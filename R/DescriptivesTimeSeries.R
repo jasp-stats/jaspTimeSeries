@@ -15,9 +15,6 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 
-# When making changes to this file always mention @sophieberkhout as a 
-# reviewer in the Pull Request
-
 DescriptivesTimeSeries <- function(jaspResults, dataset, options) {
     ready <- (length(options$dependentVariable) > 0)
 
@@ -43,7 +40,8 @@ DescriptivesTimeSeries <- function(jaspResults, dataset, options) {
 
 .tsTimeSeriesPlot <- function(jaspResults, dataset, options, ready) {
   timeSeriesPlot <- createJaspPlot(title = "Time Series Plot", width = 480)
-  timeSeriesPlot$dependOn(c("dependentVariable", "timeSeriesPlot"))
+  timeSeriesPlot$dependOn(c("timeSeriesPlot"))
+  timeSeriesPlot$position <- 1
 
   jaspResults[["timeSeriesPlot"]] <- timeSeriesPlot
 
@@ -77,7 +75,8 @@ DescriptivesTimeSeries <- function(jaspResults, dataset, options) {
 
 .tsStateSpacePlot <- function(jaspResults, dataset, options, ready) {
   stateSpacePlot <- createJaspPlot(title = "State Space Plot")
-  stateSpacePlot$dependOn(c("dependentVariable", "stateSpacePlot"))
+  stateSpacePlot$dependOn(c("stateSpacePlot", "addSmooth", "addSmoothCI", "addSmoothCIValue"))
+  stateSpacePlot$position <- 2
 
   jaspResults[["stateSpacePlot"]] <- stateSpacePlot
 
@@ -126,8 +125,9 @@ DescriptivesTimeSeries <- function(jaspResults, dataset, options) {
 }
 
 .tsACF <- function(jaspResults, dataset, options, ready){
-  acfPlot <- createJaspPlot(title = "Autocorrelation Function")
-  acfPlot$dependOn(c("dependentVariable", "acf"))
+  acfPlot <- createJaspPlot(title = "Autocorrelation Function Plot")
+  acfPlot$dependOn(c("acf", "addLinesCI", "addLinesCIValue"))
+  acfPlot$position <- 3
 
   jaspResults[["acfPlot"]] <- acfPlot
 
@@ -147,7 +147,8 @@ DescriptivesTimeSeries <- function(jaspResults, dataset, options) {
 
   dat <- data.frame(ACF = yACF$acf, Lag = yACF$lag)
 
-  yRange <- dat$ACF
+  xBreaks <- jaspGraphs::getPrettyAxisBreaks(dat$Lag)
+  yRange  <- dat$ACF
 
   plot <- ggplot2::ggplot()
   if(options$addLinesCI){
@@ -161,7 +162,6 @@ DescriptivesTimeSeries <- function(jaspResults, dataset, options) {
                             linetype = "dashed", color = "blue", data = dfSegment)
   }
 
-  xBreaks <- jaspGraphs::getPrettyAxisBreaks(dat$Lag)
   yBreaks <- jaspGraphs::getPrettyAxisBreaks(yRange)
 
   plot <- plot +
