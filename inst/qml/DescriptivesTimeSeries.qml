@@ -17,22 +17,51 @@ Form
         CheckBox
         {
             name: "timeSeriesPlot"
-            label: qsTr("Time Series Plot")
+            label: qsTr("Time series plot")
         }
         CheckBox
         {
             name: "stateSpacePlot"
-            label: qsTr("State Space Plot")
+            label: qsTr("State space plot")
+            CheckBox
+            {
+                name: "addSmooth"
+                label: qsTr("Add regression line")
+                checked: true
+                RadioButtonGroup
+                {
+                    name:	"regressionType";
+                    RadioButton { value: "smooth";	label: qsTr("Smooth");	checked: true }
+                    RadioButton { value: "linear";	label: qsTr("Linear")				  }
+                }
+
+                CheckBox
+                {
+                    name: "addSmoothCI"
+                    label: qsTr("Show confidence interval")
+                    checked: true
+                    childrenOnSameRow: true
+                    CIField { name: "addSmoothCIValue" }
+                }
+            }
         }
         CheckBox
         {
-            name: "ACF"
-            label: qsTr("Autocorrelation Function")
+            name: "acf"
+            label: qsTr("Autocorrelation function")
+            CheckBox
+            {
+                name: "addLinesCI"
+                label: qsTr("Show confidence interval")
+                checked: true
+                childrenOnSameRow: true
+                CIField { name: "addLinesCIValue" }
+            }
         }
         CheckBox
         {
             name: "powerSpectralDensity"
-            label: qsTr("Power Spectral Density")
+            label: qsTr("Power spectral density")
         }
     }
 }
