@@ -47,7 +47,7 @@ Form
         }
         CheckBox
         {
-            name: "acf"
+            name: "acfPlot"
             label: qsTr("Autocorrelation function")
             CheckBox
             {
@@ -65,4 +65,4 @@ Form
         }
     }
 }
-
+// dataSetModel.rowCount()
