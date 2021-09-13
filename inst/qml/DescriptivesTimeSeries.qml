@@ -17,41 +17,70 @@ Form
         CheckBox
         {
             name: "timeSeriesPlot"
+            id:    tsPlot
             label: qsTr("Time series plot")
+            checked: true
+            RadioButtonGroup
+            {
+                name:	"tsType"
+                visible: tsPlot.checked
+                radioButtonsOnSameRow: true
+                RadioButton { value: "points";	label: qsTr("Points")}
+                RadioButton { value: "line";	label: qsTr("Line")}
+                RadioButton { value: "both";	label: qsTr("Both");	checked: true }
+            }
         }
         CheckBox
         {
             name: "stateSpacePlot"
+            id: sspPlot
             label: qsTr("State space plot")
-            CheckBox
+            Group
             {
-                name: "addSmooth"
-                label: qsTr("Add regression line")
-                checked: true
-                RadioButtonGroup
+                visible: sspPlot.checked
+                columns: 2
+                IntegerField
                 {
-                    name:	"regressionType";
-                    RadioButton { value: "smooth";	label: qsTr("Smooth");	checked: true }
-                    RadioButton { value: "linear";	label: qsTr("Linear")				  }
+                    name: "sspLag"
+                    label: qsTr("Lag")
+                    defaultValue: 1
                 }
-
                 CheckBox
                 {
-                    name: "addSmoothCI"
-                    label: qsTr("Show confidence interval")
+                    name: "addSmooth"
+                    id: sspSmooth
+                    label: qsTr("Add regression line")
                     checked: true
-                    childrenOnSameRow: true
-                    CIField { name: "addSmoothCIValue" }
+                    RadioButtonGroup
+                    {
+                        name:	"regressionType"
+                        visible: sspSmooth.checked
+                        radioButtonsOnSameRow: true
+                        RadioButton { value: "smooth";	label: qsTr("Smooth");	checked: true }
+                        RadioButton { value: "linear";	label: qsTr("Linear")				  }
+                    }
+
+                    CheckBox
+                    {
+                        name: "addSmoothCI"
+                        visible: sspSmooth.checked
+                        label: qsTr("Show confidence interval")
+                        checked: true
+                        childrenOnSameRow: true
+                        CIField { name: "addSmoothCIValue" }
+                    }
                 }
             }
         }
         CheckBox
         {
             name: "acfPlot"
+            id: acf
             label: qsTr("Autocorrelation function")
             CheckBox
             {
                 name: "addLinesCI"
+                visible: acf.checked
                 label: qsTr("Show confidence interval")
                 checked: true
                 childrenOnSameRow: true
