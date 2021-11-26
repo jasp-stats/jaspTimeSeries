@@ -8,7 +8,20 @@ Form
     VariablesForm
     {
         AvailableVariablesList { name: "variables" }
-        AssignedVariablesList  { name: "dependentVariable"; label: qsTr("Dependent Variable"); allowedColumns: ["ordinal", "scale"] }
+        AssignedVariablesList  
+        {
+            name: "dependentVariable"
+            label: qsTr("Dependent Variable")
+            allowedColumns: ["ordinal", "scale"]
+            singleVariable: true
+        }
+        AssignedVariablesList  
+        {
+            name: "timeVariable"
+            label: qsTr("Time")
+            allowedColumns: ["ordinal", "scale"]
+            singleVariable: true
+        }
     }
 
     Group
@@ -25,8 +38,8 @@ Form
                 name:	"tsType"
                 visible: tsPlot.checked
                 radioButtonsOnSameRow: true
-                RadioButton { value: "points";	label: qsTr("Points")}
-                RadioButton { value: "line";	label: qsTr("Line")}
+                RadioButton { value: "points";	label: qsTr("Points") }
+                RadioButton { value: "line";	label: qsTr("Line") }
                 RadioButton { value: "both";	label: qsTr("Both");	checked: true }
             }
         }
@@ -41,7 +54,7 @@ Form
                 columns: 2
                 IntegerField
                 {
-                    name: "sspLag"
+                    name: "lag"
                     label: qsTr("Lag")
                     defaultValue: 1
                 }
@@ -90,7 +103,86 @@ Form
         CheckBox
         {
             name: "powerSpectralDensity"
+            id: psd
             label: qsTr("Power spectral density")
+            Group
+            {
+                columns: 2
+                CheckBox
+                {
+                    name: "detrend"
+                    visible: psd.checked
+                    label: qsTr("Detrend")
+                    checked: true
+                }
+                CheckBox
+                {
+                    name: "demean"
+                    visible: psd.checked
+                    label: qsTr("Demean")
+                    checked: false
+                }
+            }
+            CheckBox
+            {
+                name: "smoothing"
+                visible: psd.checked
+                label: qsTr("Add kernel smoother")
+                childrenOnSameRow: true
+                DropDown
+                {
+                    name: "kernel"
+                    values:
+                    [
+                        { label: qsTr("Daniell"), value: "daniell" },
+                        { label: qsTr("Modified Daniell"), value: "modified.daniell" }
+                    ]
+                }
+                Group
+                {
+                    columns: 2
+                    IntegerField
+                    {
+                        name: "m1"
+                        label: qsTr("Dimensions")
+                    }
+                    IntegerField
+                    {
+                        name: "m2"
+                    }
+                }
+            }
+            DoubleField
+            {
+                name: "taper"
+                visible: psd.checked
+                label: qsTr("Taper")
+                min: 0
+                max: 0.5
+            }
+            RadioButtonGroup
+            {
+                name: "scaling"
+                visible: psd.checked
+                title: qsTr("Scaling")
+                radioButtonsOnSameRow: true
+                RadioButton
+                {
+                    name: "noScaling"
+                    label: qsTr("None")
+                    checked: true
+                }
+                RadioButton
+                {
+                    name: "log"
+                    label: qsTr("ln")
+                }
+                RadioButton
+                {
+                    name: "log10"
+                    label: qsTr("log")
+                }
+            }
         }
     }
 }
