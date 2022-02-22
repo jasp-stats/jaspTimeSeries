@@ -36,7 +36,6 @@ Form
             RadioButtonGroup
             {
                 name:	"tsType"
-                visible: tsPlot.checked
                 radioButtonsOnSameRow: true
                 RadioButton { value: "points";	label: qsTr("Points") }
                 RadioButton { value: "line";	label: qsTr("Line") }
@@ -50,7 +49,6 @@ Form
             label: qsTr("State space plot")
             Group
             {
-                visible: sspPlot.checked
                 columns: 2
                 IntegerField
                 {
@@ -67,7 +65,6 @@ Form
                     RadioButtonGroup
                     {
                         name:	"regressionType"
-                        visible: sspSmooth.checked
                         radioButtonsOnSameRow: true
                         RadioButton { value: "smooth";	label: qsTr("Smooth");	checked: true }
                         RadioButton { value: "linear";	label: qsTr("Linear")				  }
@@ -76,7 +73,6 @@ Form
                     CheckBox
                     {
                         name: "addSmoothCI"
-                        visible: sspSmooth.checked
                         label: qsTr("Show confidence interval")
                         checked: true
                         childrenOnSameRow: true
@@ -87,17 +83,16 @@ Form
         }
         CheckBox
         {
-            name: "acfPlot"
+            name: "acfPlots"
             id: acf
-            label: qsTr("Autocorrelation function")
+            label: qsTr("Autocorrelation functions")
             CheckBox
             {
-                name: "addLinesCI"
-                visible: acf.checked
+                name: "acfCI"
                 label: qsTr("Show confidence interval")
                 checked: true
                 childrenOnSameRow: true
-                CIField { name: "addLinesCIValue" }
+                CIField { name: "acfCIValue" }
             }
         }
         CheckBox
@@ -111,14 +106,12 @@ Form
                 CheckBox
                 {
                     name: "detrend"
-                    visible: psd.checked
                     label: qsTr("Detrend")
                     checked: true
                 }
                 CheckBox
                 {
                     name: "demean"
-                    visible: psd.checked
                     label: qsTr("Demean")
                     checked: false
                 }
@@ -126,7 +119,6 @@ Form
             CheckBox
             {
                 name: "smoothing"
-                visible: psd.checked
                 label: qsTr("Add kernel smoother")
                 childrenOnSameRow: true
                 DropDown
@@ -155,7 +147,6 @@ Form
             DoubleField
             {
                 name: "taper"
-                visible: psd.checked
                 label: qsTr("Taper")
                 min: 0
                 max: 0.5
@@ -163,7 +154,6 @@ Form
             RadioButtonGroup
             {
                 name: "scaling"
-                visible: psd.checked
                 title: qsTr("Scaling")
                 radioButtonsOnSameRow: true
                 RadioButton

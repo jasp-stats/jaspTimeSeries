@@ -106,9 +106,6 @@ DescriptivesTimeSeries <- function(jaspResults, dataset, options) {
   dat <- data.frame(y, yLag)
   dat <- na.omit(dat)
 
-  # xBreaks <- jaspGraphs::getPrettyAxisBreaks(yLag)
-  # yBreaks <- jaspGraphs::getPrettyAxisBreaks(y)
-
   # forceLinearSmooth <- options$regressionType == "linear"
   # Does not work with bquote
   p <- jaspGraphs::JASPScatterPlot(dat$yLag, dat$y,
@@ -121,57 +118,53 @@ DescriptivesTimeSeries <- function(jaspResults, dataset, options) {
                                    plotAbove = "none", plotRight = "none"
                                    )
 
-  # p <- ggplot2::ggplot(dat, ggplot2::aes(x = yLag, y = y)) + jaspGraphs::geom_point() +
-  #   ggplot2::scale_x_continuous(name = bquote(.(decodeColNames(yName))[t-1]), 
-  #                               breaks = xBreaks, limits = range(xBreaks)) +
-  #   ggplot2::scale_y_continuous(name = bquote(.(decodeColNames(yName))[t]), 
-  #                               breaks = yBreaks, limits = range(yBreaks))
-
-  # if (options$addSmooth) {
-  #   p <- p + ggplot2::geom_smooth(se = options$addSmoothCI, level = options$addSmoothCIValue,
-  #                                 method = if (forceLinearSmooth) "lm" else "loess")
-  # }
-  # p <- jaspGraphs::themeJasp(p)
-
   stateSpacePlot$plotObject <- p
   
   return()
 }
 
 .tsACF <- function(jaspResults, dataset, options, ready, position){
-  if (!options$acfPlot)
+  if (!is.null(jaspResults[["acfContainer"]]))
     return()
 
-  if (is.null(jaspResults[["acfPlot"]])) {
-    plot <- createJaspPlot(title = "Autocorrelation Function Plot")
-    plot$dependOn(c("acfPlot", "addLinesCI", "addLinesCIValue", "dependentVariable"))
-    plot$position <- position
+  acfContainer <- createJaspContainer(title = gettext("Autocorrelation Function Plots"))
+  acfContainer$dependOn(c("acfPlots", "acfCI", "acfCIValue", "dependentVariable"))
+  jaspResults[["acfContainer"]] <- acfContainer
+  jaspResults[["acfContainer"]]$position <- position
 
-    jaspResults[["acfPlot"]] <- plot
+  if (!ready) {
+    return()
+  }
 
-    if (!ready)
-      return()
+  if (options$acfPlots) {
+    acfPlot <- createJaspPlot(title = "Autocorrelation Function")
+    acfPlot$dependOn(c("acfPlot", "acfCI", "acfCIValue", "dependentVariable"))
+    acfPlot$position <- 1
+    acfContainer[["acfPlot"]] <- acfPlot
 
-    .tsFillACF(plot, dataset, options)
+    .tsFillACF(acfPlot, type = "ACF", dataset, options)
+
+    pacfPlot <- createJaspPlot(title = "Partial Autocorrelation Function")
+    pacfPlot$dependOn(c("pacfPlot", "pacfCI", "pacfCIValue", "dependentVariable"))
+    pacfPlot$position <- 2
+    acfContainer[["pacfPlot"]] <- pacfPlot
+
+    .tsFillACF(pacfPlot, type = "PACF", dataset, options)
   }
 }
 
-.tsFillACF <- function(acfPlot, dataset, options) {
+.tsFillACF <- function(plot, type, dataset, options) {
   y <- dataset[, options$dependentVariable[1]]
   y <- na.omit(y)
 
-  yACF <- acf(y, plot = F)
+  yACF  <- acf(y, plot = F)
+  yPACF <- pacf(y, plot = F)
 
-  dat <- data.frame(ACF = yACF$acf, Lag = yACF$lag)
-
-  xBreaks <- jaspGraphs::getPrettyAxisBreaks(dat$Lag)
-  yRange  <- dat$ACF
+  xBreaks <- jaspGraphs::getPrettyAxisBreaks(c(yACF$lag, yPACF$lag))
 
   p <- ggplot2::ggplot()
-  if (options$addLinesCI) {
-    ci        <- options$addLinesCIValue
-    clim      <- qnorm((1 + ci) / 2) / sqrt(yACF$n.used)
-    yRange    <- c(yRange, clim, -clim)
+  if (options$acfCI) {
+    clim      <- qnorm((1 + options$acfCIValue) / 2) / sqrt(yACF$n.used)
     dfSegment <- data.frame(x = min(xBreaks), xend = max(xBreaks), y = c(clim, -clim))
 
     p <- p +
@@ -179,16 +172,19 @@ DescriptivesTimeSeries <- function(jaspResults, dataset, options) {
                             linetype = "dashed", color = "blue", data = dfSegment)
   }
 
-  yBreaks <- jaspGraphs::getPrettyAxisBreaks(yRange)
+  yBreaks <- jaspGraphs::getPrettyAxisBreaks(c(yACF$acf, yPACF$acf, clim, -clim))
+
+  if (type == "ACF")  dat <- data.frame(acf = yACF$acf, lag = yACF$lag)
+  if (type == "PACF") dat <- data.frame(acf = yPACF$acf, lag = yPACF$lag)
 
   p <- p +
-    ggplot2::geom_linerange(data = dat, ggplot2::aes(x = Lag, ymin = 0, ymax = ACF)) +
+    ggplot2::geom_linerange(data = dat, ggplot2::aes(x = lag, ymin = 0, ymax = acf)) +
     ggplot2::scale_x_continuous(name = "Lag", breaks = xBreaks, limits = range(xBreaks)) +
-    ggplot2::scale_y_continuous(name = "ACF", breaks = yBreaks, limits = range(yBreaks))
+    ggplot2::scale_y_continuous(name = type, breaks = yBreaks, limits = range(yBreaks))
 
   p <- jaspGraphs::themeJasp(p)
 
-  acfPlot$plotObject <- p
+  plot$plotObject <- p
   
   return()
 }
@@ -256,11 +252,6 @@ DescriptivesTimeSeries <- function(jaspResults, dataset, options) {
                                          labels = scales::trans_format(logTrans, logLabels))
   }
   
-  # if(options$scaling == "log10")
-  #   p <- p + scale_y_continuous(trans = "log10",
-  #                               breaks = trans_breaks("log10", function(x) 10 ^ x),
-  #                               labels = trans_format("log10", math_format(10 ^ .x)))
-
   p <- jaspGraphs::themeJasp(p)
 
   powerSpectralDensity$plotObject <- p
