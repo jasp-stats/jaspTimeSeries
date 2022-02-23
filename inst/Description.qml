@@ -21,14 +21,14 @@ Description
 
 	Analysis
 	{
-		title:			qsTr("ARMA")
-		func:			"ARMATimeSeries"
+		title:			qsTr("ARIMA")
+		func:			"ARIMATimeSeries"
 	}
 
-	Analysis
-	{
-		title:			qsTr("Spectral Analysis")
-		func:			"SpectralAnalysis"
-	}
+	// Analysis
+	// {
+	// 	title:			qsTr("Spectral Analysis")
+	// 	func:			"SpectralAnalysis"
+	// }
 
 }

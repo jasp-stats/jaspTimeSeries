@@ -61,32 +61,31 @@ Form
                 label: qsTr("Manual")
                 Group
                 {
-                    title: qsTr("Model terms")
                     enabled: manual.checked
-                    CheckBox
+                    IntegerField
                     {
-                        name:   "ar"
-                        id:     ar
-                        label:  qsTr("Autoregressive (AR) order")
-                        checked: true
-                        childrenOnSameRow: true
-                        IntegerField { name: "p" }
+                        name:   "p"
+                        id:     p
+                        label:  qsTr("Autoregressive (AR) order p")
+                        // checked: true
+                        // childrenOnSameRow: true
+                        // IntegerField { name: "p" }
                     }
-                    CheckBox
+                    IntegerField
                     {
-                        name:       "i"
-                        id:         i
-                        label:      qsTr("Difference (I) degree")
-                        childrenOnSameRow: true
-                        IntegerField { name: "d" }
+                        name:       "d"
+                        id:         d
+                        label:      qsTr("Difference (I) degree d")
+                        // childrenOnSameRow: true
+                        // IntegerField { name: "d" }
                     }
-                    CheckBox
+                    IntegerField
                     {
-                        name:       "ma"
-                        id:         ma
-                        label:      qsTr("Moving average (MA) order")
-                        childrenOnSameRow: true
-                        IntegerField { name: "q" }
+                        name:       "q"
+                        id:         q
+                        label:      qsTr("Moving average (MA) order q")
+                        // childrenOnSameRow: true
+                        // IntegerField { name: "q" }
                     }
                 }				  
             }

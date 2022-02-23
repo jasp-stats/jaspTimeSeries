@@ -11,7 +11,8 @@ License: GPL (>= 2)
 Encoding: UTF-8
 Imports:
   jaspBase,
-  jaspGraphs
+  jaspGraphs,
+  forecast
 Suggests:
   testthat
 Remotes:
