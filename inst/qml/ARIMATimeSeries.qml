@@ -113,27 +113,59 @@ Form
                         name:   "p"
                         id:     p
                         label:  qsTr("Autoregressive (AR) order p")
-                        // checked: true
-                        // childrenOnSameRow: true
-                        // IntegerField { name: "p" }
                     }
                     IntegerField
                     {
                         name:       "d"
                         id:         d
                         label:      qsTr("Difference (I) degree d")
-                        // childrenOnSameRow: true
-                        // IntegerField { name: "d" }
                     }
                     IntegerField
                     {
                         name:       "q"
                         id:         q
                         label:      qsTr("Moving average (MA) order q")
-                        // childrenOnSameRow: true
-                        // IntegerField { name: "q" }
                     }
-                }				  
+                    CheckBox
+                    {
+                        name:   "addConstant"
+                        id:     addConstant
+                        label:  qsTr("Include constant")
+                    }
+                    CheckBox
+                    {
+                        name:   "addSeasonal"
+                        id:     addSeasonal
+                        label:  qsTr("Add seasonal components")
+                        Group
+                        {
+                            IntegerField
+                            {
+                                name:   "m"
+                                id:     m
+                                label:  qsTr("Period")
+                            }
+                            IntegerField
+                            {
+                                name:   "P"
+                                id:     sP
+                                label:  qsTr("AR order P")
+                            }
+                            IntegerField
+                            {
+                                name:       "D"
+                                id:         sD
+                                label:      qsTr("I degree D")
+                            }
+                            IntegerField
+                            {
+                                name:       "Q"
+                                id:         sQ
+                                label:      qsTr("MA order Q")
+                            }
+                        }
+                    }
+                }			  
             }
         }
     }
