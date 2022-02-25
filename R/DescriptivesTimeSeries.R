@@ -20,31 +20,38 @@ DescriptivesTimeSeries <- function(jaspResults, dataset, options) {
     ready <- options$dependentVariable != ""
 
     if (ready)
-      dataset <- .tsReadData(jaspResults, dataset, options)
+      dataset <- .tsReadDataDescriptives(jaspResults, dataset, options)
 
-    .tsTimeSeriesPlot(jaspResults, dataset, options, ready, position = 1)
+    .tsTimeSeriesPlotDescriptives(jaspResults, dataset, options, ready, position = 1, dependencies = c("timeSeriesPlot", "tsType", "dependentVariable"))
     
-    .tsStateSpacePlot(jaspResults, dataset, options, ready, position = 2)
+    .tsStateSpacePlotDescriptives(jaspResults, dataset, options, ready, position = 2, dependencies  = c("stateSpacePlot", "lag", "regressionType", "addSmooth", "addSmoothCI", "addSmoothCIValue", "dependentVariable"))
 
-    .tsACF(jaspResults, dataset, options, ready, position = 3)
+    .tsACFDescriptives(jaspResults, dataset, options, ready, position = 3, dependencies = c("acfPlots", "acfCI", "acfCIValue", "dependentVariable"))
 
-    .tsPowerSpectralDensity(jaspResults, dataset, options, ready, position = 4)
+    .tsPowerSpectralDensityDescriptives(jaspResults, dataset, options, ready, position = 4, dependencies = c("powerSpectralDensity", "detrend", "demean", "smoothing", "kernel", "m1", "m2", "taper", "scaling", "noScaling", "log", "log10", "dependentVariable"))
 }
 
-.tsReadData <- function(jaspResults, dataset, options) {
+.tsReadDataDescriptives <- function(jaspResults, dataset, options) {
   if (!is.null(dataset))
     return(dataset)
-  else
-    return(.readDataSetToEnd(columns.as.numeric = options$dependentVariable))
+  else {
+    dataset <- .readDataSetToEnd(columns.as.numeric = options$dependentVariable)
+    yName <- options$dependentVariable[1]
+    y     <- dataset[, yName]
+    t     <- 1:nrow(dataset)
+
+    dat <- data.frame(y, t)
+    return(dat)
+  }
 }
 
-.tsTimeSeriesPlot <- function(jaspResults, dataset, options, ready, position) {
+.tsTimeSeriesPlotDescriptives <- function(jaspResults, dataset, options, ready, position, dependencies) {
   if (!options$timeSeriesPlot)
     return()
   
   if (is.null(jaspResults[["timeSeriesPlot"]])) {
     plot <- createJaspPlot(title = "Time Series Plot", width = 480)
-    plot$dependOn(c("timeSeriesPlot", "tsType", "dependentVariable"))
+    plot$dependOn(dependencies)
     plot$position <- position
 
     jaspResults[["timeSeriesPlot"]] <- plot
@@ -58,13 +65,14 @@ DescriptivesTimeSeries <- function(jaspResults, dataset, options) {
 
 .tsFillTimeSeriesPlot <- function(timeSeriesPlot, dataset, options, type) {
   yName <- options$dependentVariable[1]
-  y     <- dataset[, yName]
-  t     <- 1:nrow(dataset)
+  # y     <- dataset[, yName]
+  # t     <- 1:nrow(dataset)
 
-  dat <- data.frame(y, t)
+  # dat <- data.frame(y, t)
+  dat <- dataset
 
-  xBreaks <- jaspGraphs::getPrettyAxisBreaks(c(1, t))
-  yBreaks <- jaspGraphs::getPrettyAxisBreaks(y)
+  xBreaks <- jaspGraphs::getPrettyAxisBreaks(c(1, dat$t))
+  yBreaks <- jaspGraphs::getPrettyAxisBreaks(dat$y)
 
   p <- ggplot2::ggplot(dat, ggplot2::aes(x = t, y = y)) +
     ggplot2::scale_x_continuous(name = gettext("t"), breaks = xBreaks, limits = range(xBreaks)) +
@@ -76,13 +84,13 @@ DescriptivesTimeSeries <- function(jaspResults, dataset, options) {
   timeSeriesPlot$plotObject <- p
 }
 
-.tsStateSpacePlot <- function(jaspResults, dataset, options, ready, position) {
+.tsStateSpacePlotDescriptives <- function(jaspResults, dataset, options, ready, position, dependencies) {
   if (!options$stateSpacePlot)
     return()
 
   if (is.null(jaspResults[["stateSpacePlot"]])) {
     plot <- createJaspPlot(title = "State Space Plot")
-    plot$dependOn(c("stateSpacePlot", "lag", "regressionType", "addSmooth", "addSmoothCI", "addSmoothCIValue", "dependentVariable"))
+    plot$dependOn(dependencies)
     plot$position <- position
 
     jaspResults[["stateSpacePlot"]] <- plot
@@ -95,15 +103,15 @@ DescriptivesTimeSeries <- function(jaspResults, dataset, options) {
 }
 
 .tsFillStateSpacePlot <- function(stateSpacePlot, dataset, options) {
-  yName <- options$dependentVariable[1]
-  y     <- dataset[, yName]
-  yLag  <- c(rep(NA, options$lag), y[1:(length(y) - options$lag)])
+  # yName <- options$dependentVariable[1]
+  # y     <- dataset[, yName]
+  yLag  <- c(rep(NA, options$lag), dataset$y[1:(length(dataset$y) - options$lag)])
 
-  yName <- decodeColNames(yName)
+  yName <- decodeColNames(options$dependentVariable[1])
   xName <- as.expression(bquote(.(yName)[t-.(options$lag)]))
   yName <- as.expression(bquote(.(yName)[t]))
 
-  dat <- data.frame(y, yLag)
+  dat <- data.frame(y = dataset$y, yLag)
   dat <- na.omit(dat)
 
   # forceLinearSmooth <- options$regressionType == "linear"
@@ -123,12 +131,12 @@ DescriptivesTimeSeries <- function(jaspResults, dataset, options) {
   return()
 }
 
-.tsACF <- function(jaspResults, dataset, options, ready, position){
+.tsACFDescriptives <- function(jaspResults, dataset, options, ready, position, dependencies){
   if (!is.null(jaspResults[["acfContainer"]]))
     return()
 
   acfContainer <- createJaspContainer(title = gettext("Autocorrelation Function Plots"))
-  acfContainer$dependOn(c("acfPlots", "acfCI", "acfCIValue", "dependentVariable"))
+  acfContainer$dependOn(dependencies)
   jaspResults[["acfContainer"]] <- acfContainer
   jaspResults[["acfContainer"]]$position <- position
 
@@ -138,14 +146,14 @@ DescriptivesTimeSeries <- function(jaspResults, dataset, options) {
 
   if (options$acfPlots) {
     acfPlot <- createJaspPlot(title = "Autocorrelation Function")
-    acfPlot$dependOn(c("acfPlot", "acfCI", "acfCIValue", "dependentVariable"))
+    acfPlot$dependOn(dependencies)
     acfPlot$position <- 1
     acfContainer[["acfPlot"]] <- acfPlot
 
     .tsFillACF(acfPlot, type = "ACF", dataset, options)
 
     pacfPlot <- createJaspPlot(title = "Partial Autocorrelation Function")
-    pacfPlot$dependOn(c("pacfPlot", "pacfCI", "pacfCIValue", "dependentVariable"))
+    pacfPlot$dependOn(dependencies)
     pacfPlot$position <- 2
     acfContainer[["pacfPlot"]] <- pacfPlot
 
@@ -154,17 +162,18 @@ DescriptivesTimeSeries <- function(jaspResults, dataset, options) {
 }
 
 .tsFillACF <- function(plot, type, dataset, options) {
-  y <- dataset[, options$dependentVariable[1]]
-  y <- na.omit(y)
+  # y <- dataset[, options$dependentVariable[1]]
+  y <- na.omit(dataset$y)
 
-  yACF  <- acf(y, plot = F)
-  yPACF <- pacf(y, plot = F)
-
-  xBreaks <- jaspGraphs::getPrettyAxisBreaks(c(yACF$lag, yPACF$lag))
+  if (type == "ACF")  ac <- acf(y, plot = F)
+  if (type == "PACF") ac <- pacf(y, plot = F)
+  xBreaks <- jaspGraphs::getPrettyAxisBreaks(ac$lag)
+  # if (type == "both")
+  #   xBreaks <- jaspGraphs::getPrettyAxisBreaks(c(yACF$lag, yPACF$lag))
 
   p <- ggplot2::ggplot()
   if (options$acfCI) {
-    clim      <- qnorm((1 + options$acfCIValue) / 2) / sqrt(yACF$n.used)
+    clim      <- qnorm((1 + options$acfCIValue) / 2) / sqrt(ac$n.used)
     dfSegment <- data.frame(x = min(xBreaks), xend = max(xBreaks), y = c(clim, -clim))
 
     p <- p +
@@ -172,10 +181,10 @@ DescriptivesTimeSeries <- function(jaspResults, dataset, options) {
                             linetype = "dashed", color = "blue", data = dfSegment)
   }
 
-  yBreaks <- jaspGraphs::getPrettyAxisBreaks(c(yACF$acf, yPACF$acf, clim, -clim))
+  yBreaks <- jaspGraphs::getPrettyAxisBreaks(c(ac$acf, clim, -clim))
 
-  if (type == "ACF")  dat <- data.frame(acf = yACF$acf, lag = yACF$lag)
-  if (type == "PACF") dat <- data.frame(acf = yPACF$acf, lag = yPACF$lag)
+  dat <- data.frame(acf = ac$acf, lag = ac$lag)
+  # if (type == "PACF") dat <- data.frame(acf = yPACF$acf, lag = yPACF$lag)
 
   p <- p +
     ggplot2::geom_linerange(data = dat, ggplot2::aes(x = lag, ymin = 0, ymax = acf)) +
@@ -189,18 +198,13 @@ DescriptivesTimeSeries <- function(jaspResults, dataset, options) {
   return()
 }
 
-.tsPowerSpectralDensity <- function(jaspResults, dataset, options, ready, position){
+.tsPowerSpectralDensityDescriptives <- function(jaspResults, dataset, options, ready, position, dependencies){
   if (!options$powerSpectralDensity)
     return()
 
   if (is.null(jaspResults[["powerSpectralDensity"]])) {
     plot <- createJaspPlot(title = "Power Spectral Density Plot")
-    plot$dependOn(c("powerSpectralDensity",
-                    "detrend", "demean", 
-                    "smoothing", "kernel", "m1", "m2", 
-                    "taper",
-                    "scaling", "noScaling", "log", "log10",
-                    "dependentVariable"))
+    plot$dependOn(dependencies)
     plot$position <- position
 
     jaspResults[["powerSpectralDensity"]] <- plot
@@ -213,8 +217,8 @@ DescriptivesTimeSeries <- function(jaspResults, dataset, options) {
 }
 
 .tsFillPowerSpectralDensity <- function(powerSpectralDensity, dataset, options) {
-  y <- dataset[, options$dependentVariable[1]]
-  y <- na.omit(y)
+  # y <- dataset[, options$dependentVariable[1]]
+  y <- na.omit(dataset$y)
 
   k <- NULL
 

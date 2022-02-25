@@ -19,12 +19,16 @@ ARIMATimeSeries <- function(jaspResults, dataset, options) {
     # ready <- (length(options$dependentVariable) > 0)
     ready <- options$dependentVariable != ""
 
-    if (ready)
-      dataset <- .tsReadData(jaspResults, dataset, options)
+    if (ready) {
+      rawData <- .tsReadData(jaspResults, dataset, options)
+      dataset <- .tsPrepareData(jaspResults, rawData, options)
+    }
     
     fit <- .tsResults(jaspResults, dataset, options, ready)
 
-    .tsCreateTableCoefficients(jaspResults, fit, dataset, options, position = 1, ready)
+    .tsTimeSeriesPlot(jaspResults, dataset, options, ready, position = 1, dependencies = c("transformation", "timeSeriesPlot", "tsType", "dependentVariable"))
+
+    .tsCreateTableCoefficients(jaspResults, fit, dataset, options, ready, position = 2)
     # .tsTimeSeriesPlot(jaspResults, dataset, options, ready, position = 1)
     
     # .tsACF(jaspResults, dataset, options, ready, position = 3)
@@ -32,7 +36,7 @@ ARIMATimeSeries <- function(jaspResults, dataset, options) {
 
 .tsDependencies <- c("model", "ic", "best", "manual",
                      "method", "p", "d", "q",
-                     "dependentVariable", "center", "detrend")
+                     "dependentVariable", "center", "detrend", "transformation")
 
 .tsReadData <- function(jaspResults, dataset, options) {
   if (!is.null(dataset))
@@ -41,31 +45,66 @@ ARIMATimeSeries <- function(jaspResults, dataset, options) {
     return(.readDataSetToEnd(columns.as.numeric = options$dependentVariable))
 }
 
+.tsPrepareData <- function(jaspResults, dataset, options) {
+  yName <- options$dependentVariable[1]
+  y     <- dataset[, yName]
+  t     <- 1:nrow(dataset)
+
+  if (options$transformation == "center") y <- y - mean(y)
+
+  if (options$transformation == "detrend") {
+    lmFit <- lm(y ~ poly(t, options$poly))
+    y <- lmFit$residuals
+  }
+  # add covariates at some point
+  return(data.frame(y, t))
+}
+
+.tsTimeSeriesPlot <- function(jaspResults, dataset, options, ready, position, dependencies) {
+  if (!options$timeSeriesPlot)
+    return()
+  
+  if (is.null(jaspResults[["timeSeriesPlot"]])) {
+    plot <- createJaspPlot(title = "Time Series Plot", width = 480)
+    plot$dependOn(dependencies)
+    plot$position <- position
+
+    jaspResults[["timeSeriesPlot"]] <- plot
+
+    if (!ready)
+      return()
+
+    .tsFillTimeSeriesPlot(plot, dataset, options, type = options$tsType)
+  }
+}
+
 .tsResults <- function(jaspResults, dataset, options, ready) {
-  if(!ready)
+  if (!ready)
     return()
 
-  yName <- options$dependentVariable[1]
-  y     <- ts(dataset[, yName])
+  # yName <- options$dependentVariable[1]
+  y     <- ts(dataset$y)
   
   # if(options$best) fit <- auto.arima(y, ic = options$ic)
 
-  if(options$model == "manual") {
+  if (options$model == "manual") {
     # p   <- ifelse(options$ar, options$p, 0)
     # d   <- ifelse(options$i,  options$d, 0)
     # q   <- ifelse(options$ma, options$q, 0)
-
-    if(options$p == 0 & options$d >= 1 & options$q == 0) .quitAnalysis("There are no parameters in the model and the constant cannot be estimated when d >= 1.")
     fit <- arima(y, order = c(options$p, options$d, options$q))
         # fit <- forecast::Arima(y, order = c(options$p, options$d, options$q), include.constant = T)
   }
 
-  if(options$model == "best") fit <- forecast::auto.arima(y)
+  if (options$model == "best") fit <- forecast::auto.arima(y)
+
+  if (length(fit$coef) == 0)
+    .quitAnalysis("No parameters are estimated.")
+
 
   return(fit)
 }
 
-.tsCreateTableCoefficients <- function(jaspResults, fit, dataset, options, position, ready) {
+.tsCreateTableCoefficients <- function(jaspResults, fit, dataset, options, ready, position) {
   if (!is.null(jaspResults[["coefTable"]])) return()
 
   coefTable <- createJaspTable("Coefficients")

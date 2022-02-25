@@ -32,6 +32,52 @@ Form
 
     Group
     {
+        RadioButtonGroup
+        {
+            name: "transformation"
+            title: qsTr("Data Transformation")
+            RadioButton  { value: "noTransform";	label: qsTr("None") }
+            RadioButton  { value: "center";	        label: qsTr("Center") }
+            RadioButton
+            {
+                value: "detrend"
+                label: qsTr("Detrend using linear regression")
+                IntegerField { name: "poly"; label: qsTr("Polynomial"); defaultValue: 1; min: 0; max: 10; }
+            }
+        }
+        // title: qsTr("Data Transformation")
+        CheckBox
+        {
+            name: "timeSeriesPlot"
+            id:    tsPlot
+            label: qsTr("Plot time series")
+            checked: true
+            RadioButtonGroup
+            {
+                name:	"tsType"
+                radioButtonsOnSameRow: true
+                RadioButton { value: "points";	label: qsTr("Points") }
+                RadioButton { value: "line";	label: qsTr("Line") }
+                RadioButton { value: "both";	label: qsTr("Both");	checked: true }
+            }
+        }
+        // CheckBox
+        // {
+        //     name:   "center"
+        //     id:     center
+        //     label:  qsTr("Center")
+        // }
+        // CheckBox
+        // {
+        //     name:   "detrend"
+        //     id:     detrend
+        //     label:  qsTr("Detrend using linear regression")
+        //     IntegerField { name: "poly"; label: qsTr("Polynomial"); defaultValue: 1; min: 0; max: 10; }
+        // }
+    }
+
+    Group
+    {
         title: qsTr("Model Specification")
         RadioButtonGroup
         {
@@ -92,36 +138,46 @@ Form
         }
     }
 
-    Group
-    {
-        title: qsTr("Data Transformation")
-        CheckBox
-        {
-            name:   "center"
-            id:     center
-            label:  qsTr("Center")
-        }
-        CheckBox
-        {
-            name:   "detrend"
-            id:     detrend
-            label:  qsTr("Detrend")
-        }
-    }
-    Group
+    Section
     {
         title: qsTr("Residual Diagnostics")
-        CheckBox
+        Group
         {
-            name:   "residualPlots"
-            id:     residualPlots
-            label:  qsTr("Diagnostic plots")
+            title: qsTr("Plots")
+            CheckBox
+            {
+                name:   "residualTimeSeries"
+                id:     residualTimeSeries
+                label:  qsTr("Time series plot")
+            }
+            CheckBox
+            {
+                name:   "residualACF"
+                id:     residualACF
+                label:  qsTr("Autocorrelation function")
+            }
+            CheckBox
+            {
+                name:   "residualHistogram"
+                id:     residualHistogram
+                label:  qsTr("Histogram")
+            }
+            CheckBox
+            {
+                name:   "residualQQ"
+                id:     residualQQ
+                label:  qsTr("Q-Q plot")
+            }
         }
-        CheckBox
+        Group
         {
-            name:   "residualTable"
-            id:     residualTable
-            label:  qsTr("Diagnostic table")
+            title: qsTr("Tests")
+            CheckBox
+            {
+                name:   "ljungBox"
+                id:     ljungBox
+                label:  qsTr("Ljung-Box test")
+            }
         }
     }
 }
