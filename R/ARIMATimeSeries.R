@@ -34,9 +34,10 @@ ARIMATimeSeries <- function(jaspResults, dataset, options) {
     # .tsACF(jaspResults, dataset, options, ready, position = 3)
 }
 
-.tsDependencies <- c("model", "ic", "best", "manual",
-                     "method", "p", "d", "q",
-                     "dependentVariable", "center", "detrend", "transformation")
+.tsDependencies <- c("model", "ic", "best", "manual", "addConstant",
+                     "p", "d", "q",
+                     "dependentVariable", "center", "detrend", "transformation",
+                     "addSeasonal", "period", "m", "P", "D", "Q")
 
 .tsReadData <- function(jaspResults, dataset, options) {
   if (!is.null(dataset))
@@ -53,6 +54,7 @@ ARIMATimeSeries <- function(jaspResults, dataset, options) {
   if (options$transformation == "center") y <- y - mean(y)
 
   if (options$transformation == "detrend") {
+    # residuals(forecast::tslm(x ~ trend))
     lmFit <- lm(y ~ poly(t, options$poly))
     y <- lmFit$residuals
   }
@@ -82,8 +84,17 @@ ARIMATimeSeries <- function(jaspResults, dataset, options) {
   if (!ready)
     return()
 
+  if (options$addSeasonal) {
+    m <- options$m
+    P <- options$P
+    D <- options$D
+    Q <- options$Q
+  } else {
+    m <- 1
+    P <- D <- Q <- 0
+  }
   # yName <- options$dependentVariable[1]
-  y     <- ts(dataset$y)
+  y <- ts(dataset$y, frequency = m)
   
   # if(options$best) fit <- auto.arima(y, ic = options$ic)
 
@@ -91,11 +102,13 @@ ARIMATimeSeries <- function(jaspResults, dataset, options) {
     # p   <- ifelse(options$ar, options$p, 0)
     # d   <- ifelse(options$i,  options$d, 0)
     # q   <- ifelse(options$ma, options$q, 0)
-    fit <- arima(y, order = c(options$p, options$d, options$q))
-        # fit <- forecast::Arima(y, order = c(options$p, options$d, options$q), include.constant = T)
+    # fit <- arima(y, order = c(options$p, options$d, options$q))
+      fit <- forecast::Arima(y, include.constant = options$addConstant,
+                             order = c(options$p, options$d, options$q),
+                             seasonal = c(P, D, Q))
   }
 
-  if (options$model == "best") fit <- forecast::auto.arima(y)
+  if (options$model == "best") fit <- forecast::auto.arima(y, allowdrift = options$addConstant, allowmean = options$addConstant)
 
   if (length(fit$coef) == 0)
     .quitAnalysis("No parameters are estimated.")
@@ -137,6 +150,10 @@ ARIMATimeSeries <- function(jaspResults, dataset, options) {
   p <- fit$arma[1]
   d <- fit$arma[6]
   q <- fit$arma[2]
+  P <- fit$arma[3]
+  D <- fit$arma[7]
+  Q <- fit$arma[4]
+  m <- fit$arma[5]
 
   estimate  <- fit$coef
   SE        <- sqrt(diag(fit$var.coef))
@@ -144,7 +161,7 @@ ARIMATimeSeries <- function(jaspResults, dataset, options) {
   coefficients <- character()
   group <- logical()
 
-  if(d <= 1 & (p + q) != length(estimate)) {
+  if(options$addConstant & d < 2 & (p + q) != length(estimate)) {
     group <- T
     coefficients <- gettext("Constant")
     # I want the intercept to be the first row...
@@ -164,6 +181,18 @@ ARIMATimeSeries <- function(jaspResults, dataset, options) {
     group <- c(group, T, rep(F, q - 1))
   }
 
+  if(P >= 1) {
+    sar <- sprintf("sAR(%d)", 1:P)
+    coefficients <- c(coefficients, sar)
+    group <- c(group, T, rep(F, P - 1))
+  }
+
+  if(Q >= 1) {
+    sma <- sprintf("sMA(%d)", 1:Q)
+    coefficients <- c(coefficients, sma)
+    group <- c(group, T, rep(F, Q - 1))
+  }
+
   rows <- data.frame(coefficients = coefficients,
                      estimate = estimate,
                      SE = SE,
@@ -171,5 +200,5 @@ ARIMATimeSeries <- function(jaspResults, dataset, options) {
   row.names(rows) <- paste0("row", 1:length(coefficients))
   coefTable$addRows(rows)
 
-  coefTable$addFootnote(gettextf("ARIMA(%s, %s, %s)", p, d, q))
+  coefTable$addFootnote(gettextf("ARIMA(%s, %s, %s)(%s, %s, %s)[%s]", p, d, q, P, D, Q, m))
 }
