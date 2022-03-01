@@ -63,8 +63,8 @@ DescriptivesTimeSeries <- function(jaspResults, dataset, options) {
   }
 }
 
-.tsFillTimeSeriesPlot <- function(timeSeriesPlot, dataset, options, type) {
-  yName <- options$dependentVariable[1]
+.tsFillTimeSeriesPlot <- function(timeSeriesPlot, dataset, options, type, yName = NULL) {
+  if (is.null(yName)) yName <- options$dependentVariable[1]
   # y     <- dataset[, yName]
   # t     <- 1:nrow(dataset)
 
@@ -150,38 +150,40 @@ DescriptivesTimeSeries <- function(jaspResults, dataset, options) {
     acfPlot$position <- 1
     acfContainer[["acfPlot"]] <- acfPlot
 
-    .tsFillACF(acfPlot, type = "ACF", dataset, options)
+    .tsFillACF(acfPlot, type = "ACF", dataset, options, ci = options$acfCI, ciValue = options$acfCIValue)
 
     pacfPlot <- createJaspPlot(title = "Partial Autocorrelation Function")
     pacfPlot$dependOn(dependencies)
     pacfPlot$position <- 2
     acfContainer[["pacfPlot"]] <- pacfPlot
 
-    .tsFillACF(pacfPlot, type = "PACF", dataset, options)
+    .tsFillACF(pacfPlot, type = "PACF", dataset, options, ci = options$acfCI, ciValue = options$acfCIValue)
   }
 }
 
-.tsFillACF <- function(plot, type, dataset, options) {
+.tsFillACF <- function(plot, type, dataset, options, ci, ciValue) {
   # y <- dataset[, options$dependentVariable[1]]
   y <- na.omit(dataset$y)
 
   if (type == "ACF")  ac <- acf(y, plot = F)
   if (type == "PACF") ac <- pacf(y, plot = F)
   xBreaks <- jaspGraphs::getPrettyAxisBreaks(ac$lag)
+  yRange <- ac$acf
   # if (type == "both")
   #   xBreaks <- jaspGraphs::getPrettyAxisBreaks(c(yACF$lag, yPACF$lag))
 
   p <- ggplot2::ggplot()
-  if (options$acfCI) {
-    clim      <- qnorm((1 + options$acfCIValue) / 2) / sqrt(ac$n.used)
+  if (ci) {
+    clim      <- qnorm((1 + ciValue) / 2) / sqrt(ac$n.used)
     dfSegment <- data.frame(x = min(xBreaks), xend = max(xBreaks), y = c(clim, -clim))
+    yRange    <- c(yRange, clim, -clim)
 
     p <- p +
       ggplot2::geom_segment(ggplot2::aes(x = x, xend = xend, y = y, yend = y),
                             linetype = "dashed", color = "blue", data = dfSegment)
   }
 
-  yBreaks <- jaspGraphs::getPrettyAxisBreaks(c(ac$acf, clim, -clim))
+  yBreaks <- jaspGraphs::getPrettyAxisBreaks(yRange)
 
   dat <- data.frame(acf = ac$acf, lag = ac$lag)
   # if (type == "PACF") dat <- data.frame(acf = yPACF$acf, lag = yPACF$lag)

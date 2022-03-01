@@ -36,13 +36,14 @@ Form
         {
             name: "transformation"
             title: qsTr("Data Transformation")
+            info: "test"
             RadioButton  { value: "noTransform";	label: qsTr("None");    checked: true }
             RadioButton  { value: "center";	        label: qsTr("Center") }
             RadioButton
             {
                 value: "detrend"
-                label: qsTr("Detrend using linear regression")
-                IntegerField { name: "poly"; label: qsTr("Polynomial"); defaultValue: 1; min: 0; max: 10; }
+                label: qsTr("Detrend")
+                // IntegerField { name: "poly"; label: qsTr("Polynomial"); defaultValue: 1; min: 0; max: 10; }
             }
         }
         // title: qsTr("Data Transformation")
@@ -200,18 +201,66 @@ Form
                 name:   "residualTimeSeries"
                 id:     residualTimeSeries
                 label:  qsTr("Time series plot")
+                RadioButtonGroup
+                {
+                    name:	"residualTsType"
+                    radioButtonsOnSameRow: true
+                    RadioButton { value: "points";	label: qsTr("Points") }
+                    RadioButton { value: "line";	label: qsTr("Line") }
+                    RadioButton { value: "both";	label: qsTr("Both");	checked: true }
+                }
             }
             CheckBox
             {
                 name:   "residualACF"
                 id:     residualACF
                 label:  qsTr("Autocorrelation function")
+                CheckBox
+                {
+                    name: "residualAcfCI"
+                    label: qsTr("Show confidence interval")
+                    checked: true
+                    childrenOnSameRow: true
+                    CIField { name: "residualAcfCIValue" }
+                }
             }
             CheckBox
             {
-                name:   "residualHistogram"
-                id:     residualHistogram
-                label:  qsTr("Histogram")
+                name:   "residualDistribution"
+                id:     residualDistribution
+                label:  qsTr("Distribution plot")              
+            }
+            Group
+            {
+                // Layout.columnSpan: 2
+                enabled: residualDistribution.checked
+
+                indent:		true
+                CheckBox {			name: "distPlotDensity";	label: qsTr("Display density")						}
+                CheckBox {			name: "distPlotRug";		label: qsTr("Display rug marks")					}
+                DropDown {
+                    name: "binWidthType"
+                    label: qsTr("Bin width type")
+                    indexDefaultValue: 0
+                    values:
+                        [
+                        {label: qsTr("Sturges"),				value: "sturges"},
+                        {label: qsTr("Scott"),					value: "scott"},
+                        {label: qsTr("Doane"),					value: "doane"},
+                        {label: qsTr("Freedman-Diaconis"),		value: "fd"	},
+                        {label: qsTr("Manual"),					value: "manual"	}
+                    ]
+                    id: binWidthType
+                }
+                DoubleField
+                {
+                    name:			"numberOfBins"
+                    label:			qsTr("Number of bins")
+                    defaultValue:	30
+                    min:			3;
+                    max:			10000;
+                    enabled:		binWidthType.currentValue === "manual"
+                }
             }
             CheckBox
             {
