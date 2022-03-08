@@ -22,11 +22,11 @@ DescriptivesTimeSeries <- function(jaspResults, dataset, options) {
     if (ready)
       dataset <- .tsReadDataDescriptives(jaspResults, dataset, options)
 
-    .tsTimeSeriesPlotDescriptives(jaspResults, dataset, options, ready, position = 1, dependencies = c("timeSeriesPlot", "tsType", "dependentVariable"))
+    .tsTimeSeriesPlotDescriptives(jaspResults, dataset, options, ready, position = 1, dependencies = c("timeSeriesPlot", "tsType", "dependentVariable", "distribution"))
     
     .tsStateSpacePlotDescriptives(jaspResults, dataset, options, ready, position = 2, dependencies  = c("stateSpacePlot", "lag", "regressionType", "addSmooth", "addSmoothCI", "addSmoothCIValue", "dependentVariable"))
 
-    .tsACFDescriptives(jaspResults, dataset, options, ready, position = 3, dependencies = c("acfPlots", "acfCI", "acfCIValue", "dependentVariable"))
+    .tsACFDescriptives(jaspResults, dataset, options, ready, position = 3, dependencies = c("acfPlots", "acfCI", "acfCIValue", "acfMax", "dependentVariable"))
 
     .tsPowerSpectralDensityDescriptives(jaspResults, dataset, options, ready, position = 4, dependencies = c("powerSpectralDensity", "detrend", "demean", "smoothing", "kernel", "m1", "m2", "taper", "scaling", "noScaling", "log", "log10", "dependentVariable"))
 }
@@ -50,7 +50,7 @@ DescriptivesTimeSeries <- function(jaspResults, dataset, options) {
     return()
   
   if (is.null(jaspResults[["timeSeriesPlot"]])) {
-    plot <- createJaspPlot(title = "Time Series Plot", width = 480)
+    plot <- createJaspPlot(title = "Time Series Plot", width = 660)
     plot$dependOn(dependencies)
     plot$position <- position
 
@@ -59,11 +59,11 @@ DescriptivesTimeSeries <- function(jaspResults, dataset, options) {
     if (!ready)
       return()
 
-    .tsFillTimeSeriesPlot(plot, dataset, options, type = options$tsType)
+    .tsFillTimeSeriesPlot(plot, dataset, options, type = options$tsType, distribution = options$distribution)
   }
 }
 
-.tsFillTimeSeriesPlot <- function(timeSeriesPlot, dataset, options, type, yName = NULL) {
+.tsFillTimeSeriesPlot <- function(timeSeriesPlot, dataset, options, type, distribution, yName = NULL) {
   if (is.null(yName)) yName <- options$dependentVariable[1]
   # y     <- dataset[, yName]
   # t     <- 1:nrow(dataset)
@@ -71,15 +71,21 @@ DescriptivesTimeSeries <- function(jaspResults, dataset, options) {
   # dat <- data.frame(y, t)
   dat <- dataset
 
-  xBreaks <- jaspGraphs::getPrettyAxisBreaks(c(1, dat$t))
-  yBreaks <- jaspGraphs::getPrettyAxisBreaks(dat$y)
+  # xBreaks <- jaspGraphs::getPrettyAxisBreaks(c(1, dat$t))
+  # yBreaks <- jaspGraphs::getPrettyAxisBreaks(dat$y)
 
-  p <- ggplot2::ggplot(dat, ggplot2::aes(x = t, y = y)) +
-    ggplot2::scale_x_continuous(name = gettext("t"), breaks = xBreaks, limits = range(xBreaks)) +
-    ggplot2::scale_y_continuous(name = yName, breaks = yBreaks, limits = range(yBreaks))
-  if (type != "points") p <- p + jaspGraphs::geom_line()
-  if (type != "line") p <- p + jaspGraphs::geom_point()
-  p <- jaspGraphs::themeJasp(p)
+  # p <- ggplot2::ggplot(dat, ggplot2::aes(x = t, y = y)) +
+  #   ggplot2::scale_x_continuous(name = gettext("t"), breaks = xBreaks, limits = range(xBreaks)) +
+  #   ggplot2::scale_y_continuous(name = yName, breaks = yBreaks, limits = range(yBreaks))
+  # if (type != "points") p <- p + jaspGraphs::geom_line()
+  # if (type != "line") p <- p + jaspGraphs::geom_point()
+  # p <- jaspGraphs::themeJasp(p)
+
+  p <- jaspGraphs::JASPScatterPlot(dat$t, dat$y, yName = yName, xName = "t",
+                                   addSmooth = F, plotAbove = "none", plotRight = distribution)
+  if(type != "points")  p$subplots$mainPlot$layers[[1]] <- jaspGraphs::geom_line()
+  if(type == "both")    p$subplots$mainPlot <- p$subplots$mainPlot + jaspGraphs::geom_point()
+
 
   timeSeriesPlot$plotObject <- p
 }
@@ -165,8 +171,8 @@ DescriptivesTimeSeries <- function(jaspResults, dataset, options) {
   # y <- dataset[, options$dependentVariable[1]]
   y <- na.omit(dataset$y)
 
-  if (type == "ACF")  ac <- acf(y, plot = F)
-  if (type == "PACF") ac <- pacf(y, plot = F)
+  if (type == "ACF")  ac <- acf(y, plot = F, lag.max = options$acfMax)
+  if (type == "PACF") ac <- pacf(y, plot = F, lag.max = options$acfMax)
   xBreaks <- jaspGraphs::getPrettyAxisBreaks(ac$lag)
   yRange <- ac$acf
   # if (type == "both")
@@ -188,12 +194,20 @@ DescriptivesTimeSeries <- function(jaspResults, dataset, options) {
   dat <- data.frame(acf = ac$acf, lag = ac$lag)
   # if (type == "PACF") dat <- data.frame(acf = yPACF$acf, lag = yPACF$lag)
 
-  p <- p +
-    ggplot2::geom_linerange(data = dat, ggplot2::aes(x = lag, ymin = 0, ymax = acf)) +
-    ggplot2::scale_x_continuous(name = "Lag", breaks = xBreaks, limits = range(xBreaks)) +
-    ggplot2::scale_y_continuous(name = type, breaks = yBreaks, limits = range(yBreaks))
+  # p <- p +
+  #   ggplot2::geom_linerange(data = dat, ggplot2::aes(x = lag, ymin = 0, ymax = acf)) +
+  #   ggplot2::scale_x_continuous(name = "Lag", breaks = xBreaks, limits = range(xBreaks)) +
+  #   ggplot2::scale_y_continuous(name = type, breaks = yBreaks, limits = range(yBreaks))
 
-  p <- jaspGraphs::themeJasp(p)
+  p <- p +
+    ggplot2::geom_linerange(data = dat, ggplot2::aes(x = lag, ymin = 0, ymax = acf), size = 1) +
+    ggplot2::labs(x = "Lag", y = type) +
+    jaspGraphs::geom_rangeframe() +
+    jaspGraphs::themeJaspRaw()
+    # ggplot2::scale_x_continuous(name = "Lag", breaks = xBreaks, limits = range(xBreaks)) +
+    # ggplot2::scale_y_continuous(name = type, breaks = yBreaks, limits = range(yBreaks))
+
+  # p <- jaspGraphs::themeJaspRaw(p)
 
   plot$plotObject <- p
   
@@ -237,12 +251,13 @@ DescriptivesTimeSeries <- function(jaspResults, dataset, options) {
 
   dat <- data.frame(x = yPSD$freq, y = yPSD$spec)
 
-  xBreaks <- jaspGraphs::getPrettyAxisBreaks(dat$x)
-  yBreaks <- jaspGraphs::getPrettyAxisBreaks(dat$y)
+  # xBreaks <- jaspGraphs::getPrettyAxisBreaks(dat$x)
+  # yBreaks <- jaspGraphs::getPrettyAxisBreaks(dat$y)
 
   p <- ggplot2::ggplot(dat, ggplot2::aes(x = x, y = y)) + jaspGraphs::geom_line() +
-    ggplot2::scale_x_continuous(name = "Frequency", breaks = xBreaks) +
-    ggplot2::scale_y_continuous(name = "Spectrum", breaks = yBreaks)
+    ggplot2::labs(x = "Frequency", y = "Spectrum")
+    # ggplot2::scale_x_continuous(name = "Frequency", breaks = xBreaks) +
+    # ggplot2::scale_y_continuous(name = "Spectrum", breaks = yBreaks)
 
   if (options$scaling != "noScaling") {
     logTrans <- options$scaling
@@ -258,7 +273,10 @@ DescriptivesTimeSeries <- function(jaspResults, dataset, options) {
                                          labels = scales::trans_format(logTrans, logLabels))
   }
   
-  p <- jaspGraphs::themeJasp(p)
+  p <- p + 
+    jaspGraphs::geom_rangeframe() +
+    jaspGraphs::themeJaspRaw()
+
 
   powerSpectralDensity$plotObject <- p
   

@@ -26,7 +26,7 @@ ARIMATimeSeries <- function(jaspResults, dataset, options) {
     
     fit <- .tsResults(jaspResults, dataset, options, ready)
 
-    .tsTimeSeriesPlot(jaspResults, dataset, options, ready, position = 1, dependencies = c("transformation", "timeSeriesPlot", "tsType", "dependentVariable"))
+    .tsTimeSeriesPlot(jaspResults, dataset, options, ready, position = 1, dependencies = c("transformation", "timeSeriesPlot", "tsType", "dependentVariable", "distribution"))
 
     .tsCreateTableCoefficients(jaspResults, fit, dataset, options, ready, position = 2)
     
@@ -70,7 +70,7 @@ ARIMATimeSeries <- function(jaspResults, dataset, options) {
     return()
   
   if (is.null(jaspResults[["timeSeriesPlot"]])) {
-    plot <- createJaspPlot(title = "Time Series Plot", width = 480)
+    plot <- createJaspPlot(title = "Time Series Plot", width = 660)
     plot$dependOn(dependencies)
     plot$position <- position
 
@@ -79,9 +79,45 @@ ARIMATimeSeries <- function(jaspResults, dataset, options) {
     if (!ready)
       return()
 
-    .tsFillTimeSeriesPlot(plot, dataset, options, type = options$tsType)
+    .tsFillTimeSeriesPlot(plot, dataset, options, type = options$tsType, distribution = options$distribution)
   }
 }
+
+# .tsCreateTableStationarityTests <- function(jaspResults, fit, dataset, options, ready, position) {
+#   if (!is.null(jaspResults[["coefTable"]])) return()
+
+#   coefTable <- createJaspTable("Coefficients")
+#   coefTable$dependOn(.tsDependencies)
+#   coefTable$position <- position
+#   coefTable$showSpecifiedColumnsOnly <- TRUE
+
+#   coefTable$addColumnInfo(name = "coefficients",   title = "",                         type = "string")
+#   coefTable$addColumnInfo(name = "estimate",       title = gettext("Estimate"),        type = "number")
+#   coefTable$addColumnInfo(name = "SE",             title = gettext("Standard Error"),  type = "number")
+
+#   # coefTable$setExpectedSize(2)
+
+#   jaspResults[["coefTable"]] <- coefTable
+
+#   # Check if ready
+#   if(!ready) {
+#     rows <- data.frame(coefficients = ".",
+#                        estimate = ".",
+#                        SE = ".")
+#     row.names(rows) <- paste0("row", 1)
+#     coefTable$addRows(rows)
+#     return()
+#   }
+
+#   rows <- data.frame(coefficients = coefficients,
+#                      estimate = estimate,
+#                      SE = SE,
+#                      .isNewGroup = group)
+#   row.names(rows) <- paste0("row", 1:length(coefficients))
+#   coefTable$addRows(rows)
+
+#   coefTable$addFootnote(gettextf("An ARIMA(%s, %s, %s)(%s, %s, %s)[%s] model was fitted.", p, d, q, P, D, Q, m))
+# }
 
 .tsResults <- function(jaspResults, dataset, options, ready) {
   if (!ready)
@@ -210,141 +246,97 @@ ARIMATimeSeries <- function(jaspResults, dataset, options) {
 }
 
 .tsResidualDiagnostics <- function(jaspResults, fit, dataset, options, ready, position, dependencies){
-  if (!is.null(jaspResults[["residContainer"]]))
-    return()
+  # if (!options[["residualPlots"]])
+  #   return()
 
   residContainer <- createJaspContainer(title = gettext("Residual Diagnostics Plots"))
-  residContainer$dependOn(dependencies)
+  residContainer$dependOn(c(dependencies, "residualPlots"))
   jaspResults[["residContainer"]] <- residContainer
   jaspResults[["residContainer"]]$position <- position
 
-  if (!ready) {
+  if (!ready | !options[["residualPlots"]]) {
     return()
   }
 
   dataset$y <- residuals(fit)
 
-  # if (options$residualTimeSeries) {
-    residualTimeSeriesPlot <- createJaspPlot(title = "Time Series Plot", width = 480)
-    residualTimeSeriesPlot$dependOn(c("residualTimeSeries", "residualTsType", "residualPoints"))
+  if (is.null(residContainer[["residualTimeSeriesPlot"]]) & options$residualTs) {
+    residualTimeSeriesPlot <- createJaspPlot(title = "Time Series Plot", width = 660)
+    residualTimeSeriesPlot$dependOn(c("residualTs", "residualTsType", "residualsDistribution"))
     residualTimeSeriesPlot$position <- 1
     residContainer[["residualTimeSeriesPlot"]] <- residualTimeSeriesPlot
 
-    if (options$residualTimeSeries) .tsFillTimeSeriesPlot(residualTimeSeriesPlot, dataset, options, type = options$residualTsType, yName = "Standardized Residuals")
-  # }
-  if (options$residualACF) {
+    if (!ready)
+      return()
+
+    .tsFillTimeSeriesPlot(residualTimeSeriesPlot, dataset, options, type = options$residualTsType, distribution = options$residualsDistribution, yName = "Standardized Residuals")
+  }
+
+  if (is.null(residContainer[["residualACFPlot"]]) & options$residualACF) {
     residualACFPlot <- createJaspPlot(title = "Autocorrelation Function Plot")
-    residualACFPlot$dependOn(c("residualACF", "residualAcfCI", "residualAcfCIValue"))
+    residualACFPlot$dependOn(c("residualACF", "residualAcfCI", "residualAcfCIValue", "acfMax"))
     residualACFPlot$position <- 2
     residContainer[["residualACFPlot"]] <- residualACFPlot
 
+    if (!ready)
+      return()
+
     .tsFillACF(residualACFPlot, type = "ACF", dataset, options, ci = options$residualAcfCI, ciValue = options$residualAcfCIValue)
   }
-  if (options$residualDistribution) {
-    residualDistribution <- createJaspPlot(title = "Histogram Plot")
-    residualDistribution$dependOn(c("residualDistribution", "distPlotDensity", "distPlotRug", "binWidthType", "numberOfBins"))
-    residualDistribution$position <- 3
-    residContainer[["residualDistribution"]] <- residualDistribution
 
-    .tsFillHist(residualDistribution, dataset, options, 
-                rugs = options$distPlotRug, displayDensity = options$distPlotDensity, 
-                binWidthType = options$binWidthType, numberOfBins = options$numberOfBins)
-  }
-  if (options$residualQQ) {
+  if (is.null(residContainer[["residualQQPlot"]]) & options$residualQQ) {
     residualQQPlot <- createJaspPlot(title = "Q-Q Plot")
     residualQQPlot$dependOn("residualQQ")
     residualQQPlot$position <- 4
     residContainer[["residualQQPlot"]] <- residualQQPlot
 
+    if (!ready)
+      return()
+
     residualQQPlot$plotObject <- jaspGraphs::plotQQnorm(dataset$y, ablineColor = "darkred")
-    # .tsFillResidualQQPlot(residualQQPlot, dataset, options)
+  }
+
+  if (is.null(residContainer[["ljungPlot"]]) & options$residualLB) {
+    ljungPlot <- createJaspPlot(title = "Ljung-Box Plot")
+    ljungPlot$dependOn(c("residualLB", "acfMax"))
+    ljungPlot$position <- 3
+    residContainer[["ljungPlot"]] <- ljungPlot
+
+    if (!ready)
+      return()
+
+    .tsFillLjungBoxPlot(ljungPlot, dataset, options)
   }
 }
 
-.tsFillHist <- function(residualDistribution, dataset, options, rugs, displayDensity, binWidthType, numberOfBins) {
-
-  lwd <- 1
-  variable <- dataset$y
-
-  if (binWidthType == "doane") {  # https://en.wikipedia.org/wiki/Histogram#Doane's_formula
-    sigma.g1 <- sqrt((6*(length(variable) - 2)) / ((length(variable) + 1)*(length(variable) + 3)))
-    g1 <- mean(abs(variable)^3)
-    k <- 1 + log2(length(variable)) + log2(1 + (g1 / sigma.g1))
-    binWidthType <- k
-  } else if (binWidthType == "fd" && nclass.FD(variable) > 10000) { # FD-method will produce extreme number of bins and crash ggplot, mention this in footnote
-    binWidthType <- 10000
-  } else if (binWidthType == "manual") {
-    binWidthType <- numberOfBins
-  }
-
-  h <- hist(variable, plot = FALSE, breaks = binWidthType)
-  # h <- hist(variable, plot = FALSE)
-
-  if (!displayDensity)
-    yhigh <- max(h$counts)
+.tsReadDataDescriptives <- function(jaspResults, dataset, options) {
+  if (!is.null(dataset))
+    return(dataset)
   else {
-    dens <- density(variable)
-    yhigh <- max(max(h$density), max(dens$y))
-  }
-  ylow <- 0
-  xticks <- base::pretty(c(variable, h$breaks), min.n = 3)
+    dataset <- .readDataSetToEnd(columns.as.numeric = options$dependentVariable)
+    yName <- options$dependentVariable[1]
+    y     <- dataset[, yName]
+    t     <- 1:nrow(dataset)
 
-  if (!displayDensity) {
-    p <-
-      jaspGraphs::drawAxis(
-        xName = "Residuals", yName = gettext("Counts"), xBreaks = xticks,
-        yBreaks = base::pretty(c(0, h$counts)), force = TRUE, xLabels = xticks
-      )
-  } else {
-    p <-
-      jaspGraphs::drawAxis(
-        xName = "Residuals", yName = gettext("Density"), xBreaks = xticks,
-        yBreaks = c(0,  1.05 * yhigh), force = TRUE, yLabels = NULL,
-        xLabels = xticks
-      )
+    dat <- data.frame(y, t)
+    return(dat)
+  }
+}
+
+.tsFillLjungBoxPlot <- function(ljungPlot, dataset, options) {
+  pValues <- numeric(options$acfMax)
+  nLags <- 1:options$acfMax
+  for (i in nLags) {
+    pValues[i] <- stats::Box.test(dataset$y, i, type = "Ljung-Box")$p.value
   }
 
-  if (displayDensity) {
-    p <- p +
-      ggplot2::geom_histogram(
-        data    = data.frame(variable),
-        mapping = ggplot2::aes(x = variable, y = ..density..),
-        breaks  = h[["breaks"]],
-        fill    = "grey",
-        col     = "black",
-        size    = .7
-      ) +
-      ggplot2::geom_line(
-        data    = data.frame(x = dens$x, y = dens$y),
-        mapping = ggplot2::aes(x = x, y = y),
-        lwd     = lwd,
-        col     = "black"
-      )
-  } else {
-    p <- p +
-      ggplot2::geom_histogram(
-        data     = data.frame(variable),
-        mapping  = ggplot2::aes(x = variable, y = ..count..),
-        breaks   = h[["breaks"]],
-        fill     = "grey",
-        col      = "black",
-        size     = .7
-      )
-  }
+  p <- jaspGraphs::JASPScatterPlot(nLags, pValues, addSmooth = F, 
+                                   plotAbove = "none", plotRight = "none", 
+                                   xName = "Lag", yName = expression(italic(p)-value)) 
+  p$subplots$mainPlot <- 
+    p$subplots$mainPlot + ggplot2::geom_segment(ggplot2::aes(x = 0, xend = length(nLags), y = 0.05, yend = 0.05), 
+                                     linetype = "dashed", color = "blue") +
+                          ggplot2::ylim(c(0, 1))
 
-  if (rugs)
-    p <- p + ggplot2::geom_rug(data = data.frame(variable), mapping = ggplot2::aes(x = variable), sides = "b")
-
-  # JASP theme
-  p <- jaspGraphs::themeJasp(p,
-                             axisTickWidth = .7,
-                             bty = list(type = "n", ldwX = .7, lwdY = 1))
-  # TODO: Fix jaspgraphs axis width X vs Y. See @vandenman.
-
-  if (displayDensity)
-    p <- p + ggplot2::theme(axis.ticks.y = ggplot2::element_blank())
-
-  residualDistribution$plotObject <- p
-  
-  return()
+  ljungPlot$plotObject <- p
 }

@@ -61,6 +61,15 @@ Form
                 RadioButton { value: "line";	label: qsTr("Line") }
                 RadioButton { value: "both";	label: qsTr("Both");	checked: true }
             }
+            RadioButtonGroup
+            {
+                name:	"distribution"
+                title: qsTr("Distribution")
+                // radioButtonsOnSameRow: true
+                RadioButton { value: "density";	label: qsTr("Density") }
+                RadioButton { value: "histogram";	label: qsTr("Histogram") }
+                RadioButton { value: "none";	label: qsTr("None");	checked: true }
+            }
         }
         // CheckBox
         // {
@@ -75,6 +84,28 @@ Form
         //     label:  qsTr("Detrend using linear regression")
         //     IntegerField { name: "poly"; label: qsTr("Polynomial"); defaultValue: 1; min: 0; max: 10; }
         // }
+    }
+    Group
+    {
+        title: qsTr("Stationarity Tests")
+        CheckBox
+        {
+            name:   "adfTest"
+            id:     adfTest
+            label:  qsTr("Augmented Dickey-Fuller")
+        }
+        CheckBox
+        {
+            name:   "ppTest"
+            id:     ppTest
+            label:  qsTr("Phillips-Perron")
+        }
+        CheckBox
+        {
+            name:   "kpssTest"
+            id:     kpssTest
+            label:  qsTr("Kwiatkowski-Phillips-Schmidt-Shin")
+        }
     }
 
     Section
@@ -193,14 +224,22 @@ Form
     Section
     {
         title: qsTr("Residual Diagnostics")
-        Group
+        CheckBox
         {
-            title: qsTr("Plots")
+            name:   "residualPlots"
+            id:     residualPlots
+            label:  qsTr("Residual Plots")
+            // CheckBox
+            // {
+            //     name:   "residualTimeSeries"
+            //     id:     residualTimeSeries
+            //     label:  qsTr("Time series plot")
             CheckBox
             {
-                name:   "residualTimeSeries"
-                id:     residualTimeSeries
-                label:  qsTr("Time series plot")
+                name:       "residualTs"
+                id:         residualTs
+                label:      qsTr("Time series")
+                checked:    true
                 RadioButtonGroup
                 {
                     name:	"residualTsType"
@@ -209,57 +248,14 @@ Form
                     RadioButton { value: "line";	label: qsTr("Line") }
                     RadioButton { value: "both";	label: qsTr("Both");	checked: true }
                 }
-            }
-            CheckBox
-            {
-                name:   "residualACF"
-                id:     residualACF
-                label:  qsTr("Autocorrelation function")
-                CheckBox
+                RadioButtonGroup
                 {
-                    name: "residualAcfCI"
-                    label: qsTr("Show confidence interval")
-                    checked: true
-                    childrenOnSameRow: true
-                    CIField { name: "residualAcfCIValue" }
-                }
-            }
-            CheckBox
-            {
-                name:   "residualDistribution"
-                id:     residualDistribution
-                label:  qsTr("Distribution plot")              
-            }
-            Group
-            {
-                // Layout.columnSpan: 2
-                enabled: residualDistribution.checked
-
-                indent:		true
-                CheckBox {			name: "distPlotDensity";	label: qsTr("Display density")						}
-                CheckBox {			name: "distPlotRug";		label: qsTr("Display rug marks")					}
-                DropDown {
-                    name: "binWidthType"
-                    label: qsTr("Bin width type")
-                    indexDefaultValue: 0
-                    values:
-                        [
-                        {label: qsTr("Sturges"),				value: "sturges"},
-                        {label: qsTr("Scott"),					value: "scott"},
-                        {label: qsTr("Doane"),					value: "doane"},
-                        {label: qsTr("Freedman-Diaconis"),		value: "fd"	},
-                        {label: qsTr("Manual"),					value: "manual"	}
-                    ]
-                    id: binWidthType
-                }
-                DoubleField
-                {
-                    name:			"numberOfBins"
-                    label:			qsTr("Number of bins")
-                    defaultValue:	30
-                    min:			3;
-                    max:			10000;
-                    enabled:		binWidthType.currentValue === "manual"
+                    name:	"residualsDistribution"
+                    title: qsTr("Distribution")
+                    // radioButtonsOnSameRow: true
+                    RadioButton { value: "density";	label: qsTr("Density") }
+                    RadioButton { value: "histogram";	label: qsTr("Histogram") }
+                    RadioButton { value: "none";	label: qsTr("None");	checked: true }
                 }
             }
             CheckBox
@@ -268,17 +264,49 @@ Form
                 id:     residualQQ
                 label:  qsTr("Q-Q plot")
             }
-        }
-        Group
-        {
-            title: qsTr("Tests")
-            CheckBox
+            Group
             {
-                name:   "ljungBox"
-                id:     ljungBox
-                label:  qsTr("Ljung-Box test")
+                title: qsTr("Autocorrelation")
+                CheckBox
+                {
+                    name:   "residualACF"
+                    id:     residualACF
+                    label:  qsTr("Autocorrelation function")
+                    CheckBox
+                    {
+                        name: "residualAcfCI"
+                        label: qsTr("Show confidence interval")
+                        checked: true
+                        childrenOnSameRow: true
+                        CIField { name: "residualAcfCIValue" }
+                    }
+                }
+                CheckBox
+                {
+                    name:   "residualLB"
+                    id:     residualLB
+                    label:  qsTr("Ljung-Box p-values")
+                }
+                IntegerField 
+                {
+                    name: "acfMax"
+                    label: qsTr("Maximum lag")
+                    min: 1
+                    defaultValue: 10
+                    enabled: residualACF.checked | residualLB.checked
+                }
             }
         }
+        // Group
+        // {
+        //     title: qsTr("Tests")
+        //     CheckBox
+        //     {
+        //         name:   "ljungBox"
+        //         id:     ljungBox
+        //         label:  qsTr("Ljung-Box test")
+        //     }
+        // }
     }
 
     Section

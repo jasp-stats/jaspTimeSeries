@@ -41,6 +41,15 @@ Form
                 RadioButton { value: "line";	label: qsTr("Line") }
                 RadioButton { value: "both";	label: qsTr("Both");	checked: true }
             }
+            RadioButtonGroup
+            {
+                name:	"distribution"
+                title: qsTr("Distribution")
+                // radioButtonsOnSameRow: true
+                RadioButton { value: "density";	label: qsTr("Density") }
+                RadioButton { value: "histogram";	label: qsTr("Histogram") }
+                RadioButton { value: "none";	label: qsTr("None");	checked: true }
+            }
         }
         CheckBox
         {
@@ -94,6 +103,7 @@ Form
                 childrenOnSameRow: true
                 CIField { name: "acfCIValue" }
             }
+            IntegerField { name: "acfMax"; label: qsTr("Maximum lag"); min: 1; defaultValue: 10 }
         }
         CheckBox
         {
