@@ -29,8 +29,11 @@ ARIMATimeSeries <- function(jaspResults, dataset, options) {
     .tsTimeSeriesPlot(jaspResults, dataset, options, ready, position = 1, dependencies = c("transformation", "timeSeriesPlot", "tsType", "dependentVariable", "distribution"))
 
     .tsCreateTableCoefficients(jaspResults, fit, dataset, options, ready, position = 2)
+
+    if (options$adfTest | options$ppTest | options$kpssTest)
+      .tsCreateTableStationarityTests(jaspResults, fit, dataset, options, ready, position = 3)
     
-    .tsResidualDiagnostics(jaspResults, fit, dataset, options, ready, position = 3, dependencies = .tsDependencies)
+    .tsResidualDiagnostics(jaspResults, fit, dataset, options, ready, position = 4, dependencies = .tsDependencies)
     # .tsTimeSeriesPlot(jaspResults, dataset, options, ready, position = 1)
     
     # .tsACF(jaspResults, dataset, options, ready, position = 3)
@@ -83,41 +86,83 @@ ARIMATimeSeries <- function(jaspResults, dataset, options) {
   }
 }
 
-# .tsCreateTableStationarityTests <- function(jaspResults, fit, dataset, options, ready, position) {
-#   if (!is.null(jaspResults[["coefTable"]])) return()
+.tsCreateTableStationarityTests <- function(jaspResults, fit, dataset, options, ready, position) {
+  # makeTable <- options$adfTest | options$ppTest | options$kpssTest
+  if (!is.null(jaspResults[["stationaryTable"]]) & (options$adfTest | options$ppTest | options$kpssTest)) return()
 
-#   coefTable <- createJaspTable("Coefficients")
-#   coefTable$dependOn(.tsDependencies)
-#   coefTable$position <- position
-#   coefTable$showSpecifiedColumnsOnly <- TRUE
+  stationaryTable <- createJaspTable("Stationarity Tests")
+  stationaryTable$dependOn(c(.tsDependencies, "adfTest", "ppTest", "kpssTest"))
+  stationaryTable$position <- position
+  stationaryTable$showSpecifiedColumnsOnly <- TRUE
 
-#   coefTable$addColumnInfo(name = "coefficients",   title = "",                         type = "string")
-#   coefTable$addColumnInfo(name = "estimate",       title = gettext("Estimate"),        type = "number")
-#   coefTable$addColumnInfo(name = "SE",             title = gettext("Standard Error"),  type = "number")
+  stationaryTable$addColumnInfo(name = "test",      title = gettext("Test"),                      type = "string")
+  stationaryTable$addColumnInfo(name = "statistic", title = gettext("Statistic"),                 type = "string")
+  # stationaryTable$addColumnInfo(name = "estimate",  title = gettext("Estimate"),                  type = "number")
+  stationaryTable$addColumnInfo(name = "lag",       title = gettext("Truncation lag parameter"),  type = "integer")
+  stationaryTable$addColumnInfo(name = "p",         title = gettext("p-value"),                   type = "number")
 
-#   # coefTable$setExpectedSize(2)
+  # stationaryTable$setExpectedSize(2)
 
-#   jaspResults[["coefTable"]] <- coefTable
+  jaspResults[["stationaryTable"]] <- stationaryTable
 
-#   # Check if ready
-#   if(!ready) {
-#     rows <- data.frame(coefficients = ".",
-#                        estimate = ".",
-#                        SE = ".")
-#     row.names(rows) <- paste0("row", 1)
-#     coefTable$addRows(rows)
-#     return()
-#   }
+  # Check if ready
+  if(!ready) {
+    rows <- data.frame(test = ".",
+                       statistic = ".",
+                      #  estimate = ".",
+                       lag = ".",
+                       p = ".")
+    row.names(rows) <- paste0("row", 1)
+    stationaryTable$addRows(rows)
+    return()
+  }
 
-#   rows <- data.frame(coefficients = coefficients,
-#                      estimate = estimate,
-#                      SE = SE,
-#                      .isNewGroup = group)
-#   row.names(rows) <- paste0("row", 1:length(coefficients))
-#   coefTable$addRows(rows)
+  statistic <- lag <- p <- vector()
 
-#   coefTable$addFootnote(gettextf("An ARIMA(%s, %s, %s)(%s, %s, %s)[%s] model was fitted.", p, d, q, P, D, Q, m))
-# }
+  dfA <- dfP <- dfK <- NULL
+  if (options$adfTest) {
+    # a <- tseries::adf.test(dataset$y)
+    dfA <- .stationarityTests(tseries::adf.test(dataset$y), "Augmented Dickey-Fuller t")
+  }
+  if (options$ppTest) {
+    # type = c("Z(alpha)", "Z(t_alpha)")
+    # rho normalized bias test (regression coefficient) vs. tau studentized test
+    ppType <- ""
+    dfP <- .stationarityTests(tseries::pp.test(dataset$y), sprintf("Phillips-Perron %s", ppType))
+  }
+  if (options$kpssTest) {
+    # null = c("Level", "Trend")
+    kpssType <- ""
+    dfK <- .stationarityTests(tseries::kpss.test(dataset$y), sprintf("Kwiatkowski-Phillips-Schmidt-Shin %s \u03B7", kpssType))
+  }
+  # p <- tseries::pp.test(dataset$y)
+  # k <- tseries::kpss.test(dataset$y)
+
+  # DF t, PP Z(alpha hat) and Z(t_alpha hat), KPSS level/trend eta
+  # test <- c("Augmented Dickey-Fuller t", "Phillips-Perron", "Kwiatkowski-Phillips-Schmidt-Shin")
+  # statistic <- c(a$statistic, p$statistic, k$statistic)
+  # estimate <- c(a$statistic, p$statistic, k$statistic)
+  # lag <- c(a$parameter, p$parameter, k$parameter)
+  # p <- c(a$p.value, p$p.value, k$p.value)
+
+  # rows <- data.frame(test = test,
+  #                    statistic = statistic,
+  #                   #  estimate = estimate,
+  #                    lag = lag,
+  #                    p = p)
+  if (options$adfTest | options$ppTest | options$kpssTest) {
+    rows <- rbind(dfA, dfP, dfK)
+    row.names(rows) <- paste0("row", 1:nrow(rows))
+    stationaryTable$addRows(rows)
+  }
+
+  # stationaryTable$addFootnote(gettextf())
+}
+
+.stationarityTests <- function(fit, test) {
+  df <- data.frame(test = test, statistic = fit$statistic, lag = fit$parameter, p = fit$p.value)
+  return(df)
+}
 
 .tsResults <- function(jaspResults, dataset, options, ready) {
   if (!ready)
@@ -259,6 +304,7 @@ ARIMATimeSeries <- function(jaspResults, dataset, options) {
   }
 
   dataset$y <- residuals(fit)
+  # stdres <- rs/sqrt(fitit$sigma2)
 
   if (is.null(residContainer[["residualTimeSeriesPlot"]]) & options$residualTs) {
     residualTimeSeriesPlot <- createJaspPlot(title = "Time Series Plot", width = 660)
@@ -294,6 +340,7 @@ ARIMATimeSeries <- function(jaspResults, dataset, options) {
       return()
 
     residualQQPlot$plotObject <- jaspGraphs::plotQQnorm(dataset$y, ablineColor = "darkred")
+    # this plot from jaspGraphs still uses jaspTheme()
   }
 
   if (is.null(residContainer[["ljungPlot"]]) & options$residualLB) {
