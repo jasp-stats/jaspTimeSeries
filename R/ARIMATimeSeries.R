@@ -91,16 +91,16 @@ ARIMATimeSeries <- function(jaspResults, dataset, options) {
   if (!is.null(jaspResults[["stationaryTable"]]) & (options$adfTest | options$ppTest | options$kpssTest)) return()
 
   stationaryTable <- createJaspTable("Stationarity Tests")
-  stationaryTable$dependOn(c(.tsDependencies, "adfTest", "ppTest", "kpssTest"))
+  stationaryTable$dependOn(c(.tsDependencies, "adfTest", "ppTest", "kpssTest", "kpssNull"))
   stationaryTable$position <- position
   stationaryTable$showSpecifiedColumnsOnly <- TRUE
 
   stationaryTable$addColumnInfo(name = "test",      title = gettext("Test"),                      type = "string")
-  stationaryTable$addColumnInfo(name = "statistic", title = gettext("Statistic"),                 type = "string")
+  stationaryTable$addColumnInfo(name = "statistic", title = gettext("Statistic"),                 type = "number")
   # stationaryTable$addColumnInfo(name = "estimate",  title = gettext("Estimate"),                  type = "number")
   stationaryTable$addColumnInfo(name = "lag",       title = gettext("Truncation lag parameter"),  type = "integer")
-  stationaryTable$addColumnInfo(name = "p",         title = gettext("p-value"),                   type = "number")
-
+  stationaryTable$addColumnInfo(name = "p",         title = gettext("p"),                         type = "pvalue",  format = "p:.0101")
+  stationaryTable$addColumnInfo(name = "null",      title = sprintf("H\u2080"),                   type = "string")
   # stationaryTable$setExpectedSize(2)
 
   jaspResults[["stationaryTable"]] <- stationaryTable
@@ -111,7 +111,8 @@ ARIMATimeSeries <- function(jaspResults, dataset, options) {
                        statistic = ".",
                       #  estimate = ".",
                        lag = ".",
-                       p = ".")
+                       p = ".",
+                       null = ".")
     row.names(rows) <- paste0("row", 1)
     stationaryTable$addRows(rows)
     return()
@@ -122,18 +123,26 @@ ARIMATimeSeries <- function(jaspResults, dataset, options) {
   dfA <- dfP <- dfK <- NULL
   if (options$adfTest) {
     # a <- tseries::adf.test(dataset$y)
-    dfA <- .stationarityTests(tseries::adf.test(dataset$y), "Augmented Dickey-Fuller t")
+    # alternative stationary
+    dfA <- .stationarityTests(tseries::adf.test(dataset$y), "Augmented Dickey-Fuller t", gettext("Non-stationary"))
+    # p value 0.01 - 0.99
   }
   if (options$ppTest) {
     # type = c("Z(alpha)", "Z(t_alpha)")
+    # alternative stationary
     # rho normalized bias test (regression coefficient) vs. tau studentized test
-    ppType <- ""
-    dfP <- .stationarityTests(tseries::pp.test(dataset$y), sprintf("Phillips-Perron %s", ppType))
+    ppType <- "Z(\u03B1)"
+    dfP <- .stationarityTests(tseries::pp.test(dataset$y), sprintf("Phillips-Perron %s", ppType), gettext("Non-stationary"))
+    # p value 0.01 - 0.99
   }
   if (options$kpssTest) {
+    # null is stationary
     # null = c("Level", "Trend")
-    kpssType <- ""
-    dfK <- .stationarityTests(tseries::kpss.test(dataset$y), sprintf("Kwiatkowski-Phillips-Schmidt-Shin %s \u03B7", kpssType))
+    dfK <- .stationarityTests(tseries::kpss.test(dataset$y, null = options$kpssNull),
+                              sprintf("Kwiatkowski-Phillips-Schmidt-Shin %s \u03B7", options$kpssNull),
+                              gettextf("%s stationary", options$kpssNull))
+                              
+    # p value 0.1 - 0.01
   }
   # p <- tseries::pp.test(dataset$y)
   # k <- tseries::kpss.test(dataset$y)
@@ -159,8 +168,8 @@ ARIMATimeSeries <- function(jaspResults, dataset, options) {
   # stationaryTable$addFootnote(gettextf())
 }
 
-.stationarityTests <- function(fit, test) {
-  df <- data.frame(test = test, statistic = fit$statistic, lag = fit$parameter, p = fit$p.value)
+.stationarityTests <- function(fit, test, null) {
+  df <- data.frame(test = test, statistic = fit$statistic, lag = fit$parameter, p = fit$p.value, null)
   return(df)
 }
 

@@ -99,12 +99,28 @@ Form
             name:   "ppTest"
             id:     ppTest
             label:  qsTr("Phillips-Perron")
+            // RadioButtonGroup
+            // {
+            //     name: "ppType"
+            //     title: qsTr("Type") 
+            //     radioButtonsOnSameRow: true
+            //     RadioButton { value: "normalized";	label: qsTr("Normalized biased") }
+            //     RadioButton { value: "studentzed";	label: qsTr("Studentized") }
+            // }
         }
         CheckBox
         {
             name:   "kpssTest"
             id:     kpssTest
             label:  qsTr("Kwiatkowski-Phillips-Schmidt-Shin")
+            RadioButtonGroup
+            {
+                name: "kpssNull"
+                title: qsTr("Null hypothesis")
+                radioButtonsOnSameRow: true
+                RadioButton { value: "Level";	label: qsTr("Level") }
+                RadioButton { value: "Trend";	label: qsTr("Trend") }
+            }
         }
     }
 

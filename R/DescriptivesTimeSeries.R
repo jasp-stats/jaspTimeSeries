@@ -83,8 +83,25 @@ DescriptivesTimeSeries <- function(jaspResults, dataset, options) {
 
   p <- jaspGraphs::JASPScatterPlot(dat$t, dat$y, yName = yName, xName = "t",
                                    addSmooth = F, plotAbove = "none", plotRight = distribution)
-  if(type != "points")  p$subplots$mainPlot$layers[[1]] <- jaspGraphs::geom_line()
-  if(type == "both")    p$subplots$mainPlot <- p$subplots$mainPlot + jaspGraphs::geom_point()
+  if (type != "points")  p$subplots$mainPlot$layers[[1]] <- jaspGraphs::geom_line()
+  if (type == "both")    p$subplots$mainPlot <- p$subplots$mainPlot + jaspGraphs::geom_point()
+
+
+  # if (forecast)
+  # f <- forecast::forecast(fit)
+  # f <- as.data.frame(f)
+  # names(f) <- c("y", "lb80", "ub80", "lb95", "ub95")
+  # f$t <- as.numeric(row.names(f))
+  # obs <- data.frame(t = dat$t, y = dat$y)
+  # fcs <- data.frame(t = f$t, y = f$y)
+  # new <- rbind(obs, fc)
+  # cols <- rep(c("black", "blue"), c(nrow(obs), nrow(fcs)))
+  # p <- ggplot()
+  # p <- p + 
+  #   geom_ribbon(aes(ymin = lb95, ymax = ub95, x = t), f, alpha = 0.1) +
+  #   geom_ribbon(aes(ymin = lb80, ymax = ub80, x = t), f, alpha = 0.2)
+  # p <- p + geom_line(aes(x = t, y = y, group = 1), data = new, color = cols)
+
 
 
   timeSeriesPlot$plotObject <- p
