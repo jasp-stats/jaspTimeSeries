@@ -335,6 +335,15 @@ Form
                 name:   "forecastTimeSeries"
                 id:     forecastTimeSeries
                 label:  qsTr("Time series plot")
+                RadioButtonGroup
+                {
+                    name:	"forecastType"
+                    radioButtonsOnSameRow: true
+                    RadioButton { value: "points";	label: qsTr("Points") }
+                    RadioButton { value: "line";	label: qsTr("Line") }
+                    RadioButton { value: "both";	label: qsTr("Both");	checked: true }
+                }
+                IntegerField { name: "nForecasts"; label: qsTr("Number of forecasts"); min: 1; defaultValue: 10 }
                 CheckBox
                 {
                     name:       "addObserved"
