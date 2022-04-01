@@ -126,41 +126,54 @@ ARIMATimeSeries <- function(jaspResults, dataset, options) {
 
   # statistic <- lag <- p <- vector()
   
-  smallerA <- smallerP <- smallerK <- F
-  rowNames <- NULL
-  dfA <- dfP <- dfK <- NULL
+  smallerA <- smallerP <- smallerK <- greaterA <- greaterP <- greaterK <- F
+  # rowNames <- NULL
+  # dfA <- dfP <- dfK <- NULL
   if (options$adfTest) {
     # a <- tseries::adf.test(dataset$y)
     # alternative stationary
-    rowNames <- c(rowNames, "adf")
+    # rowNames <- c(rowNames, "adf")
+    # rowNames <- c(rowNames, "row1")
     fit <- tseries::adf.test(dataset$y)
     smallerA <- fit$p.value == 0.01
     greaterA <- fit$p.value == 0.99
     dfA <- .stationarityRows(fit, "Augmented Dickey-Fuller t", gettext("Non-stationary"))
     # p value 0.01 - 0.99
+    stationaryTable$addRows(dfA)
+    stationaryTable$setRowName(rowIndex = 1, newName = "adf")
   }
   if (options$ppTest) {
     # type = c("Z(alpha)", "Z(t_alpha)")
     # alternative stationary
     # rho normalized bias test (regression coefficient) vs. tau studentized test
-    rowNames <- c(rowNames, "pp")
+    # rowNames <- c(rowNames, "pp")
+    # rowNames <- c(rowNames, "row2")
     ppType <- "Z(\u03B1)"
     fit <- tseries::pp.test(dataset$y)
     smallerP <- fit$p.value == 0.01
     greaterP <- fit$p.value == 0.99
     dfP <- .stationarityRows(fit, sprintf("Phillips-Perron %s", ppType), gettext("Non-stationary"))
+    stationaryTable$addRows(dfP)
+    idxP <- ifelse(options$adfTest, 2, 1)
+    stationaryTable$setRowName(rowIndex = idxP, newName = "pp")
     # p value 0.01 - 0.99
   }
   if (options$kpssTest) {
     # null is stationary
     # null = c("Level", "Trend")
-    rowNames <- c(rowNames, "kpss")
+    # rowNames <- c(rowNames, "kpss")
+    # rowNames <- c(rowNames, "row3")
     fit <- tseries::kpss.test(dataset$y, null = options$kpssNull)
     smallerK <- fit$p.value == 0.01
     greaterK <- fit$p.value == 0.1
     dfK <- .stationarityRows(fit,
                              sprintf("Kwiatkowski-Phillips-Schmidt-Shin %s %s", options$kpssNull, "\u03B7"),
                              gettextf("%s stationary", options$kpssNull))
+                             
+    stationaryTable$addRows(dfK)
+    idxK <- ifelse(options$adfTest & options$ppTest, 3, ifelse(options$adfTest | options$ppTest, 2, 1))
+    stationaryTable$setRowName(rowIndex = idxK, newName = "kpss")
+
                               
     # p value 0.1 - 0.01
   }
@@ -179,23 +192,47 @@ ARIMATimeSeries <- function(jaspResults, dataset, options) {
   #                   #  estimate = estimate,
   #                    lag = lag,
   #                    p = p)
-  if (options$adfTest | options$ppTest | options$kpssTest) {
-    rows <- rbind(dfA, dfP, dfK)
-    # row.names(rows) <-  c("row1", "row2", "row3")
-    stationaryTable$addRows(rows, rowNames =  c("row1", "row2", "row3"))
-    # stationaryTable$$addFootnote(gettext("The p-values are interpolated from tables of critical values, and are not precise if the computed statistic is outside the table (see Help file)."))
-  }
+  # if (options$adfTest | options$ppTest | options$kpssTest) {
+  #   rows <- rbind(dfA, dfP, dfK)
+  #   row.names(rows) <-  rowNames
+  #   stationaryTable$addRows(rows)
+  #   # stationaryTable$addRows(rows, rowNames = rowNames)
+
+  #   # stationaryTable$addRows(rows, rowNames = c("row1", "row2", "row3"))
+  #   # stationaryTable$$addFootnote(gettext("The p-values are interpolated from tables of critical values, and are not precise if the computed statistic is outside the table (see Help file)."))
+  # }
 
   # Depends on which rows are in the table
-  if (smallerA | smallerK | smallerP) {
-    footRow <- NULL
-    if (options$adfTest & smallerA) footRow <- c(footRow, "adf")
-    if (options$ppTest & smallerP) footRow <- c(footRow, "pp")
-    if (options$kpssTest & smallerK) footRow <- c(footRow, "kpss")
-    stationaryTable$addFootnote(gettextf("The p-value is actually smaller than shown p-value (see Help file)."), colNames = "p", rowNames = c("row2"))
-  }
+  # if (smallerA | smallerK | smallerP) {
+  #   footRow <- NULL
+  #   if (options$adfTest & smallerA) footRow <- c(footRow, "adf")
+  #   if (options$ppTest & smallerP) footRow <- c(footRow, "pp")
+  #   if (options$kpssTest & smallerK) footRow <- c(footRow, "kpss")
+  #   # if (options$adfTest & smallerA) footRow <- c(footRow, "row1")
+  #   # if (options$ppTest & smallerP) footRow <- c(footRow, "row2")
+  #   # if (options$kpssTest & smallerK) footRow <- c(footRow, "row3")
+  #   stationaryTable$addFootnote(gettextf("The p-value is actually smaller than p-value shown (see Help file)."), colNames = "p", rowNames = footRow)
+  # }
+
   # stationaryTable$addFootnote(gettextf("The p-value is actually greater than shown p-value (see Help file)."), rowNames = , colNames = "p")
 
+  # txt <- gettextf("The p-value is actually %s than p-value shown (see Help file).", greaterOrSmaller)
+  if (smallerA | smallerK | smallerP)
+    stationaryTable$addFootnote(gettext("The p-value is actually smaller than p-value shown (see Help file)."), 
+                                colNames = "p", rowNames = .stationaryFootnoteRows(smallerA, smallerP, smallerK, options))
+
+  if (greaterA | greaterP | greaterK)                            
+    stationaryTable$addFootnote(gettext("The p-value is actually greater than p-value shown (see Help file)."), 
+                                colNames = "p", rowNames = .stationaryFootnoteRows(greaterA, greaterP, greaterK, options))
+
+}
+
+.stationaryFootnoteRows <- function(A, P, K, options) {
+  footRow <- NULL
+  if (options$adfTest & A)  footRow <- c(footRow, "adf")
+  if (options$ppTest & P)   footRow <- c(footRow, "pp")
+  if (options$kpssTest & K) footRow <- c(footRow, "kpss")
+  return(footRow)
 }
 
 .stationarityRows <- function(fit, test, null) {
@@ -247,7 +284,7 @@ ARIMATimeSeries <- function(jaspResults, dataset, options) {
 
   return(fit)
 }
-
+ 
 .tsCreateTableCoefficients <- function(jaspResults, fit, dataset, options, ready, position) {
   if (!is.null(jaspResults[["coefTable"]])) return()
 
