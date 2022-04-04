@@ -28,18 +28,23 @@ ARIMATimeSeries <- function(jaspResults, dataset, options) {
 
     .tsTimeSeriesPlot(jaspResults, dataset, options, ready, position = 1, dependencies = c("transformation", "timeSeriesPlot", "tsType", "dependentVariable", "distribution"))
 
-    .tsCreateTableCoefficients(jaspResults, fit, dataset, options, ready, position = 2)
+    .tsCreateTableModel(jaspResults, fit, dataset, options, ready, position = 3)
+
+    .tsCreateTableCoefficients(jaspResults, fit, dataset, options, ready, position = 4)
 
     if (options$adfTest | options$ppTest | options$kpssTest)
-      .tsCreateTableStationarityTests(jaspResults, fit, dataset, options, ready, position = 3)
+      .tsCreateTableStationarityTests(jaspResults, fit, dataset, options, ready, position = 2)
     
-    .tsResidualDiagnostics(jaspResults, fit, dataset, options, ready, position = 4, dependencies = .tsDependencies)
+    .tsResidualDiagnostics(jaspResults, fit, dataset, options, ready, position = 5, dependencies = .tsDependencies)
     # .tsTimeSeriesPlot(jaspResults, dataset, options, ready, position = 1)
     
     # .tsACF(jaspResults, dataset, options, ready, position = 3)
 
     if (options$forecastTimeSeries)
-      .tsForecastPlot(jaspResults, fit, dataset, options, ready, position = 5, dependencies = c(.tsDependencies, "forecastTimeSeries", "addObserved", "forecastType", "nForecasts"))
+      .tsForecastPlot(jaspResults, fit, dataset, options, ready, position = 6, dependencies = c(.tsDependencies, "forecastTimeSeries", "addObserved", "forecastType", "nForecasts"))
+
+    if (options$save != "")
+      .tsSaveForecasts(jaspResults, fit, dataset, options)
 }
 
 # data dependencies
@@ -284,6 +289,46 @@ ARIMATimeSeries <- function(jaspResults, dataset, options) {
 
   return(fit)
 }
+
+.tsCreateTableModel <- function(jaspResults, fit, dataset, options, ready, position) {
+  if (!is.null(jaspResults[["modelTable"]])) return()
+
+  table <- createJaspTable("Model Summary")
+  table$dependOn(.tsDependencies)
+  table$position <- position
+  table$showSpecifiedColumnsOnly <- TRUE
+
+  table$addColumnInfo(name = "sigma",   title = "\u03C3\u00B2",             type = "number")
+  table$addColumnInfo(name = "ll",      title = gettext("Log-Likelihood"),  type = "number")
+  table$addColumnInfo(name = "aic",     title = gettext("AIC"),             type = "number")
+  table$addColumnInfo(name = "aicc",    title = gettext("AICc"),            type = "number")
+  table$addColumnInfo(name = "bic",     title = gettext("BIC"),             type = "number")
+
+  # coefTable$setExpectedSize(2)
+
+  jaspResults[["modelTable"]] <- table
+
+  # Check if ready
+  if(!ready) {
+    rows <- data.frame(sigma = ".",
+                       ll = ".",
+                       aic = ".",
+                       aicc = ".", 
+                       bic = ".")
+    row.names(rows) <- paste0("row", 1)
+    table$addRows(rows)
+    return()
+  }
+
+
+  rows <- data.frame(sigma = fit$sigma2,
+                     ll = fit$loglik,
+                     aic = fit$aic,
+                     aicc = fit$aicc,
+                     bic = fit$bic)
+  row.names(rows) <- paste0("row", 1)
+  table$addRows(rows)
+}
  
 .tsCreateTableCoefficients <- function(jaspResults, fit, dataset, options, ready, position) {
   if (!is.null(jaspResults[["coefTable"]])) return()
@@ -333,6 +378,7 @@ ARIMATimeSeries <- function(jaspResults, dataset, options) {
     group <- T
     coefficients <- gettext("Constant")
     # I want the intercept to be the first row...
+    # which(names(estimate) == "Intercept")
     estimate  <- c(estimate[length(estimate)], estimate[-length(estimate)])
     SE        <- c(SE[length(SE)], SE[-length(SE)])
   }
@@ -368,7 +414,11 @@ ARIMATimeSeries <- function(jaspResults, dataset, options) {
   row.names(rows) <- paste0("row", 1:length(coefficients))
   coefTable$addRows(rows)
 
-  coefTable$addFootnote(gettextf("An ARIMA(%s, %s, %s)(%s, %s, %s)[%s] model was fitted.", p, d, q, P, D, Q, m))
+  if (P >= 1 | D >= 1 | Q >= 1) {
+    coefTable$addFootnote(gettextf("An ARIMA(%s, %s, %s)(%s, %s, %s)[%s] model was fitted.", p, d, q, P, D, Q, m))
+  } else {
+    coefTable$addFootnote(gettextf("An ARIMA(%s, %s, %s) model was fitted.", p, d, q))
+  }
 }
 
 .tsResidualDiagnostics <- function(jaspResults, fit, dataset, options, ready, position, dependencies){
@@ -487,16 +537,25 @@ ARIMATimeSeries <- function(jaspResults, dataset, options) {
   }
 }
 
-.tsFillforecastPlot <- function(plot, fit, dataset, options) {
-  yName <- options$dependentVariable[1]
-
-  dat <- dataset
-
+.tsForecasts <- function(fit, dataset, options) {
   pred <- forecast::forecast(fit, h = options$nForecasts)
   pred <- as.data.frame(pred)
   names(pred) <- c("y", "lb80", "ub80", "lb95", "ub95")
-  pred$t <- (nrow(dat) + 1):(nrow(dat)+nrow(pred))
-  obs <- data.frame(t = dat$t, y = dat$y)
+  pred$t <- (nrow(dataset) + 1):(nrow(dataset)+nrow(pred))
+  return(pred)
+}
+
+.tsFillforecastPlot <- function(plot, fit, dataset, options) {
+  yName <- options$dependentVariable[1]
+
+  # dat <- dataset
+
+  # pred <- forecast::forecast(fit, h = options$nForecasts)
+  # pred <- as.data.frame(pred)
+  # names(pred) <- c("y", "lb80", "ub80", "lb95", "ub95")
+  # pred$t <- (nrow(dat) + 1):(nrow(dat)+nrow(pred))
+  pred <- .tsForecasts(fit, dataset, options)
+  obs <- data.frame(t = dataset$t, y = dataset$y)
   fcs <- data.frame(t = pred$t, y = pred$y)
   both <- rbind(obs, fcs)
   cols <- rep(c("black", "blue"), c(nrow(obs), nrow(fcs)))
@@ -515,4 +574,20 @@ ARIMATimeSeries <- function(jaspResults, dataset, options) {
   if (options$forecastType != "line") p <- p + jaspGraphs::geom_point(ggplot2::aes(x = t, y = y), data = both[idx, ], color = cols[idx])
 
   plot$plotObject <- p
+}
+
+.tsSaveForecasts <- function(jaspResults, fit, dataset, options) {
+  # if (is.null(jaspResults[["save"]])) {
+  #   state <- createJaspState()
+  #   state$dependOn(c(.tsDependencies, "save"))
+  #   jaspResults[["save"]] <- state
+  # }
+
+  # if (options$save != "") {
+    forecasts <- .tsForecasts(fit, dataset, options)
+    utils::write.csv(forecasts, file = options$save, row.names = FALSE)
+    # state[["object"]] <- TRUE
+  # }
+
+  # return()
 }

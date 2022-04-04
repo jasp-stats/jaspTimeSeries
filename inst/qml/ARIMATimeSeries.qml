@@ -27,6 +27,7 @@ Form
             name: "covariates"
             label: qsTr("Covariates")
             allowedColumns: ["ordinal", "scale"]
+            height: 120
         }
     }
 
@@ -353,6 +354,15 @@ Form
                 }
             }
         }
+        FileSelector
+		{
+			name:	             "save"
+			label:	            qsTr("Save forecasts as")
+            placeholderText:    qsTr("e.g. forecasts.csv")
+			filter:	            "*.csv"
+			save:	            true
+            fieldWidth:                     180 * preferencesModel.uiScale
+		}
     }
 }
 // dataSetModel.rowCount()
