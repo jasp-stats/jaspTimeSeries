@@ -32,7 +32,7 @@ ARIMATimeSeries <- function(jaspResults, dataset, options) {
 
     .tsCreateTableCoefficients(jaspResults, fit, dataset, options, ready, position = 4)
 
-    if (options$adfTest | options$ppTest | options$kpssTest)
+    if (options$adfTest | options$ppTest | options$kpssLevel | options$kpssTrend)
       .tsCreateTableStationarityTests(jaspResults, fit, dataset, options, ready, position = 2)
     
     .tsResidualDiagnostics(jaspResults, fit, dataset, options, ready, position = 5, dependencies = .tsDependencies)
@@ -98,10 +98,10 @@ ARIMATimeSeries <- function(jaspResults, dataset, options) {
 
 .tsCreateTableStationarityTests <- function(jaspResults, fit, dataset, options, ready, position) {
   # makeTable <- options$adfTest | options$ppTest | options$kpssTest
-  if (!is.null(jaspResults[["stationaryTable"]]) & (options$adfTest | options$ppTest | options$kpssTest)) return()
+  if (!is.null(jaspResults[["stationaryTable"]]) & (options$adfTest | options$ppTest | options$kpssLevel | options$kpssTrend)) return()
 
   stationaryTable <- createJaspTable("Stationarity Tests")
-  stationaryTable$dependOn(c("adfTest", "ppTest", "kpssTest", "kpssNull"))
+  stationaryTable$dependOn(c("dependentVariable", "adfTest", "ppTest", "kpssLevel", "kpssTrend"))
   stationaryTable$position <- position
   stationaryTable$showSpecifiedColumnsOnly <- TRUE
 
@@ -131,7 +131,7 @@ ARIMATimeSeries <- function(jaspResults, dataset, options) {
 
   # statistic <- lag <- p <- vector()
   
-  smallerA <- smallerP <- smallerK <- greaterA <- greaterP <- greaterK <- F
+  smallerA <- smallerP <- smallerKl <- smallerKt <- greaterA <- greaterP <- greaterKl <- greaterKt <- F
   # rowNames <- NULL
   # dfA <- dfP <- dfK <- NULL
   if (options$adfTest) {
@@ -163,23 +163,39 @@ ARIMATimeSeries <- function(jaspResults, dataset, options) {
     stationaryTable$setRowName(rowIndex = idxP, newName = "pp")
     # p value 0.01 - 0.99
   }
-  if (options$kpssTest) {
+  if (options$kpssLevel) {
     # null is stationary
     # null = c("Level", "Trend")
     # rowNames <- c(rowNames, "kpss")
     # rowNames <- c(rowNames, "row3")
-    fit <- tseries::kpss.test(dataset$y, null = options$kpssNull)
-    smallerK <- fit$p.value == 0.01
-    greaterK <- fit$p.value == 0.1
-    dfK <- .stationarityRows(fit,
-                             sprintf("Kwiatkowski-Phillips-Schmidt-Shin %s %s", options$kpssNull, "\u03B7"),
-                             gettextf("%s stationary", options$kpssNull))
+    fit <- tseries::kpss.test(dataset$y, null = "Level")
+    smallerKl <- fit$p.value == 0.01
+    greaterKl <- fit$p.value == 0.1
+    dfKl <- .stationarityRows(fit,
+                              sprintf("Kwiatkowski-Phillips-Schmidt-Shin Level %s", "\u03B7"),
+                              gettext("Level stationary"))
                              
-    stationaryTable$addRows(dfK)
-    idxK <- ifelse(options$adfTest & options$ppTest, 3, ifelse(options$adfTest | options$ppTest, 2, 1))
-    stationaryTable$setRowName(rowIndex = idxK, newName = "kpss")
+    stationaryTable$addRows(dfKl)
+    idxKl <- ifelse(options$adfTest & options$ppTest, 3, ifelse(options$adfTest | options$ppTest, 2, 1))
+    stationaryTable$setRowName(rowIndex = idxKl, newName = "kpssLevel")
 
                               
+    # p value 0.1 - 0.01
+  }
+  if (options$kpssTrend) {
+    fit <- tseries::kpss.test(dataset$y, null = "Trend")
+    smallerKt <- fit$p.value == 0.01
+    greaterKt <- fit$p.value == 0.1
+    dfKt <- .stationarityRows(fit,
+                              sprintf("Kwiatkowski-Phillips-Schmidt-Shin Trend %s", "\u03B7"),
+                              gettext("Trend stationary"))
+                             
+    stationaryTable$addRows(dfKt)
+    otherRows <- sum(options$adfTest, options$ppTest, options$kpssLevel)
+    idxKt <- ifelse(otherRows == 3, 4, 
+                    ifelse(otherRows == 2, 3,
+                           ifelse(otherRows == 1, 2, 1)))
+    stationaryTable$setRowName(rowIndex = idxKt, newName = "kpssTrend")                              
     # p value 0.1 - 0.01
   }
   # p <- tseries::pp.test(dataset$y)
@@ -222,21 +238,22 @@ ARIMATimeSeries <- function(jaspResults, dataset, options) {
   # stationaryTable$addFootnote(gettextf("The p-value is actually greater than shown p-value (see Help file)."), rowNames = , colNames = "p")
 
   # txt <- gettextf("The p-value is actually %s than p-value shown (see Help file).", greaterOrSmaller)
-  if (smallerA | smallerK | smallerP)
-    stationaryTable$addFootnote(gettext("The p-value is actually smaller than p-value shown (see Help file)."), 
-                                colNames = "p", rowNames = .stationaryFootnoteRows(smallerA, smallerP, smallerK, options))
+  if (smallerA | smallerP | smallerKl | smallerKt)
+    stationaryTable$addFootnote(gettext("The p-value is actually less than p-value shown (see Help file)."), 
+                                colNames = "p", rowNames = .stationaryFootnoteRows(smallerA, smallerP, smallerKl, smallerKt, options))
 
-  if (greaterA | greaterP | greaterK)                            
+  if (greaterA | greaterP | greaterKl | greaterKt)                            
     stationaryTable$addFootnote(gettext("The p-value is actually greater than p-value shown (see Help file)."), 
-                                colNames = "p", rowNames = .stationaryFootnoteRows(greaterA, greaterP, greaterK, options))
+                                colNames = "p", rowNames = .stationaryFootnoteRows(greaterA, greaterP, greaterKl, greaterKt, options))
 
 }
 
-.stationaryFootnoteRows <- function(A, P, K, options) {
+.stationaryFootnoteRows <- function(A, P, Kl, Kt, options) {
   footRow <- NULL
   if (options$adfTest & A)  footRow <- c(footRow, "adf")
   if (options$ppTest & P)   footRow <- c(footRow, "pp")
-  if (options$kpssTest & K) footRow <- c(footRow, "kpss")
+  if (options$kpssLevel & Kl) footRow <- c(footRow, "kpssLevel")
+  if (options$kpssTrend & Kt) footRow <- c(footRow, "kpssTrend")
   return(footRow)
 }
 
@@ -300,8 +317,8 @@ ARIMATimeSeries <- function(jaspResults, dataset, options) {
 
   table$addColumnInfo(name = "sigma",   title = "\u03C3\u00B2",             type = "number")
   table$addColumnInfo(name = "ll",      title = gettext("Log-Likelihood"),  type = "number")
-  table$addColumnInfo(name = "aic",     title = gettext("AIC"),             type = "number")
   table$addColumnInfo(name = "aicc",    title = gettext("AICc"),            type = "number")
+  table$addColumnInfo(name = "aic",     title = gettext("AIC"),             type = "number")
   table$addColumnInfo(name = "bic",     title = gettext("BIC"),             type = "number")
 
   # coefTable$setExpectedSize(2)
@@ -312,8 +329,8 @@ ARIMATimeSeries <- function(jaspResults, dataset, options) {
   if(!ready) {
     rows <- data.frame(sigma = ".",
                        ll = ".",
-                       aic = ".",
-                       aicc = ".", 
+                       aicc = ".",
+                       aic = ".", 
                        bic = ".")
     row.names(rows) <- paste0("row", 1)
     table$addRows(rows)
@@ -323,8 +340,8 @@ ARIMATimeSeries <- function(jaspResults, dataset, options) {
 
   rows <- data.frame(sigma = fit$sigma2,
                      ll = fit$loglik,
-                     aic = fit$aic,
                      aicc = fit$aicc,
+                     aic = fit$aic,
                      bic = fit$bic)
   row.names(rows) <- paste0("row", 1)
   table$addRows(rows)

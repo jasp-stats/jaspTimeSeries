@@ -184,6 +184,41 @@ DescriptivesTimeSeries <- function(jaspResults, dataset, options) {
   }
 }
 
+.tsAC <- function(x, lag) {
+  iN <- 1 / length(x)
+  
+  xMean    <- mean(x)
+  xC       <- x - xMean
+  
+  c0 <- iN * sum(xC ^ 2)
+  
+  c1 <- numeric(lag)
+  names(c1) <- paste0("lag", 1:lag)
+  for(i in 1:lag) {
+    xLaggedC <- lagged(x, i) - xMean
+    c1[i]    <- iN * sum(xC * xLaggedC, na.rm = T)
+  }
+  
+  ac <- c1 / c0
+  return(ac)
+}
+
+.tsBartlettCI <- function(r, N, ci = 0.95) {
+  z <- qnorm((1 + ci) / 2)
+  
+  lag <- length(r)
+  df  <- data.frame(r = r, se = numeric(lag), lb = numeric(lag), ub = numeric(lag))
+  for(i in 1:lag) {
+    df$se[i] <- sqrt((1 / N) * (1 + 2 * sum(r[1:i] ^ 2)))
+  }
+  
+  b <- z * df$se
+  
+  df$lb <- df$r - b
+  df$ub <- df$r + b
+  return(df)
+}
+
 .tsFillACF <- function(plot, type, dataset, options, ci, ciValue) {
   # y <- dataset[, options$dependentVariable[1]]
   y <- na.omit(dataset$y)
@@ -191,19 +226,24 @@ DescriptivesTimeSeries <- function(jaspResults, dataset, options) {
   if (type == "ACF")  ac <- acf(y, plot = F, lag.max = options$acfMax)
   if (type == "PACF") ac <- pacf(y, plot = F, lag.max = options$acfMax)
   xBreaks <- jaspGraphs::getPrettyAxisBreaks(ac$lag)
+  xBreaks <- xBreaks[!xBreaks%%1] # keep only integers
   yRange <- ac$acf
   # if (type == "both")
   #   xBreaks <- jaspGraphs::getPrettyAxisBreaks(c(yACF$lag, yPACF$lag))
+  # dfSegment <- data.frame(x = min(xBreaks), xend = max(xBreaks))
+  xMin <- min(xBreaks)
+  xMax <- max(xBreaks)
 
   p <- ggplot2::ggplot()
   if (ci) {
     clim      <- qnorm((1 + ciValue) / 2) / sqrt(ac$n.used)
-    dfSegment <- data.frame(x = min(xBreaks), xend = max(xBreaks), y = c(clim, -clim))
+    # dfSegment <- data.frame(x = min(xBreaks), xend = max(xBreaks), y = c(clim, -clim))
+    yClim <- c(clim, -clim)
     yRange    <- c(yRange, clim, -clim)
 
     p <- p +
-      ggplot2::geom_segment(ggplot2::aes(x = x, xend = xend, y = y, yend = y),
-                            linetype = "dashed", color = "blue", data = dfSegment)
+      ggplot2::geom_segment(ggplot2::aes(x = xMin, xend = xMax, y = yClim, yend = yClim),
+                            linetype = "dashed", color = "blue")
   }
 
   yBreaks <- jaspGraphs::getPrettyAxisBreaks(yRange)
@@ -211,14 +251,15 @@ DescriptivesTimeSeries <- function(jaspResults, dataset, options) {
   dat <- data.frame(acf = ac$acf, lag = ac$lag)
   # if (type == "PACF") dat <- data.frame(acf = yPACF$acf, lag = yPACF$lag)
 
-  # p <- p +
+  p <- p +
   #   ggplot2::geom_linerange(data = dat, ggplot2::aes(x = lag, ymin = 0, ymax = acf)) +
-  #   ggplot2::scale_x_continuous(name = "Lag", breaks = xBreaks, limits = range(xBreaks)) +
-  #   ggplot2::scale_y_continuous(name = type, breaks = yBreaks, limits = range(yBreaks))
+    ggplot2::scale_x_continuous(name = "Lag", breaks = xBreaks, limits = range(xBreaks)) +
+    ggplot2::scale_y_continuous(name = type, breaks = yBreaks, limits = range(yBreaks))
 
   p <- p +
     ggplot2::geom_linerange(data = dat, ggplot2::aes(x = lag, ymin = 0, ymax = acf), size = 1) +
-    ggplot2::labs(x = "Lag", y = type) +
+    ggplot2::geom_segment(ggplot2::aes(x = xMin, xend = xMax, y = 0, yend = 0), alpha = 0.2) +
+    # ggplot2::labs(x = "Lag", y = type) +
     jaspGraphs::geom_rangeframe() +
     jaspGraphs::themeJaspRaw()
     # ggplot2::scale_x_continuous(name = "Lag", breaks = xBreaks, limits = range(xBreaks)) +
@@ -268,13 +309,13 @@ DescriptivesTimeSeries <- function(jaspResults, dataset, options) {
 
   dat <- data.frame(x = yPSD$freq, y = yPSD$spec)
 
-  # xBreaks <- jaspGraphs::getPrettyAxisBreaks(dat$x)
-  # yBreaks <- jaspGraphs::getPrettyAxisBreaks(dat$y)
+  xBreaks <- jaspGraphs::getPrettyAxisBreaks(dat$x)
+  yBreaks <- jaspGraphs::getPrettyAxisBreaks(dat$y)
 
   p <- ggplot2::ggplot(dat, ggplot2::aes(x = x, y = y)) + jaspGraphs::geom_line() +
-    ggplot2::labs(x = "Frequency", y = "Spectrum")
-    # ggplot2::scale_x_continuous(name = "Frequency", breaks = xBreaks) +
-    # ggplot2::scale_y_continuous(name = "Spectrum", breaks = yBreaks)
+    # ggplot2::labs(x = "Frequency", y = "Spectrum")
+    ggplot2::scale_x_continuous(name = "Frequency", breaks = xBreaks) +
+    ggplot2::scale_y_continuous(name = "Spectrum", breaks = yBreaks)
 
   if (options$scaling != "noScaling") {
     logTrans <- options$scaling

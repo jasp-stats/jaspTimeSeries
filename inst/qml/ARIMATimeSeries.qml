@@ -30,24 +30,9 @@ Form
             height: 120
         }
     }
-
+    
     Group
     {
-        RadioButtonGroup
-        {
-            name: "transformation"
-            title: qsTr("Data Transformation")
-            info: "test"
-            RadioButton  { value: "noTransform";	label: qsTr("None");    checked: true }
-            RadioButton  { value: "center";	        label: qsTr("Center") }
-            RadioButton
-            {
-                value: "detrend"
-                label: qsTr("Detrend")
-                // IntegerField { name: "poly"; label: qsTr("Polynomial"); defaultValue: 1; min: 0; max: 10; }
-            }
-        }
-        // title: qsTr("Data Transformation")
         CheckBox
         {
             name: "timeSeriesPlot"
@@ -74,56 +59,64 @@ Form
         }
         // CheckBox
         // {
-        //     name:   "center"
-        //     id:     center
-        //     label:  qsTr("Center")
-        // }
-        // CheckBox
-        // {
         //     name:   "detrend"
         //     id:     detrend
         //     label:  qsTr("Detrend using linear regression")
         //     IntegerField { name: "poly"; label: qsTr("Polynomial"); defaultValue: 1; min: 0; max: 10; }
         // }
     }
-    Group
+
+    Section
     {
-        title: qsTr("Stationarity Tests")
-        CheckBox
+        title: qsTr("Data Preparation")
+        Group
         {
-            name:   "adfTest"
-            id:     adfTest
-            label:  qsTr("Augmented Dickey-Fuller")
-        }
-        CheckBox
-        {
-            name:   "ppTest"
-            id:     ppTest
-            label:  qsTr("Phillips-Perron")
-            // RadioButtonGroup
-            // {
-            //     name: "ppType"
-            //     title: qsTr("Type") 
-            //     radioButtonsOnSameRow: true
-            //     RadioButton { value: "normalized";	label: qsTr("Normalized biased") }
-            //     RadioButton { value: "studentzed";	label: qsTr("Studentized") }
-            // }
-        }
-        CheckBox
-        {
-            name:   "kpssTest"
-            id:     kpssTest
-            label:  qsTr("Kwiatkowski-Phillips-Schmidt-Shin")
-            RadioButtonGroup
+            title: qsTr("Stationarity Tests")
+            CheckBox
             {
-                name: "kpssNull"
-                title: qsTr("Null hypothesis")
-                radioButtonsOnSameRow: true
-                RadioButton { value: "Level";	label: qsTr("Level") }
-                RadioButton { value: "Trend";	label: qsTr("Trend") }
+                name:   "adfTest"
+                id:     adfTest
+                label:  qsTr("Augmented Dickey-Fuller")
+            }
+            CheckBox
+            {
+                name:   "ppTest"
+                id:     ppTest
+                label:  qsTr("Phillips-Perron")
+                // RadioButtonGroup
+                // {
+                //     name: "ppType"
+                //     title: qsTr("Type") 
+                //     radioButtonsOnSameRow: true
+                //     RadioButton { value: "normalized";	label: qsTr("Normalized biased") }
+                //     RadioButton { value: "studentzed";	label: qsTr("Studentized") }
+                // }
+            }
+            Group
+            {
+                title: qsTr("Kwiatkowski-Phillips-Schmidt-Shin")
+                columns: 2
+                CheckBox { name: "kpssLevel"; id: kpssLevel;	label: qsTr("Level stationary") }
+                CheckBox { name: "kpssTrend"; id: kpssTrend;	label: qsTr("Trend stationary") }
+
             }
         }
+        RadioButtonGroup
+        {
+            name: "transformation"
+            title: qsTr("Transformation")
+            info: "test"
+            RadioButton  { value: "noTransform";	label: qsTr("None");    checked: true }
+            RadioButton  { value: "center";	        label: qsTr("Center") }
+            RadioButton
+            {
+                value: "detrend"
+                label: qsTr("Detrend using linear regression")
+                IntegerField { name: "poly"; label: qsTr("Polynomial"); defaultValue: 1; min: 0; max: 10; }
+            }
+        } 
     }
+
 
     Section
     {
@@ -135,6 +128,7 @@ Form
                 name:       "addConstant"
                 id:         addConstant
                 label:      qsTr("Include constant")
+                checked:    true
                 enabled:    best.checked | (manual.checked & (d.value < 2 | D.value < 2))
             }
             CheckBox
