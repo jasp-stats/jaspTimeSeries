@@ -185,7 +185,8 @@ DescriptivesTimeSeries <- function(jaspResults, dataset, options) {
 }
 
 .tsAC <- function(x, lag) {
-  iN <- 1 / length(x)
+  N  <- length(x)
+  iN <- 1 / N
   
   xMean    <- mean(x)
   xC       <- x - xMean
@@ -195,6 +196,7 @@ DescriptivesTimeSeries <- function(jaspResults, dataset, options) {
   c1 <- numeric(lag)
   names(c1) <- paste0("lag", 1:lag)
   for(i in 1:lag) {
+    xLagged  <- c(rep(NA, i), x[1:(N - i)])
     xLaggedC <- lagged(x, i) - xMean
     c1[i]    <- iN * sum(xC * xLaggedC, na.rm = T)
   }
@@ -203,52 +205,53 @@ DescriptivesTimeSeries <- function(jaspResults, dataset, options) {
   return(ac)
 }
 
-.tsBartlettCI <- function(r, N, ci = 0.95) {
+.tsBartlettSE <- function(r, N, ci = 0.95) {
   z <- qnorm((1 + ci) / 2)
   
   lag <- length(r)
-  df  <- data.frame(r = r, se = numeric(lag), lb = numeric(lag), ub = numeric(lag))
+  df  <- data.frame(r = r, se = numeric(lag))
   for(i in 1:lag) {
-    df$se[i] <- sqrt((1 / N) * (1 + 2 * sum(r[1:i] ^ 2)))
+    df$se[i] <- z * sqrt((1 / N) * (1 + 2 * sum(r[1:i] ^ 2)))
   }
-  
-  b <- z * df$se
-  
-  df$lb <- df$r - b
-  df$ub <- df$r + b
+
   return(df)
 }
 
 .tsFillACF <- function(plot, type, dataset, options, ci, ciValue) {
   # y <- dataset[, options$dependentVariable[1]]
   y <- na.omit(dataset$y)
-
-  if (type == "ACF")  ac <- acf(y, plot = F, lag.max = options$acfMax)
-  if (type == "PACF") ac <- pacf(y, plot = F, lag.max = options$acfMax)
-  xBreaks <- jaspGraphs::getPrettyAxisBreaks(ac$lag)
+  lag <- options$acfMax
+  if (type == "ACF")  ac <- tsAC(y, lag = lag)
+  # if (type == "PACF") ac <- pacf(y, plot = F, lag.max = options$acfMax)
+  xBreaks <- jaspGraphs::getPrettyAxisBreaks(ac)
   xBreaks <- xBreaks[!xBreaks%%1] # keep only integers
-  yRange <- ac$acf
+  yRange <- ac
   # if (type == "both")
   #   xBreaks <- jaspGraphs::getPrettyAxisBreaks(c(yACF$lag, yPACF$lag))
   # dfSegment <- data.frame(x = min(xBreaks), xend = max(xBreaks))
   xMin <- min(xBreaks)
   xMax <- max(xBreaks)
 
+  dat <- data.frame(acf = ac, lag = 1:lag)
   p <- ggplot2::ggplot()
   if (ci) {
-    clim      <- qnorm((1 + ciValue) / 2) / sqrt(ac$n.used)
+    if (ciType == "normal") {
+      clim      <- qnorm((1 + ciValue) / 2) / sqrt(ac$n.used)
+      dat$se <- rep(clim, nrow(dat))
+    } else {
+      clim <- tsBartlettSE(ac, length(y), ciValue)
+      dat$se <- clim$se
+    }
     # dfSegment <- data.frame(x = min(xBreaks), xend = max(xBreaks), y = c(clim, -clim))
-    yClim <- c(clim, -clim)
-    yRange    <- c(yRange, clim, -clim)
+    # yClim <- c(clim, -clim)
+    yRange    <- c(yRange, dat$se, -dat$se)
 
     p <- p +
-      ggplot2::geom_segment(ggplot2::aes(x = xMin, xend = xMax, y = yClim, yend = yClim),
+      ggplot2::geom_line(ggplot2::aes(x = xMin, xend = xMax, y = yClim, yend = yClim),
                             linetype = "dashed", color = "blue")
   }
 
   yBreaks <- jaspGraphs::getPrettyAxisBreaks(yRange)
-
-  dat <- data.frame(acf = ac$acf, lag = ac$lag)
   # if (type == "PACF") dat <- data.frame(acf = yPACF$acf, lag = yPACF$lag)
 
   p <- p +

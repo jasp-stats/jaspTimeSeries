@@ -142,7 +142,7 @@ ARIMATimeSeries <- function(jaspResults, dataset, options) {
     fit <- tseries::adf.test(dataset$y)
     smallerA <- fit$p.value == 0.01
     greaterA <- fit$p.value == 0.99
-    dfA <- .stationarityRows(fit, "Augmented Dickey-Fuller t", gettext("Non-stationary"))
+    dfA <- .stationarityRows(fit, "Augmented Dickey-Fuller t", gettext("Non-stationary")) # h0 a unit root
     # p value 0.01 - 0.99
     stationaryTable$addRows(dfA)
     stationaryTable$setRowName(rowIndex = 1, newName = "adf")
@@ -173,7 +173,7 @@ ARIMATimeSeries <- function(jaspResults, dataset, options) {
     greaterKl <- fit$p.value == 0.1
     dfKl <- .stationarityRows(fit,
                               sprintf("Kwiatkowski-Phillips-Schmidt-Shin Level %s", "\u03B7"),
-                              gettext("Level stationary"))
+                              gettext("Level stationary")) # mean stationarity
                              
     stationaryTable$addRows(dfKl)
     idxKl <- ifelse(options$adfTest & options$ppTest, 3, ifelse(options$adfTest | options$ppTest, 2, 1))
@@ -188,7 +188,7 @@ ARIMATimeSeries <- function(jaspResults, dataset, options) {
     greaterKt <- fit$p.value == 0.1
     dfKt <- .stationarityRows(fit,
                               sprintf("Kwiatkowski-Phillips-Schmidt-Shin Trend %s", "\u03B7"),
-                              gettext("Trend stationary"))
+                              gettext("Trend stationary")) # linear trend stationarity
                              
     stationaryTable$addRows(dfKt)
     otherRows <- sum(options$adfTest, options$ppTest, options$kpssLevel)
