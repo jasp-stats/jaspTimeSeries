@@ -10,14 +10,14 @@ Form
         AvailableVariablesList { name: "variables" }
         AssignedVariablesList  
         {
-            name: "dependentVariable"
+            name: "dependent"
             label: qsTr("Variable")
             allowedColumns: ["ordinal", "scale"]
             singleVariable: true
         }
         AssignedVariablesList  
         {
-            name: "timeVariable"
+            name: "time"
             label: qsTr("Time")
             allowedColumns: ["ordinal", "scale"]
             singleVariable: true
@@ -35,7 +35,7 @@ Form
             checked: true
             RadioButtonGroup
             {
-                name:	"tsType"
+                name:	"timeSeriesPlotType"
                 radioButtonsOnSameRow: true
                 RadioButton { value: "points";	label: qsTr("Points") }
                 RadioButton { value: "line";	label: qsTr("Line") }
@@ -43,7 +43,7 @@ Form
             }
             RadioButtonGroup
             {
-                name:	"tsDistribution"
+                name:	"timeSeriesPlotDistribution"
                 title: qsTr("Distribution")
                 // radioButtonsOnSameRow: true
                 RadioButton { value: "density";	label: qsTr("Density") }
@@ -61,19 +61,19 @@ Form
                 columns: 2
                 IntegerField
                 {
-                    name: "lag"
+                    name: "stateSpacePlotLag"
                     label: qsTr("Lag")
                     defaultValue: 1
                 }
                 CheckBox
                 {
-                    name: "addSmooth"
+                    name: "stateSpacePlotRegressionLine"
                     id: sspSmooth
                     label: qsTr("Add regression line")
                     checked: true
                     RadioButtonGroup
                     {
-                        name:	"regressionType"
+                        name:	"stateSpacePlotRegressionType"
                         radioButtonsOnSameRow: true
                         RadioButton { value: "smooth";	label: qsTr("Smooth");	checked: true }
                         RadioButton { value: "linear";	label: qsTr("Linear")				  }
@@ -81,11 +81,11 @@ Form
 
                     CheckBox
                     {
-                        name: "addSmoothCI"
+                        name: "stateSpacePlotRegressionCi"
                         label: qsTr("Show confidence interval")
                         checked: true
                         childrenOnSameRow: true
-                        CIField { name: "addSmoothCIValue" }
+                        CIField { name: "stateSpacePlotRegressionCiLevel" }
                     }
                 }
             }
@@ -101,7 +101,7 @@ Form
                 label: qsTr("Show confidence interval")
                 checked: true
                 childrenOnSameRow: true
-                CIField { name: "acfCiValue" }
+                CIField { name: "acfCiLevel" }
                 RadioButtonGroup
                 {
                   name: "acfCiType"
@@ -123,7 +123,7 @@ Form
                 label: qsTr("Show confidence interval")
                 checked: true
                 childrenOnSameRow: true
-                CIField { name: "pacfCiValue" }
+                CIField { name: "pacfCiLevel" }
             }
             IntegerField { name: "pacfMaxLag"; label: qsTr("Maximum lag"); min: 1; defaultValue: 10 }
         }
@@ -137,25 +137,25 @@ Form
                 columns: 2
                 CheckBox
                 {
-                    name: "detrend"
+                    name: "powerSpectralDensityDetrend"
                     label: qsTr("Detrend")
                     checked: true
                 }
                 CheckBox
                 {
-                    name: "demean"
+                    name: "powerSpectralDensityDemean"
                     label: qsTr("Demean")
                     checked: false
                 }
             }
             CheckBox
             {
-                name: "smoothing"
+                name: "powerSpectralDensitySmoother"
                 label: qsTr("Add kernel smoother")
                 childrenOnSameRow: true
                 DropDown
                 {
-                    name: "kernel"
+                    name: "powerSpectralDensitySmootherKernel"
                     values:
                     [
                         { label: qsTr("Daniell"), value: "daniell" },
@@ -167,25 +167,25 @@ Form
                     columns: 2
                     IntegerField
                     {
-                        name: "m1"
+                        name: "powerSpectralDensitySmootherKernelM1"
                         label: qsTr("Dimensions")
                     }
                     IntegerField
                     {
-                        name: "m2"
+                        name: "powerSpectralDensitySmootherKernelM2"
                     }
                 }
             }
             DoubleField
             {
-                name: "taper"
+                name: "powerSpectralDensityTaper"
                 label: qsTr("Taper")
                 min: 0
                 max: 0.5
             }
             RadioButtonGroup
             {
-                name: "scaling"
+                name: "powerSpectralDensityScaling"
                 title: qsTr("Scaling")
                 radioButtonsOnSameRow: true
                 RadioButton
