@@ -22,13 +22,15 @@ DescriptivesTimeSeries <- function(jaspResults, dataset, options) {
     if (ready)
       dataset <- .tsReadDataDescriptives(jaspResults, dataset, options)
 
-    .tsTimeSeriesPlotDescriptives(jaspResults, dataset, options, ready, position = 1, dependencies = c("timeSeriesPlot", "tsType", "dependentVariable", "distribution"))
+    .tsTimeSeriesPlotDescriptives(jaspResults, dataset, options, ready, position = 1, dependencies = c("timeSeriesPlot", "tsType", "dependentVariable", "tsDistribution"))
     
     .tsStateSpacePlotDescriptives(jaspResults, dataset, options, ready, position = 2, dependencies  = c("stateSpacePlot", "lag", "regressionType", "addSmooth", "addSmoothCI", "addSmoothCIValue", "dependentVariable"))
 
-    .tsACFDescriptives(jaspResults, dataset, options, ready, position = 3, dependencies = c("acfPlots", "acfCI", "acfCIValue", "acfMax", "dependentVariable"))
+    .tsACFDescriptives(jaspResults, dataset, options, ready, position = 3, dependencies = c("dependentVariable", "acf"))
 
-    .tsPowerSpectralDensityDescriptives(jaspResults, dataset, options, ready, position = 4, dependencies = c("powerSpectralDensity", "detrend", "demean", "smoothing", "kernel", "m1", "m2", "taper", "scaling", "noScaling", "log", "log10", "dependentVariable"))
+    .tsPACFDescriptives(jaspResults, dataset, options, ready, position = 4, dependencies = c("dependentVariable", "pacf"))
+
+    .tsPowerSpectralDensityDescriptives(jaspResults, dataset, options, ready, position = 5, dependencies = c("powerSpectralDensity", "detrend", "demean", "smoothing", "kernel", "m1", "m2", "taper", "scaling", "noScaling", "log", "log10", "dependentVariable"))
 }
 
 .tsReadDataDescriptives <- function(jaspResults, dataset, options) {
@@ -59,7 +61,8 @@ DescriptivesTimeSeries <- function(jaspResults, dataset, options) {
     if (!ready)
       return()
 
-    .tsFillTimeSeriesPlot(plot, dataset, options, type = options$tsType, distribution = options$distribution)
+    .tsFillTimeSeriesPlot(plot, dataset, options, type = options$tsType, distribution = options$tsDistribution)
+
   }
 }
 
@@ -155,32 +158,51 @@ DescriptivesTimeSeries <- function(jaspResults, dataset, options) {
 }
 
 .tsACFDescriptives <- function(jaspResults, dataset, options, ready, position, dependencies){
-  if (!is.null(jaspResults[["acfContainer"]]))
+
+  if (!options$acf)
     return()
 
-  acfContainer <- createJaspContainer(title = gettext("Autocorrelation Function Plots"))
-  acfContainer$dependOn(dependencies)
-  jaspResults[["acfContainer"]] <- acfContainer
-  jaspResults[["acfContainer"]]$position <- position
+  if (is.null(jaspResults[["acfPlot"]])) {
+    plot <- createJaspPlot(title = "Autocorrelation Function")
+    plot$dependOn(c("acfCi", "acfCiValue", "acfCiType", "acfMaxLag"))
+    plot$position <- position
 
-  if (!ready) {
-    return()
+    jaspResults[["acfPlot"]] <- plot
+
+    if (!ready) {
+      return()
+    }
+
+    .tsFillACF(plot,
+      type = "ACF", dataset, options,
+      ci = options$acfCi,
+      ciValue = options$acfCiValue,
+      ciType = options$acfCiType
+    )
   }
+}
 
-  if (options$acfPlots) {
-    acfPlot <- createJaspPlot(title = "Autocorrelation Function")
-    acfPlot$dependOn(dependencies)
-    acfPlot$position <- 1
-    acfContainer[["acfPlot"]] <- acfPlot
+.tsPACFDescriptives <- function(jaspResults, dataset, options, ready, position, dependencies) {
 
-    .tsFillACF(acfPlot, type = "ACF", dataset, options, ci = options$acfCI, ciValue = options$acfCIValue)
+  if (!options$acf)
+    return()
 
-    pacfPlot <- createJaspPlot(title = "Partial Autocorrelation Function")
-    pacfPlot$dependOn(dependencies)
-    pacfPlot$position <- 2
-    acfContainer[["pacfPlot"]] <- pacfPlot
+  if (is.null(jaspResults[["pacfPlot"]])) {
+    plot <- createJaspPlot(title = "Partial Autocorrelation Function")
+    plot$dependOn(c("pacfCi", "pacfCiValue", "pacfCiType", "pacfMaxLag"))
+    plot$position <- position
 
-    .tsFillACF(pacfPlot, type = "PACF", dataset, options, ci = options$acfCI, ciValue = options$acfCIValue)
+    jaspResults[["pacfPlot"]] <- plot
+
+    if (!ready) {
+      return()
+    }
+
+    .tsFillACF(plot,
+      type = "PACF", dataset, options, ci = options$pacfCi,
+      ciValue = options$pacfCiValue,
+      ciType = options$pacfCiType
+    )
   }
 }
 
@@ -197,7 +219,7 @@ DescriptivesTimeSeries <- function(jaspResults, dataset, options) {
   names(c1) <- paste0("lag", 1:lag)
   for(i in 1:lag) {
     xLagged  <- c(rep(NA, i), x[1:(N - i)])
-    xLaggedC <- lagged(x, i) - xMean
+    xLaggedC <- xLagged - xMean
     c1[i]    <- iN * sum(xC * xLaggedC, na.rm = T)
   }
   
@@ -217,38 +239,58 @@ DescriptivesTimeSeries <- function(jaspResults, dataset, options) {
   return(df)
 }
 
-.tsFillACF <- function(plot, type, dataset, options, ci, ciValue) {
+.tsFillACF <- function(plot, type, dataset, options, ci, ciValue, ciType) {
   # y <- dataset[, options$dependentVariable[1]]
   y <- na.omit(dataset$y)
   lag <- options$acfMax
-  if (type == "ACF")  ac <- tsAC(y, lag = lag)
-  # if (type == "PACF") ac <- pacf(y, plot = F, lag.max = options$acfMax)
-  xBreaks <- jaspGraphs::getPrettyAxisBreaks(ac)
-  xBreaks <- xBreaks[!xBreaks%%1] # keep only integers
-  yRange <- ac
+  # if (type == "ACF")  ac <- .tsAC(y, lag = lag)
+  if (type == "ACF") {
+    ac <- stats::acf(y, plot = FALSE, lag.max = options$acfMax)
+    dat <- data.frame(acf = ac$acf[-1], lag = ac$lag[-1]) # remove lag 0
+  }
+  if (type == "PACF") {
+    ac <- stats::pacf(y, plot = FALSE, lag.max = options$pacfMax)
+    ciType <- "normal"
+    dat <- data.frame(acf = ac$acf, lag = ac$lag)
+  }
+  # xBreaks <- jaspGraphs::getPrettyAxisBreaks(1:length(ac))
+
   # if (type == "both")
   #   xBreaks <- jaspGraphs::getPrettyAxisBreaks(c(yACF$lag, yPACF$lag))
   # dfSegment <- data.frame(x = min(xBreaks), xend = max(xBreaks))
+
+  yRange <- dat$acf
+  xBreaks <- jaspGraphs::getPrettyAxisBreaks(dat$lag)
+  xBreaks <- xBreaks[!xBreaks %% 1] # keep only integers
   xMin <- min(xBreaks)
   xMax <- max(xBreaks)
 
-  dat <- data.frame(acf = ac, lag = 1:lag)
   p <- ggplot2::ggplot()
   if (ci) {
     if (ciType == "normal") {
       clim      <- qnorm((1 + ciValue) / 2) / sqrt(ac$n.used)
-      dat$se <- rep(clim, nrow(dat))
+      dat$upper <- rep(clim, nrow(dat))
+      dat$lower <- -dat$upper
     } else {
-      clim <- tsBartlettSE(ac, length(y), ciValue)
-      dat$se <- clim$se
+      clim <- .tsBartlettSE(dat$acf, ac$n.used, ciValue)
+      dat$upper <- clim$se
+      dat$lower <- -dat$upper
     }
     # dfSegment <- data.frame(x = min(xBreaks), xend = max(xBreaks), y = c(clim, -clim))
     # yClim <- c(clim, -clim)
-    yRange    <- c(yRange, dat$se, -dat$se)
+    yRange    <- c(yRange, dat$upper, dat$lower)
 
     p <- p +
-      ggplot2::geom_line(ggplot2::aes(x = xMin, xend = xMax, y = yClim, yend = yClim),
-                            linetype = "dashed", color = "blue")
+      # ggplot2::geom_line(data = dat, ggplot2::aes(x = lag, y = upper),
+      #   linetype = "dashed", color = "blue"
+      # ) +
+      # ggplot2::geom_line(data = dat, ggplot2::aes(x = lag, y = lower),
+      #   linetype = "dashed", color = "blue"
+      # )
+      ggplot2::geom_ribbon(
+        data = dat,
+        ggplot2::aes(x = lag, ymin = lower, ymax = upper), alpha = 0.15
+      )
   }
 
   yBreaks <- jaspGraphs::getPrettyAxisBreaks(yRange)
@@ -267,11 +309,9 @@ DescriptivesTimeSeries <- function(jaspResults, dataset, options) {
     jaspGraphs::themeJaspRaw()
     # ggplot2::scale_x_continuous(name = "Lag", breaks = xBreaks, limits = range(xBreaks)) +
     # ggplot2::scale_y_continuous(name = type, breaks = yBreaks, limits = range(yBreaks))
-
   # p <- jaspGraphs::themeJaspRaw(p)
-
   plot$plotObject <- p
-  
+  # browser()
   return()
 }
 

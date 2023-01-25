@@ -43,7 +43,7 @@ Form
             }
             RadioButtonGroup
             {
-                name:	"distribution"
+                name:	"tsDistribution"
                 title: qsTr("Distribution")
                 // radioButtonsOnSameRow: true
                 RadioButton { value: "density";	label: qsTr("Density") }
@@ -92,18 +92,40 @@ Form
         }
         CheckBox
         {
-            name: "acfPlots"
+            name: "acf"
             id: acf
-            label: qsTr("Autocorrelation functions")
+            label: qsTr("Autocorrelation function")
             CheckBox
             {
-                name: "acfCI"
+                name: "acfCi"
                 label: qsTr("Show confidence interval")
                 checked: true
                 childrenOnSameRow: true
-                CIField { name: "acfCIValue" }
+                CIField { name: "acfCiValue" }
+                RadioButtonGroup
+                {
+                  name: "acfCiType"
+                  title: qsTr("Confidence interval type")
+                  RadioButton { value: "normal";	label: qsTr("Normal");	checked: true }
+                  RadioButton { value: "bartlett";	label: qsTr("Bartlett")	}
+                }
             }
-            IntegerField { name: "acfMax"; label: qsTr("Maximum lag"); min: 1; defaultValue: 10 }
+            IntegerField { name: "acfMaxLag"; label: qsTr("Maximum lag"); min: 1; defaultValue: 10 }
+        }
+        CheckBox
+        {
+            name: "pacf"
+            id: pacf
+            label: qsTr("Partial autocorrelation function")
+            CheckBox
+            {
+                name: "pacfCi"
+                label: qsTr("Show confidence interval")
+                checked: true
+                childrenOnSameRow: true
+                CIField { name: "pacfCiValue" }
+            }
+            IntegerField { name: "pacfMaxLag"; label: qsTr("Maximum lag"); min: 1; defaultValue: 10 }
         }
         CheckBox
         {
