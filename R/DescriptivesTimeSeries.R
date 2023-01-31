@@ -180,7 +180,7 @@ DescriptivesTimeSeries <- function(jaspResults, dataset, options) {
 
   lag <- length(r)
   df  <- data.frame(r = r, se = numeric(lag))
-  for(i in 1:lag) {
+  for (i in 1:lag) {
     df$se[i] <- z * sqrt((1 / N) * (1 + 2 * sum(r[1:i] ^ 2)))
   }
 

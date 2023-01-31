@@ -355,9 +355,14 @@ ARIMATimeSeries <- function(jaspResults, dataset, options) {
   coefTable$position <- position
   coefTable$showSpecifiedColumnsOnly <- TRUE
 
-  coefTable$addColumnInfo(name = "coefficients",   title = "",                         type = "string")
-  coefTable$addColumnInfo(name = "estimate",       title = gettext("Estimate"),        type = "number")
-  coefTable$addColumnInfo(name = "SE",             title = gettext("Standard Error"),  type = "number")
+  coefTable$addColumnInfo(name = "coefficients",  title = "",                         type = "string")
+  coefTable$addColumnInfo(name = "estimate",      title = gettext("Estimate"),        type = "number")
+  coefTable$addColumnInfo(name = "SE",            title = gettext("Standard Error"),  type = "number")
+  coefTable$addColumnInfo(name = "t",             title = gettext("t"), type = "number")
+  coefTable$addColumnInfo(name = "p", title = gettext("p"), type = "pvalue")
+  overtitle <- gettextf("%s%% CI", 100 * .95)
+  coefTable$addColumnInfo(name = "lower", title = gettext("Lower"), type = "number", overtitle = overtitle)
+  coefTable$addColumnInfo(name = "upper", title = gettext("Upper"), type = "number", overtitle = overtitle)
 
   # coefTable$setExpectedSize(2)
 
@@ -365,9 +370,15 @@ ARIMATimeSeries <- function(jaspResults, dataset, options) {
 
   # Check if ready
   if(!ready) {
-    rows <- data.frame(coefficients = ".",
-                       estimate = ".",
-                       SE = ".")
+    rows <- data.frame(
+      coefficients = ".",
+      estimate = ".",
+      SE = ".",
+      t = ".",
+      p = ".",
+      lower = ".",
+      upper = "."
+    )
     row.names(rows) <- paste0("row", 1)
     coefTable$addRows(rows)
     return()
@@ -386,33 +397,46 @@ ARIMATimeSeries <- function(jaspResults, dataset, options) {
   m <- fit$arma[5]
 
   estimate  <- fit$coef
-  SE        <- sqrt(diag(fit$var.coef))
-
+  SE <- sqrt(diag(fit$var.coef))
+  t <- fit$coef / SE
+  df <- fit$nobs - length(estimate)
+  p.val <- 2 * (1 - stats::pt(abs(t), df))
+  me <- stats::qt(.95 / 2 + 0.5, df = df) * SE
+  lower <- estimate - me
+  upper <- estimate + me
   coefficients <- character()
   group <- logical()
 
-  if(options$addConstant & d < 2 & D < 2 & (p + q) != length(estimate)) {
-    group <- T
+  # there is no constant if d or D > 1
+  if (options$addConstant && d < 2 && D < 2 && (p + q) != length(estimate)) {
+    group <- TRUE
     coefficients <- gettext("Constant")
     # I want the intercept to be the first row...
-    # which(names(estimate) == "Intercept")
-    estimate  <- c(estimate[length(estimate)], estimate[-length(estimate)])
-    SE        <- c(SE[length(SE)], SE[-length(SE)])
+    # which(names(estimate) == "intercept")
+    int <- which(names(estimate) == "intercept")
+    nint <- which(names(estimate) != "intercept")
+    idx <- c(int, nint)
+    estimate  <- estimate[idx]
+    SE        <- SE[idx]
+    t <- t[idx]
+    p.val <- p.val[idx]
+    lower <- lower[idx]
+    upper <- upper[idx]
   }
 
-  if(p >= 1) {
+  if (p >= 1) {
     ar <- sprintf("AR(%d)", 1:p)
     coefficients <- c(coefficients, ar)
     group <- c(group, T, rep(F, p - 1))
   }
 
-  if(q >= 1) {
+  if (q >= 1) {
     ma <- sprintf("MA(%d)", 1:q)
     coefficients <- c(coefficients, ma)
     group <- c(group, T, rep(F, q - 1))
   }
 
-  if(P >= 1) {
+  if (P >= 1) {
     sar <- sprintf("seasonal AR(%d)", 1:P)
     coefficients <- c(coefficients, sar)
     group <- c(group, T, rep(F, P - 1))
@@ -427,6 +451,10 @@ ARIMATimeSeries <- function(jaspResults, dataset, options) {
   rows <- data.frame(coefficients = coefficients,
                      estimate = estimate,
                      SE = SE,
+                     t = t,
+                     p = p.val,
+                     lower = lower,
+                     upper = upper,
                      .isNewGroup = group)
   row.names(rows) <- paste0("row", 1:length(coefficients))
   coefTable$addRows(rows)
