@@ -23,6 +23,8 @@ ARIMATimeSeries <- function(jaspResults, dataset, options) {
       rawData <- .tsReadData(jaspResults, dataset, options)
       dataset <- .tsPrepareData(jaspResults, rawData, options)
     }
+
+    .tsSaveTransformation(dataset, options, jaspResults, ready)
     
     fit <- .tsResults(jaspResults, dataset, options, ready)
 
@@ -66,16 +68,30 @@ ARIMATimeSeries <- function(jaspResults, dataset, options) {
   y     <- dataset[, yName]
   t     <- 1:nrow(dataset)
 
-  if (options$transformation == "center") y <- y - mean(y)
-
-  if (options$transformation == "detrend") {
-    y <- ts(y)
-    y <- residuals(forecast::tslm(y ~ trend))
-    # lmFit <- lm(y ~ poly(t, options$poly))
-    # y <- lmFit$residuals
-  }
   # add covariates at some point
   return(data.frame(y, t))
+}
+
+.tsTransformData <- function(dataset, options, jaspResults) {
+  if (options$transformation == "center") {
+    yTransformed <- dataset$y - mean(dataset$y)
+  }
+
+  if (options$transformation == "detrend") {
+    yTransformed <- residuals(lm(y ~ poly(t, options$poly), data = dataset))
+  }
+
+  return(yTransformed)
+}
+
+.tsSaveTransformation <- function(dataset, options, jaspResults, ready) {
+  if (options[["transformationSavedToData"]] && is.null(jaspResults[["transformationColumn"]]) && options[["transformationColumn"]] != "" && ready) {
+    transformationColumn <- rep(NA, max(as.numeric(rownames(dataset))))
+    transformationColumn[as.numeric(rownames(dataset))] <- .tsTransformData(dataset, options, jaspResults)
+    jaspResults[["transformationColumn"]] <- createJaspColumn(columnName = options[["transformationColumn"]])
+    jaspResults[["transformationColumn"]]$dependOn(options = c("transformationColumn", "transformationSavedToData", "transformation", "poly", "dependentVariable"))
+    jaspResults[["transformationColumn"]]$setScale(transformationColumn)
+  }
 }
 
 .tsTimeSeriesPlot <- function(jaspResults, dataset, options, ready, position, dependencies) {

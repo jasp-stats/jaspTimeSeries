@@ -145,6 +145,7 @@ DescriptivesTimeSeries <- function(jaspResults, dataset, options) {
 
     .tsFillACF(plot,
       type = "ACF", dataset, options,
+      maxLag = options$acfMaxLag,
       ci = options$acfCi,
       ciValue = options$acfCiLevel,
       ciType = options$acfCiType
@@ -153,7 +154,7 @@ DescriptivesTimeSeries <- function(jaspResults, dataset, options) {
 }
 
 .tsPACFDescriptives <- function(jaspResults, dataset, options, ready, position, dependencies) {
-  if (!options$acf)
+  if (!options$pacf)
     return()
 
   if (is.null(jaspResults[["pacfPlot"]])) {
@@ -168,7 +169,9 @@ DescriptivesTimeSeries <- function(jaspResults, dataset, options) {
     }
 
     .tsFillACF(plot,
-      type = "PACF", dataset, options, ci = options$pacfCi,
+      type = "PACF", dataset, options,
+      maxLag = options$pacfMaxLag,
+      ci = options$pacfCi,
       ciValue = options$pacfCiLevel,
       ciType = options$pacfCiType
     )
@@ -187,15 +190,15 @@ DescriptivesTimeSeries <- function(jaspResults, dataset, options) {
   return(df)
 }
 
-.tsFillACF <- function(plot, type, dataset, options, ci, ciValue, ciType) {
+.tsFillACF <- function(plot, type, dataset, options, maxLag, ci, ciValue, ciType) {
   y <- na.omit(dataset$y)
-  lag <- options$acfMax
+  # lag <- options$acfMax
   if (type == "ACF") {
-    ac <- stats::acf(y, plot = FALSE, lag.max = options$acfMax)
+    ac <- stats::acf(y, plot = FALSE, lag.max = maxLag)
     dat <- data.frame(acf = ac$acf[-1], lag = ac$lag[-1]) # remove lag 0
   }
   if (type == "PACF") {
-    ac <- stats::pacf(y, plot = FALSE, lag.max = options$pacfMax)
+    ac <- stats::pacf(y, plot = FALSE, lag.max = maxLag)
     ciType <- "normal"
     dat <- data.frame(acf = ac$acf, lag = ac$lag)
   }

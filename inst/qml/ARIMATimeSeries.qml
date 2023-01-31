@@ -114,7 +114,23 @@ Form
                 label: qsTr("Detrend using linear regression")
                 IntegerField { name: "poly"; label: qsTr("Polynomial"); defaultValue: 1; min: 0; max: 10; }
             }
-        } 
+        }
+        CheckBox 
+        {
+          id:							transformationSavedToData
+          name:						"transformationSavedToData"
+          text:						qsTr("Add transformation to data")
+
+          ComputedColumnField 
+          {
+            id:						    transformationColumn
+            name:					    "transformationColumn"
+            text:					    qsTr("Column name")
+            placeholderText:  qsTr("e.g., transformed")
+            fieldWidth:				120
+            enabled:				  transformationSavedToData.checked
+          }
+        }
     }
 
 

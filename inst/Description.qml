@@ -15,14 +15,20 @@ Description
 
 	Analysis
 	{
-		title:			qsTr("Descriptives")
-		func:			"DescriptivesTimeSeries"
+		title:	qsTr("Descriptives")
+		func:		"DescriptivesTimeSeries"
 	}
 
 	Analysis
 	{
-		title:			qsTr("ARIMA")
-		func:			"ARIMATimeSeries"
+		title:		qsTr("Data Transformation")
+		func:		"DataTransformationTimeSeries"
+	}
+
+	Analysis
+	{
+		title:  qsTr("ARIMA")
+		func:		"ARIMATimeSeries"
 	}
 
 	// Analysis
