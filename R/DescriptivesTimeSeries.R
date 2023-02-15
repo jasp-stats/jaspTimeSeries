@@ -25,11 +25,11 @@ DescriptivesTimeSeries <- function(jaspResults, dataset, options) {
 
     .tsStateSpacePlotDescriptives(jaspResults, dataset, options, ready, position = 2, dependencies  = c("stateSpacePlot", "stateSpacePlotLag", "stateSpacePlotRegressionType", "stateSpacePlotRegressionLine", "stateSpacePlotRegressionCi", "stateSpacePlotRegressionCiLevel", "dependent"))
 
-    .tsACFDescriptives(jaspResults, dataset, options, ready, position = 3, dependencies = c("dependent", "acf", "acfCi", "acfCiLevel", "acfCiType", "acfMaxLag"))
+    .tsACFDescriptives(jaspResults, dataset, options, ready, position = 3, dependencies = c("dependent", "acf", "acfCi", "acfCiLevel", "acfCiType", "acfFirstLag", "acfMaxLag"))
 
     .tsPACFDescriptives(jaspResults, dataset, options, ready, position = 4, dependencies = c("dependent", "pacf", "pacfCi", "pacfCiLevel", "pacfCiType", "pacfMaxLag"))
 
-    .tsPowerSpectralDensityDescriptives(jaspResults, dataset, options, ready, position = 5, dependencies = c("powerSpectralDensity", "powerSpectralDensityDetrend", "powerSpectralDensityDemean", "powerSpectralDensitySmoother", "powerSpectralDensitySmootherKernel", "powerSpectralDensitySmootherKernelM1", "powerSpectralDensitySmootherKernelM2", "powerSpectralDensityTaper", "powerSpectralDensityScaling", "noScaling", "log", "log10", "dependent"))
+    .tsPowerSpectralDensityDescriptives(jaspResults, dataset, options, ready, position = 5, dependencies = c("powerSpectralDensity", "powerSpectralDensityDetrend", "powerSpectralDensityDemean", "powerSpectralDensitySmoother", "powerSpectralDensitySmootherKernel", "term", "dimension", "powerSpectralDensityTaper", "powerSpectralDensityScaling", "noScaling", "log", "log10", "dependent"))
 }
 
 .tsReadDataDescriptives <- function(jaspResults, dataset, options) {
@@ -145,6 +145,7 @@ DescriptivesTimeSeries <- function(jaspResults, dataset, options) {
 
     .tsFillACF(plot,
       type = "ACF", dataset, options,
+      firstLag = options$acfFirstLag,
       maxLag = options$acfMaxLag,
       ci = options$acfCi,
       ciValue = options$acfCiLevel,
@@ -178,30 +179,39 @@ DescriptivesTimeSeries <- function(jaspResults, dataset, options) {
   }
 }
 
-.tsBartlettSE <- function(r, N, ci = 0.95) {
+.tsAcfBartlett <- function(r, N, ci = 0.95, type = "bartlett") {
   z <- qnorm((1 + ci) / 2)
 
   lag <- length(r)
   df  <- data.frame(r = r, se = numeric(lag))
+
+  
   for (i in 1:lag) {
-    df$se[i] <- z * sqrt((1 / N) * (1 + 2 * sum(r[1:i] ^ 2)))
+    if (type == "movingAverage") {
+      df$se[i] <- z * sqrt((1 / N) * (1 + 2 * sum(r[1:i] ^ 2)))
+    } else {
+      # bartletts formula but maybe not correct
+      df$se[i] <- z * sqrt((1 / N) * sum(r[1:i] ^ 2 + r[(1:i) - i] * r[(1:i) + i] + 2 * r[i] ^ 2 * r[1:i] ^ 2 - 4 * r[i] * r[1:i] * r[(1:i) - i]))
+    }
   }
 
   return(df)
 }
 
-.tsFillACF <- function(plot, type, dataset, options, maxLag, ci, ciValue, ciType) {
+.tsFillACF <- function(plot, type, dataset, options, firstLag = F, maxLag, ci, ciValue, ciType) {
   y <- na.omit(dataset$y)
   # lag <- options$acfMax
   if (type == "ACF") {
     ac <- stats::acf(y, plot = FALSE, lag.max = maxLag)
-    dat <- data.frame(acf = ac$acf[-1], lag = ac$lag[-1]) # remove lag 0
   }
   if (type == "PACF") {
     ac <- stats::pacf(y, plot = FALSE, lag.max = maxLag)
-    ciType <- "normal"
-    dat <- data.frame(acf = ac$acf, lag = ac$lag)
+    ciType <- "whiteNoise"
   }
+
+  dat <- data.frame(acf = ac$acf, lag = ac$lag)
+  if(type == "ACF" & !firstLag)
+    dat <- dat[-1, ] # remove lag 0
 
   yRange <- dat$acf
   xBreaks <- jaspGraphs::getPrettyAxisBreaks(dat$lag)
@@ -211,12 +221,12 @@ DescriptivesTimeSeries <- function(jaspResults, dataset, options) {
 
   p <- ggplot2::ggplot()
   if (ci) {
-    if (ciType == "normal") {
+    if (ciType == "whiteNoise") {
       clim <- qnorm((1 + ciValue) / 2) / sqrt(ac$n.used)
       dat$upper <- rep(clim, nrow(dat))
       dat$lower <- -dat$upper
     } else {
-      clim <- .tsBartlettSE(dat$acf, ac$n.used, ciValue)
+      clim <- .tsAcfBartlett(dat$acf, ac$n.used, ciValue, ciType)
       dat$upper <- clim$se
       dat$lower <- -dat$upper
     }
@@ -238,7 +248,7 @@ DescriptivesTimeSeries <- function(jaspResults, dataset, options) {
 
   p <- p +
     ggplot2::geom_linerange(data = dat, ggplot2::aes(x = lag, ymin = 0, ymax = acf), size = 1) +
-    ggplot2::geom_segment(ggplot2::aes(x = xMin, xend = xMax, y = 0, yend = 0), alpha = 0.2) +
+    ggplot2::geom_segment(ggplot2::aes(x = xMin, xend = xMax, y = 0, yend = 0), alpha = 0.5) +
     jaspGraphs::geom_rangeframe() +
     jaspGraphs::themeJaspRaw()
 
@@ -264,14 +274,24 @@ DescriptivesTimeSeries <- function(jaspResults, dataset, options) {
   }
 }
 
+.tsGetKernellDimensions <- function(options) {
+  dims <- NULL
+  for (i in 1:length(options[["term"]])) {
+    dims <- c(dims, options[["term"]][[i]]$dimension)
+  }
+  return(dims) # Vector of kernel dimensions in each term
+}
+
 .tsFillPowerSpectralDensity <- function(powerSpectralDensity, dataset, options) {
   y <- na.omit(dataset$y)
 
   k <- NULL
 
+  dims <- .tsGetKernellDimensions(options)
+
   # crashes when modified daniell has zeros..
   if (options$powerSpectralDensitySmoother)
-    k <- stats::kernel(options$powerSpectralDensitySmootherKernel, c(options$powerSpectralDensitySmootherKernelM1, options$powerSpectralDensitySmootherKernelM2))
+    k <- stats::kernel(options$powerSpectralDensitySmootherKernel, dims)
 
   yPSD <- stats::spec.pgram(y,
     kernel = k,

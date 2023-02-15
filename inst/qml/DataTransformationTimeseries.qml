@@ -138,6 +138,7 @@ Form
                     RadioButton { value: "bartlett";	label: qsTr("Bartlett")	}
                   }
               }
+              CheckBox { name: "acfFirstLag"; label: qsTr("Include first lag") }
               IntegerField { name: "acfMaxLag"; label: qsTr("Maximum lag"); min: 1; defaultValue: 10 }
           }
           CheckBox

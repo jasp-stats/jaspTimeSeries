@@ -24,7 +24,7 @@ ARIMATimeSeries <- function(jaspResults, dataset, options) {
       dataset <- .tsPrepareData(jaspResults, rawData, options)
     }
 
-    .tsSaveTransformation(dataset, options, jaspResults, ready)
+    # .tsSaveTransformation(dataset, options, jaspResults, ready)
     
     fit <- .tsResults(jaspResults, dataset, options, ready)
 
@@ -34,13 +34,16 @@ ARIMATimeSeries <- function(jaspResults, dataset, options) {
 
     .tsCreateTableCoefficients(jaspResults, fit, dataset, options, ready, position = 4)
 
-    if (options$adfTest | options$ppTest | options$kpssLevel | options$kpssTrend)
-      .tsCreateTableStationarityTests(jaspResults, fit, dataset, options, ready, position = 2)
+    # if (options$adfTest | options$ppTest | options$kpssLevel | options$kpssTrend)
+    #   .tsCreateTableStationarityTests(jaspResults, fit, dataset, options, ready, position = 2)
     
     .tsResidualDiagnostics(jaspResults, fit, dataset, options, ready, position = 5, dependencies = .tsDependencies)
     # .tsTimeSeriesPlot(jaspResults, dataset, options, ready, position = 1)
     
     # .tsACF(jaspResults, dataset, options, ready, position = 3)
+
+    if (options$forecastTable)
+      .tsCreateTableForecasts(jaspResults, fit, dataset, options, ready, position = 7)
 
     if (options$forecastTimeSeries)
       .tsForecastPlot(jaspResults, fit, dataset, options, ready, position = 6, dependencies = c(.tsDependencies, "forecastTimeSeries", "addObserved", "forecastType", "nForecasts"))
@@ -72,27 +75,27 @@ ARIMATimeSeries <- function(jaspResults, dataset, options) {
   return(data.frame(y, t))
 }
 
-.tsTransformData <- function(dataset, options, jaspResults) {
-  if (options$transformation == "center") {
-    yTransformed <- dataset$y - mean(dataset$y)
-  }
+# .tsTransformData <- function(dataset, options, jaspResults) {
+#   if (options$transformation == "center") {
+#     yTransformed <- dataset$y - mean(dataset$y)
+#   }
 
-  if (options$transformation == "detrend") {
-    yTransformed <- residuals(lm(y ~ poly(t, options$poly), data = dataset))
-  }
+#   if (options$transformation == "detrend") {
+#     yTransformed <- residuals(lm(y ~ poly(t, options$poly), data = dataset))
+#   }
 
-  return(yTransformed)
-}
+#   return(yTransformed)
+# }
 
-.tsSaveTransformation <- function(dataset, options, jaspResults, ready) {
-  if (options[["transformationSavedToData"]] && is.null(jaspResults[["transformationColumn"]]) && options[["transformationColumn"]] != "" && ready) {
-    transformationColumn <- rep(NA, max(as.numeric(rownames(dataset))))
-    transformationColumn[as.numeric(rownames(dataset))] <- .tsTransformData(dataset, options, jaspResults)
-    jaspResults[["transformationColumn"]] <- createJaspColumn(columnName = options[["transformationColumn"]])
-    jaspResults[["transformationColumn"]]$dependOn(options = c("transformationColumn", "transformationSavedToData", "transformation", "poly", "dependentVariable"))
-    jaspResults[["transformationColumn"]]$setScale(transformationColumn)
-  }
-}
+# .tsSaveTransformation <- function(dataset, options, jaspResults, ready) {
+#   if (options[["transformationSavedToData"]] && is.null(jaspResults[["transformationColumn"]]) && options[["transformationColumn"]] != "" && ready) {
+#     transformationColumn <- rep(NA, max(as.numeric(rownames(dataset))))
+#     transformationColumn[as.numeric(rownames(dataset))] <- .tsTransformData(dataset, options, jaspResults)
+#     jaspResults[["transformationColumn"]] <- createJaspColumn(columnName = options[["transformationColumn"]])
+#     jaspResults[["transformationColumn"]]$dependOn(options = c("transformationColumn", "transformationSavedToData", "transformation", "poly", "dependentVariable"))
+#     jaspResults[["transformationColumn"]]$setScale(transformationColumn)
+#   }
+# }
 
 .tsTimeSeriesPlot <- function(jaspResults, dataset, options, ready, position, dependencies) {
   if (!options$timeSeriesPlot)
@@ -112,108 +115,108 @@ ARIMATimeSeries <- function(jaspResults, dataset, options) {
   }
 }
 
-.tsCreateTableStationarityTests <- function(jaspResults, fit, dataset, options, ready, position) {
-  # makeTable <- options$adfTest | options$ppTest | options$kpssTest
-  if (!is.null(jaspResults[["stationaryTable"]]) & (options$adfTest | options$ppTest | options$kpssLevel | options$kpssTrend)) return()
+# .tsCreateTableStationarityTests <- function(jaspResults, fit, dataset, options, ready, position) {
+#   # makeTable <- options$adfTest | options$ppTest | options$kpssTest
+#   if (!is.null(jaspResults[["stationaryTable"]]) & (options$adfTest | options$ppTest | options$kpssLevel | options$kpssTrend)) return()
 
-  stationaryTable <- createJaspTable("Stationarity Tests")
-  stationaryTable$dependOn(c("dependentVariable", "adfTest", "ppTest", "kpssLevel", "kpssTrend"))
-  stationaryTable$position <- position
-  stationaryTable$showSpecifiedColumnsOnly <- TRUE
+#   stationaryTable <- createJaspTable("Stationarity Tests")
+#   stationaryTable$dependOn(c("dependentVariable", "adfTest", "ppTest", "kpssLevel", "kpssTrend"))
+#   stationaryTable$position <- position
+#   stationaryTable$showSpecifiedColumnsOnly <- TRUE
 
-  stationaryTable$addColumnInfo(name = "test",      title = gettext("Test"),                      type = "string")
-  stationaryTable$addColumnInfo(name = "statistic", title = gettext("Statistic"),                 type = "number")
-  # stationaryTable$addColumnInfo(name = "estimate",  title = gettext("Estimate"),                  type = "number")
-  stationaryTable$addColumnInfo(name = "lag",       title = gettext("Truncation lag parameter"),  type = "integer")
-  # stationaryTable$addColumnInfo(name = "p",         title = gettext("p"),                         type = "pvalue",  format = "p:.0101")
-  stationaryTable$addColumnInfo(name = "p",         title = gettext("p"),                         type = "pvalue")
-  stationaryTable$addColumnInfo(name = "null",      title = sprintf("H\u2080"),                   type = "string")
-  # stationaryTable$setExpectedSize(2)
+#   stationaryTable$addColumnInfo(name = "test",      title = gettext("Test"),                      type = "string")
+#   stationaryTable$addColumnInfo(name = "statistic", title = gettext("Statistic"),                 type = "number")
+#   # stationaryTable$addColumnInfo(name = "estimate",  title = gettext("Estimate"),                  type = "number")
+#   stationaryTable$addColumnInfo(name = "lag",       title = gettext("Truncation lag parameter"),  type = "integer")
+#   # stationaryTable$addColumnInfo(name = "p",         title = gettext("p"),                         type = "pvalue",  format = "p:.0101")
+#   stationaryTable$addColumnInfo(name = "p",         title = gettext("p"),                         type = "pvalue")
+#   stationaryTable$addColumnInfo(name = "null",      title = sprintf("H\u2080"),                   type = "string")
+#   # stationaryTable$setExpectedSize(2)
 
-  jaspResults[["stationaryTable"]] <- stationaryTable
+#   jaspResults[["stationaryTable"]] <- stationaryTable
 
-  # Check if ready
-  if(!ready) {
-    rows <- data.frame(test = ".",
-                       statistic = ".",
-                      #  estimate = ".",
-                       lag = ".",
-                       p = ".",
-                       null = ".")
-    row.names(rows) <- paste0("row", 1)
-    stationaryTable$addRows(rows)
-    return()
-  }
+#   # Check if ready
+#   if(!ready) {
+#     rows <- data.frame(test = ".",
+#                        statistic = ".",
+#                       #  estimate = ".",
+#                        lag = ".",
+#                        p = ".",
+#                        null = ".")
+#     row.names(rows) <- paste0("row", 1)
+#     stationaryTable$addRows(rows)
+#     return()
+#   }
 
-  # statistic <- lag <- p <- vector()
+#   # statistic <- lag <- p <- vector()
   
-  smallerA <- smallerP <- smallerKl <- smallerKt <- greaterA <- greaterP <- greaterKl <- greaterKt <- F
-  # rowNames <- NULL
-  # dfA <- dfP <- dfK <- NULL
-  if (options$adfTest) {
-    # a <- tseries::adf.test(dataset$y)
-    # alternative stationary
-    # rowNames <- c(rowNames, "adf")
-    # rowNames <- c(rowNames, "row1")
-    fit <- tseries::adf.test(dataset$y)
-    smallerA <- fit$p.value == 0.01
-    greaterA <- fit$p.value == 0.99
-    dfA <- .stationarityRows(fit, "Augmented Dickey-Fuller t", gettext("Non-stationary")) # h0 a unit root
-    # p value 0.01 - 0.99
-    stationaryTable$addRows(dfA)
-    stationaryTable$setRowName(rowIndex = 1, newName = "adf")
-  }
-  if (options$ppTest) {
-    # type = c("Z(alpha)", "Z(t_alpha)")
-    # alternative stationary
-    # rho normalized bias test (regression coefficient) vs. tau studentized test
-    # rowNames <- c(rowNames, "pp")
-    # rowNames <- c(rowNames, "row2")
-    ppType <- "Z(\u03B1)"
-    fit <- tseries::pp.test(dataset$y)
-    smallerP <- fit$p.value == 0.01
-    greaterP <- fit$p.value == 0.99
-    dfP <- .stationarityRows(fit, sprintf("Phillips-Perron %s", ppType), gettext("Non-stationary"))
-    stationaryTable$addRows(dfP)
-    idxP <- ifelse(options$adfTest, 2, 1)
-    stationaryTable$setRowName(rowIndex = idxP, newName = "pp")
-    # p value 0.01 - 0.99
-  }
-  if (options$kpssLevel) {
-    # null is stationary
-    # null = c("Level", "Trend")
-    # rowNames <- c(rowNames, "kpss")
-    # rowNames <- c(rowNames, "row3")
-    fit <- tseries::kpss.test(dataset$y, null = "Level")
-    smallerKl <- fit$p.value == 0.01
-    greaterKl <- fit$p.value == 0.1
-    dfKl <- .stationarityRows(fit,
-                              sprintf("Kwiatkowski-Phillips-Schmidt-Shin Level %s", "\u03B7"),
-                              gettext("Level stationary")) # mean stationarity
+#   smallerA <- smallerP <- smallerKl <- smallerKt <- greaterA <- greaterP <- greaterKl <- greaterKt <- F
+#   # rowNames <- NULL
+#   # dfA <- dfP <- dfK <- NULL
+#   if (options$adfTest) {
+#     # a <- tseries::adf.test(dataset$y)
+#     # alternative stationary
+#     # rowNames <- c(rowNames, "adf")
+#     # rowNames <- c(rowNames, "row1")
+#     fit <- tseries::adf.test(dataset$y)
+#     smallerA <- fit$p.value == 0.01
+#     greaterA <- fit$p.value == 0.99
+#     dfA <- .stationarityRows(fit, "Augmented Dickey-Fuller t", gettext("Non-stationary")) # h0 a unit root
+#     # p value 0.01 - 0.99
+#     stationaryTable$addRows(dfA)
+#     stationaryTable$setRowName(rowIndex = 1, newName = "adf")
+#   }
+#   if (options$ppTest) {
+#     # type = c("Z(alpha)", "Z(t_alpha)")
+#     # alternative stationary
+#     # rho normalized bias test (regression coefficient) vs. tau studentized test
+#     # rowNames <- c(rowNames, "pp")
+#     # rowNames <- c(rowNames, "row2")
+#     ppType <- "Z(\u03B1)"
+#     fit <- tseries::pp.test(dataset$y)
+#     smallerP <- fit$p.value == 0.01
+#     greaterP <- fit$p.value == 0.99
+#     dfP <- .stationarityRows(fit, sprintf("Phillips-Perron %s", ppType), gettext("Non-stationary"))
+#     stationaryTable$addRows(dfP)
+#     idxP <- ifelse(options$adfTest, 2, 1)
+#     stationaryTable$setRowName(rowIndex = idxP, newName = "pp")
+#     # p value 0.01 - 0.99
+#   }
+#   if (options$kpssLevel) {
+#     # null is stationary
+#     # null = c("Level", "Trend")
+#     # rowNames <- c(rowNames, "kpss")
+#     # rowNames <- c(rowNames, "row3")
+#     fit <- tseries::kpss.test(dataset$y, null = "Level")
+#     smallerKl <- fit$p.value == 0.01
+#     greaterKl <- fit$p.value == 0.1
+#     dfKl <- .stationarityRows(fit,
+#                               sprintf("Kwiatkowski-Phillips-Schmidt-Shin Level %s", "\u03B7"),
+#                               gettext("Level stationary")) # mean stationarity
                              
-    stationaryTable$addRows(dfKl)
-    idxKl <- ifelse(options$adfTest & options$ppTest, 3, ifelse(options$adfTest | options$ppTest, 2, 1))
-    stationaryTable$setRowName(rowIndex = idxKl, newName = "kpssLevel")
+#     stationaryTable$addRows(dfKl)
+#     idxKl <- ifelse(options$adfTest & options$ppTest, 3, ifelse(options$adfTest | options$ppTest, 2, 1))
+#     stationaryTable$setRowName(rowIndex = idxKl, newName = "kpssLevel")
 
                               
-    # p value 0.1 - 0.01
-  }
-  if (options$kpssTrend) {
-    fit <- tseries::kpss.test(dataset$y, null = "Trend")
-    smallerKt <- fit$p.value == 0.01
-    greaterKt <- fit$p.value == 0.1
-    dfKt <- .stationarityRows(fit,
-                              sprintf("Kwiatkowski-Phillips-Schmidt-Shin Trend %s", "\u03B7"),
-                              gettext("Trend stationary")) # linear trend stationarity
+#     # p value 0.1 - 0.01
+#   }
+#   if (options$kpssTrend) {
+#     fit <- tseries::kpss.test(dataset$y, null = "Trend")
+#     smallerKt <- fit$p.value == 0.01
+#     greaterKt <- fit$p.value == 0.1
+#     dfKt <- .stationarityRows(fit,
+#                               sprintf("Kwiatkowski-Phillips-Schmidt-Shin Trend %s", "\u03B7"),
+#                               gettext("Trend stationary")) # linear trend stationarity
                              
-    stationaryTable$addRows(dfKt)
-    otherRows <- sum(options$adfTest, options$ppTest, options$kpssLevel)
-    idxKt <- ifelse(otherRows == 3, 4, 
-                    ifelse(otherRows == 2, 3,
-                           ifelse(otherRows == 1, 2, 1)))
-    stationaryTable$setRowName(rowIndex = idxKt, newName = "kpssTrend")                              
-    # p value 0.1 - 0.01
-  }
+#     stationaryTable$addRows(dfKt)
+#     otherRows <- sum(options$adfTest, options$ppTest, options$kpssLevel)
+#     idxKt <- ifelse(otherRows == 3, 4, 
+#                     ifelse(otherRows == 2, 3,
+#                            ifelse(otherRows == 1, 2, 1)))
+#     stationaryTable$setRowName(rowIndex = idxKt, newName = "kpssTrend")                              
+#     # p value 0.1 - 0.01
+#   }
   # p <- tseries::pp.test(dataset$y)
   # k <- tseries::kpss.test(dataset$y)
 
@@ -254,15 +257,15 @@ ARIMATimeSeries <- function(jaspResults, dataset, options) {
   # stationaryTable$addFootnote(gettextf("The p-value is actually greater than shown p-value (see Help file)."), rowNames = , colNames = "p")
 
   # txt <- gettextf("The p-value is actually %s than p-value shown (see Help file).", greaterOrSmaller)
-  if (smallerA | smallerP | smallerKl | smallerKt)
-    stationaryTable$addFootnote(gettext("The p-value is actually less than p-value shown (see Help file)."), 
-                                colNames = "p", rowNames = .stationaryFootnoteRows(smallerA, smallerP, smallerKl, smallerKt, options))
+#   if (smallerA | smallerP | smallerKl | smallerKt)
+#     stationaryTable$addFootnote(gettext("The p-value is actually less than p-value shown (see Help file)."), 
+#                                 colNames = "p", rowNames = .stationaryFootnoteRows(smallerA, smallerP, smallerKl, smallerKt, options))
 
-  if (greaterA | greaterP | greaterKl | greaterKt)                            
-    stationaryTable$addFootnote(gettext("The p-value is actually greater than p-value shown (see Help file)."), 
-                                colNames = "p", rowNames = .stationaryFootnoteRows(greaterA, greaterP, greaterKl, greaterKt, options))
+#   if (greaterA | greaterP | greaterKl | greaterKt)                            
+#     stationaryTable$addFootnote(gettext("The p-value is actually greater than p-value shown (see Help file)."), 
+#                                 colNames = "p", rowNames = .stationaryFootnoteRows(greaterA, greaterP, greaterKl, greaterKt, options))
 
-}
+# }
 
 .stationaryFootnoteRows <- function(A, P, Kl, Kt, options) {
   footRow <- NULL
@@ -510,16 +513,20 @@ ARIMATimeSeries <- function(jaspResults, dataset, options) {
     .tsFillTimeSeriesPlot(residualTimeSeriesPlot, dataset, options, type = options$residualTsType, distribution = options$residualsDistribution, yName = "Standardized Residuals")
   }
 
-  if (is.null(residContainer[["residualACFPlot"]]) & options$residualACF) {
+  if (is.null(residContainer[["residualACFPlot"]]) & options$residualAcf) {
     residualACFPlot <- createJaspPlot(title = "Autocorrelation Function Plot")
-    residualACFPlot$dependOn(c("residualACF", "residualAcfCI", "residualAcfCIValue", "acfMax"))
+    residualACFPlot$dependOn(c("residualAcf", "residualAcfCi", "residualAcfCiLevel", "residualAcfFirstLag", "residualMaxLag"))
     residualACFPlot$position <- 2
     residContainer[["residualACFPlot"]] <- residualACFPlot
 
     if (!ready)
       return()
 
-    .tsFillACF(residualACFPlot, type = "ACF", dataset, options, ci = options$residualAcfCI, ciValue = options$residualAcfCIValue)
+    .tsFillACF(residualACFPlot, type = "ACF", dataset, options, 
+      firstLag = options$residualAcfFirstLag, maxLag = options$residualMaxLag,
+      ci = options$residualAcfCi, ciValue = options$residualAcfCiLevel,
+      ciType = "normal"
+    )
   }
 
   if (is.null(residContainer[["residualQQPlot"]]) & options$residualQQ) {
@@ -537,7 +544,7 @@ ARIMATimeSeries <- function(jaspResults, dataset, options) {
 
   if (is.null(residContainer[["ljungPlot"]]) & options$residualLB) {
     ljungPlot <- createJaspPlot(title = "Ljung-Box Plot")
-    ljungPlot$dependOn(c("residualLB", "acfMax"))
+    ljungPlot$dependOn(c("residualLB", "residualMaxLag", "ljungBoxSignificanceLevel"))
     ljungPlot$position <- 3
     residContainer[["ljungPlot"]] <- ljungPlot
 
@@ -563,19 +570,37 @@ ARIMATimeSeries <- function(jaspResults, dataset, options) {
 }
 
 .tsFillLjungBoxPlot <- function(ljungPlot, dataset, options) {
-  pValues <- numeric(options$acfMax)
-  nLags <- 1:options$acfMax
+  pValues <- numeric(options$residualMaxLag)
+  nLags <- 1:options$residualMaxLag
   for (i in nLags) {
     pValues[i] <- stats::Box.test(dataset$y, i, type = "Ljung-Box")$p.value
   }
 
-  p <- jaspGraphs::JASPScatterPlot(nLags, pValues, addSmooth = F, 
-                                   plotAbove = "none", plotRight = "none", 
-                                   xName = "Lag", yName = expression(italic(p)-value)) 
-  p$subplots$mainPlot <- 
-    p$subplots$mainPlot + ggplot2::geom_segment(ggplot2::aes(x = 0, xend = length(nLags), y = 0.05, yend = 0.05), 
-                                     linetype = "dashed", color = "blue") +
-                          ggplot2::ylim(c(0, 1))
+  df <- data.frame(x = nLags, y = pValues)
+
+  yBreaks <- jaspGraphs::getPrettyAxisBreaks(c(0, 1))
+  xBreaks <- jaspGraphs::getPrettyAxisBreaks(nLags)
+
+  sig <- options$ljungBoxSignificanceLevel
+
+  p <- ggplot2::ggplot() +
+    ggplot2::scale_x_continuous(name = "Lag", breaks = xBreaks, limits = range(xBreaks)) +
+    ggplot2::scale_y_continuous(name = "p-value", breaks = yBreaks, limits = range(yBreaks))
+
+  p <- p + 
+    ggplot2::geom_segment(ggplot2::aes(x = 0, xend = length(nLags), y = sig, yend = sig), alpha = 0.5) +
+    jaspGraphs::geom_point(ggplot2::aes(x = x, y = y), data = df) +
+    jaspGraphs::geom_rangeframe() +
+    jaspGraphs::themeJaspRaw()
+
+  # p <- jaspGraphs::JASPScatterPlot(nLags, pValues, addSmooth = F, 
+  #                                  plotAbove = "none", plotRight = "none", 
+  #                                  xName = "Lag", yName = "p-value") 
+  # p$subplots$mainPlot <- 
+  #   # p$subplots$mainPlot + ggplot2::geom_segment(ggplot2::aes(x = 0, xend = length(nLags), y = 0.05, yend = 0.05), 
+  #   #                                  linetype = "dashed", color = "blue") +
+  #   p$subplots$mainPlot + ggplot2::geom_ribbon(ggplot2::aes(x = nLags, ymin = options$ljungBoxSignificanceLevel, ymax = 1), alpha = 0.15) +
+  #                         ggplot2::ylim(c(0, 1))
 
   ljungPlot$plotObject <- p
 }
@@ -599,10 +624,15 @@ ARIMATimeSeries <- function(jaspResults, dataset, options) {
 }
 
 .tsForecasts <- function(fit, dataset, options) {
-  pred <- forecast::forecast(fit, h = options$nForecasts)
-  pred <- as.data.frame(pred)
-  names(pred) <- c("y", "lb80", "ub80", "lb95", "ub95")
-  pred$t <- (nrow(dataset) + 1):(nrow(dataset)+nrow(pred))
+  pred <- data.frame(t = (nrow(dataset) + 1):(nrow(dataset) + options$nForecasts))
+  pred <- cbind(
+    pred,
+    as.data.frame(forecast::forecast(fit, h = options$nForecasts))
+  )
+  # pred <- as.data.frame(pred)
+  yName <- options$dependentVariable[1]
+  names(pred) <- c("t", yName, "lower80", "upper80", "lower95", "upper95")
+  # pred$t <- (nrow(dataset) + 1):(nrow(dataset)+nrow(pred))
   return(pred)
 }
 
@@ -616,18 +646,24 @@ ARIMATimeSeries <- function(jaspResults, dataset, options) {
   # names(pred) <- c("y", "lb80", "ub80", "lb95", "ub95")
   # pred$t <- (nrow(dat) + 1):(nrow(dat)+nrow(pred))
   pred <- .tsForecasts(fit, dataset, options)
-  obs <- data.frame(t = dataset$t, y = dataset$y)
-  fcs <- data.frame(t = pred$t, y = pred$y)
+  obs <- data.frame(t = dataset$t, y = dataset[, 2])
+  fcs <- data.frame(t = pred$t, y = pred[, 2])
   both <- rbind(obs, fcs)
   cols <- rep(c("black", "blue"), c(nrow(obs), nrow(fcs)))
   idx <- (nrow(obs) + 1):nrow(both)
   if (options$addObserved)
     idx <- 1:nrow(both)
 
-  p <- ggplot2::ggplot()
+  yBreaks <- jaspGraphs::getPrettyAxisBreaks(c(both[idx, "y"], pred$lower95, pred$upper95))
+  xBreaks <- jaspGraphs::getPrettyAxisBreaks(both[idx, "t"])
+
+  p <- ggplot2::ggplot() +
+    ggplot2::scale_x_continuous(name = "t", breaks = xBreaks, limits = range(xBreaks)) +
+    ggplot2::scale_y_continuous(name = yName, breaks = yBreaks, limits = range(yBreaks))
+
   p <- p + 
-    ggplot2::geom_ribbon(ggplot2::aes(ymin = lb95, ymax = ub95, x = t), pred, alpha = 0.1) +
-    ggplot2::geom_ribbon(ggplot2::aes(ymin = lb80, ymax = ub80, x = t), pred, alpha = 0.2) +
+    ggplot2::geom_ribbon(ggplot2::aes(ymin = lower95, ymax = upper95, x = t), pred, alpha = 0.1) +
+    ggplot2::geom_ribbon(ggplot2::aes(ymin = lower80, ymax = upper80, x = t), pred, alpha = 0.2) +
     jaspGraphs::geom_rangeframe() +
     jaspGraphs::themeJaspRaw()
 
@@ -651,4 +687,52 @@ ARIMATimeSeries <- function(jaspResults, dataset, options) {
   # }
 
   # return()
+}
+
+.tsCreateTableForecasts <- function(jaspResults, fit, dataset, options, ready, position) {
+  if (!is.null(jaspResults[["forecastTable"]])) return()
+
+  table <- createJaspTable("Forecasts")
+  table$dependOn(.tsDependencies)
+  table$position <- position
+  # coefTable$showSpecifiedColumnsOnly <- TRUE
+  yName <- options$dependentVariable[1]
+  table$addColumnInfo(name = "t",  title = "t",                   type = "string")
+  table$addColumnInfo(name = "y",  title = yName,          type = "number")
+  overtitle80 <- gettextf("%s%% CI", 100 * .80)
+  table$addColumnInfo(name = "lower80", title = gettext("Lower"), type = "number", overtitle = overtitle80)
+  table$addColumnInfo(name = "upper80", title = gettext("Upper"), type = "number", overtitle = overtitle80)
+  overtitle95 <- gettextf("%s%% CI", 100 * .95)
+  table$addColumnInfo(name = "lower95", title = gettext("Lower"), type = "number", overtitle = overtitle95)
+  table$addColumnInfo(name = "upper95", title = gettext("Upper"), type = "number", overtitle = overtitle95)
+
+  # table$setExpectedSize(2)
+
+  jaspResults[["forecastTable"]] <- table
+
+  # Check if ready
+  if(!ready) {
+    rows <- data.frame(
+      t = ".",
+      y = ".",
+      lower80 = ".",
+      upper80 = ".",
+      lower95 = ".",
+      upper95 = "."
+    )
+    row.names(rows) <- paste0("row", 1)
+    table$addRows(rows)
+    return()
+  }
+
+  forecasts <- .tsForecasts(fit, dataset, options)
+
+  rows <- data.frame(t = forecasts$t,
+                     y = forecasts[, 2],
+                     lower80 = forecasts$lower80,
+                     upper80 = forecasts$upper80,
+                     lower95 = forecasts$lower95,
+                     upper95 = forecasts$upper95)
+  row.names(rows) <- paste0("row", 1:nrow(forecasts))
+  table$addRows(rows)
 }

@@ -31,7 +31,7 @@ DataTransformationTimeSeries <- function(jaspResults, dataset, options) {
 
     .tsTimeSeriesPlotTransformation(jaspResults, transformedDataset, options, ready, position = 1, dependencies = c(.tsTransformationDependencies, "timeSeriesPlot", "timeSeriesPlotType", "timeSeriesPlotDistribution"))
 
-    .tsACFTransformation(jaspResults, transformedDataset, options, ready, position = 3, dependencies = c(.tsTransformationDependencies, "acf", "acfCi", "acfCiLevel", "acfCiType", "acfMaxLag"))
+    .tsACFTransformation(jaspResults, transformedDataset, options, ready, position = 3, dependencies = c(.tsTransformationDependencies, "acf", "acfCi", "acfCiLevel", "acfCiType", "acfFirstLag", "acfMaxLag"))
 
     .tsPACFTransformation(jaspResults, transformedDataset, options, ready, position = 4, dependencies = c(.tsTransformationDependencies, "pacf", "pacfCi", "pacfCiLevel", "pacfCiType", "pacfMaxLag"))
 }
@@ -288,6 +288,7 @@ DataTransformationTimeSeries <- function(jaspResults, dataset, options) {
 
     .tsFillACF(plot,
       type = "ACF", dataset, options,
+      firstLag = options$acfFirstLag,
       maxLag = options$acfMaxLag,
       ci = options$acfCi,
       ciValue = options$acfCiLevel,

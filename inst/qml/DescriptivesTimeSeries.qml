@@ -106,10 +106,12 @@ Form
                 {
                   name: "acfCiType"
                   title: qsTr("Confidence interval type")
-                  RadioButton { value: "normal";	label: qsTr("Normal");	checked: true }
-                  RadioButton { value: "bartlett";	label: qsTr("Bartlett")	}
+                  RadioButton { value: "whiteNoise";	label: qsTr("White noise");	checked: true }
+                  RadioButton { value: "movingAverage";	label: qsTr("Moving average")	}
+                  // RadioButton { value: "bartlett";	label: qsTr("Bartlett")	}
                 }
             }
+            CheckBox { name: "acfFirstLag"; label: qsTr("Include first lag") }
             IntegerField { name: "acfMaxLag"; label: qsTr("Maximum lag"); min: 1; defaultValue: 10 }
         }
         CheckBox
@@ -164,17 +166,62 @@ Form
                 }
                 Group
                 {
-                    columns: 2
-                    IntegerField
+                    RowLayout
                     {
-                        name: "powerSpectralDensitySmootherKernelM1"
-                        label: qsTr("Dimensions")
+                      Label
+                      {
+                        text:						qsTr("Dimension")
+                        Layout.leftMargin:			130 * preferencesModel.uiScale
+                        Layout.preferredWidth:	70 * preferencesModel.uiScale
+                      }
                     }
-                    IntegerField
+
+                    ComponentsList
                     {
-                        name: "powerSpectralDensitySmootherKernelM2"
+                      name:							"term"
+                      defaultValues:		[1]
+                      minimumItems:			1
+                      rowComponent:			RowLayout
+                      {
+                        Row
+                        {
+                          spacing:				4 * preferencesModel.uiScale
+                          Layout.preferredWidth:	110 * preferencesModel.uiScale
+
+                          Label
+                          {
+                            text:				qsTr("Term ") + (rowIndex + 1)
+                          }
+                        }
+                        
+                        RowLayout
+                        {
+                          spacing:				4 * preferencesModel.uiScale
+                          Layout.preferredWidth:	50 * preferencesModel.uiScale
+                          
+                          IntegerField
+                          {
+                            id:					  dimension
+                            name:				  "dimension"
+                            useExternalBorder:	true
+                            min:				    1
+                            defaultValue:		1
+                          }
+                        }
+                      }
                     }
-                }
+                    // columns: 2
+                    // IntegerField
+                    // {
+                    //     name: "powerSpectralDensitySmootherKernelM1"
+                    //     label: qsTr("Dimensions")
+                    // }
+                    // IntegerField
+                    // {
+                    //     name: "powerSpectralDensitySmootherKernelM2"
+                    // }
+              
+            }
             }
             DoubleField
             {

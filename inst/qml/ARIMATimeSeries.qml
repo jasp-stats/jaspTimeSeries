@@ -66,72 +66,72 @@ Form
         // }
     }
 
-    Section
-    {
-        title: qsTr("Data Preparation")
-        Group
-        {
-            title: qsTr("Stationarity Tests")
-            CheckBox
-            {
-                name:   "adfTest"
-                id:     adfTest
-                label:  qsTr("Augmented Dickey-Fuller")
-            }
-            CheckBox
-            {
-                name:   "ppTest"
-                id:     ppTest
-                label:  qsTr("Phillips-Perron")
-                // RadioButtonGroup
-                // {
-                //     name: "ppType"
-                //     title: qsTr("Type") 
-                //     radioButtonsOnSameRow: true
-                //     RadioButton { value: "normalized";	label: qsTr("Normalized biased") }
-                //     RadioButton { value: "studentzed";	label: qsTr("Studentized") }
-                // }
-            }
-            Group
-            {
-                title: qsTr("Kwiatkowski-Phillips-Schmidt-Shin")
-                columns: 2
-                CheckBox { name: "kpssLevel"; id: kpssLevel;	label: qsTr("Level stationary") }
-                CheckBox { name: "kpssTrend"; id: kpssTrend;	label: qsTr("Trend stationary") }
+    // Section
+    // {
+    //     title: qsTr("Data Preparation")
+    //     Group
+    //     {
+    //         title: qsTr("Stationarity Tests")
+    //         CheckBox
+    //         {
+    //             name:   "adfTest"
+    //             id:     adfTest
+    //             label:  qsTr("Augmented Dickey-Fuller")
+    //         }
+    //         CheckBox
+    //         {
+    //             name:   "ppTest"
+    //             id:     ppTest
+    //             label:  qsTr("Phillips-Perron")
+    //             // RadioButtonGroup
+    //             // {
+    //             //     name: "ppType"
+    //             //     title: qsTr("Type") 
+    //             //     radioButtonsOnSameRow: true
+    //             //     RadioButton { value: "normalized";	label: qsTr("Normalized biased") }
+    //             //     RadioButton { value: "studentzed";	label: qsTr("Studentized") }
+    //             // }
+    //         }
+    //         Group
+    //         {
+    //             title: qsTr("Kwiatkowski-Phillips-Schmidt-Shin")
+    //             columns: 2
+    //             CheckBox { name: "kpssLevel"; id: kpssLevel;	label: qsTr("Level stationary") }
+    //             CheckBox { name: "kpssTrend"; id: kpssTrend;	label: qsTr("Trend stationary") }
 
-            }
-        }
-        RadioButtonGroup
-        {
-            name: "transformation"
-            title: qsTr("Transformation")
-            info: "test"
-            RadioButton  { value: "noTransform";	label: qsTr("None");    checked: true }
-            RadioButton  { value: "center";	        label: qsTr("Center") }
-            RadioButton
-            {
-                value: "detrend"
-                label: qsTr("Detrend using linear regression")
-                IntegerField { name: "poly"; label: qsTr("Polynomial"); defaultValue: 1; min: 0; max: 10; }
-            }
-        }
-        CheckBox 
-        {
-          id:							transformationSavedToData
-          name:						"transformationSavedToData"
-          text:						qsTr("Add transformation to data")
+    //         }
+    //     }
+    //     RadioButtonGroup
+    //     {
+    //         name: "transformation"
+    //         title: qsTr("Transformation")
+    //         info: "test"
+    //         RadioButton  { value: "noTransform";	label: qsTr("None");    checked: true }
+    //         RadioButton  { value: "center";	        label: qsTr("Center") }
+    //         RadioButton
+    //         {
+    //             value: "detrend"
+    //             label: qsTr("Detrend using linear regression")
+    //             IntegerField { name: "poly"; label: qsTr("Polynomial"); defaultValue: 1; min: 0; max: 10; }
+    //         }
+    //     }
+    //     CheckBox 
+    //     {
+    //       id:							transformationSavedToData
+    //       name:						"transformationSavedToData"
+    //       text:						qsTr("Add transformation to data")
 
-          ComputedColumnField 
-          {
-            id:						    transformationColumn
-            name:					    "transformationColumn"
-            text:					    qsTr("Column name")
-            placeholderText:  qsTr("e.g., transformed")
-            fieldWidth:				120
-            enabled:				  transformationSavedToData.checked
-          }
-        }
-    }
+    //       ComputedColumnField 
+    //       {
+    //         id:						    transformationColumn
+    //         name:					    "transformationColumn"
+    //         text:					    qsTr("Column name")
+    //         placeholderText:  qsTr("e.g., transformed")
+    //         fieldWidth:				120
+    //         enabled:				  transformationSavedToData.checked
+    //       }
+    //     }
+    // }
 
 
     Section
@@ -296,27 +296,38 @@ Form
                 title: qsTr("Autocorrelation")
                 CheckBox
                 {
-                    name:   "residualACF"
+                    name:   "residualAcf"
                     id:     residualACF
                     label:  qsTr("Autocorrelation function")
                     CheckBox
                     {
-                        name: "residualAcfCI"
+                        name: "residualAcfCi"
                         label: qsTr("Show confidence interval")
                         checked: true
                         childrenOnSameRow: true
-                        CIField { name: "residualAcfCIValue" }
+                        CIField { name: "residualAcfCiLevel" }
                     }
+                    CheckBox { name: "residualAcfFirstLag"; label: qsTr("Include first lag") }
+                    // IntegerField { name: "residualAcfMaxLag"; label: qsTr("Maximum lag"); min: 1; defaultValue: 10 }
                 }
                 CheckBox
                 {
                     name:   "residualLB"
                     id:     residualLB
                     label:  qsTr("Ljung-Box p-values")
+                    CIField { name: "ljungBoxSignificanceLevel"; label: qsTr("Significance level"); defaultValue: 5 }
+                    // DoubleField
+                    // { 
+                    //     name: "ljungBoxSignificanceLevel"
+                    //     label: qsTr("Significance level")
+                    //     defaultValue: 5
+                    //     decimals: 1
+
+                    // }
                 }
                 IntegerField 
                 {
-                    name: "acfMax"
+                    name: "residualMaxLag"
                     label: qsTr("Maximum lag")
                     min: 1
                     defaultValue: 10
@@ -364,15 +375,25 @@ Form
                 }
             }
         }
-        FileSelector
-		{
-			name:	             "save"
-			label:	            qsTr("Save forecasts as")
-            placeholderText:    qsTr("e.g. forecasts.csv")
-			filter:	            "*.csv"
-			save:	            true
-            fieldWidth:                     180 * preferencesModel.uiScale
-		}
+        Group
+        {
+            CheckBox
+            {
+                name:   "forecastTable"
+                id:     forecastTable
+                label:  qsTr("Forecasts table")
+            }
+        
+            FileSelector
+            {
+                name:	             "save"
+                label:	            qsTr("Save forecasts as")
+                placeholderText:    qsTr("e.g. forecasts.csv")
+                filter:	            "*.csv"
+                save:	              true
+                fieldWidth:         180 * preferencesModel.uiScale
+            }
+        }
     }
 }
 // dataSetModel.rowCount()
