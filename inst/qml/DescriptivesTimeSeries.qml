@@ -26,7 +26,18 @@ Form
 
     Group
     {
+      // title: qsTr("Table")
+      CheckBox
+      {
+          name: "descriptivesTableTransposed"
+          label: qsTr("Transpose descriptives table")
+      }
+    }
+
+    Section
+    {
         title: qsTr("Plots")
+        columns: 1
         CheckBox
         {
             name: "timeSeriesPlot"
@@ -53,27 +64,27 @@ Form
         }
         CheckBox
         {
-            name: "stateSpacePlot"
+            name: "lagPlot"
             id: sspPlot
-            label: qsTr("State space plot")
+            label: qsTr("Lag plot")
             Group
             {
-                columns: 2
+                // columns: 2
                 IntegerField
                 {
-                    name: "stateSpacePlotLag"
+                    name: "lagPlotLag"
                     label: qsTr("Lag")
                     defaultValue: 1
                 }
                 CheckBox
                 {
-                    name: "stateSpacePlotRegressionLine"
+                    name: "lagPlotRegressionLine"
                     id: sspSmooth
                     label: qsTr("Add regression line")
                     checked: true
                     RadioButtonGroup
                     {
-                        name:	"stateSpacePlotRegressionType"
+                        name:	"lagPlotRegressionType"
                         radioButtonsOnSameRow: true
                         RadioButton { value: "smooth";	label: qsTr("Smooth");	checked: true }
                         RadioButton { value: "linear";	label: qsTr("Linear")				  }
@@ -81,11 +92,11 @@ Form
 
                     CheckBox
                     {
-                        name: "stateSpacePlotRegressionCi"
+                        name: "lagPlotRegressionCi"
                         label: qsTr("Show confidence interval")
                         checked: true
                         childrenOnSameRow: true
-                        CIField { name: "stateSpacePlotRegressionCiLevel" }
+                        CIField { name: "lagPlotRegressionCiLevel" }
                     }
                 }
             }
@@ -129,130 +140,119 @@ Form
             }
             IntegerField { name: "pacfMaxLag"; label: qsTr("Maximum lag"); min: 1; defaultValue: 10 }
         }
-        CheckBox
-        {
-            name: "powerSpectralDensity"
-            id: psd
-            label: qsTr("Power spectral density")
-            Group
-            {
-                columns: 2
-                CheckBox
-                {
-                    name: "powerSpectralDensityDetrend"
-                    label: qsTr("Detrend")
-                    checked: true
-                }
-                CheckBox
-                {
-                    name: "powerSpectralDensityDemean"
-                    label: qsTr("Demean")
-                    checked: false
-                }
-            }
-            CheckBox
-            {
-                name: "powerSpectralDensitySmoother"
-                label: qsTr("Add kernel smoother")
-                childrenOnSameRow: true
-                DropDown
-                {
-                    name: "powerSpectralDensitySmootherKernel"
-                    values:
-                    [
-                        { label: qsTr("Daniell"), value: "daniell" },
-                        { label: qsTr("Modified Daniell"), value: "modified.daniell" }
-                    ]
-                }
-                Group
-                {
-                    RowLayout
-                    {
-                      Label
-                      {
-                        text:						qsTr("Dimension")
-                        Layout.leftMargin:			130 * preferencesModel.uiScale
-                        Layout.preferredWidth:	70 * preferencesModel.uiScale
-                      }
-                    }
+        // CheckBox
+        // {
+        //     name: "powerSpectralDensity"
+        //     id: psd
+        //     label: qsTr("Power spectral density")
+        //     Group
+        //     {
+        //         columns: 2
+        //         CheckBox
+        //         {
+        //             name: "powerSpectralDensityDetrend"
+        //             label: qsTr("Detrend")
+        //             checked: true
+        //         }
+        //         CheckBox
+        //         {
+        //             name: "powerSpectralDensityDemean"
+        //             label: qsTr("Demean")
+        //             checked: false
+        //         }
+        //     }
+        //     CheckBox
+        //     {
+        //         name: "powerSpectralDensitySmoother"
+        //         label: qsTr("Add kernel smoother")
+        //         childrenOnSameRow: true
+        //         DropDown
+        //         {
+        //             name: "powerSpectralDensitySmootherKernel"
+        //             values:
+        //             [
+        //                 { label: qsTr("Daniell"), value: "daniell" },
+        //                 { label: qsTr("Modified Daniell"), value: "modified.daniell" }
+        //             ]
+        //         }
+        //         Group
+        //         {
+        //             RowLayout
+        //             {
+        //               Label
+        //               {
+        //                 text:						qsTr("Dimension")
+        //                 Layout.leftMargin:			130 * preferencesModel.uiScale
+        //                 Layout.preferredWidth:	70 * preferencesModel.uiScale
+        //               }
+        //             }
 
-                    ComponentsList
-                    {
-                      name:							"term"
-                      defaultValues:		[1]
-                      minimumItems:			1
-                      rowComponent:			RowLayout
-                      {
-                        Row
-                        {
-                          spacing:				4 * preferencesModel.uiScale
-                          Layout.preferredWidth:	110 * preferencesModel.uiScale
+        //             ComponentsList
+        //             {
+        //               name:							"term"
+        //               defaultValues:		[1]
+        //               minimumItems:			1
+        //               rowComponent:			RowLayout
+        //               {
+        //                 Row
+        //                 {
+        //                   spacing:				4 * preferencesModel.uiScale
+        //                   Layout.preferredWidth:	110 * preferencesModel.uiScale
 
-                          Label
-                          {
-                            text:				qsTr("Term ") + (rowIndex + 1)
-                          }
-                        }
+        //                   Label
+        //                   {
+        //                     text:				qsTr("Term ") + (rowIndex + 1)
+        //                   }
+        //                 }
                         
-                        RowLayout
-                        {
-                          spacing:				4 * preferencesModel.uiScale
-                          Layout.preferredWidth:	50 * preferencesModel.uiScale
+        //                 RowLayout
+        //                 {
+        //                   spacing:				4 * preferencesModel.uiScale
+        //                   Layout.preferredWidth:	50 * preferencesModel.uiScale
                           
-                          IntegerField
-                          {
-                            id:					  dimension
-                            name:				  "dimension"
-                            useExternalBorder:	true
-                            min:				    1
-                            defaultValue:		1
-                          }
-                        }
-                      }
-                    }
-                    // columns: 2
-                    // IntegerField
-                    // {
-                    //     name: "powerSpectralDensitySmootherKernelM1"
-                    //     label: qsTr("Dimensions")
-                    // }
-                    // IntegerField
-                    // {
-                    //     name: "powerSpectralDensitySmootherKernelM2"
-                    // }
-              
-            }
-            }
-            DoubleField
-            {
-                name: "powerSpectralDensityTaper"
-                label: qsTr("Taper")
-                min: 0
-                max: 0.5
-            }
-            RadioButtonGroup
-            {
-                name: "powerSpectralDensityScaling"
-                title: qsTr("Scaling")
-                radioButtonsOnSameRow: true
-                RadioButton
-                {
-                    name: "noScaling"
-                    label: qsTr("None")
-                    checked: true
-                }
-                RadioButton
-                {
-                    name: "log"
-                    label: qsTr("ln")
-                }
-                RadioButton
-                {
-                    name: "log10"
-                    label: qsTr("log")
-                }
-            }
-        }
+        //                   IntegerField
+        //                   {
+        //                     id:					  dimension
+        //                     name:				  "dimension"
+        //                     useExternalBorder:	true
+        //                     min:				    1
+        //                     defaultValue:		1
+        //                   }
+        //                 }
+        //               }
+        //             } 
+        //         }
+        //     }
+    //         DoubleField
+    //         {
+    //             name: "powerSpectralDensityTaper"
+    //             label: qsTr("Taper")
+    //             min: 0
+    //             max: 0.5
+    //         }
+    //         RadioButtonGroup
+    //         {
+    //             name: "powerSpectralDensityScaling"
+    //             title: qsTr("Scaling")
+    //             radioButtonsOnSameRow: true
+    //             RadioButton
+    //             {
+    //                 name: "noScaling"
+    //                 label: qsTr("None")
+    //                 checked: true
+    //             }
+    //             RadioButton
+    //             {
+    //                 name: "log"
+    //                 label: qsTr("ln")
+    //             }
+    //             RadioButton
+    //             {
+    //                 name: "log10"
+    //                 label: qsTr("log")
+    //             }
+    //         }
+    //     }
     }
 }
 // dataSetModel.rowCount()

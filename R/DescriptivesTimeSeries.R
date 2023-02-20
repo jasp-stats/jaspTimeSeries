@@ -21,15 +21,17 @@ DescriptivesTimeSeries <- function(jaspResults, dataset, options) {
     if (ready)
       dataset <- .tsReadDataDescriptives(jaspResults, dataset, options)
 
-    .tsTimeSeriesPlotDescriptives(jaspResults, dataset, options, ready, position = 1, dependencies = c("timeSeriesPlot", "timeSeriesPlotType", "dependent", "timeSeriesPlotDistribution"))
+    .tsDescriptivesTable(jaspResults, dataset, options, ready, position = 1, dependencies = c("dependent", "descriptivesTableTransposed"))
 
-    .tsStateSpacePlotDescriptives(jaspResults, dataset, options, ready, position = 2, dependencies  = c("stateSpacePlot", "stateSpacePlotLag", "stateSpacePlotRegressionType", "stateSpacePlotRegressionLine", "stateSpacePlotRegressionCi", "stateSpacePlotRegressionCiLevel", "dependent"))
+    .tsTimeSeriesPlotDescriptives(jaspResults, dataset, options, ready, position = 2, dependencies = c("timeSeriesPlot", "timeSeriesPlotType", "dependent", "timeSeriesPlotDistribution"))
 
-    .tsACFDescriptives(jaspResults, dataset, options, ready, position = 3, dependencies = c("dependent", "acf", "acfCi", "acfCiLevel", "acfCiType", "acfFirstLag", "acfMaxLag"))
+    .tslagPlotDescriptives(jaspResults, dataset, options, ready, position = 3, dependencies  = c("lagPlot", "lagPlotLag", "lagPlotRegressionType", "lagPlotRegressionLine", "lagPlotRegressionCi", "lagPlotRegressionCiLevel", "dependent"))
 
-    .tsPACFDescriptives(jaspResults, dataset, options, ready, position = 4, dependencies = c("dependent", "pacf", "pacfCi", "pacfCiLevel", "pacfCiType", "pacfMaxLag"))
+    .tsACFDescriptives(jaspResults, dataset, options, ready, position = 4, dependencies = c("dependent", "acf", "acfCi", "acfCiLevel", "acfCiType", "acfFirstLag", "acfMaxLag"))
 
-    .tsPowerSpectralDensityDescriptives(jaspResults, dataset, options, ready, position = 5, dependencies = c("powerSpectralDensity", "powerSpectralDensityDetrend", "powerSpectralDensityDemean", "powerSpectralDensitySmoother", "powerSpectralDensitySmootherKernel", "term", "dimension", "powerSpectralDensityTaper", "powerSpectralDensityScaling", "noScaling", "log", "log10", "dependent"))
+    .tsPACFDescriptives(jaspResults, dataset, options, ready, position = 5, dependencies = c("dependent", "pacf", "pacfCi", "pacfCiLevel", "pacfCiType", "pacfMaxLag"))
+
+    # .tsPowerSpectralDensityDescriptives(jaspResults, dataset, options, ready, position = 6, dependencies = c("powerSpectralDensity", "powerSpectralDensityDetrend", "powerSpectralDensityDemean", "powerSpectralDensitySmoother", "powerSpectralDensitySmootherKernel", "term", "dimension", "powerSpectralDensityTaper", "powerSpectralDensityScaling", "noScaling", "log", "log10", "dependent"))
 }
 
 .tsReadDataDescriptives <- function(jaspResults, dataset, options) {
@@ -82,48 +84,48 @@ DescriptivesTimeSeries <- function(jaspResults, dataset, options) {
   timeSeriesPlot$plotObject <- p
 }
 
-.tsStateSpacePlotDescriptives <- function(jaspResults, dataset, options, ready, position, dependencies) {
-  if (!options$stateSpacePlot)
+.tslagPlotDescriptives <- function(jaspResults, dataset, options, ready, position, dependencies) {
+  if (!options$lagPlot)
     return()
 
-  if (is.null(jaspResults[["stateSpacePlot"]])) {
+  if (is.null(jaspResults[["lagPlot"]])) {
     plot <- createJaspPlot(title = "State Space Plot")
     plot$dependOn(dependencies)
     plot$position <- position
 
-    jaspResults[["stateSpacePlot"]] <- plot
+    jaspResults[["lagPlot"]] <- plot
 
     if (!ready)
       return()
 
-    .tsFillStateSpacePlot(plot, dataset, options)
+    .tsFilllagPlot(plot, dataset, options)
   }
 }
 
-.tsFillStateSpacePlot <- function(stateSpacePlot, dataset, options) {
-  yLag  <- c(rep(NA, options$stateSpacePlotLag), dataset$y[1:(length(dataset$y) - options$stateSpacePlotLag)])
+.tsFilllagPlot <- function(lagPlot, dataset, options) {
+  yLag  <- c(rep(NA, options$lagPlotLag), dataset$y[1:(length(dataset$y) - options$lagPlotLag)])
 
   yName <- decodeColNames(options$dependent[1])
-  xName <- as.expression(bquote(.(yName)[t-.(options$stateSpacePlotLag)]))
+  xName <- as.expression(bquote(.(yName)[t-.(options$lagPlotLag)]))
   yName <- as.expression(bquote(.(yName)[t]))
 
   dat <- data.frame(y = dataset$y, yLag)
   dat <- na.omit(dat)
 
-  # forceLinearSmooth <- options$stateSpacePlotRegressionType == "linear"
+  # forceLinearSmooth <- options$lagPlotRegressionType == "linear"
   # Does not work with bquote
   p <- jaspGraphs::JASPScatterPlot(
     dat$yLag, dat$y,
     xName = xName, 
     yName = yName,
-    addSmooth = options$stateSpacePlotRegressionLine,
-    addSmoothCI = options$stateSpacePlotRegressionCi,
-    smoothCIValue = options$stateSpacePlotRegressionCiLevel,
-    forceLinearSmooth = options$stateSpacePlotRegressionType == "linear",
+    addSmooth = options$lagPlotRegressionLine,
+    addSmoothCI = options$lagPlotRegressionCi,
+    smoothCIValue = options$lagPlotRegressionCiLevel,
+    forceLinearSmooth = options$lagPlotRegressionType == "linear",
     plotAbove = "none", plotRight = "none"
   )
 
-  stateSpacePlot$plotObject <- p
+  lagPlot$plotObject <- p
 
   return()
 }
@@ -333,4 +335,51 @@ DescriptivesTimeSeries <- function(jaspResults, dataset, options) {
   powerSpectralDensity$plotObject <- p
 
   return()
+}
+
+.tsDescriptivesTable <- function(jaspResults, dataset, options, ready, position, dependencies) {
+  if (!is.null(jaspResults[["descriptivesTable"]])) return()
+
+  table <- createJaspTable("Descriptive Statistics")
+  table$dependOn(dependencies)
+  table$position <- position
+  table$showSpecifiedColumnsOnly <- TRUE
+  table$transpose <- !options[["descriptivesTableTransposed"]] # the table is transposed by default
+
+  table$addColumnInfo(name = "variable",  title = " ",                        type = "string")
+  table$addColumnInfo(name = "valid",     title = gettext("Valid"),           type = "integer")
+  table$addColumnInfo(name = "missing",   title = gettext("Missing"),         type = "integer")
+  table$addColumnInfo(name = "mean",      title = gettext("Mean"),            type = "number")
+  table$addColumnInfo(name = "sd",        title = gettext("Std. Deviation"),  type = "number")
+  table$addColumnInfo(name = "min",       title = gettext("Minimum"),         type = "number")
+  table$addColumnInfo(name = "max",       title = gettext("Maximum"),         type = "number")
+
+  # coefTable$setExpectedSize(2)
+
+  jaspResults[["descriptivesTable"]] <- table
+
+  # Check if ready
+  if(!ready) {
+    rows <- data.frame(valid = ".",
+                       missing = ".",
+                       mean = ".",
+                       min = ".", 
+                       max = ".")
+    # row.names(rows) <- paste0("row", 1)
+    table$addRows(rows)
+    return()
+  }
+
+  na.omitted <- na.omit(dataset$y)
+  yName <- options$dependent[1]
+  
+  rows <- data.frame(variable = yName,
+                     valid = length(na.omitted),
+                     missing = nrow(dataset) - length(na.omitted),
+                     mean = mean(na.omitted),
+                     sd = sd(na.omitted),
+                     min = min(na.omitted),
+                     max = max(na.omitted))
+  # row.names(rows) <- paste0("row", 1)
+  table$addRows(rows)
 }
