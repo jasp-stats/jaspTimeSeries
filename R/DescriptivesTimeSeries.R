@@ -354,32 +354,19 @@ DescriptivesTimeSeries <- function(jaspResults, dataset, options) {
   table$addColumnInfo(name = "min",       title = gettext("Minimum"),         type = "number")
   table$addColumnInfo(name = "max",       title = gettext("Maximum"),         type = "number")
 
-  # coefTable$setExpectedSize(2)
-
   jaspResults[["descriptivesTable"]] <- table
 
-  # Check if ready
-  if(!ready) {
-    rows <- data.frame(valid = ".",
-                       missing = ".",
-                       mean = ".",
-                       min = ".", 
-                       max = ".")
-    # row.names(rows) <- paste0("row", 1)
+  if (ready) {
+    na.omitted <- na.omit(dataset$y)
+    yName <- options$dependent[1]
+    
+    rows <- data.frame(variable = yName,
+                      valid = length(na.omitted),
+                      missing = nrow(dataset) - length(na.omitted),
+                      mean = mean(na.omitted),
+                      sd = sd(na.omitted),
+                      min = min(na.omitted),
+                      max = max(na.omitted))
     table$addRows(rows)
-    return()
   }
-
-  na.omitted <- na.omit(dataset$y)
-  yName <- options$dependent[1]
-  
-  rows <- data.frame(variable = yName,
-                     valid = length(na.omitted),
-                     missing = nrow(dataset) - length(na.omitted),
-                     mean = mean(na.omitted),
-                     sd = sd(na.omitted),
-                     min = min(na.omitted),
-                     max = max(na.omitted))
-  # row.names(rows) <- paste0("row", 1)
-  table$addRows(rows)
 }

@@ -49,11 +49,18 @@ Form
         }
         Group
         {
+            title: qsTr("Phillips-Perron")
+            columns: 2
+            CheckBox { name: "ppTestRegressionCoefficient"; id: ppRegression;	label: qsTr("Regression coefficient test") }
+            CheckBox { name: "ppTestStudentized"; id: ppStudentized;	label: qsTr("Studentized test") }
+
+        }
+        Group
+        {
             title: qsTr("Kwiatkowski-Phillips-Schmidt-Shin")
             columns: 2
             CheckBox { name: "kpssLevel"; id: kpssLevel;	label: qsTr("Level stationary") }
             CheckBox { name: "kpssTrend"; id: kpssTrend;	label: qsTr("Trend stationary") }
-
         }
     }
 

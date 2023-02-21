@@ -23,8 +23,8 @@ DataTransformationTimeSeries <- function(jaspResults, dataset, options) {
       transformedDataset <- .tsTransformData(jaspResults, dataset, options)
     }
     
-    if (options$adfTest | options$ppTest | options$kpssLevel | options$kpssTrend) {
-      .tsCreateTableStationarityTests(jaspResults, transformedDataset, options, ready, position = 2, dependencies = c(.tsTransformationDependencies, "adfTest", "ppTest", "kpssLevel", "kpssTrend"))
+    if (options$adfTest | options$ppTestRegressionCoefficient | options$ppTestStudentized | options$kpssLevel | options$kpssTrend) {
+      .tsCreateTableStationarityTests(jaspResults, transformedDataset, options, ready, position = 2, dependencies = c(.tsTransformationDependencies, "adfTest", "ppTestRegressionCoefficient", "ppTestStudentized", "kpssLevel", "kpssTrend"))
     }
 
     .tsSaveTransformation(transformedDataset, options, jaspResults, ready)
@@ -76,7 +76,7 @@ DataTransformationTimeSeries <- function(jaspResults, dataset, options) {
 }
 
 .tsCreateTableStationarityTests <- function(jaspResults, dataset, options, ready, position, dependencies) {
-  if (!is.null(jaspResults[["stationaryTable"]]) & (options$adfTest | options$ppTest | options$kpssLevel | options$kpssTrend)) {
+  if (!is.null(jaspResults[["stationaryTable"]]) & (options$adfTest | options$ppTestRegressionCoefficient | options$ppTestStudentized | options$kpssLevel | options$kpssTrend)) {
     return()
   }
 
@@ -93,164 +93,103 @@ DataTransformationTimeSeries <- function(jaspResults, dataset, options) {
 
   jaspResults[["stationaryTable"]] <- stationaryTable
 
-  # Check if ready
+  test <- c(
+    "Augmented Dickey-Fuller t",
+    paste("Phillips-Perron", c("regression coefficient \u03C1", "studentized \u03C4")),
+    paste("Kwiatkowski-Phillips-Schmidt-Shin", c(gettext("Level"), gettext("Trend")), "\u03B7")
+  )
+
+  null <- c(
+    rep(gettext("Non-stationary"), 3),
+    gettext("Level stationary"),
+    gettext("Trend stationary")
+  )
+
+  idx <- c(options$adfTest, options$ppTestRegressionCoefficient, options$ppTestStudentized, options$kpssLevel, options$kpssTrend)
+  rows <- 1:5
+  rowsIdx <- rows[idx]
+
   if (!ready) {
     rows <- data.frame(
-      test = ".",
+      test = test[idx],
       statistic = ".",
       lag = ".",
       p = ".",
-      null = "."
+      null = null[idx]
     )
-    row.names(rows) <- paste0("row", 1)
+    row.names(rows) <- paste0("row", rowsIdx)
     stationaryTable$addRows(rows)
     return()
   }
 
+  df <- data.frame(test, statistic = numeric(5), lag = numeric(5), p = numeric(5), null)
   smallerA <- smallerP <- smallerKl <- smallerKt <- greaterA <- greaterP <- greaterKl <- greaterKt <- F
   if (options$adfTest) {
-    # alternative stationary
     fit <- tseries::adf.test(dataset$y)
-    smallerA <- fit$p.value == 0.01
-    greaterA <- fit$p.value == 0.99
-    dfA <- .stationarityRows(fit, "Augmented Dickey-Fuller t", gettext("Non-stationary")) # h0 a unit root
-    # p value 0.01 - 0.99
-    stationaryTable$addRows(dfA)
+    df[1, c("statistic", "lag", "p")] <- c(fit$statistic, fit$parameter, fit$p.value)
+    stationaryTable$addRows(df[1, ])
     stationaryTable$setRowName(rowIndex = 1, newName = "adf")
+    smallerA <- fit$p.value == 0.01
+    greaterA <- fit$p.value == 0.99   # p value 0.01 - 0.99
   }
-  if (options$ppTest) {
+  if (options$ppTestRegressionCoefficient) {
     # type = c("Z(alpha)", "Z(t_alpha)")
-    # alternative stationary
     # rho normalized bias test (regression coefficient) vs. tau studentized test
-    ppType <- "Z(\u03B1)"
-    fit <- tseries::pp.test(dataset$y)
-    smallerP <- fit$p.value == 0.01
-    greaterP <- fit$p.value == 0.99
-    dfP <- .stationarityRows(fit, sprintf("Phillips-Perron %s", ppType), gettext("Non-stationary"))
-    stationaryTable$addRows(dfP)
-    idxP <- ifelse(options$adfTest, 2, 1)
-    stationaryTable$setRowName(rowIndex = idxP, newName = "pp")
-    # p value 0.01 - 0.99
+    # ppType <- "Z(\u03B1)"
+    fit <- tseries::pp.test(dataset$y, type = "Z(alpha)")
+    df[2, c("statistic", "lag", "p")] <- c(fit$statistic, fit$parameter, fit$p.value)
+    stationaryTable$addRows(df[2, ])
+    stationaryTable$setRowName(rowIndex = which(rowsIdx == 2), newName = "ppRegression")
+    smallerPr <- fit$p.value == 0.01
+    greaterPr <- fit$p.value == 0.99   # p value 0.01 - 0.99
+  }
+  if (options$ppTestStudentized) {
+    fit <- tseries::pp.test(dataset$y, type = "Z(t_alpha)")
+    df[3, c("statistic", "lag", "p")] <- c(fit$statistic, fit$parameter, fit$p.value)
+    stationaryTable$addRows(df[3, ])
+    stationaryTable$setRowName(rowIndex = which(rowsIdx == 3), newName = "ppStudentized")
+    smallerPs <- fit$p.value == 0.01
+    greaterPs <- fit$p.value == 0.99   # p value 0.01 - 0.99
   }
   if (options$kpssLevel) {
-    # null is stationary
-    # null = c("Level", "Trend")
     fit <- tseries::kpss.test(dataset$y, null = "Level")
+    df[4, c("statistic", "lag", "p")] <- c(fit$statistic, fit$parameter, fit$p.value)
+    stationaryTable$addRows(df[4, ])
+    stationaryTable$setRowName(rowIndex = which(rowsIdx == 4), newName = "kpssLevel")
     smallerKl <- fit$p.value == 0.01
-    greaterKl <- fit$p.value == 0.1
-    dfKl <- .stationarityRows(
-      fit,
-      sprintf("Kwiatkowski-Phillips-Schmidt-Shin Level %s", "\u03B7"),
-      gettext("Level stationary")
-    ) # mean stationarity
-    stationaryTable$addRows(dfKl)
-    idxKl <- ifelse(options$adfTest & options$ppTest, 3, ifelse(options$adfTest | options$ppTest, 2, 1))
-    stationaryTable$setRowName(rowIndex = idxKl, newName = "kpssLevel")
-    # p value 0.1 - 0.01
+    greaterKl <- fit$p.value == 0.1    # p value 0.1 - 0.01
   }
   if (options$kpssTrend) {
     fit <- tseries::kpss.test(dataset$y, null = "Trend")
+    df[5, c("statistic", "lag", "p")] <- c(fit$statistic, fit$parameter, fit$p.value)
+    stationaryTable$addRows(df[5, ])
+    stationaryTable$setRowName(rowIndex = which(rowsIdx == 5), newName = "kpssTrend")
     smallerKt <- fit$p.value == 0.01
-    greaterKt <- fit$p.value == 0.1
-    dfKt <- .stationarityRows(
-      fit,
-      sprintf("Kwiatkowski-Phillips-Schmidt-Shin Trend %s", "\u03B7"),
-      gettext("Trend stationary")
-    ) # linear trend stationarity
-
-    stationaryTable$addRows(dfKt)
-    otherRows <- sum(options$adfTest, options$ppTest, options$kpssLevel)
-    idxKt <- ifelse(otherRows == 3, 4,
-      ifelse(otherRows == 2, 3,
-        ifelse(otherRows == 1, 2, 1)
-      )
-    )
-    stationaryTable$setRowName(rowIndex = idxKt, newName = "kpssTrend")
-    # p value 0.1 - 0.01
+    greaterKt <- fit$p.value == 0.1    # p value 0.1 - 0.01
   }
 
-  if (smallerA | smallerP | smallerKl | smallerKt) {
+  if (smallerA | smallerPr | smallerPs | smallerKl | smallerKt) {
     stationaryTable$addFootnote(gettext("The p-value is actually less than p-value shown (see Help file)."),
-      colNames = "p", rowNames = .stationaryFootnoteRows(smallerA, smallerP, smallerKl, smallerKt, options)
+      colNames = "p", rowNames = .stationaryFootnoteRows(smallerA, smallerPr, smallerPs, smallerKl, smallerKt, options)
     )
   }
 
-  if (greaterA | greaterP | greaterKl | greaterKt) {
+  if (greaterA | greaterPr | greaterPs | greaterKl | greaterKt) {
     stationaryTable$addFootnote(gettext("The p-value is actually greater than p-value shown (see Help file)."),
-      colNames = "p", rowNames = .stationaryFootnoteRows(greaterA, greaterP, greaterKl, greaterKt, options)
+      colNames = "p", rowNames = .stationaryFootnoteRows(greaterA, greaterPr, greaterPs, greaterKl, greaterKt, options)
     )
   }
 }
 
-.stationaryFootnoteRows <- function(A, P, Kl, Kt, options) {
+.stationaryFootnoteRows <- function(A, Pr, Ps, Kl, Kt, options) {
   footRow <- NULL
   if (options$adfTest & A) footRow <- c(footRow, "adf")
-  if (options$ppTest & P) footRow <- c(footRow, "pp")
+  if (options$ppTestRegressionCoefficient & Pr) footRow <- c(footRow, "ppRegression")
+  if (options$ppTestStudentized & Ps) footRow <- c(footRow, "ppStudentized")
   if (options$kpssLevel & Kl) footRow <- c(footRow, "kpssLevel")
   if (options$kpssTrend & Kt) footRow <- c(footRow, "kpssTrend")
   return(footRow)
 }
-
-.stationarityRows <- function(fit, test, null) {
-  # p <- fit$p.value
-  # sgn <- ""
-  # if (p == 0.01) sgn <- "<"
-  # if (p == 0.99 | (kpss & p == 0.1)) sgn <- ">"
-  # p <- paste(sgn, substring(sprintf("%.3f", p), 2))
-  df <- data.frame(test = test, statistic = fit$statistic, lag = fit$parameter, p = fit$p.value, null = null)
-  return(df)
-}
-
-# .tsPlotsOriginalData <- function(jaspResults, dataset, options, ready, position, dependencies) {
-
-#   tsContainer <- createJaspContainer(title = gettext("Original Data"))
-#   tsContainer$dependOn(dependencies)
-#   jaspResults[["tsContainer"]] <- tsContainer
-#   jaspResults[["tsContainer"]]$position <- position
-
-#   if (!ready | !options[["originalDataPlots"]]) {
-#     return()
-#   }
-
-#   if (is.null(tsContainer[["originalDataTimeSeriesPlot"]])) {
-#     originalDataTimeSeriesPlot <- createJaspPlot(title = "Time Series Plot", width = 660)
-#     originalDataTimeSeriesPlot$dependOn(c("originalDataTsType", "originalDataDistribution"))
-#     originalDataTimeSeriesPlot$position <- 1
-#     tsContainer[["originalDataTimeSeriesPlot"]] <- originalDataTimeSeriesPlot
-
-#     if (!ready) {
-#       return()
-#     }
-
-#     .tsFillTimeSeriesPlot(originalDataTimeSeriesPlot, dataset, options, type = options$timeSeriesPlotType, distribution = options$timeSeriesPlotDistribution)
-#   }
-
-#   if (is.null(tsContainer[["acfPlot"]])) {
-#     acfPlot <- createJaspPlot(title = "Autocorrelation Function Plot")
-#     acfPlot$dependOn(c("acfCi", "acfCiLevel", "acfCiType", "acfMaxLag"))
-#     acfPlot$position <- 2
-#     tsContainer[["acfPlot"]] <- acfPlot
-
-#     if (!ready) {
-#       return()
-#     }
-
-#     .tsFillACF(acfPlot, type = "ACF", dataset, options, maxLag = options$acfMaxLag, ci = options$acfCi, ciValue = options$acfCiLevel, ciType = options$acfCiType)
-#   }
-
-#   if (is.null(tsContainer[["pacfPlot"]])) {
-#     pacfPlot <- createJaspPlot(title = "Partial Autocorrelation Function Plot")
-#     pacfPlot$dependOn(c("pacfCi", "pacfCiLevel", "pacfCiType", "pacfMaxLag"))
-#     pacfPlot$position <- 2
-#     tsContainer[["pacfPlot"]] <- pacfPlot
-
-#     if (!ready) {
-#       return()
-#     }
-
-#     .tsFillACF(pacfPlot, type = "PACF", dataset, options, maxLag = options$pacfMaxLag, ci = options$pacfCi, ciValue = options$acfCiLevel, ciType = options$acfCiType)
-#   }
-# }
 
 .tsTimeSeriesPlotTransformation <- function(jaspResults, dataset, options, ready, position, dependencies) {
   if (!options$timeSeriesPlot)
