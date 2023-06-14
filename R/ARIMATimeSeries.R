@@ -28,7 +28,7 @@ ARIMATimeSeries <- function(jaspResults, dataset, options) {
     
     fit <- .tsResults(jaspResults, dataset, options, ready)
 
-    .tsTimeSeriesPlot(jaspResults, dataset, options, ready, position = 1, dependencies = c("transformation", "timeSeriesPlot", "tsType", "dependentVariable", "distribution"))
+    .tsTimeSeriesPlot(jaspResults, dataset, options, ready, position = 1, dependencies = c("timeSeriesPlot", "tsType", "dependentVariable", "distribution"))
 
     .tsCreateTableModel(jaspResults, fit, dataset, options, ready, position = 3)
 
@@ -38,6 +38,9 @@ ARIMATimeSeries <- function(jaspResults, dataset, options) {
     #   .tsCreateTableStationarityTests(jaspResults, fit, dataset, options, ready, position = 2)
     
     .tsResidualDiagnostics(jaspResults, fit, dataset, options, ready, position = 5, dependencies = .tsDependencies)
+    # c("residualColumn", "residualSavedToData", dependencies)
+    .tsSaveResiduals(dataset, fit, options, jaspResults, ready, dependencies = c("residualColumn", "residualSavedToData", .tsDependencies))
+
     # .tsTimeSeriesPlot(jaspResults, dataset, options, ready, position = 1)
     
     # .tsACF(jaspResults, dataset, options, ready, position = 3)
@@ -56,14 +59,23 @@ ARIMATimeSeries <- function(jaspResults, dataset, options) {
 
 .tsDependencies <- c("model", "ic", "best", "manual", "addConstant",
                      "p", "d", "q",
-                     "dependentVariable", "center", "detrend", "transformation",
+                     "dependentVariable", "covariates",
                      "addSeasonal", "period", "m", "P", "D", "Q")
 
 .tsReadData <- function(jaspResults, dataset, options) {
-  if (!is.null(dataset))
-    return(dataset)
-  else
-    return(.readDataSetToEnd(columns.as.numeric = options$dependentVariable))
+  if (is.null(dataset)) {
+    y <- options$dependentVariable[1]
+    # y     <- dataset[, yName]
+    # t     <- 1:nrow(dataset)
+
+    covariates <- NULL
+    if (length(options[["covariates"]]) > 0) {
+      covariates <- unlist(options[["covariates"]])
+    }
+  # add covariates at some point
+  # return(cbind(y, t, covariates))
+  }  
+  return(.readDataSetToEnd(columns.as.numeric = c(y, covariates)))
 }
 
 .tsPrepareData <- function(jaspResults, dataset, options) {
@@ -71,8 +83,16 @@ ARIMATimeSeries <- function(jaspResults, dataset, options) {
   y     <- dataset[, yName]
   t     <- 1:nrow(dataset)
 
+  df <- data.frame(y, t)
+
+  if (length(options[["covariates"]]) > 0) {
+    covariateNames <- options$covariates
+    covariates <- dataset[, covariateNames]
+    df <- cbind(df, covariates)
+  }
+
   # add covariates at some point
-  return(data.frame(y, t))
+  return(df)
 }
 
 # .tsTransformData <- function(dataset, options, jaspResults) {
@@ -307,6 +327,12 @@ ARIMATimeSeries <- function(jaspResults, dataset, options) {
 
   # if(options$best) fit <- auto.arima(y, ic = options$ic)
 
+  xreg <- NULL
+  if (length(options[["covariates"]]) > 0) {
+    covariates <- dataset[, which(names(dataset) != "y" & names(dataset) != "t")]
+    xreg <- as.matrix(covariates)
+  }
+
   if (options$model == "manual") {
     # p   <- ifelse(options$ar, options$p, 0)
     # d   <- ifelse(options$i,  options$d, 0)
@@ -314,6 +340,7 @@ ARIMATimeSeries <- function(jaspResults, dataset, options) {
     # fit <- arima(y, order = c(options$p, options$d, options$q))
       fit <- forecast::Arima(y, include.constant = options$addConstant,
                              order = c(options$p, options$d, options$q),
+                             xreg = xreg,
                              seasonal = seasonOrder)
   }
 
@@ -461,10 +488,16 @@ ARIMATimeSeries <- function(jaspResults, dataset, options) {
     group <- c(group, T, rep(F, P - 1))
   }
 
-  if(Q >= 1) {
+  if (Q >= 1) {
     sma <- sprintf("seasonal MA(%d)", 1:Q)
     coefficients <- c(coefficients, sma)
     group <- c(group, T, rep(F, Q - 1))
+  }
+
+  if (length(options[["covariates"]]) > 0) {
+    xreg <- options$covariates
+    coefficients <- c(coefficients, xreg)
+    group <- c(group, T, rep(F, length(xreg) - 1))
   }
 
   rows <- data.frame(coefficients = coefficients,
@@ -552,6 +585,16 @@ ARIMATimeSeries <- function(jaspResults, dataset, options) {
       return()
 
     .tsFillLjungBoxPlot(ljungPlot, dataset, options)
+  }
+}
+
+.tsSaveResiduals <- function(dataset, fit, options, jaspResults, ready, dependencies) {
+  if (options[["residualSavedToData"]] && is.null(jaspResults[["residualColumn"]]) && options[["residualColumn"]] != "" && ready) {
+    residualColumn <- rep(NA, max(as.numeric(rownames(dataset))))
+    residualColumn[as.numeric(rownames(dataset))] <- fit$residuals
+    jaspResults[["residualColumn"]] <- createJaspColumn(columnName = options[["residualColumn"]])
+    jaspResults[["residualColumn"]]$dependOn(options = dependencies)
+    jaspResults[["residualColumn"]]$setScale(residualColumn)
   }
 }
 

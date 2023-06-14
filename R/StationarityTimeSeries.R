@@ -15,7 +15,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 
-DataTransformationTimeSeries <- function(jaspResults, dataset, options) {
+StationarityTimeSeries <- function(jaspResults, dataset, options) {
     ready <- options$dependent != ""
 
     if (ready) {
@@ -123,7 +123,7 @@ DataTransformationTimeSeries <- function(jaspResults, dataset, options) {
   }
 
   df <- data.frame(test, statistic = numeric(5), lag = numeric(5), p = numeric(5), null)
-  smallerA <- smallerP <- smallerKl <- smallerKt <- greaterA <- greaterP <- greaterKl <- greaterKt <- F
+  smallerA <- smallerPr <- smallerPs <- smallerKl <- smallerKt <- greaterA <- greaterPr <- greaterPs <- greaterKl <- greaterKt <- F
   if (options$adfTest) {
     fit <- tseries::adf.test(dataset$y)
     df[1, c("statistic", "lag", "p")] <- c(fit$statistic, fit$parameter, fit$p.value)

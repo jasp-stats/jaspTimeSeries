@@ -335,6 +335,22 @@ Form
                 }
             }
         }
+        CheckBox 
+        {
+          id:							residualSavedToData
+          name:						"residualSavedToData"
+          text:						qsTr("Add residuals to data")
+
+          ComputedColumnField 
+          {
+            id:						    residualColumn
+            name:					    "residualColumn"
+            text:					    qsTr("Column name")
+            placeholderText:  qsTr("e.g., residuals")
+            fieldWidth:				120
+            enabled:				  residualSavedToData.checked
+          }
+        }
         // Group
         // {
         //     title: qsTr("Tests")

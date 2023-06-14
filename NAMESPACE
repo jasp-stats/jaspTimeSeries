@@ -1,4 +1,5 @@
 import(jaspBase)
 export(DescriptivesTimeSeries)
-export(DataTransformationTimeSeries)
+export(StationarityTimeSeries)
 export(ARIMATimeSeries)
+export(SpectralTimeSeries)

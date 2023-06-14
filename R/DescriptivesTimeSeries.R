@@ -258,84 +258,84 @@ DescriptivesTimeSeries <- function(jaspResults, dataset, options) {
   return()
 }
 
-.tsPowerSpectralDensityDescriptives <- function(jaspResults, dataset, options, ready, position, dependencies){
-  if (!options$powerSpectralDensity)
-    return()
+# .tsPowerSpectralDensityDescriptives <- function(jaspResults, dataset, options, ready, position, dependencies){
+#   if (!options$powerSpectralDensity)
+#     return()
 
-  if (is.null(jaspResults[["powerSpectralDensity"]])) {
-    plot <- createJaspPlot(title = "Power Spectral Density Plot")
-    plot$dependOn(dependencies)
-    plot$position <- position
+#   if (is.null(jaspResults[["powerSpectralDensity"]])) {
+#     plot <- createJaspPlot(title = "Power Spectral Density Plot")
+#     plot$dependOn(dependencies)
+#     plot$position <- position
 
-    jaspResults[["powerSpectralDensity"]] <- plot
+#     jaspResults[["powerSpectralDensity"]] <- plot
 
-    if (!ready)
-      return()
+#     if (!ready)
+#       return()
 
-    .tsFillPowerSpectralDensity(plot, dataset, options)
-  }
-}
+#     .tsFillPowerSpectralDensity(plot, dataset, options)
+#   }
+# }
 
-.tsGetKernellDimensions <- function(options) {
-  dims <- NULL
-  for (i in 1:length(options[["term"]])) {
-    dims <- c(dims, options[["term"]][[i]]$dimension)
-  }
-  return(dims) # Vector of kernel dimensions in each term
-}
+# .tsGetKernellDimensions <- function(options) {
+#   dims <- NULL
+#   for (i in 1:length(options[["term"]])) {
+#     dims <- c(dims, options[["term"]][[i]]$dimension)
+#   }
+#   return(dims) # Vector of kernel dimensions in each term
+# }
 
-.tsFillPowerSpectralDensity <- function(powerSpectralDensity, dataset, options) {
-  y <- na.omit(dataset$y)
+# .tsFillPowerSpectralDensity <- function(powerSpectralDensity, dataset, options) {
+#   y <- na.omit(dataset$y)
 
-  k <- NULL
+#   k <- NULL
 
-  dims <- .tsGetKernellDimensions(options)
+#   dims <- .tsGetKernellDimensions(options)
 
-  # crashes when modified daniell has zeros..
-  if (options$powerSpectralDensitySmoother)
-    k <- stats::kernel(options$powerSpectralDensitySmootherKernel, dims)
+#   # crashes when modified daniell has zeros..
+#   if (options$powerSpectralDensitySmoother)
+#     k <- stats::kernel(options$powerSpectralDensitySmootherKernel, dims)
 
-  yPSD <- stats::spec.pgram(y,
-    kernel = k,
-    taper = options$powerSpectralDensityTaper,
-    demean = options$powerSpectralDensityDemean,
-    detrend = options$powerSpectralDensityDetrend,
-    plot = FALSE
-  )
+#   yPSD <- stats::spec.pgram(y,
+#     kernel = k,
+#     taper = options$powerSpectralDensityTaper,
+#     demean = options$powerSpectralDensityDemean,
+#     detrend = options$powerSpectralDensityDetrend,
+#     plot = FALSE
+#   )
 
-  dat <- data.frame(x = yPSD$freq, y = yPSD$spec)
+#   dat <- data.frame(x = yPSD$freq, y = yPSD$spec)
 
-  xBreaks <- jaspGraphs::getPrettyAxisBreaks(dat$x)
-  yBreaks <- jaspGraphs::getPrettyAxisBreaks(dat$y)
+#   xBreaks <- jaspGraphs::getPrettyAxisBreaks(dat$x)
+#   yBreaks <- jaspGraphs::getPrettyAxisBreaks(dat$y)
 
-  p <- ggplot2::ggplot(dat, ggplot2::aes(x = x, y = y)) + jaspGraphs::geom_line() +
-    ggplot2::scale_x_continuous(name = "Frequency", breaks = xBreaks) +
-    ggplot2::scale_y_continuous(name = "Spectrum", breaks = yBreaks)
+#   p <- ggplot2::ggplot(dat, ggplot2::aes(x = x, y = y)) + jaspGraphs::geom_line() +
+#     ggplot2::scale_x_continuous(name = "Frequency", breaks = xBreaks) +
+#     ggplot2::scale_y_continuous(name = "Spectrum", breaks = yBreaks)
 
-  if (options$powerSpectralDensityScaling != "noScaling") {
-    logTrans <- options$powerSpectralDensityScaling
-    logFunction <- function(x) exp(x)
-    logLabels <- scales::math_format(e ^ .x)
-    if (logTrans == "log10") {
-      logFunction <- function(x) 10 ^ x
-      logLabels <- scales::math_format(10 ^ .x)
-    }
+#   if (options$powerSpectralDensityScaling != "noScaling") {
+#     logTrans <- options$powerSpectralDensityScaling
+#     logFunction <- function(x) exp(x)
+#     logLabels <- scales::math_format(e ^ .x)
+#     if (logTrans == "log10") {
+#       logFunction <- function(x) 10 ^ x
+#       logLabels <- scales::math_format(10 ^ .x)
+#     }
 
-    p <- p + ggplot2::scale_y_continuous(
-      trans = logTrans,
-      breaks = scales::trans_breaks(logTrans, logFunction),
-      labels = scales::trans_format(logTrans, logLabels)
-    )
-  }
+#     p <- p + ggplot2::scale_y_continuous(
+#       trans = logTrans,
+#       breaks = scales::trans_breaks(logTrans, logFunction),
+#       labels = scales::trans_format(logTrans, logLabels)
+#     )
+#   }
 
-  p <- p +
-    jaspGraphs::geom_rangeframe() +
-    jaspGraphs::themeJaspRaw()
+#   p <- p +
+#     jaspGraphs::geom_rangeframe() +
+#     jaspGraphs::themeJaspRaw()
 
-  powerSpectralDensity$plotObject <- p
+#   powerSpectralDensity$plotObject <- p
 
-  return()
-}
+#   return()
+# }
 
 .tsDescriptivesTable <- function(jaspResults, dataset, options, ready, position, dependencies) {
   if (!is.null(jaspResults[["descriptivesTable"]])) return()

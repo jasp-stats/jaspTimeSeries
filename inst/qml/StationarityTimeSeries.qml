@@ -33,20 +33,6 @@ Form
             id:     adfTest
             label:  qsTr("Augmented Dickey-Fuller")
         }
-        CheckBox
-        {
-            name:   "ppTest"
-            id:     ppTest
-            label:  qsTr("Phillips-Perron")
-            // RadioButtonGroup
-            // {
-            //     name: "ppType"
-            //     title: qsTr("Type") 
-            //     radioButtonsOnSameRow: true
-            //     RadioButton { value: "normalized";	label: qsTr("Normalized biased") }
-            //     RadioButton { value: "studentzed";	label: qsTr("Studentized") }
-            // }
-        }
         Group
         {
             title: qsTr("Phillips-Perron")

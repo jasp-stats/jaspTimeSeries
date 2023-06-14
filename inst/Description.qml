@@ -21,8 +21,8 @@ Description
 
 	Analysis
 	{
-		title:		qsTr("Data Transformation")
-		func:		"DataTransformationTimeSeries"
+		title:		qsTr("Stationarity")
+		func:		"StationarityTimeSeries"
 	}
 
 	Analysis
@@ -31,10 +31,10 @@ Description
 		func:		"ARIMATimeSeries"
 	}
 
-	// Analysis
-	// {
-	// 	title:			qsTr("Spectral Analysis")
-	// 	func:			"SpectralAnalysis"
-	// }
+	Analysis
+	{
+		title:	qsTr("Spectral Analysis")
+		func:		"SpectralTimeSeries"
+	}
 
 }
