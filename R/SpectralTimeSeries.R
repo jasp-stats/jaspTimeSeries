@@ -40,9 +40,6 @@ SpectralTimeSeries <- function(jaspResults, dataset, options) {
 }
 
 .tsPowerSpectralDensityDescriptives <- function(jaspResults, dataset, options, ready, position, dependencies){
-  # if (!ready)
-  #   return()
-
   if (is.null(jaspResults[["powerSpectralDensity"]])) {
     plot <- createJaspPlot(title = "Power Spectral Density Plot")
     plot$dependOn(dependencies)

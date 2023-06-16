@@ -10,14 +10,14 @@ Form
         AvailableVariablesList { name: "variables" }
         AssignedVariablesList  
         {
-            name: "dependentVariable"
+            name: "dependent"
             label: qsTr("Dependent Variable")
             allowedColumns: ["ordinal", "scale"]
             singleVariable: true
         }
         AssignedVariablesList  
         {
-            name: "timeVariable"
+            name: "time"
             label: qsTr("Time")
             allowedColumns: ["ordinal", "scale"]
             singleVariable: true
@@ -41,7 +41,7 @@ Form
             checked: true
             RadioButtonGroup
             {
-                name:	"tsType"
+                name:	"timeSeriesPlotType"
                 radioButtonsOnSameRow: true
                 RadioButton { value: "points";	label: qsTr("Points") }
                 RadioButton { value: "line";	label: qsTr("Line") }
@@ -49,90 +49,14 @@ Form
             }
             RadioButtonGroup
             {
-                name:	"distribution"
+                name:	"timeSeriesPlotDistribution"
                 title: qsTr("Distribution")
-                // radioButtonsOnSameRow: true
                 RadioButton { value: "density";	label: qsTr("Density") }
                 RadioButton { value: "histogram";	label: qsTr("Histogram") }
                 RadioButton { value: "none";	label: qsTr("None");	checked: true }
             }
         }
-        // CheckBox
-        // {
-        //     name:   "detrend"
-        //     id:     detrend
-        //     label:  qsTr("Detrend using linear regression")
-        //     IntegerField { name: "poly"; label: qsTr("Polynomial"); defaultValue: 1; min: 0; max: 10; }
-        // }
     }
-
-    // Section
-    // {
-    //     title: qsTr("Data Preparation")
-    //     Group
-    //     {
-    //         title: qsTr("Stationarity Tests")
-    //         CheckBox
-    //         {
-    //             name:   "adfTest"
-    //             id:     adfTest
-    //             label:  qsTr("Augmented Dickey-Fuller")
-    //         }
-    //         CheckBox
-    //         {
-    //             name:   "ppTest"
-    //             id:     ppTest
-    //             label:  qsTr("Phillips-Perron")
-    //             // RadioButtonGroup
-    //             // {
-    //             //     name: "ppType"
-    //             //     title: qsTr("Type") 
-    //             //     radioButtonsOnSameRow: true
-    //             //     RadioButton { value: "normalized";	label: qsTr("Normalized biased") }
-    //             //     RadioButton { value: "studentzed";	label: qsTr("Studentized") }
-    //             // }
-    //         }
-    //         Group
-    //         {
-    //             title: qsTr("Kwiatkowski-Phillips-Schmidt-Shin")
-    //             columns: 2
-    //             CheckBox { name: "kpssLevel"; id: kpssLevel;	label: qsTr("Level stationary") }
-    //             CheckBox { name: "kpssTrend"; id: kpssTrend;	label: qsTr("Trend stationary") }
-
-    //         }
-    //     }
-    //     RadioButtonGroup
-    //     {
-    //         name: "transformation"
-    //         title: qsTr("Transformation")
-    //         info: "test"
-    //         RadioButton  { value: "noTransform";	label: qsTr("None");    checked: true }
-    //         RadioButton  { value: "center";	        label: qsTr("Center") }
-    //         RadioButton
-    //         {
-    //             value: "detrend"
-    //             label: qsTr("Detrend using linear regression")
-    //             IntegerField { name: "poly"; label: qsTr("Polynomial"); defaultValue: 1; min: 0; max: 10; }
-    //         }
-    //     }
-    //     CheckBox 
-    //     {
-    //       id:							transformationSavedToData
-    //       name:						"transformationSavedToData"
-    //       text:						qsTr("Add transformation to data")
-
-    //       ComputedColumnField 
-    //       {
-    //         id:						    transformationColumn
-    //         name:					    "transformationColumn"
-    //         text:					    qsTr("Column name")
-    //         placeholderText:  qsTr("e.g., transformed")
-    //         fieldWidth:				120
-    //         enabled:				  transformationSavedToData.checked
-    //       }
-    //     }
-    // }
-
 
     Section
     {
@@ -141,49 +65,49 @@ Form
         {
             CheckBox
             {
-                name:       "addConstant"
-                id:         addConstant
-                label:      qsTr("Include constant")
+                name:       "intercept"
+                id:         intercept
+                label:      qsTr("Include intercept")
                 checked:    true
                 enabled:    best.checked | (manual.checked & (d.value < 2 | D.value < 2))
             }
             CheckBox
             {
-                name:   "addSeasonal"
-                id:     addSeasonal
+                name:   "seasonal"
+                id:     seasonal
                 label:  qsTr("Add seasonal components")
                 RadioButtonGroup
                 {
-                    name: "period"
+                    name: "periodSpecification"
+                    title: qsTr("Period")
                     radioButtonsOnSameRow: true
                     RadioButton 
                     { 
-                        value: "specifyPeriod"
-                        label: qsTr("Specify period")
+                        value: "manual"
+                        label: qsTr("Specify manually")
                         checked: true
                         childrenOnSameRow: true
-                        IntegerField { name: "m";   id: m; defaultValue: 1 }
+                        IntegerField { name: "m";   id: m; defaultValue: 1; min: 1 }
                     }
-                    RadioButton { value: "findPeriod";  label: qsTr("Find dominant period") }
+                    RadioButton { value: "dominant";  label: qsTr("Find dominant period") }
                 }
             }
         
             RadioButtonGroup
             {
-                name: "model"
+                name: "modelSpecification"
                 title: qsTr("Model Specification")
                 RadioButton 
                 {
-                    value: "best"
-                    id: best
+                    value: "auto"
+                    id: auto
                     label: qsTr("Best fitting")	
                     checked: true 
                     RadioButtonGroup
                     {
-                        name: "ic"
+                        name: "autoIc"
                         title: qsTr("Information criterion")
                         radioButtonsOnSameRow: true
-                        // enabled: best.checked
                         RadioButton { value: "aicc";    label: qsTr("AICc");	checked: true   }
                         RadioButton { value: "aic";	    label: qsTr("AIC")				        }
                         RadioButton { value: "bic";	    label: qsTr("BIC")				        } 
@@ -222,7 +146,7 @@ Form
                         Group
                         {
                             title: qsTr("Seasonal")
-                            enabled: addSeasonal.checked
+                            enabled: seasonal.checked
                             IntegerField
                             {
                                 name:   "P"
@@ -256,20 +180,15 @@ Form
             name:   "residualPlots"
             id:     residualPlots
             label:  qsTr("Residual Plots")
-            // CheckBox
-            // {
-            //     name:   "residualTimeSeries"
-            //     id:     residualTimeSeries
-            //     label:  qsTr("Time series plot")
             CheckBox
             {
-                name:       "residualTs"
-                id:         residualTs
+                name:       "residualTimeSeries"
+                id:         residualTimeSeries
                 label:      qsTr("Time series")
                 checked:    true
                 RadioButtonGroup
                 {
-                    name:	"residualTsType"
+                    name:	"residualTimeSeriesType"
                     radioButtonsOnSameRow: true
                     RadioButton { value: "points";	label: qsTr("Points") }
                     RadioButton { value: "line";	label: qsTr("Line") }
@@ -277,9 +196,8 @@ Form
                 }
                 RadioButtonGroup
                 {
-                    name:	"residualsDistribution"
+                    name:	"residualTimeSeriesDistribution"
                     title: qsTr("Distribution")
-                    // radioButtonsOnSameRow: true
                     RadioButton { value: "density";	label: qsTr("Density") }
                     RadioButton { value: "histogram";	label: qsTr("Histogram") }
                     RadioButton { value: "none";	label: qsTr("None");	checked: true }
@@ -307,23 +225,14 @@ Form
                         childrenOnSameRow: true
                         CIField { name: "residualAcfCiLevel" }
                     }
-                    CheckBox { name: "residualAcfFirstLag"; label: qsTr("Include first lag") }
-                    // IntegerField { name: "residualAcfMaxLag"; label: qsTr("Maximum lag"); min: 1; defaultValue: 10 }
+                    CheckBox { name: "residualAcfZeroLag"; label: qsTr("Include zero lag") }
                 }
                 CheckBox
                 {
-                    name:   "residualLB"
-                    id:     residualLB
+                    name:   "residualLjungBox"
+                    id:     residualLjungBox
                     label:  qsTr("Ljung-Box p-values")
                     CIField { name: "ljungBoxSignificanceLevel"; label: qsTr("Significance level"); defaultValue: 5 }
-                    // DoubleField
-                    // { 
-                    //     name: "ljungBoxSignificanceLevel"
-                    //     label: qsTr("Significance level")
-                    //     defaultValue: 5
-                    //     decimals: 1
-
-                    // }
                 }
                 IntegerField 
                 {
@@ -331,7 +240,7 @@ Form
                     label: qsTr("Maximum lag")
                     min: 1
                     defaultValue: 10
-                    enabled: residualACF.checked | residualLB.checked
+                    enabled: residualACF.checked | residualLjungBox.checked
                 }
             }
         }
@@ -339,7 +248,7 @@ Form
         {
           id:							residualSavedToData
           name:						"residualSavedToData"
-          text:						qsTr("Add residuals to data")
+          text:						qsTr("Append residuals to spreadsheet")
 
           ComputedColumnField 
           {
@@ -351,48 +260,44 @@ Form
             enabled:				  residualSavedToData.checked
           }
         }
-        // Group
-        // {
-        //     title: qsTr("Tests")
-        //     CheckBox
-        //     {
-        //         name:   "ljungBox"
-        //         id:     ljungBox
-        //         label:  qsTr("Ljung-Box test")
-        //     }
-        // }
     }
 
     Section
     {
         title: qsTr("Forecasting")
-        Group
+        CheckBox
         {
-            CheckBox
+          name: "forecast"
+          label: qsTr("Forecast")
+          IntegerField
+          {
+            name: "forecastLength"
+            label: qsTr("Number of forecasts")
+            min: 1
+            defaultValue: 10
+          }
+          CheckBox
             {
-                name:   "forecastTimeSeries"
-                id:     forecastTimeSeries
-                label:  qsTr("Time series plot")
+                name:     "forecastTimeSeries"
+                id:       forecastTimeSeries
+                label:    qsTr("Time series plot")
+                checked:  true
                 RadioButtonGroup
                 {
-                    name:	"forecastType"
+                    name:	"forecastTimeSeriesType"
                     radioButtonsOnSameRow: true
                     RadioButton { value: "points";	label: qsTr("Points") }
                     RadioButton { value: "line";	label: qsTr("Line") }
                     RadioButton { value: "both";	label: qsTr("Both");	checked: true }
                 }
-                IntegerField { name: "nForecasts"; label: qsTr("Number of forecasts"); min: 1; defaultValue: 10 }
                 CheckBox
                 {
-                    name:       "addObserved"
-                    id:         addObserved
+                    name:       "forecastTimeSeriesObserved"
+                    id:         forecastTimeSeriesObserved
                     label:      qsTr("Include observed data")
                     checked:    true
                 }
             }
-        }
-        Group
-        {
             CheckBox
             {
                 name:   "forecastTable"
@@ -402,7 +307,7 @@ Form
         
             FileSelector
             {
-                name:	             "save"
+                name:	             "saveforecast"
                 label:	            qsTr("Save forecasts as")
                 placeholderText:    qsTr("e.g. forecasts.csv")
                 filter:	            "*.csv"
