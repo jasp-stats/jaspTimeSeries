@@ -27,7 +27,7 @@ StationarityTimeSeries <- function(jaspResults, dataset, options) {
       .tsCreateTableStationarityTests(jaspResults, transformedDataset, options, ready, position = 2, dependencies = c(.tsTransformationDependencies, "adfTest", "ppTestRegressionCoefficient", "ppTestStudentized", "kpssLevel", "kpssTrend"))
     }
 
-    .tsSaveTransformation(transformedDataset, options, jaspResults, ready)
+    .tsSaveTransformation(transformedDataset, options, jaspResults, ready, dependencies = c(.tsTransformationDependencies, "transformationColumn", "transformationSavedToData"))
 
     .tsTimeSeriesPlotTransformation(jaspResults, transformedDataset, options, ready, position = 1, dependencies = c(.tsTransformationDependencies, "timeSeriesPlot", "timeSeriesPlotType", "timeSeriesPlotDistribution"))
 
@@ -36,7 +36,10 @@ StationarityTimeSeries <- function(jaspResults, dataset, options) {
     .tsPACFTransformation(jaspResults, transformedDataset, options, ready, position = 4, dependencies = c(.tsTransformationDependencies, "pacf", "pacfCi", "pacfCiLevel", "pacfCiType", "pacfMaxLag"))
 }
 
-.tsTransformationDependencies <- c("dependent", "transformation", "poly")
+.tsTransformationDependencies <- c(
+  "dependent", "detrend", "poly", "log", "logBase", "root", "rootIndex",
+  "boxCox", "boxCoxLambdaSpecification", "boxCoxLambda"
+)
 
 .tsReadDataTransformation <- function(jaspResults, dataset, options) {
   if (!is.null(dataset))
@@ -54,23 +57,46 @@ StationarityTimeSeries <- function(jaspResults, dataset, options) {
 
 .tsTransformData <- function(jaspResults, dataset, options) {
   transformedDataset <- dataset
-  if (options$transformation == "center") {
-    transformedDataset$y <- dataset$y - mean(dataset$y)
+
+  if (options$detrend) {
+    transformedDataset$y <- residuals(lm(y ~ poly(t, options$poly), data = transformedDataset))
   }
 
-  if (options$transformation == "detrend") {
-    transformedDataset$y <- residuals(lm(y ~ poly(t, options$poly), data = dataset))
+  if (options$log) {
+    if (any(transformedDataset$y <= 0))
+      .quitAnalysis("Data cannot be zero or negative for log transformation.")
+
+    if (options$logBase == "10") transformedDataset$y <- log10(transformedDataset$y)
+    if (options$logBase == "e") transformedDataset$y <- log(transformedDataset$y)
+  }
+
+  if (options$root) {
+    if (any(transformedDataset$y < 0))
+      .quitAnalysis("Data cannot be negative for root transformation.")
+
+    if (options$rootIndex == "square") transformedDataset$y <- sqrt(transformedDataset$y)
+    if (options$rootIndex == "cube") transformedDataset$y <- transformedDataset$y ^ (1 / 3)
+  }
+
+  if (options$boxCox) {
+    if (options$boxCoxLambdaSpecification == "auto") lambda <- "auto"
+    if (options$boxCoxLambdaSpecification == "manual") lambda <- options$boxCoxLambda
+    
+    transformedDataset$y <- forecast::BoxCox(
+        transformedDataset$y,
+        lambda = lambda
+      )
   }
 
   return(transformedDataset)
 }
 
-.tsSaveTransformation <- function(transformedDataset, options, jaspResults, ready) {
+.tsSaveTransformation <- function(transformedDataset, options, jaspResults, ready, dependencies) {
   if (options[["transformationSavedToData"]] && is.null(jaspResults[["transformationColumn"]]) && options[["transformationColumn"]] != "" && ready) {
     transformationColumn <- rep(NA, max(as.numeric(rownames(transformedDataset))))
     transformationColumn[as.numeric(rownames(transformedDataset))] <- transformedDataset$y
     jaspResults[["transformationColumn"]] <- createJaspColumn(columnName = options[["transformationColumn"]])
-    jaspResults[["transformationColumn"]]$dependOn(options = c("transformationColumn", "transformationSavedToData", "transformation", "poly", "dependentVariable"))
+    jaspResults[["transformationColumn"]]$dependOn(dependencies)
     jaspResults[["transformationColumn"]]$setScale(transformationColumn)
   }
 }

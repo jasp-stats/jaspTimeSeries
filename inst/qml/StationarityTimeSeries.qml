@@ -50,34 +50,91 @@ Form
         }
     }
 
-    RadioButtonGroup
+    Section
     {
-        name: "transformation"
-        title: qsTr("Transformation")
-        info: "test"
-        RadioButton  { value: "noTransform";	label: qsTr("None");    checked: true }
-        RadioButton  { value: "center";	        label: qsTr("Center") }
-        RadioButton
-        {
-            value: "detrend"
-            label: qsTr("Detrend using linear regression")
-            IntegerField { name: "poly"; label: qsTr("Polynomial"); defaultValue: 1; min: 0; max: 10; }
-        }
-    }
-    CheckBox 
-    {
-      id:							transformationSavedToData
-      name:						"transformationSavedToData"
-      text:						qsTr("Append transformation to spreadsheet")
-
-      ComputedColumnField 
+      title: qsTr("Transformation")
+      Group
       {
-        id:						    transformationColumn
-        name:					    "transformationColumn"
-        text:					    qsTr("Column name")
-        placeholderText:  qsTr("e.g., transformed")
-        fieldWidth:				120
-        enabled:				  transformationSavedToData.checked
+         CheckBox
+        { 
+          name: "log"
+          id: log
+          label: qsTr("Log")
+          childrenOnSameRow: true
+          RadioButtonGroup
+          {
+              name:	"logBase"
+              radioButtonsOnSameRow: true
+              RadioButton { value: "10";	label: qsTr("Base 10"); checked: true }
+              RadioButton { value: "e";	label: qsTr("Base e") }
+          }
+        }
+        CheckBox
+        { 
+          name: "root"
+          id: root
+          label: qsTr("Root")
+          childrenOnSameRow: true
+          RadioButtonGroup
+          {
+              name:	"rootIndex"
+              radioButtonsOnSameRow: true
+              RadioButton { value: "square";	label: qsTr("Square"); checked: true }
+              RadioButton { value: "cube";	label: qsTr("Cube") }
+          }
+        }
+        CheckBox
+        { 
+          name: "boxCox"
+          id: boxCox
+          label: qsTr("Box-Cox")
+          RadioButtonGroup
+          {
+              name:	"boxCoxLambdaSpecification"
+              title: qsTr("Lambda")
+              enabled: boxCox.checked
+              radioButtonsOnSameRow: true
+              RadioButton
+              {
+                value: "auto"
+                id: auto
+                label: qsTr("Auto")
+                checked: true
+              }
+              RadioButton
+              {
+                value: "manual"
+                id: manual
+                label: qsTr("Manual")
+                childrenOnSameRow: true
+                IntegerField { name: "boxCoxLambda"; defaultValue: 0; min: -5; max: 5; enabled: manual.checked }
+              }
+          }
+        }
+        CheckBox
+        { 
+          name: "detrend"
+          id: detrend
+          label: qsTr("Detrend using linear regression")
+          IntegerField { name: "poly"; label: qsTr("Polynomial"); defaultValue: 1; min: 0; max: 10; }
+        }
+      }
+
+      CheckBox 
+      {
+        id:							transformationSavedToData
+        name:						"transformationSavedToData"
+        text:						qsTr("Append transformation to spreadsheet")
+
+        ComputedColumnField 
+        {
+          id:						    transformationColumn
+          name:					    "transformationColumn"
+          text:					    qsTr("Column name")
+          placeholderText:  qsTr("e.g., transformed")
+          fieldWidth:				120
+          enabled:				  transformationSavedToData.checked
+        }
       }
     }
 
