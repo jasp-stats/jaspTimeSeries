@@ -68,7 +68,7 @@ Form
     {
       id:							transformationSavedToData
       name:						"transformationSavedToData"
-      text:						qsTr("Add transformation to data")
+      text:						qsTr("Append transformation to spreadsheet")
 
       ComputedColumnField 
       {
@@ -104,7 +104,6 @@ Form
               {
                   name:	"timeSeriesPlotDistribution"
                   title: qsTr("Distribution")
-                  // radioButtonsOnSameRow: true
                   RadioButton { value: "density";	label: qsTr("Density") }
                   RadioButton { value: "histogram";	label: qsTr("Histogram") }
                   RadioButton { value: "none";	label: qsTr("None");	checked: true }
@@ -127,11 +126,11 @@ Form
                   {
                     name: "acfCiType"
                     title: qsTr("Confidence interval type")
-                    RadioButton { value: "normal";	label: qsTr("Normal");	checked: true }
-                    RadioButton { value: "bartlett";	label: qsTr("Bartlett")	}
+                    RadioButton { value: "whiteNoise";	label: qsTr("White noise");	checked: true }
+                    RadioButton { value: "movingAverage";	label: qsTr("Moving average")	}
                   }
               }
-              CheckBox { name: "acfFirstLag"; label: qsTr("Include first lag") }
+              CheckBox { name: "acfZeroLag"; label: qsTr("Include zero lag") }
               IntegerField { name: "acfMaxLag"; label: qsTr("Maximum lag"); min: 1; defaultValue: 10 }
           }
           CheckBox

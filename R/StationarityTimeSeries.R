@@ -31,7 +31,7 @@ StationarityTimeSeries <- function(jaspResults, dataset, options) {
 
     .tsTimeSeriesPlotTransformation(jaspResults, transformedDataset, options, ready, position = 1, dependencies = c(.tsTransformationDependencies, "timeSeriesPlot", "timeSeriesPlotType", "timeSeriesPlotDistribution"))
 
-    .tsACFTransformation(jaspResults, transformedDataset, options, ready, position = 3, dependencies = c(.tsTransformationDependencies, "acf", "acfCi", "acfCiLevel", "acfCiType", "acfFirstLag", "acfMaxLag"))
+    .tsACFTransformation(jaspResults, transformedDataset, options, ready, position = 3, dependencies = c(.tsTransformationDependencies, "acf", "acfCi", "acfCiLevel", "acfCiType", "acfZeroLag", "acfMaxLag"))
 
     .tsPACFTransformation(jaspResults, transformedDataset, options, ready, position = 4, dependencies = c(.tsTransformationDependencies, "pacf", "pacfCi", "pacfCiLevel", "pacfCiType", "pacfMaxLag"))
 }
@@ -227,7 +227,7 @@ StationarityTimeSeries <- function(jaspResults, dataset, options) {
 
     .tsFillACF(plot,
       type = "ACF", dataset, options,
-      firstLag = options$acfFirstLag,
+      firstLag = options$acfZeroLag,
       maxLag = options$acfMaxLag,
       ci = options$acfCi,
       ciValue = options$acfCiLevel,

@@ -27,7 +27,7 @@ DescriptivesTimeSeries <- function(jaspResults, dataset, options) {
 
     .tslagPlotDescriptives(jaspResults, dataset, options, ready, position = 3, dependencies  = c("lagPlot", "lagPlotLag", "lagPlotRegressionType", "lagPlotRegressionLine", "lagPlotRegressionCi", "lagPlotRegressionCiLevel", "dependent"))
 
-    .tsACFDescriptives(jaspResults, dataset, options, ready, position = 4, dependencies = c("dependent", "acf", "acfCi", "acfCiLevel", "acfCiType", "acfFirstLag", "acfMaxLag"))
+    .tsACFDescriptives(jaspResults, dataset, options, ready, position = 4, dependencies = c("dependent", "acf", "acfCi", "acfCiLevel", "acfCiType", "acfZeroLag", "acfMaxLag"))
 
     .tsPACFDescriptives(jaspResults, dataset, options, ready, position = 5, dependencies = c("dependent", "pacf", "pacfCi", "pacfCiLevel", "pacfCiType", "pacfMaxLag"))
 
@@ -152,7 +152,7 @@ DescriptivesTimeSeries <- function(jaspResults, dataset, options) {
 
     .tsFillACF(plot,
       type = "ACF", dataset, options,
-      firstLag = options$acfFirstLag,
+      firstLag = options$acfZeroLag,
       maxLag = options$acfMaxLag,
       ci = options$acfCi,
       ciValue = options$acfCiLevel,

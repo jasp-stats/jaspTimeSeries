@@ -86,7 +86,7 @@ Form
                         name:	"lagPlotRegressionType"
                         radioButtonsOnSameRow: true
                         RadioButton { value: "smooth";	label: qsTr("Smooth");	checked: true }
-                        RadioButton { value: "linear";	label: qsTr("Linear")				  }
+                        RadioButton { value: "linear";	label: qsTr("Linear")	}
                     }
 
                     CheckBox
@@ -118,10 +118,9 @@ Form
                   title: qsTr("Confidence interval type")
                   RadioButton { value: "whiteNoise";	label: qsTr("White noise");	checked: true }
                   RadioButton { value: "movingAverage";	label: qsTr("Moving average")	}
-                  // RadioButton { value: "bartlett";	label: qsTr("Bartlett")	}
                 }
             }
-            CheckBox { name: "acfFirstLag"; label: qsTr("Include zero lag") }
+            CheckBox { name: "acfZeroLag"; label: qsTr("Include zero lag") }
             IntegerField { name: "acfMaxLag"; label: qsTr("Maximum lag"); min: 1; defaultValue: 10 }
         }
         CheckBox
