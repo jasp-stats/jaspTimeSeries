@@ -31,7 +31,6 @@ DescriptivesTimeSeries <- function(jaspResults, dataset, options) {
 
     .tsPACFDescriptives(jaspResults, dataset, options, ready, position = 5, dependencies = c("dependent", "pacf", "pacfCi", "pacfCiLevel", "pacfCiType", "pacfMaxLag"))
 
-    # .tsPowerSpectralDensityDescriptives(jaspResults, dataset, options, ready, position = 6, dependencies = c("powerSpectralDensity", "powerSpectralDensityDetrend", "powerSpectralDensityDemean", "powerSpectralDensitySmoother", "powerSpectralDensitySmootherKernel", "term", "dimension", "powerSpectralDensityTaper", "powerSpectralDensityScaling", "noScaling", "log", "log10", "dependent"))
 }
 
 .tsReadDataDescriptives <- function(jaspResults, dataset, options) {
@@ -98,11 +97,11 @@ DescriptivesTimeSeries <- function(jaspResults, dataset, options) {
     if (!ready)
       return()
 
-    .tsFilllagPlot(plot, dataset, options)
+    .tsFillLagPlot(plot, dataset, options)
   }
 }
 
-.tsFilllagPlot <- function(lagPlot, dataset, options) {
+.tsFillLagPlot <- function(lagPlot, dataset, options) {
   yLag  <- c(rep(NA, options$lagPlotLag), dataset$y[1:(length(dataset$y) - options$lagPlotLag)])
 
   yName <- decodeColNames(options$dependent[1])
@@ -112,8 +111,8 @@ DescriptivesTimeSeries <- function(jaspResults, dataset, options) {
   dat <- data.frame(y = dataset$y, yLag)
   dat <- na.omit(dat)
 
-  # forceLinearSmooth <- options$lagPlotRegressionType == "linear"
-  # Does not work with bquote
+  breaks <- jaspGraphs::getPrettyAxisBreaks(c(dat$y, dat$yLag))
+
   p <- jaspGraphs::JASPScatterPlot(
     dat$yLag, dat$y,
     xName = xName, 
@@ -124,6 +123,12 @@ DescriptivesTimeSeries <- function(jaspResults, dataset, options) {
     forceLinearSmooth = options$lagPlotRegressionType == "linear",
     plotAbove = "none", plotRight = "none"
   )
+
+  p$subplots$mainPlot <- p$subplots$mainPlot +
+    ggplot2::scale_x_continuous(breaks = breaks, limits = range(breaks)) +
+    ggplot2::scale_y_continuous(breaks = breaks, limits = range(breaks)) +
+    jaspGraphs::geom_rangeframe() +
+    jaspGraphs::themeJaspRaw()
 
   lagPlot$plotObject <- p
 
@@ -181,20 +186,14 @@ DescriptivesTimeSeries <- function(jaspResults, dataset, options) {
   }
 }
 
-.tsAcfBartlett <- function(r, N, ci = 0.95, type = "bartlett") {
+.tsAcfBartlett <- function(r, N, ci = 0.95) {
   z <- qnorm((1 + ci) / 2)
 
   lag <- length(r)
   df  <- data.frame(r = r, se = numeric(lag))
-
   
   for (i in 1:lag) {
-    if (type == "movingAverage") {
       df$se[i] <- z * sqrt((1 / N) * (1 + 2 * sum(r[1:i] ^ 2)))
-    } else {
-      # bartletts formula but maybe not correct
-      df$se[i] <- z * sqrt((1 / N) * sum(r[1:i] ^ 2 + r[(1:i) - i] * r[(1:i) + i] + 2 * r[i] ^ 2 * r[1:i] ^ 2 - 4 * r[i] * r[1:i] * r[(1:i) - i]))
-    }
   }
 
   return(df)
@@ -202,7 +201,7 @@ DescriptivesTimeSeries <- function(jaspResults, dataset, options) {
 
 .tsFillACF <- function(plot, type, dataset, options, firstLag = F, maxLag, ci, ciValue, ciType) {
   y <- na.omit(dataset$y)
-  # lag <- options$acfMax
+
   if (type == "ACF") {
     ac <- stats::acf(y, plot = FALSE, lag.max = maxLag)
   }
@@ -228,7 +227,7 @@ DescriptivesTimeSeries <- function(jaspResults, dataset, options) {
       dat$upper <- rep(clim, nrow(dat))
       dat$lower <- -dat$upper
     } else {
-      clim <- .tsAcfBartlett(dat$acf, ac$n.used, ciValue, ciType)
+      clim <- .tsAcfBartlett(dat$acf, ac$n.used, ciValue)
       dat$upper <- clim$se
       dat$lower <- -dat$upper
     }
@@ -258,85 +257,6 @@ DescriptivesTimeSeries <- function(jaspResults, dataset, options) {
   return()
 }
 
-# .tsPowerSpectralDensityDescriptives <- function(jaspResults, dataset, options, ready, position, dependencies){
-#   if (!options$powerSpectralDensity)
-#     return()
-
-#   if (is.null(jaspResults[["powerSpectralDensity"]])) {
-#     plot <- createJaspPlot(title = "Power Spectral Density Plot")
-#     plot$dependOn(dependencies)
-#     plot$position <- position
-
-#     jaspResults[["powerSpectralDensity"]] <- plot
-
-#     if (!ready)
-#       return()
-
-#     .tsFillPowerSpectralDensity(plot, dataset, options)
-#   }
-# }
-
-# .tsGetKernellDimensions <- function(options) {
-#   dims <- NULL
-#   for (i in 1:length(options[["term"]])) {
-#     dims <- c(dims, options[["term"]][[i]]$dimension)
-#   }
-#   return(dims) # Vector of kernel dimensions in each term
-# }
-
-# .tsFillPowerSpectralDensity <- function(powerSpectralDensity, dataset, options) {
-#   y <- na.omit(dataset$y)
-
-#   k <- NULL
-
-#   dims <- .tsGetKernellDimensions(options)
-
-#   # crashes when modified daniell has zeros..
-#   if (options$powerSpectralDensitySmoother)
-#     k <- stats::kernel(options$powerSpectralDensitySmootherKernel, dims)
-
-#   yPSD <- stats::spec.pgram(y,
-#     kernel = k,
-#     taper = options$powerSpectralDensityTaper,
-#     demean = options$powerSpectralDensityDemean,
-#     detrend = options$powerSpectralDensityDetrend,
-#     plot = FALSE
-#   )
-
-#   dat <- data.frame(x = yPSD$freq, y = yPSD$spec)
-
-#   xBreaks <- jaspGraphs::getPrettyAxisBreaks(dat$x)
-#   yBreaks <- jaspGraphs::getPrettyAxisBreaks(dat$y)
-
-#   p <- ggplot2::ggplot(dat, ggplot2::aes(x = x, y = y)) + jaspGraphs::geom_line() +
-#     ggplot2::scale_x_continuous(name = "Frequency", breaks = xBreaks) +
-#     ggplot2::scale_y_continuous(name = "Spectrum", breaks = yBreaks)
-
-#   if (options$powerSpectralDensityScaling != "noScaling") {
-#     logTrans <- options$powerSpectralDensityScaling
-#     logFunction <- function(x) exp(x)
-#     logLabels <- scales::math_format(e ^ .x)
-#     if (logTrans == "log10") {
-#       logFunction <- function(x) 10 ^ x
-#       logLabels <- scales::math_format(10 ^ .x)
-#     }
-
-#     p <- p + ggplot2::scale_y_continuous(
-#       trans = logTrans,
-#       breaks = scales::trans_breaks(logTrans, logFunction),
-#       labels = scales::trans_format(logTrans, logLabels)
-#     )
-#   }
-
-#   p <- p +
-#     jaspGraphs::geom_rangeframe() +
-#     jaspGraphs::themeJaspRaw()
-
-#   powerSpectralDensity$plotObject <- p
-
-#   return()
-# }
-
 .tsDescriptivesTable <- function(jaspResults, dataset, options, ready, position, dependencies) {
   if (!is.null(jaspResults[["descriptivesTable"]])) return()
 
@@ -351,22 +271,39 @@ DescriptivesTimeSeries <- function(jaspResults, dataset, options) {
   table$addColumnInfo(name = "missing",   title = gettext("Missing"),         type = "integer")
   table$addColumnInfo(name = "mean",      title = gettext("Mean"),            type = "number")
   table$addColumnInfo(name = "sd",        title = gettext("Std. Deviation"),  type = "number")
+  table$addColumnInfo(name = "var",       title = gettext("Variance"),        type = "number")
+  table$addColumnInfo(name = "range",     title = gettext("Range"),           type = "number")
   table$addColumnInfo(name = "min",       title = gettext("Minimum"),         type = "number")
   table$addColumnInfo(name = "max",       title = gettext("Maximum"),         type = "number")
+  table$addColumnInfo(name = "start",     title = gettext("Start"),           type = "number")
+  table$addColumnInfo(name = "end",       title = gettext("End"),             type = "number")
+  table$addColumnInfo(name = "ar",        title = gettext("Lag 1 Autocorrelation"),  type = "number")
 
   jaspResults[["descriptivesTable"]] <- table
 
-  if (ready) {
+  if (ready) {   
     na.omitted <- na.omit(dataset$y)
     yName <- options$dependent[1]
     
+    nY <- length(na.omitted)
+    minY <- min(na.omitted)
+    maxY <- max(na.omitted)
+
+    yLag  <- c(NA, dataset$y[1:(length(dataset$y) - 1)])
+    corY <- cor(dataset$y, yLag, use = "complete.obs")
+
     rows <- data.frame(variable = yName,
-                      valid = length(na.omitted),
-                      missing = nrow(dataset) - length(na.omitted),
+                      valid = nY,
+                      missing = nrow(dataset) - nY,
                       mean = mean(na.omitted),
                       sd = sd(na.omitted),
-                      min = min(na.omitted),
-                      max = max(na.omitted))
+                      var = var(na.omitted),
+                      range = maxY - minY,
+                      min = minY,
+                      max = maxY,
+                      start = na.omitted[1],
+                      end = na.omitted[nY],
+                      ar = corY)
     table$addRows(rows)
   }
 }

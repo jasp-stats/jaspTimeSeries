@@ -674,7 +674,7 @@ ARIMATimeSeries <- function(jaspResults, dataset, options) {
   )
   # pred <- as.data.frame(pred)
   yName <- options$dependentVariable[1]
-  names(pred) <- c("t", yName, "lower80", "upper80", "lower95", "upper95")
+  names(pred) <- c("t", "y", "lower80", "upper80", "lower95", "upper95")
   # pred$t <- (nrow(dataset) + 1):(nrow(dataset)+nrow(pred))
   return(pred)
 }
@@ -689,8 +689,8 @@ ARIMATimeSeries <- function(jaspResults, dataset, options) {
   # names(pred) <- c("y", "lb80", "ub80", "lb95", "ub95")
   # pred$t <- (nrow(dat) + 1):(nrow(dat)+nrow(pred))
   pred <- .tsForecasts(fit, dataset, options)
-  obs <- data.frame(t = dataset$t, y = dataset[, 2])
-  fcs <- data.frame(t = pred$t, y = pred[, 2])
+  obs <- data.frame(t = dataset$t, y = dataset$y)
+  fcs <- data.frame(t = pred$t, y = pred$y)
   both <- rbind(obs, fcs)
   cols <- rep(c("black", "blue"), c(nrow(obs), nrow(fcs)))
   idx <- (nrow(obs) + 1):nrow(both)
@@ -722,9 +722,10 @@ ARIMATimeSeries <- function(jaspResults, dataset, options) {
   #   state$dependOn(c(.tsDependencies, "save"))
   #   jaspResults[["save"]] <- state
   # }
-
+  yName <- options$dependentVariable[1]
   # if (options$save != "") {
     forecasts <- .tsForecasts(fit, dataset, options)
+    names(forecasts) <- c("t", yName, "lower80", "upper80", "lower95", "upper95")
     utils::write.csv(forecasts, file = options$save, row.names = FALSE)
     # state[["object"]] <- TRUE
   # }
@@ -734,13 +735,13 @@ ARIMATimeSeries <- function(jaspResults, dataset, options) {
 
 .tsCreateTableForecasts <- function(jaspResults, fit, dataset, options, ready, position) {
   if (!is.null(jaspResults[["forecastTable"]])) return()
-
+  
   table <- createJaspTable("Forecasts")
   table$dependOn(.tsDependencies)
   table$position <- position
   # coefTable$showSpecifiedColumnsOnly <- TRUE
   yName <- options$dependentVariable[1]
-  table$addColumnInfo(name = "t",  title = "t",                   type = "string")
+  table$addColumnInfo(name = "t",  title = "t",            type = "string")
   table$addColumnInfo(name = "y",  title = yName,          type = "number")
   overtitle80 <- gettextf("%s%% CI", 100 * .80)
   table$addColumnInfo(name = "lower80", title = gettext("Lower"), type = "number", overtitle = overtitle80)
@@ -771,7 +772,7 @@ ARIMATimeSeries <- function(jaspResults, dataset, options) {
   forecasts <- .tsForecasts(fit, dataset, options)
 
   rows <- data.frame(t = forecasts$t,
-                     y = forecasts[, 2],
+                     y = forecasts$y,
                      lower80 = forecasts$lower80,
                      upper80 = forecasts$upper80,
                      lower95 = forecasts$lower95,
