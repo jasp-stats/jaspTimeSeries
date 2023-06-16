@@ -55,7 +55,7 @@ Form
       title: qsTr("Transformation")
       Group
       {
-         CheckBox
+        CheckBox
         { 
           name: "log"
           id: log
@@ -107,7 +107,7 @@ Form
                 id: manual
                 label: qsTr("Manual")
                 childrenOnSameRow: true
-                IntegerField { name: "boxCoxLambda"; defaultValue: 0; min: -5; max: 5; enabled: manual.checked }
+                DoubleField { name: "boxCoxLambda"; defaultValue: 0; min: -5; max: 5; enabled: manual.checked }
               }
           }
         }
@@ -116,8 +116,18 @@ Form
           name: "detrend"
           id: detrend
           label: qsTr("Detrend using linear regression")
-          IntegerField { name: "poly"; label: qsTr("Polynomial"); defaultValue: 1; min: 0; max: 10; }
+          IntegerField { name: "detrendPoly"; label: qsTr("Polynomial"); defaultValue: 1; min: 0; max: 10; }
         }
+        CheckBox
+        { 
+          name: "difference"
+          id: difference
+          label: qsTr("Difference")
+          childrenOnSameRow: true
+          IntegerField { name: "differenceLag"; label: qsTr("Lag"); defaultValue: 1; min: 1; }
+          IntegerField { name: "differenceOrder"; label: qsTr("Order"); defaultValue: 1; min: 1; }
+        }
+
       }
 
       CheckBox 

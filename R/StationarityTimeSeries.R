@@ -37,8 +37,9 @@ StationarityTimeSeries <- function(jaspResults, dataset, options) {
 }
 
 .tsTransformationDependencies <- c(
-  "dependent", "detrend", "poly", "log", "logBase", "root", "rootIndex",
-  "boxCox", "boxCoxLambdaSpecification", "boxCoxLambda"
+  "dependent", "time", "detrend", "detrendPoly", "log", "logBase", "root", "rootIndex",
+  "boxCox", "boxCoxLambdaSpecification", "boxCoxLambda", "difference",
+  "differenceLag", "differenceOrder"
 )
 
 .tsReadDataTransformation <- function(jaspResults, dataset, options) {
@@ -57,10 +58,6 @@ StationarityTimeSeries <- function(jaspResults, dataset, options) {
 
 .tsTransformData <- function(jaspResults, dataset, options) {
   transformedDataset <- dataset
-
-  if (options$detrend) {
-    transformedDataset$y <- residuals(lm(y ~ poly(t, options$poly), data = transformedDataset))
-  }
 
   if (options$log) {
     if (any(transformedDataset$y <= 0))
@@ -86,6 +83,23 @@ StationarityTimeSeries <- function(jaspResults, dataset, options) {
         transformedDataset$y,
         lambda = lambda
       )
+  }
+
+  if (options$detrend) {
+    transformedDataset$y <- residuals(lm(y ~ poly(t, options$detrendPoly), data = transformedDataset))
+  }
+
+  if (options$difference) {
+    differencedY <- diff(
+      transformedDataset$y,
+      lag = options$differenceLag,
+      order = options$differenceOrder
+    )
+
+    transformedDataset$y <- c(
+      rep(NA, nrow(transformedDataset) - length(differencedY)),
+      differencedY
+    )
   }
 
   return(transformedDataset)
