@@ -48,7 +48,7 @@ ARIMATimeSeries <- function(jaspResults, dataset, options) {
 # data dependencies
 .tsDependencies <- c(
   "dependent", "time", "covariates",
-  "modelSpecification", "autoIc", "auto", "manual", "intercept",
+  "modelSpecification", "modelSpecificationAutoIc", "auto", "manual", "intercept",
   "p", "d", "q",
   "seasonal", "periodSpecification", "m", "P", "D", "Q"
 )
@@ -108,8 +108,8 @@ ARIMATimeSeries <- function(jaspResults, dataset, options) {
     P <- options$P
     D <- options$D
     Q <- options$Q
-    if (options$periodSpecification == "manual")  m <- options$m
-    if (options$periodSpecification == "dominant")     m <- forecast::findfrequency(dataset$y)
+    if (options$periodSpecification == "manual")    m <- options$m
+    if (options$periodSpecification == "dominant")  m <- forecast::findfrequency(dataset$y)
   } else {
     m <- 1
     P <- D <- Q <- 0
@@ -124,13 +124,25 @@ ARIMATimeSeries <- function(jaspResults, dataset, options) {
   }
 
   if (options$modelSpecification == "manual") {
-      fit <- forecast::Arima(y, include.constant = options$intercept,
-                             order = c(options$p, options$d, options$q),
-                             xreg = xreg,
-                             seasonal = seasonOrder)
+      fit <- forecast::Arima(
+        y,
+        include.constant = options$intercept,
+        order = c(options$p, options$d, options$q),
+        xreg = xreg,
+        seasonal = seasonOrder
+      )
   }
 
-  if (options$modelSpecification == "auto") fit <- forecast::auto.arima(y, allowdrift = options$intercept, allowmean = options$intercept)
+  if (options$modelSpecification == "auto") {
+    fit <- forecast::auto.arima(
+      y,
+      allowdrift = options$intercept,
+      allowmean = options$intercept,
+      ic = options$modelSpecificationAutoIc,
+      xreg = xreg,
+      seasonal = options$seasonal
+    )
+  }
 
   if (length(fit$coef) == 0)
     .quitAnalysis("No parameters are estimated.")

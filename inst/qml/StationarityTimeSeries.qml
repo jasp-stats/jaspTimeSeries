@@ -107,7 +107,7 @@ Form
                 id: manual
                 label: qsTr("Manual")
                 childrenOnSameRow: true
-                DoubleField { name: "boxCoxLambda"; defaultValue: 0; min: -5; max: 5; enabled: manual.checked }
+                DoubleField { name: "boxCoxLambda"; defaultValue: 0; min: -5; max: 5; }
               }
           }
         }
@@ -116,7 +116,42 @@ Form
           name: "detrend"
           id: detrend
           label: qsTr("Detrend using linear regression")
-          IntegerField { name: "detrendPoly"; label: qsTr("Polynomial"); defaultValue: 1; min: 0; max: 10; }
+          RadioButtonGroup
+          {
+            name: "polynomialSpecification"
+            title: qsTr("Polynomial")
+            // radioButtonsOnSameRow: true
+            RadioButton
+            {
+              value: "auto"
+              label: qsTr("Best fitting")
+              checked: true
+              IntegerField
+              {
+                name: "polynomialSpecificationAutoMax"
+                label: qsTr("Maximum")
+                defaultValue: 5
+                min: 1
+                max: 10
+              }
+              RadioButtonGroup
+              {
+                name: "polynomialSpecificationAutoIc"
+                title: qsTr("Information criterion")
+                radioButtonsOnSameRow: true
+                RadioButton { value: "aic"; label: qsTr("AIC"); checked: true }
+                RadioButton { value: "bic";	label: qsTr("BIC")				        } 
+              }
+            }
+            RadioButton
+            {
+              value: "manual"
+              label: qsTr("Manual")
+              childrenOnSameRow: true
+              IntegerField { name: "detrendPoly"; defaultValue: 1; min: 0; max: 10; }
+            }
+          }
+          // IntegerField { name: "detrendPoly"; label: qsTr("Polynomial"); defaultValue: 1; min: 0; max: 10; }
         }
         CheckBox
         { 

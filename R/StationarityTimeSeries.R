@@ -34,12 +34,17 @@ StationarityTimeSeries <- function(jaspResults, dataset, options) {
     .tsACFTransformation(jaspResults, transformedDataset, options, ready, position = 3, dependencies = c(.tsTransformationDependencies, "acf", "acfCi", "acfCiLevel", "acfCiType", "acfZeroLag", "acfMaxLag"))
 
     .tsPACFTransformation(jaspResults, transformedDataset, options, ready, position = 4, dependencies = c(.tsTransformationDependencies, "pacf", "pacfCi", "pacfCiLevel", "pacfCiType", "pacfMaxLag"))
+
+    if (options$detrend & options$polynomialSpecification == "auto") {
+      .tsCreateTablePolynomials(jaspResults, transformedDataset, options, ready, position = 5, dependencies = .tsTransformationDependencies) 
+    }
 }
 
 .tsTransformationDependencies <- c(
   "dependent", "time", "detrend", "detrendPoly", "log", "logBase", "root", "rootIndex",
   "boxCox", "boxCoxLambdaSpecification", "boxCoxLambda", "difference",
-  "differenceLag", "differenceOrder"
+  "differenceLag", "differenceOrder",
+  "polynomialSpecification", "polynomialSpecificationAutoIc", "polynomialSpecificationAutoMax"
 )
 
 .tsReadDataTransformation <- function(jaspResults, dataset, options) {
@@ -86,7 +91,13 @@ StationarityTimeSeries <- function(jaspResults, dataset, options) {
   }
 
   if (options$detrend) {
-    transformedDataset$y <- residuals(lm(y ~ poly(t, options$detrendPoly), data = transformedDataset))
+    if (options$polynomialSpecification == "manual")
+      transformedDataset$y <- residuals(lm(y ~ poly(t, options$detrendPoly), data = transformedDataset))
+    if (options$polynomialSpecification == "auto") {
+      lmFit <- sapply(0:(options$polynomialSpecificationAutoMax), .tsFitPoly, x = transformedDataset$y, t = transformedDataset$t)
+      best <- which.min(unlist(lmFit[options$polynomialSpecificationAutoIc, ]))
+      transformedDataset$y <- unlist(lmFit["residuals", best])
+    }
   }
 
   if (options$difference) {
@@ -103,6 +114,50 @@ StationarityTimeSeries <- function(jaspResults, dataset, options) {
   }
 
   return(transformedDataset)
+}
+
+.tsFitPoly <- function(degree, x, t) {
+  if (degree == 0) m <- lm(x ~ 1)
+    else m <- lm(x ~ poly(t, degree = degree))
+  return(list(residuals = residuals(m), degree = degree, aic = AIC(m), bic = BIC(m)))
+}
+
+.tsCreateTablePolynomials <- function(jaspResults, dataset, options, ready, position, dependencies) {
+  if (!is.null(jaspResults[["polyTable"]])) return()
+  
+  table <- createJaspTable("Detrend using linear regression")
+  table$dependOn(dependencies)
+  table$position <- position
+  table$addColumnInfo(name = "degree",  title = gettext("Degree"),  type = "integer")
+  table$addColumnInfo(name = "aic",     title = gettext("AIC"),     type = "number")
+  table$addColumnInfo(name = "bic",     title = gettext("BIC"),     type = "number")
+
+  jaspResults[["polyTable"]] <- table
+
+  # Check if ready
+  if(!ready) {
+    rows <- data.frame(
+      degree = ".",
+      aic = ".",
+      bic = "."
+    )
+    row.names(rows) <- paste0("row", 1)
+    table$addRows(rows)
+    return()
+  }
+
+  lmFit <- sapply(0:(options$polynomialSpecificationAutoMax), .tsFitPoly, x = dataset$y, t = dataset$t)
+  best <- lmFit["degree", which.min(unlist(lmFit[options$polynomialSpecificationAutoIc, ]))]
+
+  rows <- data.frame(
+    degree = unlist(lmFit["degree", ]),
+    aic = unlist(lmFit["aic", ]),
+    bic = unlist(lmFit["bic", ])
+  )
+  row.names(rows) <- paste0("row", 1:length(unlist(lmFit["degree", ])))
+  table$addRows(rows)
+
+  table$addFootnote(gettextf("A polynomial regression with a degree of %s was fitted.", best))
 }
 
 .tsSaveTransformation <- function(transformedDataset, options, jaspResults, ready, dependencies) {

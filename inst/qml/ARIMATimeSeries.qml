@@ -105,7 +105,7 @@ Form
                     checked: true 
                     RadioButtonGroup
                     {
-                        name: "autoIc"
+                        name: "modelSpecificationAutoIc"
                         title: qsTr("Information criterion")
                         radioButtonsOnSameRow: true
                         RadioButton { value: "aicc";    label: qsTr("AICc");	checked: true   }
