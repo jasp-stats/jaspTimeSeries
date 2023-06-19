@@ -36,7 +36,7 @@ Form
     Section
     {
         title: qsTr("Plots")
-        columns: 1
+        columns: 2
         CheckBox
         {
             name: "timeSeriesPlot"
@@ -67,7 +67,6 @@ Form
             label: qsTr("Lag plot")
             Group
             {
-                // columns: 2
                 IntegerField
                 {
                     name: "lagPlotLag"
@@ -92,7 +91,7 @@ Form
                     CheckBox
                     {
                         name: "lagPlotRegressionCi"
-                        label: qsTr("Show confidence interval")
+                        label: qsTr("Confidence interval")
                         checked: true
                         childrenOnSameRow: true
                         CIField { name: "lagPlotRegressionCiLevel" }
@@ -105,38 +104,41 @@ Form
             name: "acf"
             id: acf
             label: qsTr("Autocorrelation function")
+            IntegerField { name: "acfMaxLag"; label: qsTr("Maximum lag"); min: 1; defaultValue: 10 }
+            CheckBox { name: "acfZeroLag"; label: qsTr("Zero lag") }
             CheckBox
             {
                 name: "acfCi"
-                label: qsTr("Show confidence interval")
+                id: acfCi
+                label: qsTr("Confidence interval")
                 checked: true
                 childrenOnSameRow: true
                 CIField { name: "acfCiLevel" }
-                RadioButtonGroup
-                {
-                  name: "acfCiType"
-                  title: qsTr("Confidence interval type")
-                  RadioButton { value: "whiteNoise";	label: qsTr("White noise");	checked: true }
-                  RadioButton { value: "movingAverage";	label: qsTr("Moving average")	}
-                }
+                
             }
-            CheckBox { name: "acfZeroLag"; label: qsTr("Include zero lag") }
-            IntegerField { name: "acfMaxLag"; label: qsTr("Maximum lag"); min: 1; defaultValue: 10 }
+            RadioButtonGroup
+            {
+              name: "acfCiType"
+              enabled: acfCi.checked
+              Layout.leftMargin: 25 * preferencesModel.uiScale
+              RadioButton { value: "whiteNoise";	label: qsTr("Based on white noise");	checked: true }
+              RadioButton { value: "movingAverage";	label: qsTr("Based on moving average")	}
+            }
         }
         CheckBox
         {
             name: "pacf"
             id: pacf
             label: qsTr("Partial autocorrelation function")
+            IntegerField { name: "pacfMaxLag"; label: qsTr("Maximum lag"); min: 1; defaultValue: 10 }
             CheckBox
             {
                 name: "pacfCi"
-                label: qsTr("Show confidence interval")
+                label: qsTr("Confidence interval")
                 checked: true
                 childrenOnSameRow: true
                 CIField { name: "pacfCiLevel" }
             }
-            IntegerField { name: "pacfMaxLag"; label: qsTr("Maximum lag"); min: 1; defaultValue: 10 }
         }
     }
 }

@@ -18,8 +18,7 @@
 DescriptivesTimeSeries <- function(jaspResults, dataset, options) {
     ready <- options$dependent != ""
 
-    if (ready)
-      dataset <- .tsReadDataDescriptives(jaspResults, dataset, options)
+    dataset <- .tsReadDataDescriptives(jaspResults, dataset, options, ready)
 
     .tsDescriptivesTable(jaspResults, dataset, options, ready, position = 1, dependencies = c("dependent", "descriptivesTableTransposed"))
 
@@ -33,10 +32,11 @@ DescriptivesTimeSeries <- function(jaspResults, dataset, options) {
 
 }
 
-.tsReadDataDescriptives <- function(jaspResults, dataset, options) {
+.tsReadDataDescriptives <- function(jaspResults, dataset, options, ready) {
   if (!is.null(dataset))
     return(dataset)
-  else {
+  
+  if (ready) {
     dataset <- .readDataSetToEnd(columns.as.numeric = options$dependent)
     yName <- options$dependent[1]
     y     <- dataset[, yName]
@@ -185,7 +185,7 @@ DescriptivesTimeSeries <- function(jaspResults, dataset, options) {
 .tsDescriptivesTable <- function(jaspResults, dataset, options, ready, position, dependencies) {
   if (!is.null(jaspResults[["descriptivesTable"]])) return()
 
-  table <- createJaspTable("Descriptive Statistics")
+  table <- createJaspTable(gettext("Descriptive Statistics"))
   table$dependOn(dependencies)
   table$position <- position
   table$showSpecifiedColumnsOnly <- TRUE

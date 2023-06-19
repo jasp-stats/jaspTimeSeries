@@ -37,7 +37,7 @@ Form
         {
             name: "timeSeriesPlot"
             id:    tsPlot
-            label: qsTr("Plot time series")
+            label: qsTr("Time series plot")
             checked: true
             RadioButtonGroup
             {
@@ -67,7 +67,7 @@ Form
             {
                 name:       "intercept"
                 id:         intercept
-                label:      qsTr("Include intercept")
+                label:      qsTr("Intercept")
                 checked:    true
                 enabled:    best.checked | (manual.checked & (d.value < 2 | D.value < 2))
             }
@@ -75,7 +75,7 @@ Form
             {
                 name:   "seasonal"
                 id:     seasonal
-                label:  qsTr("Add seasonal components")
+                label:  qsTr("Seasonal components")
                 RadioButtonGroup
                 {
                     name: "periodSpecification"
@@ -83,13 +83,13 @@ Form
                     radioButtonsOnSameRow: true
                     RadioButton 
                     { 
-                        value: "manual"
-                        label: qsTr("Specify manually")
+                        value: "custom"
+                        label: qsTr("Custom")
                         checked: true
                         childrenOnSameRow: true
                         IntegerField { name: "m";   id: m; defaultValue: 1; min: 1 }
                     }
-                    RadioButton { value: "dominant";  label: qsTr("Find dominant period") }
+                    RadioButton { value: "dominant";  label: qsTr("Dominant") }
                 }
             }
         
@@ -115,7 +115,7 @@ Form
                 }
                 RadioButton 
                 { 
-                    value: "manual"	
+                    value: "custom"	
                     id: manual
                     label: qsTr("Manual")
                     Group
@@ -175,17 +175,14 @@ Form
     Section
     {
         title: qsTr("Residual Diagnostics")
-        CheckBox
+        Group
         {
-            name:   "residualPlots"
-            id:     residualPlots
-            label:  qsTr("Residual Plots")
+            title:  qsTr("Plots")
             CheckBox
             {
                 name:       "residualTimeSeries"
                 id:         residualTimeSeries
-                label:      qsTr("Time series")
-                checked:    true
+                label:      qsTr("Time series plot")
                 RadioButtonGroup
                 {
                     name:	"residualTimeSeriesType"
@@ -217,15 +214,15 @@ Form
                     name:   "residualAcf"
                     id:     residualACF
                     label:  qsTr("Autocorrelation function")
+                    CheckBox { name: "residualAcfZeroLag"; label: qsTr("Zero lag") }
                     CheckBox
                     {
                         name: "residualAcfCi"
-                        label: qsTr("Show confidence interval")
+                        label: qsTr("Confidence interval")
                         checked: true
                         childrenOnSameRow: true
                         CIField { name: "residualAcfCiLevel" }
                     }
-                    CheckBox { name: "residualAcfZeroLag"; label: qsTr("Include zero lag") }
                 }
                 CheckBox
                 {
@@ -265,56 +262,52 @@ Form
     Section
     {
         title: qsTr("Forecasting")
-        CheckBox
+        IntegerField
         {
-          name: "forecast"
-          label: qsTr("Forecast")
-          IntegerField
+          name: "forecastLength"
+          id: forecastLength
+          label: qsTr("Number of forecasts")
+          min: 0
+          max: 1e6
+          defaultValue: 0
+        }
+        FileSelector
+        {
+            name:	             "forecastSave"
+            label:	            qsTr("Save forecasts as")
+            placeholderText:    qsTr("e.g. forecasts.csv")
+            filter:	            "*.csv"
+            save:	              true
+            enabled:            forecastLength.value > 0
+            fieldWidth:         180 * preferencesModel.uiScale
+        }
+        CheckBox
           {
-            name: "forecastLength"
-            label: qsTr("Number of forecasts")
-            min: 1
-            defaultValue: 10
+              name:     "forecastTimeSeries"
+              id:       forecastTimeSeries
+              label:    qsTr("Time series plot")
+              RadioButtonGroup
+              {
+                  name:	"forecastTimeSeriesType"
+                  radioButtonsOnSameRow: true
+                  RadioButton { value: "points";	label: qsTr("Points") }
+                  RadioButton { value: "line";	label: qsTr("Line") }
+                  RadioButton { value: "both";	label: qsTr("Both");	checked: true }
+              }
+              CheckBox
+              {
+                  name:       "forecastTimeSeriesObserved"
+                  id:         forecastTimeSeriesObserved
+                  label:      qsTr("Observed data")
+                  checked:    true
+              }
           }
           CheckBox
-            {
-                name:     "forecastTimeSeries"
-                id:       forecastTimeSeries
-                label:    qsTr("Time series plot")
-                checked:  true
-                RadioButtonGroup
-                {
-                    name:	"forecastTimeSeriesType"
-                    radioButtonsOnSameRow: true
-                    RadioButton { value: "points";	label: qsTr("Points") }
-                    RadioButton { value: "line";	label: qsTr("Line") }
-                    RadioButton { value: "both";	label: qsTr("Both");	checked: true }
-                }
-                CheckBox
-                {
-                    name:       "forecastTimeSeriesObserved"
-                    id:         forecastTimeSeriesObserved
-                    label:      qsTr("Include observed data")
-                    checked:    true
-                }
-            }
-            CheckBox
-            {
-                name:   "forecastTable"
-                id:     forecastTable
-                label:  qsTr("Forecasts table")
-            }
-        
-            FileSelector
-            {
-                name:	             "saveforecast"
-                label:	            qsTr("Save forecasts as")
-                placeholderText:    qsTr("e.g. forecasts.csv")
-                filter:	            "*.csv"
-                save:	              true
-                fieldWidth:         180 * preferencesModel.uiScale
-            }
-        }
+          {
+              name:   "forecastTable"
+              id:     forecastTable
+              label:  qsTr("Forecasts table")
+          }
     }
 }
 // dataSetModel.rowCount()
