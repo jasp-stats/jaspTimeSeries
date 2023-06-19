@@ -20,7 +20,7 @@ StationarityTimeSeries <- function(jaspResults, dataset, options) {
 
     if (ready) {
       dataset <- .tsReadDataTransformation(jaspResults, dataset, options)
-      transformedDataset <- .tsTransformData(jaspResults, dataset, options)
+      transformedDataset <- .tsTransformData(jaspResults, dataset, options, ready)
     }
     
     if (options$adfTest | options$ppTestRegressionCoefficient | options$ppTestStudentized | options$kpssLevel | options$kpssTrend) {
@@ -61,7 +61,7 @@ StationarityTimeSeries <- function(jaspResults, dataset, options) {
   }
 }
 
-.tsTransformData <- function(jaspResults, dataset, options) {
+.tsTransformData <- function(jaspResults, dataset, options, ready) {
   transformedDataset <- dataset
 
   if (options$log) {
@@ -94,7 +94,8 @@ StationarityTimeSeries <- function(jaspResults, dataset, options) {
     if (options$polynomialSpecification == "manual")
       transformedDataset$y <- residuals(lm(y ~ poly(t, options$detrendPoly), data = transformedDataset))
     if (options$polynomialSpecification == "auto") {
-      lmFit <- sapply(0:(options$polynomialSpecificationAutoMax), .tsFitPoly, x = transformedDataset$y, t = transformedDataset$t)
+      .tsComputePolyResults(dataset, options, jaspResults, ready)
+      lmFit <- jaspResults[["polyResult"]]$object
       best <- which.min(unlist(lmFit[options$polynomialSpecificationAutoIc, ]))
       transformedDataset$y <- unlist(lmFit["residuals", best])
     }
@@ -114,12 +115,6 @@ StationarityTimeSeries <- function(jaspResults, dataset, options) {
   }
 
   return(transformedDataset)
-}
-
-.tsFitPoly <- function(degree, x, t) {
-  if (degree == 0) m <- lm(x ~ 1)
-    else m <- lm(x ~ poly(t, degree = degree))
-  return(list(residuals = residuals(m), degree = degree, aic = AIC(m), bic = BIC(m)))
 }
 
 .tsCreateTablePolynomials <- function(jaspResults, dataset, options, ready, position, dependencies) {
@@ -146,7 +141,8 @@ StationarityTimeSeries <- function(jaspResults, dataset, options) {
     return()
   }
 
-  lmFit <- sapply(0:(options$polynomialSpecificationAutoMax), .tsFitPoly, x = dataset$y, t = dataset$t)
+  .tsComputePolyResults(dataset, options, jaspResults, ready)
+  lmFit <- jaspResults[["polyResult"]]$object 
   best <- lmFit["degree", which.min(unlist(lmFit[options$polynomialSpecificationAutoIc, ]))]
 
   rows <- data.frame(
@@ -158,6 +154,25 @@ StationarityTimeSeries <- function(jaspResults, dataset, options) {
   table$addRows(rows)
 
   table$addFootnote(gettextf("A polynomial regression with a degree of %s was fitted.", best))
+}
+
+.tsFitPoly <- function(degree, x, t) {
+  if (degree == 0) m <- lm(x ~ 1)
+    else m <- lm(x ~ poly(t, degree = degree))
+  return(list(residuals = residuals(m), degree = degree, aic = AIC(m), bic = BIC(m)))
+}
+
+.tsComputePolyResults <- function(dataset, options, jaspResults, ready) {
+  if (!is.null(jaspResults[["polyResult"]])) {
+    return()
+  }
+
+  if (ready) {
+    res <- sapply(0:(options$polynomialSpecificationAutoMax), .tsFitPoly, x = dataset$y, t = dataset$t)
+
+    jaspResults[["polyResult"]] <- createJaspState(res)
+    jaspResults[["polyResult"]]$dependOn(c("polynomialSpecificationAutoMax"))
+  }
 }
 
 .tsSaveTransformation <- function(transformedDataset, options, jaspResults, ready, dependencies) {
