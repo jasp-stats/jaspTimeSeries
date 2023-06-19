@@ -66,23 +66,6 @@ DescriptivesTimeSeries <- function(jaspResults, dataset, options) {
   }
 }
 
-.tsFillTimeSeriesPlot <- function(timeSeriesPlot, dataset, options, type, distribution, yName = NULL) {
-  if (is.null(yName)) yName <- options$dependent[1]
-
-  dat <- dataset
-
-  p <- jaspGraphs::JASPScatterPlot(dat$t, dat$y,
-    yName = yName, xName = "t",
-    addSmooth = FALSE, plotAbove = "none",
-    plotRight = distribution
-  )
-
-  if (type != "points")  p$subplots$mainPlot$layers[[1]] <- jaspGraphs::geom_line()
-  if (type == "both")    p$subplots$mainPlot <- p$subplots$mainPlot + jaspGraphs::geom_point()
-
-  timeSeriesPlot$plotObject <- p
-}
-
 .tslagPlotDescriptives <- function(jaspResults, dataset, options, ready, position, dependencies) {
   if (!options$lagPlot)
     return()
@@ -197,64 +180,6 @@ DescriptivesTimeSeries <- function(jaspResults, dataset, options) {
   }
 
   return(df)
-}
-
-.tsFillACF <- function(plot, type, dataset, options, firstLag = F, maxLag, ci, ciValue, ciType) {
-  y <- na.omit(dataset$y)
-
-  if (type == "ACF") {
-    ac <- stats::acf(y, plot = FALSE, lag.max = maxLag)
-  }
-  if (type == "PACF") {
-    ac <- stats::pacf(y, plot = FALSE, lag.max = maxLag)
-    ciType <- "whiteNoise"
-  }
-
-  dat <- data.frame(acf = ac$acf, lag = ac$lag)
-  if(type == "ACF" & !firstLag)
-    dat <- dat[-1, ] # remove lag 0
-
-  yRange <- dat$acf
-  xBreaks <- jaspGraphs::getPrettyAxisBreaks(dat$lag)
-  xBreaks <- xBreaks[!xBreaks %% 1] # keep only integers
-  xMin <- min(xBreaks)
-  xMax <- max(xBreaks)
-
-  p <- ggplot2::ggplot()
-  if (ci) {
-    if (ciType == "whiteNoise") {
-      clim <- qnorm((1 + ciValue) / 2) / sqrt(ac$n.used)
-      dat$upper <- rep(clim, nrow(dat))
-      dat$lower <- -dat$upper
-    } else {
-      clim <- .tsAcfBartlett(dat$acf, ac$n.used, ciValue)
-      dat$upper <- clim$se
-      dat$lower <- -dat$upper
-    }
-
-    yRange    <- c(yRange, dat$upper, dat$lower)
-
-    p <- p +
-      ggplot2::geom_ribbon(
-        data = dat,
-        ggplot2::aes(x = lag, ymin = lower, ymax = upper), alpha = 0.15
-      )
-  }
-
-  yBreaks <- jaspGraphs::getPrettyAxisBreaks(yRange)
-
-  p <- p +
-    ggplot2::scale_x_continuous(name = "Lag", breaks = xBreaks, limits = range(xBreaks)) +
-    ggplot2::scale_y_continuous(name = type, breaks = yBreaks, limits = range(yBreaks))
-
-  p <- p +
-    ggplot2::geom_linerange(data = dat, ggplot2::aes(x = lag, ymin = 0, ymax = acf), size = 1) +
-    ggplot2::geom_segment(ggplot2::aes(x = xMin, xend = xMax, y = 0, yend = 0), alpha = 0.5) +
-    jaspGraphs::geom_rangeframe() +
-    jaspGraphs::themeJaspRaw()
-
-  plot$plotObject <- p
-  return()
 }
 
 .tsDescriptivesTable <- function(jaspResults, dataset, options, ready, position, dependencies) {
