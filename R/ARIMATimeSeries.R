@@ -18,12 +18,12 @@
 ARIMATimeSeries <- function(jaspResults, dataset, options) {
     ready <- options$dependent != ""
 
-    rawData <- .tsReadData(jaspResults, dataset, options, ready)
-    dataset <- .tsPrepareData(jaspResults, rawData, options, ready)
+    # rawData <- .tsReadData(jaspResults, dataset, options, ready)
+    dataset <- .tsReadData(jaspResults, dataset, options, ready, covariates = TRUE)
     
     fit <- .tsResults(jaspResults, dataset, options, ready)
 
-    .tsTimeSeriesPlot(jaspResults, dataset, options, ready, position = 1, dependencies = c("timeSeriesPlot", "timeSeriesPlotType", "dependent", "timeSeriesPlotDistribution"))
+    .tsTimeSeriesPlot(jaspResults, dataset, options, ready, position = 1, dependencies = c("dependent", "time", "timeSeriesPlot", "timeSeriesPlotType", "timeSeriesPlotDistribution"))
 
     .tsCreateTableModel(jaspResults, fit, dataset, options, ready, position = 3, dependencies = .tsDependencies)
 
@@ -47,41 +47,6 @@ ARIMATimeSeries <- function(jaspResults, dataset, options) {
   "p", "d", "q",
   "seasonal", "periodSpecification", "m", "P", "D", "Q"
 )
-
-.tsReadData <- function(jaspResults, dataset, options, ready) {
-  if (!ready)
-    return()
-
-  if (is.null(dataset)) {
-    y <- options$dependent[1]
-    # t     <- 1:nrow(dataset)
-
-    covariates <- NULL
-    if (length(options[["covariates"]]) > 0) {
-      covariates <- unlist(options[["covariates"]])
-    }
-  }
-  return(.readDataSetToEnd(columns.as.numeric = c(y, covariates)))
-}
-
-.tsPrepareData <- function(jaspResults, dataset, options, ready) {
-  if (!ready)
-    return()
-
-  yName <- options$dependent[1]
-  y     <- dataset[, yName]
-  t     <- 1:nrow(dataset)
-
-  df <- data.frame(y, t)
-
-  if (length(options[["covariates"]]) > 0) {
-    covariateNames <- options$covariates
-    covariates <- dataset[, covariateNames]
-    df <- cbind(df, covariates)
-  }
-
-  return(df)
-}
 
 .tsTimeSeriesPlot <- function(jaspResults, dataset, options, ready, position, dependencies) {
   if (!options$timeSeriesPlot)
@@ -120,7 +85,7 @@ ARIMATimeSeries <- function(jaspResults, dataset, options) {
 
   xreg <- NULL
   if (length(options[["covariates"]]) > 0) {
-    covariates <- dataset[, which(names(dataset) != "y" & names(dataset) != "t")]
+    covariates <- dataset[, grepl("xreg", names(dataset))]
     xreg <- as.matrix(covariates)
   }
 
@@ -249,7 +214,7 @@ ARIMATimeSeries <- function(jaspResults, dataset, options) {
   group <- logical()
 
   # there is no constant if d or D > 1
-  if (options$intercept && d < 2 && D < 2 && (p + q) != length(estimate)) {
+  if (options$intercept && any(names(fit$coef) == "intercept")) {
     group <- TRUE
     coefficients <- gettext("Constant")
     # I want the intercept to be the first row...

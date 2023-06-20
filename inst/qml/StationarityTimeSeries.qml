@@ -20,7 +20,7 @@ Form
         {
             name: "time"
             label: qsTr("Time")
-            allowedColumns: ["ordinal", "scale"]
+            allowedColumns: ["ordinal", "nominalText"]
             singleVariable: true
             allowAnalysisOwnComputedColumns: false
         }

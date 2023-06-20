@@ -18,7 +18,7 @@
 StationarityTimeSeries <- function(jaspResults, dataset, options) {
     ready <- options$dependent != ""
 
-    dataset <- .tsReadDataTransformation(jaspResults, dataset, options, ready)
+    dataset <- .tsReadData(jaspResults, dataset, options, ready)
     transformedDataset <- .tsTransformData(jaspResults, dataset, options, ready)
     
     .tsCreateTableStationarityTests(jaspResults, transformedDataset, options, ready, position = 2, dependencies = c(.tsTransformationDependencies, "adfTest", "ppTestRegressionCoefficient", "ppTestStudentized", "kpssLevel", "kpssTrend"))
@@ -41,20 +41,20 @@ StationarityTimeSeries <- function(jaspResults, dataset, options) {
   "polynomialSpecification", "polynomialSpecificationAutoIc", "polynomialSpecificationAutoMax"
 )
 
-.tsReadDataTransformation <- function(jaspResults, dataset, options, ready) {
-  if (!is.null(dataset))
-    return(dataset)
+# .tsReadDataTransformation <- function(jaspResults, dataset, options, ready) {
+#   if (!is.null(dataset))
+#     return(dataset)
   
-  if (ready) {
-    dataset <- .readDataSetToEnd(columns.as.numeric = options$dependent)
-    yName <- options$dependent[1]
-    y     <- dataset[, yName]
-    t     <- 1:nrow(dataset)
+#   if (ready) {
+#     dataset <- .readDataSetToEnd(columns.as.numeric = options$dependent)
+#     yName <- options$dependent[1]
+#     y     <- dataset[, yName]
+#     t     <- 1:nrow(dataset)
 
-    dat <- data.frame(y, t)
-    return(dat)
-  }
-}
+#     dat <- data.frame(y, t)
+#     return(dat)
+#   }
+# }
 
 .tsTransformData <- function(jaspResults, dataset, options, ready) {
   if (!ready)

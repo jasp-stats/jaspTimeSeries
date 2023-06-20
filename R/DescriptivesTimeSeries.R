@@ -18,34 +18,39 @@
 DescriptivesTimeSeries <- function(jaspResults, dataset, options) {
     ready <- options$dependent != ""
 
-    dataset <- .tsReadDataDescriptives(jaspResults, dataset, options, ready)
+    dataset <- .tsReadData(jaspResults, dataset, options, ready)
 
-    .tsDescriptivesTable(jaspResults, dataset, options, ready, position = 1, dependencies = c("dependent", "descriptivesTableTransposed"))
+    .tsDescriptivesTable(jaspResults, dataset, options, ready, position = 1, dependencies = c("dependent", "time", "descriptivesTableTransposed"))
 
-    .tsTimeSeriesPlotDescriptives(jaspResults, dataset, options, ready, position = 2, dependencies = c("timeSeriesPlot", "timeSeriesPlotType", "dependent", "timeSeriesPlotDistribution"))
+    .tsTimeSeriesPlotDescriptives(jaspResults, dataset, options, ready, position = 2, dependencies = c("dependent", "time", "timeSeriesPlot", "timeSeriesPlotType", "timeSeriesPlotDistribution"))
 
-    .tslagPlotDescriptives(jaspResults, dataset, options, ready, position = 3, dependencies  = c("lagPlot", "lagPlotLag", "lagPlotRegressionType", "lagPlotRegressionLine", "lagPlotRegressionCi", "lagPlotRegressionCiLevel", "dependent"))
+    .tslagPlotDescriptives(jaspResults, dataset, options, ready, position = 3, dependencies  = c("dependent", "time", "lagPlot", "lagPlotLag", "lagPlotRegressionType", "lagPlotRegressionLine", "lagPlotRegressionCi", "lagPlotRegressionCiLevel"))
 
-    .tsACFDescriptives(jaspResults, dataset, options, ready, position = 4, dependencies = c("dependent", "acf", "acfCi", "acfCiLevel", "acfCiType", "acfZeroLag", "acfMaxLag"))
+    .tsACFDescriptives(jaspResults, dataset, options, ready, position = 4, dependencies = c("dependent", "time", "acf", "acfCi", "acfCiLevel", "acfCiType", "acfZeroLag", "acfMaxLag"))
 
-    .tsPACFDescriptives(jaspResults, dataset, options, ready, position = 5, dependencies = c("dependent", "pacf", "pacfCi", "pacfCiLevel", "pacfCiType", "pacfMaxLag"))
+    .tsPACFDescriptives(jaspResults, dataset, options, ready, position = 5, dependencies = c("dependent", "time", "pacf", "pacfCi", "pacfCiLevel", "pacfCiType", "pacfMaxLag"))
 
 }
 
-.tsReadDataDescriptives <- function(jaspResults, dataset, options, ready) {
-  if (!is.null(dataset))
-    return(dataset)
+# .tsReadDataDescriptives <- function(jaspResults, dataset, options, ready) {
+#   if (!is.null(dataset))
+#     return(dataset)
   
-  if (ready) {
-    dataset <- .readDataSetToEnd(columns.as.numeric = options$dependent)
-    yName <- options$dependent[1]
-    y     <- dataset[, yName]
-    t     <- 1:nrow(dataset)
-
-    dat <- data.frame(y, t)
-    return(dat)
-  }
-}
+#   if (ready) {
+#     yDataset <- .readDataSetToEnd(columns.as.numeric = options$dependent)
+#     yName <- options$dependent[1]
+#     y     <- yDataset[, yName]
+#     if (options$time == "") {
+#       t <- 1:nrow(yDataset)
+#     } else {
+#       tDataset <- .readDataSetToEnd(columns = options$time)
+#       tName <- options$time[1]
+#       t <- tDataset[, tName]
+#     }
+#     dat <- data.frame(y, t)
+#     return(dat)
+#   }
+# }
 
 .tsTimeSeriesPlotDescriptives <- function(jaspResults, dataset, options, ready, position, dependencies) {
   if (!options$timeSeriesPlot)
@@ -71,7 +76,7 @@ DescriptivesTimeSeries <- function(jaspResults, dataset, options) {
     return()
 
   if (is.null(jaspResults[["lagPlot"]])) {
-    plot <- createJaspPlot(title = "State Space Plot")
+    plot <- createJaspPlot(title = "Lag Plot")
     plot$dependOn(dependencies)
     plot$position <- position
 

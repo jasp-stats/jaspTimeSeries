@@ -18,7 +18,7 @@
 SpectralTimeSeries <- function(jaspResults, dataset, options) {
     ready <- options$dependent != ""
 
-    dataset <- .tsReadDataSpectral(jaspResults, dataset, options, ready)
+    dataset <- .tsReadData(jaspResults, dataset, options, ready, time = FALSE)
     
     .tsPowerSpectralDensity(jaspResults, dataset, options, ready, position = 2, dependencies = .tsSpectralDependencies)
     .tsCreateTableBandWith(jaspResults, dataset, options, ready, position = 1, dependencies = .tsSpectralDependencies) 
@@ -29,20 +29,20 @@ SpectralTimeSeries <- function(jaspResults, dataset, options) {
   "taper", "log", "detrend", "demean"
 )
 
-.tsReadDataSpectral <- function(jaspResults, dataset, options) {
-  if (!is.null(dataset))
-    return(dataset)
+# .tsReadDataSpectral <- function(jaspResults, dataset, options, ready) {
+#   if (!is.null(dataset))
+#     return(dataset)
   
-  if (ready) {
-    dataset <- .readDataSetToEnd(columns.as.numeric = options$dependent)
-    yName <- options$dependent[1]
-    y     <- dataset[, yName]
-    t     <- 1:nrow(dataset)
+#   if (ready) {
+#     dataset <- .readDataSetToEnd(columns.as.numeric = options$dependent)
+#     yName <- options$dependent[1]
+#     y     <- dataset[, yName]
+#     t     <- 1:nrow(dataset)
 
-    dat <- data.frame(y, t)
-    return(dat)
-  }
-}
+#     dat <- data.frame(y, t)
+#     return(dat)
+#   }
+# }
 
 .tsComputeSpectralResults <- function(dataset, options, jaspResults, ready) {
   if (!is.null(jaspResults[["spectralResult"]])) {
