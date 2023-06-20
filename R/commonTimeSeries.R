@@ -43,7 +43,7 @@
         dat <- cbind(dat, covariates)
       }
     }
-    dat <- .tsDataWithMissingRowsHandler(dat)
+    if (time) dat <- .tsDataWithMissingRowsHandler(dat)
     return(dat)
   }
 }

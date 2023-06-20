@@ -18,7 +18,6 @@
 ARIMATimeSeries <- function(jaspResults, dataset, options) {
     ready <- options$dependent != ""
 
-    # rawData <- .tsReadData(jaspResults, dataset, options, ready)
     dataset <- .tsReadData(jaspResults, dataset, options, ready, covariates = TRUE)
     
     fit <- .tsResults(jaspResults, dataset, options, ready)

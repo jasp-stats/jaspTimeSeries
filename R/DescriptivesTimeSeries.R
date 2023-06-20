@@ -32,26 +32,6 @@ DescriptivesTimeSeries <- function(jaspResults, dataset, options) {
 
 }
 
-# .tsReadDataDescriptives <- function(jaspResults, dataset, options, ready) {
-#   if (!is.null(dataset))
-#     return(dataset)
-  
-#   if (ready) {
-#     yDataset <- .readDataSetToEnd(columns.as.numeric = options$dependent)
-#     yName <- options$dependent[1]
-#     y     <- yDataset[, yName]
-#     if (options$time == "") {
-#       t <- 1:nrow(yDataset)
-#     } else {
-#       tDataset <- .readDataSetToEnd(columns = options$time)
-#       tName <- options$time[1]
-#       t <- tDataset[, tName]
-#     }
-#     dat <- data.frame(y, t)
-#     return(dat)
-#   }
-# }
-
 .tsTimeSeriesPlotDescriptives <- function(jaspResults, dataset, options, ready, position, dependencies) {
   if (!options$timeSeriesPlot)
     return()

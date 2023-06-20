@@ -29,21 +29,6 @@ SpectralTimeSeries <- function(jaspResults, dataset, options) {
   "taper", "log", "detrend", "demean"
 )
 
-# .tsReadDataSpectral <- function(jaspResults, dataset, options, ready) {
-#   if (!is.null(dataset))
-#     return(dataset)
-  
-#   if (ready) {
-#     dataset <- .readDataSetToEnd(columns.as.numeric = options$dependent)
-#     yName <- options$dependent[1]
-#     y     <- dataset[, yName]
-#     t     <- 1:nrow(dataset)
-
-#     dat <- data.frame(y, t)
-#     return(dat)
-#   }
-# }
-
 .tsComputeSpectralResults <- function(dataset, options, jaspResults, ready) {
   if (!is.null(jaspResults[["spectralResult"]])) {
     return()
