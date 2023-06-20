@@ -49,6 +49,11 @@
 }
 
 .tsDataWithMissingRowsHandler <- function(dataset) {
+  # Sometimes time series data sets do not have NA's for missing data,
+  # but skip rows with a column indicating the time / date
+  # so e.g., when third measurement is missing at t = 3,
+  # the data set goes from t = 2 on the second row, to t = 4 on the third.
+  # This function makes sure these data are seen as missings with NA's.
   tryDate <- try(as.POSIXct(dataset$t, tz = "UTC"))
 
   if (jaspBase::isTryError(tryDate)) {
@@ -64,21 +69,6 @@
   dat     <- merge(dfNewT, dataset, all.x = TRUE)
   return(dat)
 }
-
-#   if (length(options[["covariates"]]) > 0) {
-#     covariateNames <- options$covariates
-#     covariates <- dataset[, covariateNames]
-#     df <- cbind(df, covariates)
-#   }
-
-#     covariates <- NULL
-#     if (length(options[["covariates"]]) > 0) {
-#       covariates <- unlist(options[["covariates"]])
-#     }
-
-
-#   return(.readDataSetToEnd(columns.as.numeric = c(y, covariates)))
-
 
 .tsFillTimeSeriesPlot <- function(timeSeriesPlot, dataset, options, type, distribution, yName = NULL) {
   if (is.null(yName)) yName <- options$dependent[1]
