@@ -81,7 +81,7 @@ StationarityTimeSeries <- function(jaspResults, dataset, options) {
   # apply detrend using linear regression and save only residuals
   if (options$detrend) {
     if (options$polynomialSpecification == "custom") {
-      transformedDataset$y <- residuals(lm(y ~ poly(t, options$detrendPoly), data = transformedDataset))
+      transformedDataset$y <- residuals(lm(y ~ poly(as.integer(t), options$detrendPoly), data = transformedDataset))
     }
     if (options$polynomialSpecification == "auto") {
       .tsComputePolyResults(dataset, options, jaspResults, ready)
@@ -167,7 +167,7 @@ StationarityTimeSeries <- function(jaspResults, dataset, options) {
   }
 
   if (ready) {
-    res <- sapply(0:(options$polynomialSpecificationAutoMax), .tsFitPoly, x = dataset$y, t = dataset$t)
+    res <- sapply(0:(options$polynomialSpecificationAutoMax), .tsFitPoly, x = dataset$y, t = as.integer(dataset$t))
 
     jaspResults[["polyResult"]] <- createJaspState(res)
     jaspResults[["polyResult"]]$dependOn(c("polynomialSpecificationAutoMax"))

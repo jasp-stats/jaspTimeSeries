@@ -229,16 +229,34 @@ ARIMATimeSeries <- function(jaspResults, dataset, options) {
   coefficients <- character()
   group <- logical()
 
-  # if intercept is in included
-  if (options$intercept && any(names(fit$coef) == "intercept")) {
-    group <- TRUE
-    coefficients <- gettext("Constant")
+  # if intercept and/or drift is in included
+  hasIntercept <- any(names(fit$coef) == "intercept")
+  hasDrift <- any(names(fit$coef) == "drift")
+  if (hasIntercept | hasDrift) {
+    if (options$intercept && hasIntercept) {
+      group <- TRUE
+      coefficients <- gettext("Intercept")
 
-    # I want the intercept to be the first row...
-    int <- which(names(estimate) == "intercept")
-    nint <- which(names(estimate) != "intercept")
-    idx <- c(int, nint)
+      # I want the intercept to be the first row...
+      idxInt <- which(names(estimate) == "intercept")
+      idxNotInt <- which(names(estimate) != "intercept")
+      idx <- c(idxInt, idxNotInt)
+    }
 
+    if (hasDrift) {
+      coefficients <- c(coefficients, "Drift")
+      group <- c(group, T)
+
+      # Drift should be on the second row if intercept, otherwise first row
+      idxDrift <- which(names(estimate) == "drift")
+      idxNotDrift <- which(names(estimate) != "drift")
+      idx <- c(idxDrift, idxNotDrift)
+
+      if (hasIntercept) {
+        idxNotDrift <- which(names(estimate) != "drift" & names(estimate) != "intercept")
+        idx <- c(idxInt, idxDrift, idxNotDrift)
+      }
+    }
     estimate <- estimate[idx]
     SE <- SE[idx]
     t <- t[idx]
