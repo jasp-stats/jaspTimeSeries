@@ -16,24 +16,24 @@
 #
 
 StationarityTimeSeries <- function(jaspResults, dataset, options) {
-    ready <- options$dependent != ""
+  ready <- options$dependent != ""
 
-    dataset <- .tsReadData(jaspResults, dataset, options, ready)
-    transformedDataset <- .tsTransformData(jaspResults, dataset, options, ready)
+  dataset <- .tsReadData(jaspResults, dataset, options, ready)
+  transformedDataset <- .tsTransformData(jaspResults, dataset, options, ready)
 
-    .tsErrorHandler(dataset, ready)
-    
-    .tsCreateTableStationarityTests(jaspResults, transformedDataset, options, ready, position = 2, dependencies = c(.tsTransformationDependencies, "adfTest", "ppTestRegressionCoefficient", "ppTestStudentized", "kpssLevel", "kpssTrend"))
+  .tsErrorHandler(dataset, ready)
 
-    .tsSaveTransformation(transformedDataset, options, jaspResults, ready, dependencies = c(.tsTransformationDependencies, "transformationColumn", "transformationSavedToData"))
+  .tsCreateTableStationarityTests(jaspResults, transformedDataset, options, ready, position = 2, dependencies = c(.tsTransformationDependencies, "adfTest", "ppTestRegressionCoefficient", "ppTestStudentized", "kpssLevel", "kpssTrend"))
 
-    .tsTimeSeriesPlotTransformation(jaspResults, transformedDataset, options, ready, position = 1, dependencies = c(.tsTransformationDependencies, "timeSeriesPlot", "timeSeriesPlotType", "timeSeriesPlotDistribution"))
+  .tsSaveTransformation(transformedDataset, options, jaspResults, ready, dependencies = c(.tsTransformationDependencies, "transformationColumn", "transformationSavedToData"))
 
-    .tsACFTransformation(jaspResults, transformedDataset, options, ready, position = 3, dependencies = c(.tsTransformationDependencies, "acf", "acfCi", "acfCiLevel", "acfCiType", "acfZeroLag", "acfMaxLag"))
+  .tsTimeSeriesPlotTransformation(jaspResults, transformedDataset, options, ready, position = 1, dependencies = c(.tsTransformationDependencies, "timeSeriesPlot", "timeSeriesPlotType", "timeSeriesPlotDistribution"))
 
-    .tsPACFTransformation(jaspResults, transformedDataset, options, ready, position = 4, dependencies = c(.tsTransformationDependencies, "pacf", "pacfCi", "pacfCiLevel", "pacfCiType", "pacfMaxLag"))
+  .tsACFTransformation(jaspResults, transformedDataset, options, ready, position = 3, dependencies = c(.tsTransformationDependencies, "acf", "acfCi", "acfCiLevel", "acfCiType", "acfZeroLag", "acfMaxLag"))
 
-    .tsCreateTablePolynomials(jaspResults, transformedDataset, options, ready, position = 5, dependencies = .tsTransformationDependencies) 
+  .tsPACFTransformation(jaspResults, transformedDataset, options, ready, position = 4, dependencies = c(.tsTransformationDependencies, "pacf", "pacfCi", "pacfCiLevel", "pacfCiType", "pacfMaxLag"))
+
+  .tsCreateTablePolynomials(jaspResults, transformedDataset, options, ready, position = 5, dependencies = .tsTransformationDependencies)
 }
 
 .tsTransformationDependencies <- c(
@@ -44,41 +44,45 @@ StationarityTimeSeries <- function(jaspResults, dataset, options) {
 )
 
 .tsTransformData <- function(jaspResults, dataset, options, ready) {
-  if (!ready)
+  if (!ready) {
     return()
+  }
 
   transformedDataset <- dataset
 
   # apply log
   if (options$log) {
-    if (any(transformedDataset$y <= 0))
+    if (any(transformedDataset$y <= 0)) {
       .quitAnalysis("Data cannot be zero or negative for log transformation.")
+    }
 
     if (options$logBase == "10") transformedDataset$y <- log10(transformedDataset$y)
-    if (options$logBase == "e") transformedDataset$y  <- log(transformedDataset$y)
+    if (options$logBase == "e") transformedDataset$y <- log(transformedDataset$y)
   }
 
   # apply root
   if (options$root) {
-    if (any(transformedDataset$y < 0))
+    if (any(transformedDataset$y < 0)) {
       .quitAnalysis("Data cannot be negative for root transformation.")
+    }
 
     if (options$rootIndex == "square") transformedDataset$y <- sqrt(transformedDataset$y)
-    if (options$rootIndex == "cube")   transformedDataset$y <- transformedDataset$y ^ (1 / 3)
+    if (options$rootIndex == "cube") transformedDataset$y <- transformedDataset$y^(1 / 3)
   }
 
   # apply Box-Cox transformation
   if (options$boxCox) {
-    if (options$boxCoxLambdaSpecification == "auto")    lambda <- "auto"
-    if (options$boxCoxLambdaSpecification == "custom")  lambda <- options$boxCoxLambda
-    
+    if (options$boxCoxLambdaSpecification == "auto") lambda <- "auto"
+    if (options$boxCoxLambdaSpecification == "custom") lambda <- options$boxCoxLambda
+
     transformedDataset$y <- forecast::BoxCox(transformedDataset$y, lambda = lambda)
   }
 
   # apply detrend using linear regression and save only residuals
   if (options$detrend) {
-    if (options$polynomialSpecification == "custom")
+    if (options$polynomialSpecification == "custom") {
       transformedDataset$y <- residuals(lm(y ~ poly(t, options$detrendPoly), data = transformedDataset))
+    }
     if (options$polynomialSpecification == "auto") {
       .tsComputePolyResults(dataset, options, jaspResults, ready)
       lmFit <- jaspResults[["polyResult"]]$object
@@ -107,20 +111,21 @@ StationarityTimeSeries <- function(jaspResults, dataset, options) {
 }
 
 .tsCreateTablePolynomials <- function(jaspResults, dataset, options, ready, position, dependencies) {
-  if (!is.null(jaspResults[["polyTable"]]) || !(options$detrend && options$polynomialSpecification == "auto"))
+  if (!is.null(jaspResults[["polyTable"]]) || !(options$detrend && options$polynomialSpecification == "auto")) {
     return()
+  }
 
   table <- createJaspTable(gettext("Detrend using linear regression"))
   table$dependOn(dependencies)
   table$position <- position
-  table$addColumnInfo(name = "degree",  title = gettext("Degree"),  type = "integer")
-  table$addColumnInfo(name = "aic",     title = gettext("AIC"),     type = "number")
-  table$addColumnInfo(name = "bic",     title = gettext("BIC"),     type = "number")
+  table$addColumnInfo(name = "degree", title = gettext("Degree"), type = "integer")
+  table$addColumnInfo(name = "aic", title = gettext("AIC"), type = "number")
+  table$addColumnInfo(name = "bic", title = gettext("BIC"), type = "number")
 
   jaspResults[["polyTable"]] <- table
 
   # Check if ready
-  if(!ready) {
+  if (!ready) {
     rows <- data.frame(
       degree = ".",
       aic = ".",
@@ -132,8 +137,8 @@ StationarityTimeSeries <- function(jaspResults, dataset, options) {
   }
 
   .tsComputePolyResults(dataset, options, jaspResults, ready)
-  lmFit <- jaspResults[["polyResult"]]$object 
-  best  <- lmFit["degree", which.min(unlist(lmFit[options$polynomialSpecificationAutoIc, ]))]
+  lmFit <- jaspResults[["polyResult"]]$object
+  best <- lmFit["degree", which.min(unlist(lmFit[options$polynomialSpecificationAutoIc, ]))]
 
   rows <- data.frame(
     degree = unlist(lmFit["degree", ]),
@@ -148,8 +153,11 @@ StationarityTimeSeries <- function(jaspResults, dataset, options) {
 
 .tsFitPoly <- function(degree, x, t) {
   # fit polynomial regression and save residuals, degree, and ics
-  if (degree == 0) m <- lm(x ~ 1)
-    else m <- lm(x ~ poly(t, degree = degree))
+  if (degree == 0) {
+    m <- lm(x ~ 1)
+  } else {
+    m <- lm(x ~ poly(t, degree = degree))
+  }
   return(list(residuals = residuals(m), degree = degree, aic = AIC(m), bic = BIC(m)))
 }
 
@@ -208,12 +216,14 @@ StationarityTimeSeries <- function(jaspResults, dataset, options) {
   )
 
   # each checkbox indicates a row in the table
-  idx     <- c(options$adfTest,
-               options$ppTestRegressionCoefficient,
-               options$ppTestStudentized,
-               options$kpssLevel,
-               options$kpssTrend)
-  rows    <- 1:5
+  idx <- c(
+    options$adfTest,
+    options$ppTestRegressionCoefficient,
+    options$ppTestStudentized,
+    options$kpssLevel,
+    options$kpssTrend
+  )
+  rows <- 1:5
   rowsIdx <- rows[idx]
 
   if (!ready) {
@@ -241,7 +251,7 @@ StationarityTimeSeries <- function(jaspResults, dataset, options) {
     stationaryTable$addRows(df[1, ])
     stationaryTable$setRowName(rowIndex = 1, newName = "adf")
     smallerA <- fit$p.value == 0.01
-    greaterA <- fit$p.value == 0.99   # p value 0.01 - 0.99
+    greaterA <- fit$p.value == 0.99 # p value 0.01 - 0.99
   }
   if (options$ppTestRegressionCoefficient) {
     # type = c("Z(alpha)", "Z(t_alpha)")
@@ -252,7 +262,7 @@ StationarityTimeSeries <- function(jaspResults, dataset, options) {
     stationaryTable$addRows(df[2, ])
     stationaryTable$setRowName(rowIndex = which(rowsIdx == 2), newName = "ppRegression")
     smallerPr <- fit$p.value == 0.01
-    greaterPr <- fit$p.value == 0.99   # p value 0.01 - 0.99
+    greaterPr <- fit$p.value == 0.99 # p value 0.01 - 0.99
   }
   if (options$ppTestStudentized) {
     fit <- try(tseries::pp.test(dataset$y, type = "Z(t_alpha)"))
@@ -261,7 +271,7 @@ StationarityTimeSeries <- function(jaspResults, dataset, options) {
     stationaryTable$addRows(df[3, ])
     stationaryTable$setRowName(rowIndex = which(rowsIdx == 3), newName = "ppStudentized")
     smallerPs <- fit$p.value == 0.01
-    greaterPs <- fit$p.value == 0.99   # p value 0.01 - 0.99
+    greaterPs <- fit$p.value == 0.99 # p value 0.01 - 0.99
   }
   if (options$kpssLevel) {
     fit <- try(tseries::kpss.test(dataset$y, null = "Level"))
@@ -270,7 +280,7 @@ StationarityTimeSeries <- function(jaspResults, dataset, options) {
     stationaryTable$addRows(df[4, ])
     stationaryTable$setRowName(rowIndex = which(rowsIdx == 4), newName = "kpssLevel")
     smallerKl <- fit$p.value == 0.01
-    greaterKl <- fit$p.value == 0.1    # p value 0.1 - 0.01
+    greaterKl <- fit$p.value == 0.1 # p value 0.1 - 0.01
   }
   if (options$kpssTrend) {
     fit <- try(tseries::kpss.test(dataset$y, null = "Trend"))
@@ -279,7 +289,7 @@ StationarityTimeSeries <- function(jaspResults, dataset, options) {
     stationaryTable$addRows(df[5, ])
     stationaryTable$setRowName(rowIndex = which(rowsIdx == 5), newName = "kpssTrend")
     smallerKt <- fit$p.value == 0.01
-    greaterKt <- fit$p.value == 0.1    # p value 0.1 - 0.01
+    greaterKt <- fit$p.value == 0.1 # p value 0.1 - 0.01
   }
 
   # these tests do not have exact computations for the p-value
@@ -310,8 +320,9 @@ StationarityTimeSeries <- function(jaspResults, dataset, options) {
 }
 
 .tsTimeSeriesPlotTransformation <- function(jaspResults, dataset, options, ready, position, dependencies) {
-  if (!options$timeSeriesPlot)
+  if (!options$timeSeriesPlot) {
     return()
+  }
 
   if (is.null(jaspResults[["timeSeriesPlot"]])) {
     plot <- createJaspPlot(title = "Time Series Plot", width = 660)
@@ -320,17 +331,18 @@ StationarityTimeSeries <- function(jaspResults, dataset, options) {
 
     jaspResults[["timeSeriesPlot"]] <- plot
 
-    if (!ready)
+    if (!ready) {
       return()
+    }
 
     .tsFillTimeSeriesPlot(plot, dataset, options, type = options$timeSeriesPlotType, distribution = options$timeSeriesPlotDistribution)
-
   }
 }
 
-.tsACFTransformation <- function(jaspResults, dataset, options, ready, position, dependencies){
-  if (!options$acf)
+.tsACFTransformation <- function(jaspResults, dataset, options, ready, position, dependencies) {
+  if (!options$acf) {
     return()
+  }
 
   if (is.null(jaspResults[["acfPlot"]])) {
     plot <- createJaspPlot(title = "Autocorrelation Function")
@@ -355,8 +367,9 @@ StationarityTimeSeries <- function(jaspResults, dataset, options) {
 }
 
 .tsPACFTransformation <- function(jaspResults, dataset, options, ready, position, dependencies) {
-  if (!options$pacf)
+  if (!options$pacf) {
     return()
+  }
 
   if (is.null(jaspResults[["pacfPlot"]])) {
     plot <- createJaspPlot(title = "Partial Autocorrelation Function")

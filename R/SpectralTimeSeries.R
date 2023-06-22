@@ -16,14 +16,14 @@
 #
 
 SpectralTimeSeries <- function(jaspResults, dataset, options) {
-    ready <- options$dependent != ""
+  ready <- options$dependent != ""
 
-    dataset <- .tsReadData(jaspResults, dataset, options, ready)
+  dataset <- .tsReadData(jaspResults, dataset, options, ready)
 
-    .tsErrorHandler(dataset, ready)
-    
-    .tsPowerSpectralDensity(jaspResults, dataset, options, ready, position = 2, dependencies = .tsSpectralDependencies)
-    .tsCreateTableBandWith(jaspResults, dataset, options, ready, position = 1, dependencies = .tsSpectralDependencies) 
+  .tsErrorHandler(dataset, ready)
+
+  .tsPowerSpectralDensity(jaspResults, dataset, options, ready, position = 2, dependencies = .tsSpectralDependencies)
+  .tsCreateTableBandWith(jaspResults, dataset, options, ready, position = 1, dependencies = .tsSpectralDependencies)
 }
 
 .tsSpectralDependencies <- c(
@@ -44,8 +44,9 @@ SpectralTimeSeries <- function(jaspResults, dataset, options) {
 
     dims <- .tsGetKernellDimensions(options)
 
-    if (options$kernel)
+    if (options$kernel) {
       k <- stats::kernel(options$kernelMethod, dims)
+    }
 
     res <- try(stats::spec.pgram(
       y,
@@ -64,7 +65,7 @@ SpectralTimeSeries <- function(jaspResults, dataset, options) {
   }
 }
 
-.tsPowerSpectralDensity <- function(jaspResults, dataset, options, ready, position, dependencies){
+.tsPowerSpectralDensity <- function(jaspResults, dataset, options, ready, position, dependencies) {
   if (is.null(jaspResults[["powerSpectralDensity"]])) {
     plot <- createJaspPlot(title = "Power Spectral Density Plot")
     plot$dependOn(c(dependencies, "whiteNoise", "pinkNoise", "brownNoise"))
@@ -72,8 +73,9 @@ SpectralTimeSeries <- function(jaspResults, dataset, options) {
 
     jaspResults[["powerSpectralDensity"]] <- plot
 
-    if (!ready)
+    if (!ready) {
       return()
+    }
 
     .tsFillPowerSpectralDensity(plot, jaspResults, dataset, options, ready)
   }
@@ -94,9 +96,9 @@ SpectralTimeSeries <- function(jaspResults, dataset, options) {
   x <- res$freq
   y <- res$spec
 
-  whiteNoise  <- 1 / x ^ 0
-  pinkNoise   <- 1 / x
-  brownNoise  <- 1 / x ^ 2
+  whiteNoise <- 1 / x^0
+  pinkNoise <- 1 / x
+  brownNoise <- 1 / x^2
 
   dat <- data.frame(x, y, whiteNoise, pinkNoise, brownNoise)
 
@@ -121,7 +123,7 @@ SpectralTimeSeries <- function(jaspResults, dataset, options) {
     yRange <- c(yRange, dat$brownNoise)
     p <- p + jaspGraphs::geom_line(ggplot2::aes(x = x, y = brownNoise), colour = "brown")
   }
-  
+
   yBreaks <- jaspGraphs::getPrettyAxisBreaks(yRange)
 
 
@@ -137,7 +139,9 @@ SpectralTimeSeries <- function(jaspResults, dataset, options) {
 }
 
 .tsCreateTableBandWith <- function(jaspResults, dataset, options, ready, position, dependencies) {
-  if (!is.null(jaspResults[["bandWidthTable"]])) return()
+  if (!is.null(jaspResults[["bandWidthTable"]])) {
+    return()
+  }
 
   table <- createJaspTable(gettext("Spectral Density"))
   table$dependOn(dependencies)
@@ -148,7 +152,7 @@ SpectralTimeSeries <- function(jaspResults, dataset, options) {
   jaspResults[["bandWidthTable"]] <- table
 
   # Check if ready
-  if(!ready) {
+  if (!ready) {
     rows <- data.frame(bandwidth = ".")
     row.names(rows) <- paste0("row", 1)
     table$addRows(rows)
@@ -162,6 +166,3 @@ SpectralTimeSeries <- function(jaspResults, dataset, options) {
   row.names(rows) <- paste0("row", 1)
   table$addRows(rows)
 }
-
-
- 

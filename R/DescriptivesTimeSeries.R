@@ -16,27 +16,27 @@
 #
 
 DescriptivesTimeSeries <- function(jaspResults, dataset, options) {
-    ready <- options$dependent != ""
+  ready <- options$dependent != ""
 
-    dataset <- .tsReadData(jaspResults, dataset, options, ready)
+  dataset <- .tsReadData(jaspResults, dataset, options, ready)
 
-    .tsErrorHandler(dataset, ready)
+  .tsErrorHandler(dataset, ready)
 
-    .tsDescriptivesTable(jaspResults, dataset, options, ready, position = 1, dependencies = c("dependent", "time", "descriptivesTableTransposed"))
+  .tsDescriptivesTable(jaspResults, dataset, options, ready, position = 1, dependencies = c("dependent", "time", "descriptivesTableTransposed"))
 
-    .tsTimeSeriesPlotDescriptives(jaspResults, dataset, options, ready, position = 2, dependencies = c("dependent", "time", "timeSeriesPlot", "timeSeriesPlotType", "timeSeriesPlotDistribution"))
+  .tsTimeSeriesPlotDescriptives(jaspResults, dataset, options, ready, position = 2, dependencies = c("dependent", "time", "timeSeriesPlot", "timeSeriesPlotType", "timeSeriesPlotDistribution"))
 
-    .tslagPlotDescriptives(jaspResults, dataset, options, ready, position = 3, dependencies  = c("dependent", "time", "lagPlot", "lagPlotLag", "lagPlotRegressionType", "lagPlotRegressionLine", "lagPlotRegressionCi", "lagPlotRegressionCiLevel"))
+  .tslagPlotDescriptives(jaspResults, dataset, options, ready, position = 3, dependencies = c("dependent", "time", "lagPlot", "lagPlotLag", "lagPlotRegressionType", "lagPlotRegressionLine", "lagPlotRegressionCi", "lagPlotRegressionCiLevel"))
 
-    .tsACFDescriptives(jaspResults, dataset, options, ready, position = 4, dependencies = c("dependent", "time", "acf", "acfCi", "acfCiLevel", "acfCiType", "acfZeroLag", "acfMaxLag"))
+  .tsACFDescriptives(jaspResults, dataset, options, ready, position = 4, dependencies = c("dependent", "time", "acf", "acfCi", "acfCiLevel", "acfCiType", "acfZeroLag", "acfMaxLag"))
 
-    .tsPACFDescriptives(jaspResults, dataset, options, ready, position = 5, dependencies = c("dependent", "time", "pacf", "pacfCi", "pacfCiLevel", "pacfCiType", "pacfMaxLag"))
-
+  .tsPACFDescriptives(jaspResults, dataset, options, ready, position = 5, dependencies = c("dependent", "time", "pacf", "pacfCi", "pacfCiLevel", "pacfCiType", "pacfMaxLag"))
 }
 
 .tsTimeSeriesPlotDescriptives <- function(jaspResults, dataset, options, ready, position, dependencies) {
-  if (!options$timeSeriesPlot)
+  if (!options$timeSeriesPlot) {
     return()
+  }
 
   if (is.null(jaspResults[["timeSeriesPlot"]])) {
     plot <- createJaspPlot(title = "Time Series Plot", width = 660)
@@ -45,21 +45,22 @@ DescriptivesTimeSeries <- function(jaspResults, dataset, options) {
 
     jaspResults[["timeSeriesPlot"]] <- plot
 
-    if (!ready)
+    if (!ready) {
       return()
+    }
 
     .tsFillTimeSeriesPlot(
       plot, dataset, options,
       type = options$timeSeriesPlotType,
       distribution = options$timeSeriesPlotDistribution
     )
-
   }
 }
 
 .tslagPlotDescriptives <- function(jaspResults, dataset, options, ready, position, dependencies) {
-  if (!options$lagPlot)
+  if (!options$lagPlot) {
     return()
+  }
 
   if (is.null(jaspResults[["lagPlot"]])) {
     plot <- createJaspPlot(title = "Lag Plot")
@@ -68,8 +69,9 @@ DescriptivesTimeSeries <- function(jaspResults, dataset, options) {
 
     jaspResults[["lagPlot"]] <- plot
 
-    if (!ready)
+    if (!ready) {
       return()
+    }
 
     .tsFillLagPlot(plot, dataset, options)
   }
@@ -77,10 +79,10 @@ DescriptivesTimeSeries <- function(jaspResults, dataset, options) {
 
 .tsFillLagPlot <- function(lagPlot, dataset, options) {
   # create lag version of y
-  yLag  <- c(rep(NA, options$lagPlotLag), dataset$y[1:(length(dataset$y) - options$lagPlotLag)])
+  yLag <- c(rep(NA, options$lagPlotLag), dataset$y[1:(length(dataset$y) - options$lagPlotLag)])
 
   yName <- decodeColNames(options$dependent[1])
-  xName <- as.expression(bquote(.(yName)[t-.(options$lagPlotLag)]))
+  xName <- as.expression(bquote(.(yName)[t - .(options$lagPlotLag)]))
   yName <- as.expression(bquote(.(yName)[t]))
 
   dat <- data.frame(y = dataset$y, yLag)
@@ -90,7 +92,7 @@ DescriptivesTimeSeries <- function(jaspResults, dataset, options) {
 
   p <- jaspGraphs::JASPScatterPlot(
     dat$yLag, dat$y,
-    xName = xName, 
+    xName = xName,
     yName = yName,
     addSmooth = options$lagPlotRegressionLine,
     addSmoothCI = options$lagPlotRegressionCi,
@@ -111,9 +113,10 @@ DescriptivesTimeSeries <- function(jaspResults, dataset, options) {
   return()
 }
 
-.tsACFDescriptives <- function(jaspResults, dataset, options, ready, position, dependencies){
-  if (!options$acf)
+.tsACFDescriptives <- function(jaspResults, dataset, options, ready, position, dependencies) {
+  if (!options$acf) {
     return()
+  }
 
   if (is.null(jaspResults[["acfPlot"]])) {
     plot <- createJaspPlot(title = "Autocorrelation Function")
@@ -138,8 +141,9 @@ DescriptivesTimeSeries <- function(jaspResults, dataset, options) {
 }
 
 .tsPACFDescriptives <- function(jaspResults, dataset, options, ready, position, dependencies) {
-  if (!options$pacf)
+  if (!options$pacf) {
     return()
+  }
 
   if (is.null(jaspResults[["pacfPlot"]])) {
     plot <- createJaspPlot(title = "Partial Autocorrelation Function")
@@ -163,7 +167,9 @@ DescriptivesTimeSeries <- function(jaspResults, dataset, options) {
 }
 
 .tsDescriptivesTable <- function(jaspResults, dataset, options, ready, position, dependencies) {
-  if (!is.null(jaspResults[["descriptivesTable"]])) return()
+  if (!is.null(jaspResults[["descriptivesTable"]])) {
+    return()
+  }
 
   table <- createJaspTable(gettext("Descriptive Statistics"))
   table$dependOn(dependencies)
@@ -171,44 +177,46 @@ DescriptivesTimeSeries <- function(jaspResults, dataset, options) {
   table$showSpecifiedColumnsOnly <- TRUE
   table$transpose <- !options[["descriptivesTableTransposed"]] # the table is transposed by default
 
-  table$addColumnInfo(name = "variable",  title = " ",                        type = "string")
-  table$addColumnInfo(name = "valid",     title = gettext("Valid"),           type = "integer")
-  table$addColumnInfo(name = "missing",   title = gettext("Missing"),         type = "integer")
-  table$addColumnInfo(name = "mean",      title = gettext("Mean"),            type = "number")
-  table$addColumnInfo(name = "sd",        title = gettext("Std. Deviation"),  type = "number")
-  table$addColumnInfo(name = "var",       title = gettext("Variance"),        type = "number")
-  table$addColumnInfo(name = "range",     title = gettext("Range"),           type = "number")
-  table$addColumnInfo(name = "min",       title = gettext("Minimum"),         type = "number")
-  table$addColumnInfo(name = "max",       title = gettext("Maximum"),         type = "number")
-  table$addColumnInfo(name = "start",     title = gettext("Start"),           type = "number")
-  table$addColumnInfo(name = "end",       title = gettext("End"),             type = "number")
-  table$addColumnInfo(name = "ar",        title = gettext("Lag 1 Autocorrelation"),  type = "number")
+  table$addColumnInfo(name = "variable", title = " ", type = "string")
+  table$addColumnInfo(name = "valid", title = gettext("Valid"), type = "integer")
+  table$addColumnInfo(name = "missing", title = gettext("Missing"), type = "integer")
+  table$addColumnInfo(name = "mean", title = gettext("Mean"), type = "number")
+  table$addColumnInfo(name = "sd", title = gettext("Std. Deviation"), type = "number")
+  table$addColumnInfo(name = "var", title = gettext("Variance"), type = "number")
+  table$addColumnInfo(name = "range", title = gettext("Range"), type = "number")
+  table$addColumnInfo(name = "min", title = gettext("Minimum"), type = "number")
+  table$addColumnInfo(name = "max", title = gettext("Maximum"), type = "number")
+  table$addColumnInfo(name = "start", title = gettext("Start"), type = "number")
+  table$addColumnInfo(name = "end", title = gettext("End"), type = "number")
+  table$addColumnInfo(name = "ar", title = gettext("Lag 1 Autocorrelation"), type = "number")
 
   jaspResults[["descriptivesTable"]] <- table
 
-  if (ready) {   
+  if (ready) {
     na.omitted <- na.omit(dataset$y)
     yName <- options$dependent[1]
-    
+
     nY <- length(na.omitted)
     minY <- min(na.omitted)
     maxY <- max(na.omitted)
 
-    yLag  <- c(NA, dataset$y[1:(length(dataset$y) - 1)])
+    yLag <- c(NA, dataset$y[1:(length(dataset$y) - 1)])
     corY <- cor(dataset$y, yLag, use = "complete.obs")
 
-    rows <- data.frame(variable = yName,
-                      valid = nY,
-                      missing = nrow(dataset) - nY,
-                      mean = mean(na.omitted),
-                      sd = sd(na.omitted),
-                      var = var(na.omitted),
-                      range = maxY - minY,
-                      min = minY,
-                      max = maxY,
-                      start = na.omitted[1],
-                      end = na.omitted[nY],
-                      ar = corY)
+    rows <- data.frame(
+      variable = yName,
+      valid = nY,
+      missing = nrow(dataset) - nY,
+      mean = mean(na.omitted),
+      sd = sd(na.omitted),
+      var = var(na.omitted),
+      range = maxY - minY,
+      min = minY,
+      max = maxY,
+      start = na.omitted[1],
+      end = na.omitted[nY],
+      ar = corY
+    )
     table$addRows(rows)
   }
 }

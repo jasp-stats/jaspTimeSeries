@@ -16,14 +16,15 @@
 #
 
 .tsReadData <- function(jaspResults, dataset, options, ready, covariates = FALSE) {
-  if (!is.null(dataset))
+  if (!is.null(dataset)) {
     return(dataset)
-  
+  }
+
   if (ready) {
     yDataset <- .readDataSetToEnd(columns.as.numeric = options$dependent)
     yName <- options$dependent[1]
-    y     <- yDataset[, yName]
-    dat   <- data.frame(y)
+    y <- yDataset[, yName]
+    dat <- data.frame(y)
 
     if (options$time == "") {
       t <- 1:nrow(yDataset)
@@ -49,15 +50,18 @@
 }
 
 .tsErrorHandler <- function(dataset, ready) {
-  if (!ready)
+  if (!ready) {
     return()
+  }
 
-  datZoo <- zoo::zoo(dataset$y, dataset$t) 
-  if (!zoo::is.regular(datZoo))
+  datZoo <- zoo::zoo(dataset$y, dataset$t)
+  if (!zoo::is.regular(datZoo)) {
     .quitAnalysis("The time series data should be equally-spaced.")
+  }
 
-  if (any(duplicated(dataset$t)))
+  if (any(duplicated(dataset$t))) {
     .quitAnalysis("The time variable should have unique values only.")
+  }
 }
 
 .tsDataWithMissingRowsHandler <- function(dataset) {
@@ -73,12 +77,12 @@
     newT <- 1:maxT
   } else {
     dataset$t <- as.POSIXct(dataset$t, tz = "UTC")
-    datZoo  <- zoo::zoo(dataset$y, dataset$t) # allows irregular time-series
-    datTs   <- as.ts(datZoo)                  # imputes NA's
-    newT    <- as.POSIXct(zoo::index(datTs), origin = "1970/01/01")
+    datZoo <- zoo::zoo(dataset$y, dataset$t) # allows irregular time-series
+    datTs <- as.ts(datZoo) # imputes NA's
+    newT <- as.POSIXct(zoo::index(datTs), origin = "1970/01/01")
   }
-  dfNewT  <- data.frame(t = newT)
-  dat     <- merge(dfNewT, dataset, all.x = TRUE)
+  dfNewT <- data.frame(t = newT)
+  dat <- merge(dfNewT, dataset, all.x = TRUE)
   return(dat)
 }
 
@@ -103,10 +107,10 @@
   z <- qnorm((1 + ci) / 2)
 
   lag <- length(r)
-  df  <- data.frame(r = r, se = numeric(lag))
-  
+  df <- data.frame(r = r, se = numeric(lag))
+
   for (i in 1:lag) {
-      df$se[i] <- z * sqrt((1 / N) * (1 + 2 * sum(r[1:i] ^ 2)))
+    df$se[i] <- z * sqrt((1 / N) * (1 + 2 * sum(r[1:i]^2)))
   }
 
   return(df)
@@ -124,8 +128,9 @@
   }
 
   dat <- data.frame(acf = ac$acf, lag = ac$lag)
-  if(type == "ACF" & !zeroLag)
-    dat <- dat[-1, ] # remove lag 0
+  if (type == "ACF" & !zeroLag) {
+    dat <- dat[-1, ]
+  } # remove lag 0
 
   yRange <- dat$acf
   xBreaks <- jaspGraphs::getPrettyAxisBreaks(dat$lag)
@@ -136,7 +141,7 @@
   p <- ggplot2::ggplot()
 
   if (ci) {
-  # add confidence bounds
+    # add confidence bounds
     if (ciType == "whiteNoise") {
       clim <- qnorm((1 + ciValue) / 2) / sqrt(ac$n.used)
       dat$upper <- rep(clim, nrow(dat))
@@ -147,7 +152,7 @@
       dat$lower <- -dat$upper
     }
 
-    yRange    <- c(yRange, dat$upper, dat$lower)
+    yRange <- c(yRange, dat$upper, dat$lower)
 
     p <- p +
       ggplot2::geom_ribbon(
@@ -171,24 +176,24 @@
 }
 
 # custom JASPScatterPlot function because x may be a date...
-.tsJASPScatterPlot <-  function(x, y, group = NULL, xName = NULL, yName = NULL,
-                                addSmooth = TRUE, addSmoothCI = TRUE,
-                                smoothCIValue = 0.95, forceLinearSmooth = FALSE,
-                                plotAbove = c("density", "histogram", "none"),
-                                plotRight = c("density", "histogram", "none"),
-                                colorAreaUnderDensity = TRUE,
-                                alphaAreaUnderDensity = .5,
-                                showLegend = !is.null(group),
-                                legendTitle = NULL,
-                                emulateGgMarginal = FALSE,
-                                type = "both",
-                                ...) {
+.tsJASPScatterPlot <- function(x, y, group = NULL, xName = NULL, yName = NULL,
+                               addSmooth = TRUE, addSmoothCI = TRUE,
+                               smoothCIValue = 0.95, forceLinearSmooth = FALSE,
+                               plotAbove = c("density", "histogram", "none"),
+                               plotRight = c("density", "histogram", "none"),
+                               colorAreaUnderDensity = TRUE,
+                               alphaAreaUnderDensity = .5,
+                               showLegend = !is.null(group),
+                               legendTitle = NULL,
+                               emulateGgMarginal = FALSE,
+                               type = "both",
+                               ...) {
 
   # TODO: make actual error messages
   stopifnot(
     # is.numeric(x),
     is.numeric(y),
-    is.null(group) || is.numeric(group)   || is.factor(group),
+    is.null(group) || is.numeric(group) || is.factor(group),
     is.null(xName) || is.character(xName) || is.expression(xName),
     is.null(yName) || is.character(yName) || is.expression(yName),
     is.logical(addSmooth),
@@ -198,8 +203,9 @@
   )
   plotRight <- match.arg(plotRight)
 
-  if (emulateGgMarginal)
+  if (emulateGgMarginal) {
     colorAreaUnderDensity <- FALSE
+  }
 
   tryDate <- try(as.POSIXct(x, tz = "UTC"))
 
@@ -217,18 +223,23 @@
   df <- data.frame(x = x, y = y)
   mapping <- ggplot2::aes(x = .data$x, y = .data$y)
 
-  geomPoint <- if (type == "points" || type == "both")
-    jaspGraphs::geom_point() 
-  else NULL
-  geomLine <- if (type == "line" || type == "both")
-    jaspGraphs::geom_line() 
-  else NULL
+  geomPoint <- if (type == "points" || type == "both") {
+    jaspGraphs::geom_point()
+  } else {
+    NULL
+  }
+  geomLine <- if (type == "line" || type == "both") {
+    jaspGraphs::geom_line()
+  } else {
+    NULL
+  }
 
   yBreaks <- jaspGraphs::getPrettyAxisBreaks(y)
 
   dots <- list(...)
-  if (showLegend)
+  if (showLegend) {
     dots <- quantmod::setDefaults(dots, legend.position = "right")
+  }
 
   mainPlot <- ggplot2::ggplot(df, mapping) +
     geomLine +
@@ -239,8 +250,9 @@
     jaspGraphs::geom_rangeframe() +
     do.call(jaspGraphs::themeJaspRaw, dots)
 
-  if (emulateGgMarginal)
+  if (emulateGgMarginal) {
     mainPlot <- mainPlot + ggplot2::theme(plot.margin = unit(c(0, 0, 0.25, 0.25), "cm"))
+  }
 
   gb <- ggplot2::ggplot_build(mainPlot)
   scales <- gb$layout$get_scales(1L)
