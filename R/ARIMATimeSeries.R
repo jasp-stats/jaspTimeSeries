@@ -392,6 +392,58 @@ ARIMATimeSeries <- function(jaspResults, dataset, options) {
   ljungPlot$plotObject <- p
 }
 
+.tsForecasts <- function(fit, dataset, options, jaspResults, ready) {
+  if (!is.null(jaspResults[["forecastResult"]])) {
+    return()
+  }
+
+  if (ready && options$forecastLength > 0) {
+    tryDate <- try(as.POSIXct(dataset$t, tz = "UTC"))
+
+    lastObsY <- max(which(!is.na(dataset$y)))
+    if (jaspBase::isTryError(tryDate)) {
+      tPred <- data.frame(t = (lastObsY + 1):(lastObsY + options$forecastLength))
+    } else {
+      # calculate the time interval between the observations
+      allDiffInSec <- difftime(dataset$t[2:(length(dataset$t))], dataset$t[1:(length(dataset$t) - 1)], units = "secs")
+      diffInSec <- as.numeric(names(which.max(table(allDiffInSec))))
+      # get future dates for forecasts
+      tPred <- dataset$t[lastObsY] + (lubridate::seconds(diffInSec) * 1:options$forecastLength)
+      tPred <- as.POSIXct(tPred, origin = "1970/01/01")
+    }
+
+    xreg <- NULL
+    if (length(options[["covariates"]]) > 0) {
+      nDependent <- fit$nobs
+      covariates <- dataset[, grepl("xreg", names(dataset))]
+      firstForecast <- lastObsY + 1
+      lastForecast <- lastObsY + options$forecastLength
+      rangeForecast <- firstForecast:lastForecast
+      if (length(rangeForecast) > length(firstForecast:nrow(dataset))) {
+        stop(
+          gettextf(
+            "Not enough observations in the covariate%s. The maximum number of forecasts is %s.",
+          ifelse(is.vector(covariates), "", "s"), length(firstForecast:nrow(dataset)))
+        )
+      }
+      if (firstForecast > nrow(dataset)) stop(gettext("When 'Covariates' are used in the model, predictions cannot be carried out unless the covariates are also observed for the predicted period."))
+      covariatesForecast <- covariates[rangeForecast]
+      xreg <- as.matrix(covariatesForecast)
+    }
+
+    pred <- data.frame(t = tPred)
+    pred <- cbind(
+      pred,
+      as.data.frame(forecast::forecast(fit, h = options$forecastLength, xreg = xreg))
+    )
+    yName <- options$dependent[1]
+    names(pred) <- c("t", "y", "lower80", "upper80", "lower95", "upper95")
+
+    jaspResults[["forecastResult"]] <- createJaspState(pred)
+    jaspResults[["forecastResult"]]$dependOn(c(.tsDependencies, "forecastLength"))
+  }
+}
+
 .tsForecastPlot <- function(jaspResults, fit, dataset, options, ready, position, dependencies) {
   if (!options$forecastTimeSeries)
     return()
@@ -410,54 +462,57 @@ ARIMATimeSeries <- function(jaspResults, dataset, options) {
   }
 }
 
-.tsForecasts <- function(fit, dataset, options, jaspResults, ready) {
-  if (!is.null(jaspResults[["forecastResult"]])) {
-    return()
-  }
-
-  if (ready && options$forecastLength > 0) {
-    pred <- data.frame(t = (nrow(dataset) + 1):(nrow(dataset) + options$forecastLength))
-    pred <- cbind(
-      pred,
-      as.data.frame(forecast::forecast(fit, h = options$forecastLength))
-    )
-    yName <- options$dependent[1]
-    names(pred) <- c("t", "y", "lower80", "upper80", "lower95", "upper95")
-
-    jaspResults[["forecastResult"]] <- createJaspState(pred)
-    jaspResults[["forecastResult"]]$dependOn(c(.tsDependencies, "forecastLength"))
-  }
-}
-
 .tsFillforecastPlot <- function(plot, fit, dataset, options, jaspResults, ready) {
   yName <- options$dependent[1]
 
   .tsForecasts(fit, dataset, options, jaspResults, ready)
   pred <- jaspResults[["forecastResult"]]$object
 
+  lastObsY <- max(which(!is.na(dataset$y)))
   obs <- data.frame(t = dataset$t, y = dataset$y)
+  obs <- obs[1:lastObsY, ]
   fcs <- data.frame(t = pred$t, y = pred$y)
-  both <- rbind(obs, fcs)
+  df <- rbind(obs, fcs)
   cols <- rep(c("black", "blue"), c(nrow(obs), nrow(fcs)))
-  idx <- (nrow(obs) + 1):nrow(both)
+  idx <- (nrow(obs) + 1):nrow(df)
   if (options$forecastTimeSeriesObserved)
-    idx <- 1:nrow(both)
+    idx <- 1:nrow(df)
 
-  yBreaks <- jaspGraphs::getPrettyAxisBreaks(c(both[idx, "y"], pred$lower95, pred$upper95))
-  xBreaks <- jaspGraphs::getPrettyAxisBreaks(both[idx, "t"])
+  cols <- cols[idx]
+  df <- df[idx, ]
+  yBreaks <- jaspGraphs::getPrettyAxisBreaks(c(df$y, pred$lower95, pred$upper95))
+  tryDate <- try(as.POSIXct(df$t, tz = "UTC"))
 
-  p <- ggplot2::ggplot() +
-    ggplot2::scale_x_continuous(name = "t", breaks = xBreaks, limits = range(xBreaks)) +
-    ggplot2::scale_y_continuous(name = yName, breaks = yBreaks, limits = range(yBreaks))
+  if (jaspBase::isTryError(tryDate)) {
+    df$t  <- as.numeric(df$t)
+    xBreaks <- jaspGraphs::getPrettyAxisBreaks(df$t)
+    xScale  <- ggplot2::scale_x_continuous("t", breaks = xBreaks, limits = range(xBreaks))
+  } else {
+    df$t  <- as.POSIXct(df$t, tz = "UTC")
+    xBreaks <- pretty(df$t)
+    xLabels <- attr(xBreaks, "labels")
+    xScale  <- ggplot2::scale_x_datetime("t", breaks = xBreaks, labels = xLabels, limits = range(xBreaks))
+  }
 
-  p <- p + 
+  geomPoint <- if (options$forecastTimeSeriesType == "points" || options$forecastTimeSeriesType == "both")
+    jaspGraphs::geom_point(color = cols) 
+  else NULL
+  geomLine <- if (options$forecastTimeSeriesType == "line" || options$forecastTimeSeriesType == "both")
+    jaspGraphs::geom_line(color = cols) 
+  else NULL
+
+  p <- ggplot2::ggplot(df, ggplot2::aes(x = t, y = y)) +
+    geomLine +
+    geomPoint +
+    xScale +
+    ggplot2::scale_y_continuous(name = yName, breaks = yBreaks, limits = range(yBreaks)) +
     ggplot2::geom_ribbon(ggplot2::aes(ymin = lower95, ymax = upper95, x = t), pred, alpha = 0.1) +
     ggplot2::geom_ribbon(ggplot2::aes(ymin = lower80, ymax = upper80, x = t), pred, alpha = 0.2) +
     jaspGraphs::geom_rangeframe() +
     jaspGraphs::themeJaspRaw()
 
-  if (options$forecastTimeSeriesType != "points") p <- p + jaspGraphs::geom_line(ggplot2::aes(x = t, y = y), data = both[idx, ], color = cols[idx])
-  if (options$forecastTimeSeriesType != "line") p <- p + jaspGraphs::geom_point(ggplot2::aes(x = t, y = y), data = both[idx, ], color = cols[idx])
+  # if (options$forecastTimeSeriesType != "points") p <- p + jaspGraphs::geom_line(ggplot2::aes(x = t, y = y), data = df[idx, ], color = cols[idx])
+  # if (options$forecastTimeSeriesType != "line") p <- p + jaspGraphs::geom_point(ggplot2::aes(x = t, y = y), data = df[idx, ], color = cols[idx])
 
   plot$plotObject <- p
 }
@@ -509,7 +564,7 @@ ARIMATimeSeries <- function(jaspResults, dataset, options) {
   .tsForecasts(fit, dataset, options, jaspResults, ready)
   pred <- jaspResults[["forecastResult"]]$object
 
-  rows <- data.frame(t = pred$t,
+  rows <- data.frame(t = as.character(pred$t),
                      y = pred$y,
                      lower80 = pred$lower80,
                      upper80 = pred$upper80,
