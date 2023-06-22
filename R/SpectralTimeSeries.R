@@ -18,14 +18,17 @@
 SpectralTimeSeries <- function(jaspResults, dataset, options) {
     ready <- options$dependent != ""
 
-    dataset <- .tsReadData(jaspResults, dataset, options, ready, time = FALSE)
+    dataset <- .tsReadData(jaspResults, dataset, options, ready)
+
+    .tsErrorHandler(dataset, ready)
     
     .tsPowerSpectralDensity(jaspResults, dataset, options, ready, position = 2, dependencies = .tsSpectralDependencies)
     .tsCreateTableBandWith(jaspResults, dataset, options, ready, position = 1, dependencies = .tsSpectralDependencies) 
 }
 
 .tsSpectralDependencies <- c(
-  "dependent", "kernel", "kernelMethod", "kernelTerm", "kernelDimension",
+  "dependent", "time",
+  "kernel", "kernelMethod", "kernelTerm", "kernelDimension",
   "taper", "log", "detrend", "demean"
 )
 
@@ -35,7 +38,7 @@ SpectralTimeSeries <- function(jaspResults, dataset, options) {
   }
 
   if (ready) {
-    y <- na.omit(dataset$y)
+    y <- ts(dataset$y)
 
     k <- NULL
 
@@ -44,14 +47,17 @@ SpectralTimeSeries <- function(jaspResults, dataset, options) {
     if (options$kernel)
       k <- stats::kernel(options$kernelMethod, dims)
 
-    res <- stats::spec.pgram(
+    res <- try(stats::spec.pgram(
       y,
-      kernel  = k,
-      taper   = options$taper,
-      demean  = options$demean,
-      detrend = options$detrend,
-      plot = FALSE
-    )
+      kernel    = k,
+      taper     = options$taper,
+      demean    = options$demean,
+      detrend   = options$detrend,
+      plot      = FALSE,
+      na.action = na.exclude # should probably add other options at some point
+    ))
+
+    if (jaspBase::isTryError(res)) .quitAnalysis("The spectral analysis failed.")
 
     jaspResults[["spectralResult"]] <- createJaspState(res)
     jaspResults[["spectralResult"]]$dependOn(.tsSpectralDependencies)
@@ -94,15 +100,10 @@ SpectralTimeSeries <- function(jaspResults, dataset, options) {
 
   dat <- data.frame(x, y, whiteNoise, pinkNoise, brownNoise)
 
-  xName <- "Frequency"
-  yName <- "Power"
+  dat <- as.data.frame(apply(dat, 2, log))
 
-  if (options$log) {
-    dat <- as.data.frame(apply(dat, 2, log))
-
-    xName <- "log(Frequency)"
-    yName <- "log(Power)"
-  }
+  xName <- "log(Frequency)"
+  yName <- "log(Power)"
 
   xBreaks <- jaspGraphs::getPrettyAxisBreaks(dat$x)
   yRange <- dat$y

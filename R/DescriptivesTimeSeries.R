@@ -20,6 +20,8 @@ DescriptivesTimeSeries <- function(jaspResults, dataset, options) {
 
     dataset <- .tsReadData(jaspResults, dataset, options, ready)
 
+    .tsErrorHandler(dataset, ready)
+
     .tsDescriptivesTable(jaspResults, dataset, options, ready, position = 1, dependencies = c("dependent", "time", "descriptivesTableTransposed"))
 
     .tsTimeSeriesPlotDescriptives(jaspResults, dataset, options, ready, position = 2, dependencies = c("dependent", "time", "timeSeriesPlot", "timeSeriesPlotType", "timeSeriesPlotDistribution"))
@@ -46,7 +48,11 @@ DescriptivesTimeSeries <- function(jaspResults, dataset, options) {
     if (!ready)
       return()
 
-    .tsFillTimeSeriesPlot(plot, dataset, options, type = options$timeSeriesPlotType, distribution = options$timeSeriesPlotDistribution)
+    .tsFillTimeSeriesPlot(
+      plot, dataset, options,
+      type = options$timeSeriesPlotType,
+      distribution = options$timeSeriesPlotDistribution
+    )
 
   }
 }
@@ -70,6 +76,7 @@ DescriptivesTimeSeries <- function(jaspResults, dataset, options) {
 }
 
 .tsFillLagPlot <- function(lagPlot, dataset, options) {
+  # create lag version of y
   yLag  <- c(rep(NA, options$lagPlotLag), dataset$y[1:(length(dataset$y) - options$lagPlotLag)])
 
   yName <- decodeColNames(options$dependent[1])
@@ -92,6 +99,7 @@ DescriptivesTimeSeries <- function(jaspResults, dataset, options) {
     plotAbove = "none", plotRight = "none"
   )
 
+  # make sure the y-axis and the x-axis have the same breaks
   p$subplots$mainPlot <- p$subplots$mainPlot +
     ggplot2::scale_x_continuous(breaks = breaks, limits = range(breaks)) +
     ggplot2::scale_y_continuous(breaks = breaks, limits = range(breaks)) +
@@ -120,7 +128,7 @@ DescriptivesTimeSeries <- function(jaspResults, dataset, options) {
 
     .tsFillACF(plot,
       type = "ACF", dataset, options,
-      firstLag = options$acfZeroLag,
+      zeroLag = options$acfZeroLag,
       maxLag = options$acfMaxLag,
       ci = options$acfCi,
       ciValue = options$acfCiLevel,
@@ -152,19 +160,6 @@ DescriptivesTimeSeries <- function(jaspResults, dataset, options) {
       ciType = options$pacfCiType
     )
   }
-}
-
-.tsAcfBartlett <- function(r, N, ci = 0.95) {
-  z <- qnorm((1 + ci) / 2)
-
-  lag <- length(r)
-  df  <- data.frame(r = r, se = numeric(lag))
-  
-  for (i in 1:lag) {
-      df$se[i] <- z * sqrt((1 / N) * (1 + 2 * sum(r[1:i] ^ 2)))
-  }
-
-  return(df)
 }
 
 .tsDescriptivesTable <- function(jaspResults, dataset, options, ready, position, dependencies) {

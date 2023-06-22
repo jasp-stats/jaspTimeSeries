@@ -5,6 +5,7 @@ import JASP.Widgets 1.0
 
 Form
 {
+  info: qsTr("Allows the user to fit a (seasonal) AR/MA/ARMA/ARIMA model to a time series.")
     VariablesForm
     {
         AvailableVariablesList { name: "variables" }
@@ -14,6 +15,7 @@ Form
             label: qsTr("Dependent Variable")
             allowedColumns: ["ordinal", "scale"]
             singleVariable: true
+            info: qsTr("A variable that is measured repeatedly over time.")
         }
         AssignedVariablesList  
         {
@@ -21,6 +23,7 @@ Form
             label: qsTr("Time")
             allowedColumns: ["ordinal", "nominalText"]
             singleVariable: true
+            info: qsTr("Optional. Can either be an ordinal variable indicating the order of the observations, or a text variable indicating the date/time stamp of the observations. Combined date and time values should be in the standard format 'YYYY-MM-DD HH:MM:SS', where seconds (':SS') can also be omitted. Date-only values should be in the format 'YYYY-MM-DD'. If a time variable is not supplied, the row order of the data is used.")
         }
         AssignedVariablesList  
         {
@@ -28,6 +31,7 @@ Form
             label: qsTr("Covariates")
             allowedColumns: ["ordinal", "scale"]
             height: 120
+            info: qsTr("Optional. A numerical variable to include in the model as external regressor.")
         }
     }
     
@@ -39,6 +43,7 @@ Form
             id:    tsPlot
             label: qsTr("Time series plot")
             checked: true
+            info: qsTr("Plots the dependent variable (y-axis) over time (x-axis).")
             RadioButtonGroup
             {
                 name:	"timeSeriesPlotType"
@@ -70,12 +75,14 @@ Form
                 label:      qsTr("Intercept")
                 checked:    true
                 enabled:    best.checked | (manual.checked & (d.value < 2 | D.value < 2))
+                info:       qsTr("Include an intercept in the model.")
             }
             CheckBox
             {
                 name:   "seasonal"
                 id:     seasonal
                 label:  qsTr("Seasonal components")
+                info:   qsTr("Fit a seasonal ARIMA model. If the frequency is not known, a dominant frequency may be determined from a spectral analysis.")
                 RadioButtonGroup
                 {
                     name: "periodSpecification"
@@ -95,8 +102,9 @@ Form
         
             RadioButtonGroup
             {
-                name: "modelSpecification"
-                title: qsTr("Model Specification")
+                name:   "modelSpecification"
+                title:  qsTr("Model Specification")
+                info:   qsTr("Specifies what ARIMA model to fit. The best fitting model is determined by the Hyndman-Khandakar algorithm.")
                 RadioButton 
                 {
                     value: "auto"
@@ -183,6 +191,7 @@ Form
                 name:       "residualTimeSeries"
                 id:         residualTimeSeries
                 label:      qsTr("Time series plot")
+                info:       qsTr("Plots the residuals (y-axis) over time (x-axis).")
                 RadioButtonGroup
                 {
                     name:	"residualTimeSeriesType"
@@ -205,6 +214,7 @@ Form
                 name:   "residualQQ"
                 id:     residualQQ
                 label:  qsTr("Q-Q plot")
+                info:   qsTr("Plots the quantile-quantile plot of the residuals.")
             }
             Group
             {
@@ -214,6 +224,7 @@ Form
                     name:   "residualAcf"
                     id:     residualACF
                     label:  qsTr("Autocorrelation function")
+                    info:   qsTr("Plots the autocorrelation for a specified number of lags. The confidence interval may be given assuming a white noise process.")
                     CheckBox { name: "residualAcfZeroLag"; label: qsTr("Zero lag") }
                     CheckBox
                     {
@@ -229,6 +240,7 @@ Form
                     name:   "residualLjungBox"
                     id:     residualLjungBox
                     label:  qsTr("Ljung-Box p-values")
+                    info:   qsTr("Plots the p-values of the Ljung-Box test for a number of lags of which the null hypothesis assumes that the data independently distributed and therefore have no autocorrelation.")
                     CIField { name: "ljungBoxSignificanceLevel"; label: qsTr("Significance level"); defaultValue: 5 }
                 }
                 IntegerField 
@@ -243,10 +255,10 @@ Form
         }
         CheckBox 
         {
-          id:							residualSavedToData
-          name:						"residualSavedToData"
-          text:						qsTr("Append residuals to spreadsheet")
-
+          id:		residualSavedToData
+          name:	"residualSavedToData"
+          text:	qsTr("Append residuals to spreadsheet")
+          info: qstr("Appends the residuals to the spreadsheet, so these can be used in further analyses.")
           ComputedColumnField 
           {
             id:						    residualColumn
@@ -270,6 +282,7 @@ Form
           min: 0
           max: 1e6
           defaultValue: 0
+          info: qsTr("Determines the number forecasts to make.")
         }
         FileSelector
         {
@@ -280,12 +293,14 @@ Form
             save:	              true
             enabled:            forecastLength.value > 0
             fieldWidth:         180 * preferencesModel.uiScale
+            info:               qsTr("Saves the forecasts in a seperate .csv file.")
         }
         CheckBox
           {
               name:     "forecastTimeSeries"
               id:       forecastTimeSeries
               label:    qsTr("Time series plot")
+              info:     qsTr("Plots the forecasts (and observed values) (y-axis) over time (x-axis)")
               RadioButtonGroup
               {
                   name:	"forecastTimeSeriesType"

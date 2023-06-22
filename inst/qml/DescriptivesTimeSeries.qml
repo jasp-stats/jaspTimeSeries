@@ -5,6 +5,7 @@ import JASP.Widgets 1.0
 
 Form
 {
+  info: qsTr("Descriptives allows the user to obtain descriptive statistics and descriptive plots for univariate time-series.")
     VariablesForm
     {
         AvailableVariablesList { name: "variables" }
@@ -14,6 +15,7 @@ Form
             label: qsTr("Variable")
             allowedColumns: ["ordinal", "scale"]
             singleVariable: true
+            info: qsTr("A variable that is measured repeatedly over time.")
         }
         AssignedVariablesList  
         {
@@ -21,6 +23,7 @@ Form
             label: qsTr("Time")
             allowedColumns: ["ordinal", "nominalText"]
             singleVariable: true
+            info: qsTr("Optional. Can either be an ordinal variable indicating the order of the observations, or a text variable indicating the date/time stamp of the observations. Combined date and time values should be in the standard format 'YYYY-MM-DD HH:MM:SS', where seconds (':SS') can also be omitted. Date-only values should be in the format 'YYYY-MM-DD'. If a time variable is not supplied, the row order of the data is used.")
         }
     }
 
@@ -43,6 +46,7 @@ Form
             id:    tsPlot
             label: qsTr("Time series plot")
             checked: true
+            info: qsTr("Plots the dependent variable (y-axis) over time (x-axis).")
             RadioButtonGroup
             {
                 name:	"timeSeriesPlotType"
@@ -65,6 +69,7 @@ Form
             name: "lagPlot"
             id: sspPlot
             label: qsTr("Lag plot")
+            info: qsTr("Plots the dependent variable (y-axis) against a lagged version of itself (x-axis). The lag stands for the amount of observations in between the dependent variable and the lagged version of itself. The regression line is the autoregression at the specified lag.")
             Group
             {
                 IntegerField
@@ -106,6 +111,7 @@ Form
             label: qsTr("Autocorrelation function")
             IntegerField { name: "acfMaxLag"; label: qsTr("Maximum lag"); min: 1; defaultValue: 10 }
             CheckBox { name: "acfZeroLag"; label: qsTr("Zero lag") }
+            info: qsTr("Plots the autocorrelation for a specified number of lags. The confidence interval may be given assuming either a white noise process, or assuming for a lag q a moving average process of order q - 1")
             CheckBox
             {
                 name: "acfCi"
@@ -121,8 +127,17 @@ Form
               name: "acfCiType"
               enabled: acfCi.checked
               Layout.leftMargin: 25 * preferencesModel.uiScale
-              RadioButton { value: "whiteNoise";	label: qsTr("Based on white noise");	checked: true }
-              RadioButton { value: "movingAverage";	label: qsTr("Based on moving average")	}
+              RadioButton
+              {
+                value: "whiteNoise"
+                label: qsTr("Based on white noise")
+                checked: true
+              }
+              RadioButton
+              {
+                value: "movingAverage"
+                label: qsTr("Based on moving average")
+              }
             }
         }
         CheckBox
@@ -130,6 +145,7 @@ Form
             name: "pacf"
             id: pacf
             label: qsTr("Partial autocorrelation function")
+            info: qsTr("Plots the partial autocorrelation for a specified number of lags.")
             IntegerField { name: "pacfMaxLag"; label: qsTr("Maximum lag"); min: 1; defaultValue: 10 }
             CheckBox
             {

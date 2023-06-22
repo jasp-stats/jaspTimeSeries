@@ -15,7 +15,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 
-.tsReadData <- function(jaspResults, dataset, options, ready, time = TRUE, covariates = FALSE) {
+.tsReadData <- function(jaspResults, dataset, options, ready, covariates = FALSE) {
   if (!is.null(dataset))
     return(dataset)
   
@@ -24,16 +24,16 @@
     yName <- options$dependent[1]
     y     <- yDataset[, yName]
     dat   <- data.frame(y)
-    if (time) {
-      if (options$time == "") {
-        t <- 1:nrow(yDataset)
-      } else {
-        tDataset <- .readDataSetToEnd(columns = options$time)
-        tName <- options$time[1]
-        t <- tDataset[, tName]
-      }
-      dat <- cbind(dat, t)
+
+    if (options$time == "") {
+      t <- 1:nrow(yDataset)
+    } else {
+      tDataset <- .readDataSetToEnd(columns = options$time)
+      tName <- options$time[1]
+      t <- tDataset[, tName]
     }
+    dat <- cbind(dat, t)
+
     if (covariates) {
       if (length(options[["covariates"]]) > 0) {
         cDataset <- .readDataSetToEnd(columns.as.numeric = options$covariates)
@@ -43,9 +43,21 @@
         dat <- cbind(dat, covariates)
       }
     }
-    if (time) dat <- .tsDataWithMissingRowsHandler(dat)
+    dat <- .tsDataWithMissingRowsHandler(dat)
     return(dat)
   }
+}
+
+.tsErrorHandler <- function(dataset, ready) {
+  if (!ready)
+    return()
+
+  datZoo <- zoo::zoo(dataset$y, dataset$t) 
+  if (!zoo::is.regular(datZoo))
+    .quitAnalysis("The time series data should be equally-spaced.")
+
+  if (any(duplicated(dataset$t)))
+    .quitAnalysis("The time variable should have unique values only.")
 }
 
 .tsDataWithMissingRowsHandler <- function(dataset) {
@@ -53,7 +65,7 @@
   # but skip rows with a column indicating the time / date
   # so e.g., when third measurement is missing at t = 3,
   # the data set goes from t = 2 on the second row, to t = 4 on the third.
-  # This function makes sure these data are seen as missings with NA's.
+  # This function imputes NA's for the missing time stamps.
   tryDate <- try(as.POSIXct(dataset$t, tz = "UTC"))
 
   if (jaspBase::isTryError(tryDate)) {
@@ -61,8 +73,8 @@
     newT <- 1:maxT
   } else {
     dataset$t <- as.POSIXct(dataset$t, tz = "UTC")
-    datZoo  <- zoo::zoo(dataset$y, dataset$t)
-    datTs   <- as.ts(datZoo)
+    datZoo  <- zoo::zoo(dataset$y, dataset$t) # allows irregular time-series
+    datTs   <- as.ts(datZoo)                  # imputes NA's
     newT    <- as.POSIXct(zoo::index(datTs), origin = "1970/01/01")
   }
   dfNewT  <- data.frame(t = newT)
@@ -85,7 +97,22 @@
   timeSeriesPlot$plotObject <- p
 }
 
-.tsFillACF <- function(plot, type, dataset, options, firstLag = F, maxLag, ci, ciValue, ciType) {
+.tsAcfBartlett <- function(r, N, ci = 0.95) {
+  # calculate confidence interval for ACF assuming moving average process
+  # using Bartlett's formula
+  z <- qnorm((1 + ci) / 2)
+
+  lag <- length(r)
+  df  <- data.frame(r = r, se = numeric(lag))
+  
+  for (i in 1:lag) {
+      df$se[i] <- z * sqrt((1 / N) * (1 + 2 * sum(r[1:i] ^ 2)))
+  }
+
+  return(df)
+}
+
+.tsFillACF <- function(plot, type, dataset, options, zeroLag = F, maxLag, ci, ciValue, ciType) {
   y <- na.omit(dataset$y)
 
   if (type == "ACF") {
@@ -93,11 +120,11 @@
   }
   if (type == "PACF") {
     ac <- stats::pacf(y, plot = FALSE, lag.max = maxLag)
-    ciType <- "whiteNoise"
+    ciType <- "whiteNoise" # PACF does not have confidence interval assuming ma
   }
 
   dat <- data.frame(acf = ac$acf, lag = ac$lag)
-  if(type == "ACF" & !firstLag)
+  if(type == "ACF" & !zeroLag)
     dat <- dat[-1, ] # remove lag 0
 
   yRange <- dat$acf
@@ -107,7 +134,9 @@
   xMax <- max(xBreaks)
 
   p <- ggplot2::ggplot()
+
   if (ci) {
+  # add confidence bounds
     if (ciType == "whiteNoise") {
       clim <- qnorm((1 + ciValue) / 2) / sqrt(ac$n.used)
       dat$upper <- rep(clim, nrow(dat))
@@ -131,9 +160,7 @@
 
   p <- p +
     ggplot2::scale_x_continuous(name = "Lag", breaks = xBreaks, limits = range(xBreaks)) +
-    ggplot2::scale_y_continuous(name = type, breaks = yBreaks, limits = range(yBreaks))
-
-  p <- p +
+    ggplot2::scale_y_continuous(name = type, breaks = yBreaks, limits = range(yBreaks)) +
     ggplot2::geom_linerange(data = dat, ggplot2::aes(x = lag, ymin = 0, ymax = acf), size = 1) +
     ggplot2::geom_segment(ggplot2::aes(x = xMin, xend = xMax, y = 0, yend = 0), alpha = 0.5) +
     jaspGraphs::geom_rangeframe() +
@@ -143,6 +170,7 @@
   return()
 }
 
+# custom JASPScatterPlot function because x may be a date...
 .tsJASPScatterPlot <-  function(x, y, group = NULL, xName = NULL, yName = NULL,
                                 addSmooth = TRUE, addSmoothCI = TRUE,
                                 smoothCIValue = 0.95, forceLinearSmooth = FALSE,

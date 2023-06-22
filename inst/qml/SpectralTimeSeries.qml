@@ -5,6 +5,7 @@ import JASP.Widgets 1.0
 
 Form
 {
+  info: qsTr("Spectral analysis allows the user to assess the frequency components and power distribution of a time series.")
     VariablesForm
     {
         AvailableVariablesList { name: "variables" }
@@ -14,14 +15,16 @@ Form
             label: qsTr("Variable")
             allowedColumns: ["ordinal", "scale"]
             singleVariable: true
+            info: qsTr("A variable that is measured repeatedly over time.")
         }
-        // AssignedVariablesList  
-        // {
-        //     name: "time"
-        //     label: qsTr("Time")
-        //     allowedColumns: ["ordinal", "scale"]
-        //     singleVariable: true
-        // }
+        AssignedVariablesList  
+        {
+            name: "time"
+            label: qsTr("Time")
+            allowedColumns: ["ordinal", "nominalText"]
+            singleVariable: true
+            info: qsTr("Optional. Can either be an ordinal variable indicating the order of the observations, or a text variable indicating the date/time stamp of the observations. Combined date and time values should be in the standard format 'YYYY-MM-DD HH:MM:SS', where seconds (':SS') can also be omitted. Date-only values should be in the format 'YYYY-MM-DD'. If a time variable is not supplied, the row order of the data is used.")
+        }
     }
 
     Group
@@ -33,6 +36,7 @@ Form
             id: kernel
             label: qsTr("Kernel smoother")
             childrenOnSameRow: true
+            info: qsTr("Smooths the power spectral density using a kernel. The dimension determines the convolution of kernels. The taper specifies the proportion of data to which a split cosine bell taper is applied at the beginning and end of the series.")
             DropDown
             {
                 name: "kernelMethod"
@@ -45,7 +49,7 @@ Form
         }
         Group
         {
-            Layout.leftMargin:			25 * preferencesModel.uiScale
+            Layout.leftMargin: 25 * preferencesModel.uiScale
             enabled: kernel.checked
             RowLayout
             {
@@ -103,7 +107,8 @@ Form
 
     Group
     {
-      title: qsTr("Transformation")
+      title:  qsTr("Transformation")
+      info:   qsTr("Transforms the time series by removing the trend or mean.")
       CheckBox
       {
           name: "detrend"
@@ -114,16 +119,11 @@ Form
           name: "demean"
           label: qsTr("Demean")
       }
-      CheckBox
-      {
-          name: "log"
-          label: qsTr("Log")
-          checked: true
-      }
     }
     Group
       {
-          title: qsTr("Noise shape line")
+          title:  qsTr("Noise shape line")
+          info:   qsTr("Add a line to the spectral density indicating the power spectral density of a white, pink or brown noise process.")
           CheckBox
           {
               name: "whiteNoise"
