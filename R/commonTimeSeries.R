@@ -64,6 +64,23 @@
   }
 }
 
+.tsGuessInterval <- function(dataset) {
+  allDiffInSec <- difftime(dataset$t[2:(length(dataset$t))], dataset$t[1:(length(dataset$t) - 1)], units = "secs")
+  diffInSec <- as.numeric(names(which.max(table(allDiffInSec))))
+  
+  sec     <- diffInSec
+  min     <- diffInSec / 60
+  hour    <- min / 60
+  day     <- hour / 24
+  week    <- day / 7
+  month   <- day / 30.44
+  quarter <- month / 4
+  year    <- month / 12
+
+  df <- data.frame(sec, min, hour, day, week, month, quarter, year)
+  return(names(which.min(abs(df - 1))))
+}
+
 .tsDataWithMissingRowsHandler <- function(dataset) {
   # Sometimes time series data sets do not have NA's for missing data,
   # but skip rows with a column indicating the time / date
@@ -77,9 +94,8 @@
     newT <- 1:maxT
   } else {
     dataset$t <- as.POSIXct(dataset$t, tz = "UTC")
-    datZoo <- zoo::zoo(dataset$y, dataset$t) # allows irregular time-series
-    datTs <- as.ts(datZoo) # imputes NA's
-    newT <- as.POSIXct(zoo::index(datTs), origin = "1970/01/01")
+    increment <- .tsGuessInterval(dataset)
+    newT <- seq.POSIXt(min(dataset$t), max(dataset$t), by = increment)
   }
   dfNewT <- data.frame(t = newT)
   dat <- merge(dfNewT, dataset, all.x = TRUE)
