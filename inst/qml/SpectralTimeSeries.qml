@@ -5,11 +5,11 @@ import JASP.Widgets 1.0
 
 Form
 {
-  info: qsTr("Spectral analysis allows the user to assess the frequency components and power distribution of a time series.")
+    info: qsTr("Spectral analysis allows the user to assess the frequency components and power distribution of a time series.")
     VariablesForm
     {
         AvailableVariablesList { name: "variables" }
-        AssignedVariablesList  
+        AssignedVariablesList
         {
             name: "dependent"
             label: qsTr("Variable")
@@ -17,7 +17,7 @@ Form
             singleVariable: true
             info: qsTr("A variable that is measured repeatedly over time.")
         }
-        AssignedVariablesList  
+        AssignedVariablesList
         {
             name: "time"
             label: qsTr("Time")
@@ -41,7 +41,7 @@ Form
             {
                 name: "kernelMethod"
                 values:
-                [
+                    [
                     { label: qsTr("Daniell"), value: "daniell" },
                     { label: qsTr("Modified Daniell"), value: "modified.daniell" }
                 ]
@@ -53,47 +53,47 @@ Form
             enabled: kernel.checked
             RowLayout
             {
-              Label
-              {
-                text:						        qsTr("Dimension")
-                Layout.leftMargin:			130 * preferencesModel.uiScale
-                Layout.preferredWidth:	70 * preferencesModel.uiScale
-              }
+                Label
+                {
+                    text:						        qsTr("Dimension")
+                    Layout.leftMargin:			130 * preferencesModel.uiScale
+                    Layout.preferredWidth:	70 * preferencesModel.uiScale
+                }
             }
 
             ComponentsList
             {
-              name:							"kernelTerm"
-              defaultValues:		[1]
-              minimumItems:			1
-              rowComponent:			RowLayout
-              {
-                Row
+                name:							"kernelTerm"
+                defaultValues:		[1]
+                minimumItems:			1
+                rowComponent:			RowLayout
                 {
-                  spacing:				          4 * preferencesModel.uiScale
-                  Layout.preferredWidth:	110 * preferencesModel.uiScale
+                    Row
+                    {
+                        spacing:				          4 * preferencesModel.uiScale
+                        Layout.preferredWidth:	110 * preferencesModel.uiScale
 
-                  Label
-                  {
-                    text:				qsTr("Term ") + (rowIndex + 1)
-                  }
+                        Label
+                        {
+                            text:				qsTr("Term ") + (rowIndex + 1)
+                        }
+                    }
+
+                    RowLayout
+                    {
+                        spacing:				          4 * preferencesModel.uiScale
+                        Layout.preferredWidth:	 50 * preferencesModel.uiScale
+
+                        IntegerField
+                        {
+                            id:					  dimension
+                            name:				  "kernelDimension"
+                            useExternalBorder:	true
+                            min:				    1
+                            defaultValue:		1
+                        }
+                    }
                 }
-                
-                RowLayout
-                {
-                  spacing:				          4 * preferencesModel.uiScale
-                  Layout.preferredWidth:	 50 * preferencesModel.uiScale
-                  
-                  IntegerField
-                  {
-                    id:					  dimension
-                    name:				  "kernelDimension"
-                    useExternalBorder:	true
-                    min:				    1
-                    defaultValue:		1
-                  }
-                }
-              }
             }
         }
         DoubleField
@@ -107,37 +107,37 @@ Form
 
     Group
     {
-      title:  qsTr("Transformation")
-      info:   qsTr("Transforms the time series by removing the trend or mean.")
-      CheckBox
-      {
-          name: "detrend"
-          label: qsTr("Detrend")
-      }
-      CheckBox
-      {
-          name: "demean"
-          label: qsTr("Demean")
-      }
+        title:  qsTr("Transformation")
+        info:   qsTr("Transforms the time series by removing the trend or mean.")
+        CheckBox
+        {
+            name: "detrend"
+            label: qsTr("Detrend")
+        }
+        CheckBox
+        {
+            name: "demean"
+            label: qsTr("Demean")
+        }
     }
     Group
-      {
-          title:  qsTr("Noise shape line")
-          info:   qsTr("Add a line to the spectral density indicating the power spectral density of a white, pink or brown noise process.")
-          CheckBox
-          {
-              name: "whiteNoise"
-              label: qsTr("White noise")
-          }
-          CheckBox
-          {
-              name: "pinkNoise"
-              label: qsTr("Pink noise")
-          }
-          CheckBox
-          {
-              name: "brownNoise"
-              label: qsTr("Brown noise")
-          }
-      }
+    {
+        title:  qsTr("Noise shape line")
+        info:   qsTr("Add a line to the spectral density indicating the power spectral density of a white, pink or brown noise process.")
+        CheckBox
+        {
+            name: "whiteNoise"
+            label: qsTr("White noise")
+        }
+        CheckBox
+        {
+            name: "pinkNoise"
+            label: qsTr("Pink noise")
+        }
+        CheckBox
+        {
+            name: "brownNoise"
+            label: qsTr("Brown noise")
+        }
+    }
 }

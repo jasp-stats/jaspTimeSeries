@@ -5,11 +5,11 @@ import JASP.Widgets 1.0
 
 Form
 {
-  info: qsTr("Descriptives allows the user to obtain descriptive statistics and descriptive plots for univariate time-series.")
+    info: qsTr("Descriptives allows the user to obtain descriptive statistics and descriptive plots for univariate time-series.")
     VariablesForm
     {
         AvailableVariablesList { name: "variables" }
-        AssignedVariablesList  
+        AssignedVariablesList
         {
             name: "dependent"
             label: qsTr("Variable")
@@ -17,7 +17,7 @@ Form
             singleVariable: true
             info: qsTr("A variable that is measured repeatedly over time.")
         }
-        AssignedVariablesList  
+        AssignedVariablesList
         {
             name: "time"
             label: qsTr("Time")
@@ -29,11 +29,11 @@ Form
 
     Group
     {
-      CheckBox
-      {
-          name: "descriptivesTableTransposed"
-          label: qsTr("Transpose descriptives table")
-      }
+        CheckBox
+        {
+            name: "descriptivesTableTransposed"
+            label: qsTr("Transpose descriptives table")
+        }
     }
 
     Section
@@ -124,20 +124,20 @@ Form
             }
             RadioButtonGroup
             {
-              name: "acfCiType"
-              enabled: acfCi.checked
-              Layout.leftMargin: 25 * preferencesModel.uiScale
-              RadioButton
-              {
-                value: "whiteNoise"
-                label: qsTr("Based on white noise")
-                checked: true
-              }
-              RadioButton
-              {
-                value: "movingAverage"
-                label: qsTr("Based on moving average")
-              }
+                name: "acfCiType"
+                enabled: acfCi.checked
+                Layout.leftMargin: 25 * preferencesModel.uiScale
+                RadioButton
+                {
+                    value: "whiteNoise"
+                    label: qsTr("Based on white noise")
+                    checked: true
+                }
+                RadioButton
+                {
+                    value: "movingAverage"
+                    label: qsTr("Based on moving average")
+                }
             }
         }
         CheckBox

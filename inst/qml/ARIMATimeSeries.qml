@@ -5,11 +5,11 @@ import JASP.Widgets 1.0
 
 Form
 {
-  info: qsTr("Allows the user to fit a (seasonal) AR/MA/ARMA/ARIMA model to a time series.")
+    info: qsTr("Allows the user to fit a (seasonal) AR/MA/ARMA/ARIMA model to a time series.")
     VariablesForm
     {
         AvailableVariablesList { name: "variables" }
-        AssignedVariablesList  
+        AssignedVariablesList
         {
             name: "dependent"
             label: qsTr("Dependent Variable")
@@ -17,7 +17,7 @@ Form
             singleVariable: true
             info: qsTr("A variable that is measured repeatedly over time.")
         }
-        AssignedVariablesList  
+        AssignedVariablesList
         {
             name: "time"
             label: qsTr("Time")
@@ -25,7 +25,7 @@ Form
             singleVariable: true
             info: qsTr("Optional. Can either be an ordinal variable indicating the order of the observations, or a text variable indicating the date/time stamp of the observations. Combined date and time values should be in the standard format 'YYYY-MM-DD HH:MM:SS', where seconds (':SS') can also be omitted. Date-only values should be in the format 'YYYY-MM-DD'. If a time variable is not supplied, the row order of the data is used.")
         }
-        AssignedVariablesList  
+        AssignedVariablesList
         {
             name: "covariates"
             label: qsTr("Covariates")
@@ -88,8 +88,8 @@ Form
                     name: "periodSpecification"
                     title: qsTr("Period")
                     radioButtonsOnSameRow: true
-                    RadioButton 
-                    { 
+                    RadioButton
+                    {
                         value: "custom"
                         label: qsTr("Custom")
                         checked: true
@@ -99,18 +99,18 @@ Form
                     RadioButton { value: "dominant";  label: qsTr("Dominant") }
                 }
             }
-        
+
             RadioButtonGroup
             {
                 name:   "modelSpecification"
                 title:  qsTr("Model Specification")
                 info:   qsTr("Specifies what ARIMA model to fit. The best fitting model is determined by the Hyndman-Khandakar algorithm.")
-                RadioButton 
+                RadioButton
                 {
                     value: "auto"
                     id: auto
-                    label: qsTr("Best fitting")	
-                    checked: true 
+                    label: qsTr("Best fitting")
+                    checked: true
                     RadioButtonGroup
                     {
                         name: "modelSpecificationAutoIc"
@@ -118,12 +118,12 @@ Form
                         radioButtonsOnSameRow: true
                         RadioButton { value: "aicc";    label: qsTr("AICc");	checked: true   }
                         RadioButton { value: "aic";	    label: qsTr("AIC")				        }
-                        RadioButton { value: "bic";	    label: qsTr("BIC")				        } 
+                        RadioButton { value: "bic";	    label: qsTr("BIC")				        }
                     }
                 }
-                RadioButton 
-                { 
-                    value: "custom"	
+                RadioButton
+                {
+                    value: "custom"
                     id: manual
                     label: qsTr("Manual")
                     Group
@@ -174,7 +174,7 @@ Form
                                 label:  qsTr("Moving average (MA) order Q")
                             }
                         }
-                    }	  
+                    }
                 }
             }
         }
@@ -243,7 +243,7 @@ Form
                     info:   qsTr("Plots the p-values of the Ljung-Box test for a number of lags of which the null hypothesis assumes that the data independently distributed and therefore have no autocorrelation.")
                     CIField { name: "ljungBoxSignificanceLevel"; label: qsTr("Significance level"); defaultValue: 5 }
                 }
-                IntegerField 
+                IntegerField
                 {
                     name: "residualMaxLag"
                     label: qsTr("Maximum lag")
@@ -253,21 +253,21 @@ Form
                 }
             }
         }
-        CheckBox 
+        CheckBox
         {
-          id:		residualSavedToData
-          name:	"residualSavedToData"
-          text:	qsTr("Append residuals to spreadsheet")
-          info: qstr("Appends the residuals to the spreadsheet, so these can be used in further analyses.")
-          ComputedColumnField 
-          {
-            id:						    residualColumn
-            name:					    "residualColumn"
-            text:					    qsTr("Column name")
-            placeholderText:  qsTr("e.g., residuals")
-            fieldWidth:				120
-            enabled:				  residualSavedToData.checked
-          }
+            id:		residualSavedToData
+            name:	"residualSavedToData"
+            text:	qsTr("Append residuals to spreadsheet")
+            info: qstr("Appends the residuals to the spreadsheet, so these can be used in further analyses.")
+            ComputedColumnField
+            {
+                id:						    residualColumn
+                name:					    "residualColumn"
+                text:					    qsTr("Column name")
+                placeholderText:  qsTr("e.g., residuals")
+                fieldWidth:				120
+                enabled:				  residualSavedToData.checked
+            }
         }
     }
 
@@ -276,13 +276,13 @@ Form
         title: qsTr("Forecasting")
         IntegerField
         {
-          name: "forecastLength"
-          id: forecastLength
-          label: qsTr("Number of forecasts")
-          min: 0
-          max: 1e6
-          defaultValue: 0
-          info: qsTr("Determines the number forecasts to make.")
+            name: "forecastLength"
+            id: forecastLength
+            label: qsTr("Number of forecasts")
+            min: 0
+            max: 1e6
+            defaultValue: 0
+            info: qsTr("Determines the number forecasts to make.")
         }
         FileSelector
         {
@@ -296,32 +296,32 @@ Form
             info:               qsTr("Saves the forecasts in a seperate .csv file.")
         }
         CheckBox
-          {
-              name:     "forecastTimeSeries"
-              id:       forecastTimeSeries
-              label:    qsTr("Time series plot")
-              info:     qsTr("Plots the forecasts (and observed values) (y-axis) over time (x-axis)")
-              RadioButtonGroup
-              {
-                  name:	"forecastTimeSeriesType"
-                  radioButtonsOnSameRow: true
-                  RadioButton { value: "points";	label: qsTr("Points") }
-                  RadioButton { value: "line";	label: qsTr("Line") }
-                  RadioButton { value: "both";	label: qsTr("Both");	checked: true }
-              }
-              CheckBox
-              {
-                  name:       "forecastTimeSeriesObserved"
-                  id:         forecastTimeSeriesObserved
-                  label:      qsTr("Observed data")
-                  checked:    true
-              }
-          }
-          CheckBox
-          {
-              name:   "forecastTable"
-              id:     forecastTable
-              label:  qsTr("Forecasts table")
-          }
+        {
+            name:     "forecastTimeSeries"
+            id:       forecastTimeSeries
+            label:    qsTr("Time series plot")
+            info:     qsTr("Plots the forecasts (and observed values) (y-axis) over time (x-axis)")
+            RadioButtonGroup
+            {
+                name:	"forecastTimeSeriesType"
+                radioButtonsOnSameRow: true
+                RadioButton { value: "points";	label: qsTr("Points") }
+                RadioButton { value: "line";	label: qsTr("Line") }
+                RadioButton { value: "both";	label: qsTr("Both");	checked: true }
+            }
+            CheckBox
+            {
+                name:       "forecastTimeSeriesObserved"
+                id:         forecastTimeSeriesObserved
+                label:      qsTr("Observed data")
+                checked:    true
+            }
+        }
+        CheckBox
+        {
+            name:   "forecastTable"
+            id:     forecastTable
+            label:  qsTr("Forecasts table")
+        }
     }
 }
