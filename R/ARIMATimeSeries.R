@@ -442,22 +442,20 @@ ARIMATimeSeries <- function(jaspResults, dataset, options) {
 
     # get the last non-NA observation
     lastObsY <- max(which(!is.na(dataset$y)))
+    lastT <- dataset$t[lastObsY]
     if (jaspBase::isTryError(tryDate)) {
       tPred <- data.frame(t = (lastObsY + 1):(lastObsY + options$forecastLength))
     } else {
-      # calculate the time interval between the observations
-      allDiffInSec <- difftime(dataset$t[2:(length(dataset$t))], dataset$t[1:(length(dataset$t) - 1)], units = "secs")
-      diffInSec <- as.numeric(names(which.max(table(allDiffInSec))))
+      increment <- .tsGuessInterval(dataset)
       # get future dates for forecasts
-      tPred <- dataset$t[lastObsY] + (lubridate::seconds(diffInSec) * 1:options$forecastLength)
-      tPred <- as.POSIXct(tPred, origin = "1970/01/01")
+      tPred <- seq.POSIXt(lastT, by = increment, length.out = (options$forecastLength + 1))
+      tPred <- tPred[-1] # remove last value
     }
 
     xreg <- NULL
     if (length(options[["covariates"]]) > 0) {
       nDependent <- fit$nobs
       covariates <- datasetRaw[, grepl("xreg", names(datasetRaw))]
-      lastT <- dataset$t[lastObsY]
       # get idx last observation in raw dataset
       # if a filter is used, there may be covariates outside of the filter
       # to use for forecasting
