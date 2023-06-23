@@ -66,15 +66,15 @@
 .tsGuessInterval <- function(dataset) {
   allDiffInSec <- difftime(dataset$t[2:(length(dataset$t))], dataset$t[1:(length(dataset$t) - 1)], units = "secs")
   diffInSec <- as.numeric(names(which.max(table(allDiffInSec))))
-  
-  sec     <- diffInSec
-  min     <- diffInSec / 60
-  hour    <- min / 60
-  day     <- hour / 24
-  week    <- day / 7
-  month   <- day / 30.44
+
+  sec <- diffInSec
+  min <- diffInSec / 60
+  hour <- min / 60
+  day <- hour / 24
+  week <- day / 7
+  month <- day / 30.44
   quarter <- month / 4
-  year    <- month / 12
+  year <- month / 12
 
   df <- data.frame(sec, min, hour, day, week, month, quarter, year)
   return(names(which.min(abs(df - 1))))
@@ -90,22 +90,25 @@
     }
     tryDate <- try(as.POSIXct(dataset$t, tz = "UTC"))
     if (options$filterBy == "time") {
-      if (!jaspBase::isTryError(tryDate))
+      if (!jaspBase::isTryError(tryDate)) {
         .quitAnalysis(gettext("The 'Time' variable has a date-like format, please filter by date instead."))
+      }
       start <- min(dataset$t, na.rm = TRUE)
       end <- max(dataset$t, na.rm = TRUE)
       if (options$timeStart != "") start <- options$timeStart
       if (options$timeEnd != "") end <- options$timeEnd
     }
     if (options$filterBy == "date") {
-      if (jaspBase::isTryError(tryDate))
+      if (jaspBase::isTryError(tryDate)) {
         .quitAnalysis(gettext("The 'Time' variable is not in a date-like format (e.g., yyyy-mm-dd hh:mm:ss). Try to filter by time index instead."))
+      }
       first <- min(tryDate, na.rm = TRUE)
       last <- max(tryDate, na.rm = TRUE)
       if (options$dateStart != "") {
         start <- try(as.POSIXct(options$dateStart, tz = "UTC"))
-        if (jaspBase::isTryError(start))
+        if (jaspBase::isTryError(start)) {
           .quitAnalysis(gettext("'Start' must be in a date-like format (e.g., yyyy-mm-dd hh:mm:ss)."))
+        }
         if (start >= last) {
           .quitAnalysis(gettext("The 'Start' value of the filter should be before last observation."))
         }
@@ -117,10 +120,12 @@
       }
       if (options$dateEnd != "") {
         end <- try(as.POSIXct(options$dateEnd, tz = "UTC"))
-        if (jaspBase::isTryError(end))
+        if (jaspBase::isTryError(end)) {
           .quitAnalysis(gettext("'End' must be in a date-like format (e.g., yyyy-mm-dd hh:mm:ss)."))
-        if (end <= first)
-            .quitAnalysis(gettext("The 'End' value of the filter should be larger/later than the 'Start' value."))
+        }
+        if (end <= first) {
+          .quitAnalysis(gettext("The 'End' value of the filter should be larger/later than the 'Start' value."))
+        }
         if (end > last) {
           end <- nrow(dataset)
         } else {
@@ -130,8 +135,9 @@
     }
     if (start >= nrow(dataset)) .quitAnalysis(gettext("The 'Start' value of the filter should be before last observation."))
     if (end > nrow(dataset)) end <- nrow(dataset)
-    if (end <= start)
+    if (end <= start) {
       .quitAnalysis(gettext("The 'End' value of the filter should be larger/later than the 'Start' value."))
+    }
     dataset <- dataset[start:end, ]
   }
   return(dataset)
@@ -192,7 +198,6 @@
 }
 
 .tsFillACF <- function(plot, type, dataset, options, zeroLag = F, maxLag, ci, ciValue, ciType) {
-
   y <- na.omit(as.numeric(dataset$y))
 
   if (type == "ACF") {
