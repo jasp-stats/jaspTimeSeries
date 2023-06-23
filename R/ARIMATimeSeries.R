@@ -39,11 +39,11 @@ ARIMATimeSeries <- function(jaspResults, dataset, options) {
 
   .tsSaveResiduals(dataset, datasetRaw, fit, options, jaspResults, ready, dependencies = c(.tsArimaDependencies, .tsDataDependencies, "residualColumn", "residualSavedToData"))
 
-  .tsCreateTableForecasts(jaspResults, fit, dataset, options, ready, position = 7, dependencies = c(.tsArimaDependencies, .tsDataDependencies, "forecast", "forecastLength"))
+  .tsCreateTableForecasts(jaspResults, fit, dataset, datasetRaw, options, ready, position = 7, dependencies = c(.tsArimaDependencies, .tsDataDependencies, "forecast", "forecastLength"))
 
-  .tsForecastPlot(jaspResults, fit, dataset, options, ready, position = 6, dependencies = c(.tsArimaDependencies, .tsDataDependencies, "forecast", "forecastTimeSeries", "forecastTimeSeriesObserved", "forecastTimeSeriesType", "forecastLength"))
+  .tsForecastPlot(jaspResults, fit, dataset, datasetRaw, options, ready, position = 6, dependencies = c(.tsArimaDependencies, .tsDataDependencies, "forecast", "forecastTimeSeries", "forecastTimeSeriesObserved", "forecastTimeSeriesType", "forecastLength"))
 
-  .tsSaveForecasts(jaspResults, fit, dataset, options, ready)
+  .tsSaveForecasts(jaspResults, fit, dataset, datasetRaw, options, ready)
 }
 
 # dependencies
@@ -431,7 +431,7 @@ ARIMATimeSeries <- function(jaspResults, dataset, options) {
   ljungPlot$plotObject <- p
 }
 
-.tsForecasts <- function(fit, dataset, options, jaspResults, ready) {
+.tsForecasts <- function(fit, dataset, datasetRaw, options, jaspResults, ready) {
   if (!is.null(jaspResults[["forecastResult"]])) {
     return()
   }
@@ -456,12 +456,19 @@ ARIMATimeSeries <- function(jaspResults, dataset, options) {
     xreg <- NULL
     if (length(options[["covariates"]]) > 0) {
       nDependent <- fit$nobs
-      covariates <- dataset[, grepl("xreg", names(dataset))]
-      firstForecast <- lastObsY + 1
-      lastForecast <- lastObsY + options$forecastLength
+      covariates <- datasetRaw[, grepl("xreg", names(datasetRaw))]
+      lastT <- dataset$t[lastObsY]
+      # get idx last observation in raw dataset
+      # if a filter is used, there may be covariates outside of the filter
+      # to use for forecasting
+      rawT <- try(as.POSIXct(datasetRaw$t, tz = "UTC"))
+      if (jaspBase::isTryError(rawT)) rawT <- datasetRaw$t
+      lastRaw <- match(lastT, rawT)
+      firstForecast <- lastRaw + 1
+      lastForecast <- lastRaw + options$forecastLength
       rangeForecast <- firstForecast:lastForecast
-      if (firstForecast > nrow(dataset)) .quitAnalysis(gettext("When 'Covariates' are used in the model, predictions cannot be carried out unless the covariates are also observed for the predicted period."))
-      if (length(rangeForecast) > length(firstForecast:nrow(dataset))) {
+      if (firstForecast > nrow(datasetRaw)) .quitAnalysis(gettext("When 'Covariates' are used in the model, predictions cannot be carried out unless the covariates are also observed for the predicted period."))
+      if (length(rangeForecast) > length(firstForecast:nrow(datasetRaw))) {
         .quitAnalysis(
           gettextf(
             "Not enough observations in the covariate%s. The maximum number of forecasts is %s.",
@@ -482,11 +489,11 @@ ARIMATimeSeries <- function(jaspResults, dataset, options) {
     names(pred) <- c("t", "y", "lower80", "upper80", "lower95", "upper95")
 
     jaspResults[["forecastResult"]] <- createJaspState(pred)
-    jaspResults[["forecastResult"]]$dependOn(c(.tsDependencies, "forecastLength"))
+    jaspResults[["forecastResult"]]$dependOn(c(.tsDataDependencies, .tsArimaDependencies, "forecastLength"))
   }
 }
 
-.tsForecastPlot <- function(jaspResults, fit, dataset, options, ready, position, dependencies) {
+.tsForecastPlot <- function(jaspResults, fit, dataset, datasetRaw, options, ready, position, dependencies) {
   if (!options$forecastTimeSeries) {
     return()
   }
@@ -502,14 +509,14 @@ ARIMATimeSeries <- function(jaspResults, dataset, options) {
       return()
     }
 
-    .tsFillforecastPlot(plot, fit, dataset, options, jaspResults, ready)
+    .tsFillforecastPlot(plot, fit, dataset, datasetRaw, options, jaspResults, ready)
   }
 }
 
-.tsFillforecastPlot <- function(plot, fit, dataset, options, jaspResults, ready) {
+.tsFillforecastPlot <- function(plot, fit, dataset, datasetRaw, options, jaspResults, ready) {
   yName <- options$dependent[1]
 
-  .tsForecasts(fit, dataset, options, jaspResults, ready)
+  .tsForecasts(fit, dataset, datasetRaw, options, jaspResults, ready)
   pred <- jaspResults[["forecastResult"]]$object
 
   # get the last non-NA observation
@@ -567,21 +574,21 @@ ARIMATimeSeries <- function(jaspResults, dataset, options) {
   plot$plotObject <- p
 }
 
-.tsSaveForecasts <- function(jaspResults, fit, dataset, options, ready) {
+.tsSaveForecasts <- function(jaspResults, fit, dataset, datasetRaw, options, ready) {
   # save forecasts in a seperate .csv file
   # it is not possible to append forecasts to the spreadsheet
   # because that would require adding rows instead of columns
   if (options$forecastSave != "") {
     yName <- decodeColNames(options$dependent[1])
 
-    .tsForecasts(fit, dataset, options, jaspResults, ready)
+    .tsForecasts(fit, dataset, datasetRaw, options, jaspResults, ready)
     pred <- jaspResults[["forecastResult"]]$object
     names(pred) <- c("t", yName, "lower80", "upper80", "lower95", "upper95")
     utils::write.csv(pred, file = options$forecastSave, row.names = FALSE)
   }
 }
 
-.tsCreateTableForecasts <- function(jaspResults, fit, dataset, options, ready, position, dependencies) {
+.tsCreateTableForecasts <- function(jaspResults, fit, dataset, datasetRaw, options, ready, position, dependencies) {
   if (!is.null(jaspResults[["forecastTable"]]) || !options$forecastTable) {
     return()
   }
@@ -617,7 +624,7 @@ ARIMATimeSeries <- function(jaspResults, dataset, options) {
     return()
   }
 
-  .tsForecasts(fit, dataset, options, jaspResults, ready)
+  .tsForecasts(fit, dataset, datasetRaw, options, jaspResults, ready)
   pred <- jaspResults[["forecastResult"]]$object
 
   rows <- data.frame(
