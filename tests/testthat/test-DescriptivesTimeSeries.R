@@ -13,7 +13,7 @@ results <- jaspTools::runAnalysis("DescriptivesTimeSeries", "JASP Webpage Visits
 test_that("Autocorrelation Function plot matches", {
   plotName <- results[["results"]][["acfPlot"]][["data"]]
   testPlot <- results[["state"]][["figures"]][[plotName]][["obj"]]
-  jaspTools::expect_equal_plots(testPlot, "autocorrelation-function")
+  jaspTools::expect_equal_plots(testPlot, "autocorrelation-function-desc")
 })
 
 test_that("Descriptive Statistics table results match", {
@@ -36,11 +36,11 @@ test_that("Lag Plot matches", {
 test_that("Partial Autocorrelation Function plot matches", {
   plotName <- results[["results"]][["pacfPlot"]][["data"]]
   testPlot <- results[["state"]][["figures"]][[plotName]][["obj"]]
-  jaspTools::expect_equal_plots(testPlot, "partial-autocorrelation-function")
+  jaspTools::expect_equal_plots(testPlot, "partial-autocorrelation-function-desc")
 })
 
 test_that("Time Series Plot matches", {
   plotName <- results[["results"]][["timeSeriesPlot"]][["data"]]
   testPlot <- results[["state"]][["figures"]][[plotName]][["obj"]]
-  jaspTools::expect_equal_plots(testPlot, "time-series-plot")
+  jaspTools::expect_equal_plots(testPlot, "time-series-plot-desc")
 })

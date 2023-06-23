@@ -43,5 +43,5 @@ test_that("Stationarity Tests table results match", {
 test_that("Time Series Plot matches", {
   plotName <- results[["results"]][["timeSeriesPlot"]][["data"]]
   testPlot <- results[["state"]][["figures"]][[plotName]][["obj"]]
-  jaspTools::expect_equal_plots(testPlot, "time-series-plot")
+  jaspTools::expect_equal_plots(testPlot, "time-series-plot-stat")
 })

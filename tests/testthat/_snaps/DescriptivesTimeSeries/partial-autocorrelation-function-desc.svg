@@ -76,6 +76,6 @@
 <text x='690.68' y='537.32' text-anchor='middle' style='font-size: 17.00px; font-family: sans;' textLength='18.91px' lengthAdjust='spacingAndGlyphs'>10</text>
 <text x='397.47' y='567.49' text-anchor='middle' style='font-size: 17.00px; font-family: sans;' textLength='28.37px' lengthAdjust='spacingAndGlyphs'>Lag</text>
 <text transform='translate(16.68,265.42) rotate(-90)' text-anchor='middle' style='font-size: 17.00px; font-family: sans;' textLength='45.35px' lengthAdjust='spacingAndGlyphs'>PACF</text>
-<text x='397.47' y='11.70' text-anchor='middle' style='font-size: 17.00px; font-family: sans;' textLength='229.63px' lengthAdjust='spacingAndGlyphs'>partial-autocorrelation-function</text>
+<text x='397.47' y='11.70' text-anchor='middle' style='font-size: 17.00px; font-family: sans;' textLength='271.22px' lengthAdjust='spacingAndGlyphs'>partial-autocorrelation-function-desc</text>
 </g>
 </svg>
