@@ -107,19 +107,69 @@ Form
 
     Group
     {
-        title:  qsTr("Transformation")
-        info:   qsTr("Transforms the time series by removing the trend or mean.")
         CheckBox
         {
-            name: "detrend"
-            label: qsTr("Detrend")
-        }
-        CheckBox
-        {
-            name: "demean"
-            label: qsTr("Demean")
+            name: "filter"
+            id: filter
+            label: qsTr("Filter by")
+            info: qsTr("Filters the time series so only a specific range will be used for further analyses. Row number refers to the row number in the spreadsheet. If a 'Time' variable is supplied it is also possible to filter by time index or date, depending on the format of the 'Time' variable.")
+            RadioButtonGroup
+            {
+                name: "filterBy"
+                RadioButton
+                {
+                    value: "row"
+                    id: filterRow
+                    label: qsTr("Row number")
+                    checked: true
+                    Group
+                    {
+                        columns: 2
+                        IntegerField { name: "rowStart"; label: qsTr("Start"); defaultValue: 1 }
+                        IntegerField { name: "rowEnd"; label: qsTr("End"); defaultValue: 100 }
+                    }
+                }
+                RadioButton
+                {
+                    value: "time"
+                    id: filterTime
+                    label: qsTr("Time index")
+                    enabled: time.count != 0
+                    Group
+                    {
+                        columns: 2
+                        IntegerField { name: "timeStart"; label: qsTr("Start"); defaultValue: 1 }
+                        IntegerField { name: "timeEnd"; label: qsTr("End"); defaultValue: 100 }
+                    }
+                }
+                RadioButton
+                {
+                    value: "date"
+                    id: filterDate
+                    label: qsTr("Date")
+                    enabled: time.count != 0
+                    Group
+                    {
+                        TextField
+                        {
+                            name: "dateStart"
+                            label: qsTr("Start")
+                            placeholderText: "YYYY-MM-DD HH:MM:SS"
+                            fieldWidth: 150
+                        }
+                        TextField
+                        {
+                            name: "dateEnd"
+                            label: qsTr("End")
+                            placeholderText: "YYYY-MM-DD HH:MM:SS"
+                            fieldWidth: 150
+                        }
+                    }
+                }
+            }
         }
     }
+
     Group
     {
         title:  qsTr("Noise shape line")
@@ -138,6 +188,22 @@ Form
         {
             name: "brownNoise"
             label: qsTr("Brown noise")
+        }
+    }
+
+    Group
+    {
+        title:  qsTr("Transformation")
+        info:   qsTr("Transforms the time series by removing the trend or mean.")
+        CheckBox
+        {
+            name: "detrend"
+            label: qsTr("Detrend")
+        }
+        CheckBox
+        {
+            name: "demean"
+            label: qsTr("Demean")
         }
     }
 }

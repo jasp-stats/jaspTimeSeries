@@ -18,14 +18,19 @@
 StationarityTimeSeries <- function(jaspResults, dataset, options) {
   ready <- options$dependent != ""
 
-  dataset <- .tsReadData(jaspResults, dataset, options, ready)
+  datasetRaw <- .tsReadData(jaspResults, dataset, options, ready)
+
+  datasetFiltered <- .tsDataFilterHandler(datasetRaw, options, ready)
+
+  dataset <- .tsDataWithMissingRowsHandler(datasetFiltered, ready)
+
   transformedDataset <- .tsTransformData(jaspResults, dataset, options, ready)
 
   .tsErrorHandler(dataset, ready)
 
   .tsCreateTableStationarityTests(jaspResults, transformedDataset, options, ready, position = 2, dependencies = c(.tsTransformationDependencies, "adfTest", "ppTestRegressionCoefficient", "ppTestStudentized", "kpssLevel", "kpssTrend"))
 
-  .tsSaveTransformation(transformedDataset, options, jaspResults, ready, dependencies = c(.tsTransformationDependencies, "transformationColumn", "transformationSavedToData"))
+  .tsSaveTransformation(transformedDataset, datasetRaw, options, jaspResults, ready, dependencies = c(.tsTransformationDependencies, "transformationColumn", "transformationSavedToData"))
 
   .tsTimeSeriesPlotTransformation(jaspResults, transformedDataset, options, ready, position = 1, dependencies = c(.tsTransformationDependencies, "timeSeriesPlot", "timeSeriesPlotType", "timeSeriesPlotDistribution"))
 
@@ -40,7 +45,8 @@ StationarityTimeSeries <- function(jaspResults, dataset, options) {
   "dependent", "time", "detrend", "detrendPoly", "log", "logBase", "root",
   "rootIndex", "boxCox", "boxCoxLambdaSpecification", "boxCoxLambda",
   "difference", "differenceLag", "differenceOrder", "polynomialSpecification",
-  "polynomialSpecificationAutoIc", "polynomialSpecificationAutoMax"
+  "polynomialSpecificationAutoIc", "polynomialSpecificationAutoMax",
+  "filter", "filterBy", "rowStart", "rowEnd", "timeStart", "timeEnd", "dateStart", "dateEnd"
 )
 
 .tsTransformData <- function(jaspResults, dataset, options, ready) {
@@ -170,15 +176,16 @@ StationarityTimeSeries <- function(jaspResults, dataset, options) {
     res <- sapply(0:(options$polynomialSpecificationAutoMax), .tsFitPoly, x = dataset$y, t = as.integer(dataset$t))
 
     jaspResults[["polyResult"]] <- createJaspState(res)
-    jaspResults[["polyResult"]]$dependOn(c("polynomialSpecificationAutoMax"))
+    jaspResults[["polyResult"]]$dependOn(.tsTransformationDependencies)
   }
 }
 
-.tsSaveTransformation <- function(transformedDataset, options, jaspResults, ready, dependencies) {
+.tsSaveTransformation <- function(dataset, datasetRaw, options, jaspResults, ready, dependencies) {
   # append transformed variable to spreadsheet
   if (options[["transformationSavedToData"]] && is.null(jaspResults[["transformationColumn"]]) && options[["transformationColumn"]] != "" && ready) {
-    transformationColumn <- rep(NA, max(as.numeric(rownames(transformedDataset))))
-    transformationColumn[as.numeric(rownames(transformedDataset))] <- transformedDataset$y
+    transformationColumn <- rep(NA, max(as.numeric(rownames(datasetRaw))))
+    matchT <- match(as.POSIXct(datasetRaw$t, tz = "UTC"), dataset$t)
+    transformationColumn[as.numeric(rownames(datasetRaw))] <- dataset$y[matchT]
     jaspResults[["transformationColumn"]] <- createJaspColumn(columnName = options[["transformationColumn"]])
     jaspResults[["transformationColumn"]]$dependOn(dependencies)
     jaspResults[["transformationColumn"]]$setScale(transformationColumn)

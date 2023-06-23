@@ -18,7 +18,11 @@
 ARIMATimeSeries <- function(jaspResults, dataset, options) {
   ready <- options$dependent != ""
 
-  dataset <- .tsReadData(jaspResults, dataset, options, ready, covariates = TRUE)
+  datasetRaw <- .tsReadData(jaspResults, dataset, options, ready, covariates = TRUE)
+
+  datasetFiltered <- .tsDataFilterHandler(datasetRaw, options, ready)
+
+  dataset <- .tsDataWithMissingRowsHandler(datasetFiltered, ready)
 
   .tsArimaResults(jaspResults, dataset, options, ready, dependencies = c(.tsArimaDependencies, .tsDataDependencies))
   fit <- jaspResults[["arimaResult"]]$object
@@ -33,7 +37,7 @@ ARIMATimeSeries <- function(jaspResults, dataset, options) {
 
   .tsResidualDiagnostics(jaspResults, fit, dataset, options, ready, position = 5, dependencies = c(.tsArimaDependencies, .tsDataDependencies))
 
-  .tsSaveResiduals(dataset, fit, options, jaspResults, ready, dependencies = c(.tsArimaDependencies, .tsDataDependencies, "residualColumn", "residualSavedToData"))
+  .tsSaveResiduals(dataset, datasetRaw, fit, options, jaspResults, ready, dependencies = c(.tsArimaDependencies, .tsDataDependencies, "residualColumn", "residualSavedToData"))
 
   .tsCreateTableForecasts(jaspResults, fit, dataset, options, ready, position = 7, dependencies = c(.tsArimaDependencies, .tsDataDependencies, "forecast", "forecastLength"))
 
@@ -390,11 +394,12 @@ ARIMATimeSeries <- function(jaspResults, dataset, options) {
   }
 }
 
-.tsSaveResiduals <- function(dataset, fit, options, jaspResults, ready, dependencies) {
+.tsSaveResiduals <- function(dataset, datasetRaw, fit, options, jaspResults, ready, dependencies) {
   # append residuals to spreadsheet
   if (options[["residualSavedToData"]] && is.null(jaspResults[["residualColumn"]]) && options[["residualColumn"]] != "" && ready) {
-    residualColumn <- rep(NA, max(as.numeric(rownames(dataset))))
-    residualColumn[as.numeric(rownames(dataset))] <- fit$residuals
+    residualColumn <- rep(NA, max(as.numeric(rownames(datasetRaw))))
+    matchT <- match(as.POSIXct(datasetRaw$t, tz = "UTC"), dataset$t)
+    residualColumn[as.numeric(rownames(datasetRaw))] <- fit$residuals[matchT]
     jaspResults[["residualColumn"]] <- createJaspColumn(columnName = options[["residualColumn"]])
     jaspResults[["residualColumn"]]$dependOn(options = dependencies)
     jaspResults[["residualColumn"]]$setScale(residualColumn)

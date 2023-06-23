@@ -18,7 +18,11 @@
 SpectralTimeSeries <- function(jaspResults, dataset, options) {
   ready <- options$dependent != ""
 
-  dataset <- .tsReadData(jaspResults, dataset, options, ready)
+  datasetRaw <- .tsReadData(jaspResults, dataset, options, ready)
+
+  datasetFiltered <- .tsDataFilterHandler(datasetRaw, options, ready)
+
+  dataset <- .tsDataWithMissingRowsHandler(datasetFiltered, ready)
 
   .tsErrorHandler(dataset, ready)
 
@@ -29,7 +33,8 @@ SpectralTimeSeries <- function(jaspResults, dataset, options) {
 .tsSpectralDependencies <- c(
   "dependent", "time",
   "kernel", "kernelMethod", "kernelTerm", "kernelDimension",
-  "taper", "log", "detrend", "demean"
+  "taper", "log", "detrend", "demean",
+  "filter", "filterBy", "rowStart", "rowEnd", "timeStart", "timeEnd", "dateStart", "dateEnd"
 )
 
 .tsComputeSpectralResults <- function(dataset, options, jaspResults, ready) {

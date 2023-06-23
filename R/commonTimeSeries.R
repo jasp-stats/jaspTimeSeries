@@ -44,61 +44,6 @@
         dat <- cbind(dat, covariates)
       }
     }
-
-    if (options$filter) {
-      start <- 1
-      end <- nrow(dat)
-      if (options$filterBy == "row") {
-        if (options$rowStart != "") start <- options$rowStart
-        if (options$rowEnd != "") end <- options$rowEnd
-      }
-      tryDate <- try(as.POSIXct(dat$t, tz = "UTC"))
-      if (options$filterBy == "time") {
-        if (!jaspBase::isTryError(tryDate))
-          .quitAnalysis(gettext("The 'Time' variable has a date-like format, please filter by date instead."))
-        start <- min(dat$t)
-        end <- max(dat$t)
-        if (options$timeStart != "") start <- options$timeStart
-        if (options$timeEnd != "") end <- options$timeEnd
-      }
-      if (options$filterBy == "date") {
-        if (jaspBase::isTryError(tryDate))
-          .quitAnalysis(gettext("The 'Time' variable is not in a date-like format (e.g., yyyy-mm-dd hh:mm:ss). Try to filter by time index instead."))
-        first <- min(tryDate)
-        last <- max(tryDate)
-        if (options$dateStart != "") {
-          start <- try(as.POSIXct(options$dateStart, tz = "UTC"))
-          if (jaspBase::isTryError(start))
-            .quitAnalysis(gettext("'Start' must be in a date-like format (e.g., yyyy-mm-dd hh:mm:ss)."))
-          if (start >= last) {
-            .quitAnalysis(gettext("The 'Start' value of the filter should be before last observation."))
-          }
-          if (start < first) {
-            start <- 1
-          } else {
-            start <- min(which(tryDate >= start))
-          }
-        }
-        if (options$dateEnd != "") {
-          end <- try(as.POSIXct(options$dateEnd, tz = "UTC"))
-          if (jaspBase::isTryError(end))
-            .quitAnalysis(gettext("'End' must be in a date-like format (e.g., yyyy-mm-dd hh:mm:ss)."))
-          if (end <= first)
-             .quitAnalysis(gettext("The 'End' value of the filter should be larger/later than the 'Start' value."))
-          if (end > last) {
-            end <- nrow(dat)
-          } else {
-            end <- max(which(tryDate <= end))
-          }
-        }
-      }
-      if (start >= nrow(dat)) .quitAnalysis(gettext("The 'Start' value of the filter should be before last observation."))
-      if (end > nrow(dat)) end <- nrow(dat)
-      if (end <= start)
-        .quitAnalysis(gettext("The 'End' value of the filter should be larger/later than the 'Start' value."))
-      dat <- dat[start:end, ]
-    }
-    dat <- .tsDataWithMissingRowsHandler(dat)
     return(dat)
   }
 }
@@ -135,26 +80,85 @@
   return(names(which.min(abs(df - 1))))
 }
 
-.tsDataWithMissingRowsHandler <- function(dataset) {
+.tsDataFilterHandler <- function(dataset, options, ready) {
+  if (options$filter & ready) {
+    start <- 1
+    end <- nrow(dataset)
+    if (options$filterBy == "row") {
+      if (options$rowStart != "") start <- options$rowStart
+      if (options$rowEnd != "") end <- options$rowEnd
+    }
+    tryDate <- try(as.POSIXct(dataset$t, tz = "UTC"))
+    if (options$filterBy == "time") {
+      if (!jaspBase::isTryError(tryDate))
+        .quitAnalysis(gettext("The 'Time' variable has a date-like format, please filter by date instead."))
+      start <- min(dataset$t, na.rm = TRUE)
+      end <- max(dataset$t, na.rm = TRUE)
+      if (options$timeStart != "") start <- options$timeStart
+      if (options$timeEnd != "") end <- options$timeEnd
+    }
+    if (options$filterBy == "date") {
+      if (jaspBase::isTryError(tryDate))
+        .quitAnalysis(gettext("The 'Time' variable is not in a date-like format (e.g., yyyy-mm-dd hh:mm:ss). Try to filter by time index instead."))
+      first <- min(tryDate, na.rm = TRUE)
+      last <- max(tryDate, na.rm = TRUE)
+      if (options$dateStart != "") {
+        start <- try(as.POSIXct(options$dateStart, tz = "UTC"))
+        if (jaspBase::isTryError(start))
+          .quitAnalysis(gettext("'Start' must be in a date-like format (e.g., yyyy-mm-dd hh:mm:ss)."))
+        if (start >= last) {
+          .quitAnalysis(gettext("The 'Start' value of the filter should be before last observation."))
+        }
+        if (start < first) {
+          start <- 1
+        } else {
+          start <- min(which(tryDate >= start))
+        }
+      }
+      if (options$dateEnd != "") {
+        end <- try(as.POSIXct(options$dateEnd, tz = "UTC"))
+        if (jaspBase::isTryError(end))
+          .quitAnalysis(gettext("'End' must be in a date-like format (e.g., yyyy-mm-dd hh:mm:ss)."))
+        if (end <= first)
+            .quitAnalysis(gettext("The 'End' value of the filter should be larger/later than the 'Start' value."))
+        if (end > last) {
+          end <- nrow(dataset)
+        } else {
+          end <- max(which(tryDate <= end))
+        }
+      }
+    }
+    if (start >= nrow(dataset)) .quitAnalysis(gettext("The 'Start' value of the filter should be before last observation."))
+    if (end > nrow(dataset)) end <- nrow(dataset)
+    if (end <= start)
+      .quitAnalysis(gettext("The 'End' value of the filter should be larger/later than the 'Start' value."))
+    dataset <- dataset[start:end, ]
+  }
+  return(dataset)
+}
+
+.tsDataWithMissingRowsHandler <- function(dataset, ready) {
   # Sometimes time series data sets do not have NA's for missing data,
   # but skip rows with a column indicating the time / date
   # so e.g., when third measurement is missing at t = 3,
   # the data set goes from t = 2 on the second row, to t = 4 on the third.
   # This function imputes NA's for the missing time stamps.
-  tryDate <- try(as.POSIXct(dataset$t, tz = "UTC"))
+  if (ready) {
+    tryDate <- try(as.POSIXct(dataset$t, tz = "UTC"))
 
-  if (jaspBase::isTryError(tryDate)) {
-    minT <- min(dataset$t)
-    maxT <- max(dataset$t)
-    newT <- minT:maxT
-  } else {
-    dataset$t <- as.POSIXct(dataset$t, tz = "UTC")
-    increment <- .tsGuessInterval(dataset)
-    newT <- seq.POSIXt(min(dataset$t), max(dataset$t), by = increment)
+    if (jaspBase::isTryError(tryDate)) {
+      minT <- min(dataset$t, na.rm = TRUE)
+      maxT <- max(dataset$t, na.rm = TRUE)
+      newT <- minT:maxT
+    } else {
+      dataset$t <- as.POSIXct(dataset$t, tz = "UTC")
+      increment <- .tsGuessInterval(dataset)
+      newT <- seq.POSIXt(min(dataset$t, na.rm = TRUE), max(dataset$t, na.rm = TRUE), by = increment)
+    }
+    dfNewT <- data.frame(t = newT)
+    dat <- merge(dfNewT, dataset, all.x = TRUE)
+    return(dat)
   }
-  dfNewT <- data.frame(t = newT)
-  dat <- merge(dfNewT, dataset, all.x = TRUE)
-  return(dat)
 }
 
 .tsFillTimeSeriesPlot <- function(timeSeriesPlot, dataset, options, type, distribution, yName = NULL) {
