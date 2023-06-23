@@ -53,7 +53,7 @@ StationarityTimeSeries <- function(jaspResults, dataset, options) {
   # apply log
   if (options$log) {
     if (any(transformedDataset$y <= 0)) {
-      .quitAnalysis("Data cannot be zero or negative for log transformation.")
+      .quitAnalysis(gettext("Data cannot be zero or negative for log transformation."))
     }
 
     if (options$logBase == "10") transformedDataset$y <- log10(transformedDataset$y)
@@ -63,7 +63,7 @@ StationarityTimeSeries <- function(jaspResults, dataset, options) {
   # apply root
   if (options$root) {
     if (any(transformedDataset$y < 0)) {
-      .quitAnalysis("Data cannot be negative for root transformation.")
+      .quitAnalysis(gettext("Data cannot be negative for root transformation."))
     }
 
     if (options$rootIndex == "square") transformedDataset$y <- sqrt(transformedDataset$y)
@@ -246,7 +246,7 @@ StationarityTimeSeries <- function(jaspResults, dataset, options) {
   smallerA <- smallerPr <- smallerPs <- smallerKl <- smallerKt <- greaterA <- greaterPr <- greaterPs <- greaterKl <- greaterKt <- F
   if (options$adfTest) {
     fit <- try(tseries::adf.test(dataset$y))
-    if (jaspBase::isTryError(fit)) .quitAnalysis("The ADF test failed.")
+    if (jaspBase::isTryError(fit)) .quitAnalysis(gettext("The ADF test failed."))
     df[1, c("statistic", "lag", "p")] <- c(fit$statistic, fit$parameter, fit$p.value)
     stationaryTable$addRows(df[1, ])
     stationaryTable$setRowName(rowIndex = 1, newName = "adf")
@@ -257,7 +257,7 @@ StationarityTimeSeries <- function(jaspResults, dataset, options) {
     # type = c("Z(alpha)", "Z(t_alpha)")
     # rho normalized bias test (regression coefficient) vs. tau studentized test
     fit <- try(tseries::pp.test(dataset$y, type = "Z(alpha)"))
-    if (jaspBase::isTryError(fit)) .quitAnalysis("The PP regression coefficient test failed.")
+    if (jaspBase::isTryError(fit)) .quitAnalysis(gettext("The PP regression coefficient test failed."))
     df[2, c("statistic", "lag", "p")] <- c(fit$statistic, fit$parameter, fit$p.value)
     stationaryTable$addRows(df[2, ])
     stationaryTable$setRowName(rowIndex = which(rowsIdx == 2), newName = "ppRegression")
@@ -266,7 +266,7 @@ StationarityTimeSeries <- function(jaspResults, dataset, options) {
   }
   if (options$ppTestStudentized) {
     fit <- try(tseries::pp.test(dataset$y, type = "Z(t_alpha)"))
-    if (jaspBase::isTryError(fit)) .quitAnalysis("The PP studentized test failed.")
+    if (jaspBase::isTryError(fit)) .quitAnalysis(gettext("The PP studentized test failed."))
     df[3, c("statistic", "lag", "p")] <- c(fit$statistic, fit$parameter, fit$p.value)
     stationaryTable$addRows(df[3, ])
     stationaryTable$setRowName(rowIndex = which(rowsIdx == 3), newName = "ppStudentized")
@@ -275,7 +275,7 @@ StationarityTimeSeries <- function(jaspResults, dataset, options) {
   }
   if (options$kpssLevel) {
     fit <- try(tseries::kpss.test(dataset$y, null = "Level"))
-    if (jaspBase::isTryError(fit)) .quitAnalysis("The KPSS test for level stationarity failed.")
+    if (jaspBase::isTryError(fit)) .quitAnalysis(gettext("The KPSS test for level stationarity failed."))
     df[4, c("statistic", "lag", "p")] <- c(fit$statistic, fit$parameter, fit$p.value)
     stationaryTable$addRows(df[4, ])
     stationaryTable$setRowName(rowIndex = which(rowsIdx == 4), newName = "kpssLevel")
@@ -284,7 +284,7 @@ StationarityTimeSeries <- function(jaspResults, dataset, options) {
   }
   if (options$kpssTrend) {
     fit <- try(tseries::kpss.test(dataset$y, null = "Trend"))
-    if (jaspBase::isTryError(fit)) .quitAnalysis("The KPSS test for trend stationarity failed.")
+    if (jaspBase::isTryError(fit)) .quitAnalysis(gettext("The KPSS test for trend stationarity failed."))
     df[5, c("statistic", "lag", "p")] <- c(fit$statistic, fit$parameter, fit$p.value)
     stationaryTable$addRows(df[5, ])
     stationaryTable$setRowName(rowIndex = which(rowsIdx == 5), newName = "kpssTrend")

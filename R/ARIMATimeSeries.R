@@ -20,31 +20,35 @@ ARIMATimeSeries <- function(jaspResults, dataset, options) {
 
   dataset <- .tsReadData(jaspResults, dataset, options, ready, covariates = TRUE)
 
-  .tsArimaResults(jaspResults, dataset, options, ready)
+  .tsArimaResults(jaspResults, dataset, options, ready, dependencies = c(.tsArimaDependencies, .tsDataDependencies))
   fit <- jaspResults[["arimaResult"]]$object
 
   .tsErrorHandler(dataset, ready)
 
-  .tsTimeSeriesPlot(jaspResults, dataset, options, ready, position = 1, dependencies = c("dependent", "time", "timeSeriesPlot", "timeSeriesPlotType", "timeSeriesPlotDistribution"))
+  .tsTimeSeriesPlot(jaspResults, dataset, options, ready, position = 1, dependencies = c(.tsDataDependencies, "timeSeriesPlot", "timeSeriesPlotType", "timeSeriesPlotDistribution"))
 
-  .tsCreateTableModel(jaspResults, fit, dataset, options, ready, position = 3, dependencies = .tsDependencies)
+  .tsCreateTableModel(jaspResults, fit, dataset, options, ready, position = 3, dependencies = c(.tsArimaDependencies, .tsDataDependencies))
 
-  .tsCreateTableCoefficients(jaspResults, fit, dataset, options, ready, position = 4, dependencies = .tsDependencies)
+  .tsCreateTableCoefficients(jaspResults, fit, dataset, options, ready, position = 4, dependencies = c(.tsArimaDependencies, .tsDataDependencies))
 
-  .tsResidualDiagnostics(jaspResults, fit, dataset, options, ready, position = 5, dependencies = .tsDependencies)
+  .tsResidualDiagnostics(jaspResults, fit, dataset, options, ready, position = 5, dependencies = c(.tsArimaDependencies, .tsDataDependencies))
 
-  .tsSaveResiduals(dataset, fit, options, jaspResults, ready, dependencies = c("residualColumn", "residualSavedToData", .tsDependencies))
+  .tsSaveResiduals(dataset, fit, options, jaspResults, ready, dependencies = c(.tsArimaDependencies, .tsDataDependencies, "residualColumn", "residualSavedToData"))
 
-  .tsCreateTableForecasts(jaspResults, fit, dataset, options, ready, position = 7, dependencies = c(.tsDependencies, "forecast", "forecastLength"))
+  .tsCreateTableForecasts(jaspResults, fit, dataset, options, ready, position = 7, dependencies = c(.tsArimaDependencies, .tsDataDependencies, "forecast", "forecastLength"))
 
-  .tsForecastPlot(jaspResults, fit, dataset, options, ready, position = 6, dependencies = c(.tsDependencies, "forecast", "forecastTimeSeries", "forecastTimeSeriesObserved", "forecastTimeSeriesType", "forecastLength"))
+  .tsForecastPlot(jaspResults, fit, dataset, options, ready, position = 6, dependencies = c(.tsArimaDependencies, .tsDataDependencies, "forecast", "forecastTimeSeries", "forecastTimeSeriesObserved", "forecastTimeSeriesType", "forecastLength"))
 
   .tsSaveForecasts(jaspResults, fit, dataset, options, ready)
 }
 
-# data dependencies
-.tsDependencies <- c(
+# dependencies
+.tsDataDependencies <- c(
   "dependent", "time", "covariates",
+  "filter", "filterBy", "rowStart", "rowEnd", "timeStart", "timeEnd", "dateStart", "dateEnd"
+)
+
+.tsArimaDependencies <- c(
   "modelSpecification", "modelSpecificationAutoIc", "intercept",
   "p", "d", "q",
   "seasonal", "periodSpecification", "m", "P", "D", "Q"
@@ -70,7 +74,7 @@ ARIMATimeSeries <- function(jaspResults, dataset, options) {
   }
 }
 
-.tsArimaResults <- function(jaspResults, dataset, options, ready) {
+.tsArimaResults <- function(jaspResults, dataset, options, ready, dependencies) {
   if (!is.null(jaspResults[["arimaResult"]])) {
     return()
   }
@@ -116,13 +120,13 @@ ARIMATimeSeries <- function(jaspResults, dataset, options) {
       ))
     }
 
-    if (jaspBase::isTryError(fit)) .quitAnalysis("The ARIMA model could not be fit.")
+    if (jaspBase::isTryError(fit)) .quitAnalysis(gettext("The ARIMA model could not be fit."))
     if (length(fit$coef) == 0) {
-      .quitAnalysis("No parameters are estimated.")
+      .quitAnalysis(gettext("No parameters are estimated."))
     }
 
     jaspResults[["arimaResult"]] <- createJaspState(fit)
-    jaspResults[["arimaResult"]]$dependOn(.tsDependencies)
+    jaspResults[["arimaResult"]]$dependOn(dependencies)
   }
 }
 
@@ -451,6 +455,7 @@ ARIMATimeSeries <- function(jaspResults, dataset, options) {
       firstForecast <- lastObsY + 1
       lastForecast <- lastObsY + options$forecastLength
       rangeForecast <- firstForecast:lastForecast
+      if (firstForecast > nrow(dataset)) .quitAnalysis(gettext("When 'Covariates' are used in the model, predictions cannot be carried out unless the covariates are also observed for the predicted period."))
       if (length(rangeForecast) > length(firstForecast:nrow(dataset))) {
         .quitAnalysis(
           gettextf(
@@ -459,14 +464,13 @@ ARIMATimeSeries <- function(jaspResults, dataset, options) {
           )
         )
       }
-      if (firstForecast > nrow(dataset)) .quitAnalysis(gettext("When 'Covariates' are used in the model, predictions cannot be carried out unless the covariates are also observed for the predicted period."))
       covariatesForecast <- covariates[rangeForecast]
       xreg <- as.matrix(covariatesForecast)
     }
 
     tPred <- data.frame(t = tPred)
     pred <- try(as.data.frame(forecast::forecast(fit, h = options$forecastLength, xreg = xreg)))
-    if (jaspBase::isTryError(pred)) .quitAnalysis("Forecasting failed.")
+    if (jaspBase::isTryError(pred)) .quitAnalysis(gettext("Forecasting failed."))
     pred <- cbind(tPred, pred)
 
     yName <- options$dependent[1]
@@ -546,12 +550,12 @@ ARIMATimeSeries <- function(jaspResults, dataset, options) {
   }
 
   p <- ggplot2::ggplot(df, ggplot2::aes(x = t, y = y)) +
+    ggplot2::geom_ribbon(ggplot2::aes(ymin = lower95, ymax = upper95, x = t), pred, alpha = 0.1) +
+    ggplot2::geom_ribbon(ggplot2::aes(ymin = lower80, ymax = upper80, x = t), pred, alpha = 0.2) +
     geomLine +
     geomPoint +
     xScale +
     ggplot2::scale_y_continuous(name = yName, breaks = yBreaks, limits = range(yBreaks)) +
-    ggplot2::geom_ribbon(ggplot2::aes(ymin = lower95, ymax = upper95, x = t), pred, alpha = 0.1) +
-    ggplot2::geom_ribbon(ggplot2::aes(ymin = lower80, ymax = upper80, x = t), pred, alpha = 0.2) +
     jaspGraphs::geom_rangeframe() +
     jaspGraphs::themeJaspRaw()
 

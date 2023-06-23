@@ -44,6 +44,60 @@
         dat <- cbind(dat, covariates)
       }
     }
+
+    if (options$filter) {
+      start <- 1
+      end <- nrow(dat)
+      if (options$filterBy == "row") {
+        if (options$rowStart != "") start <- options$rowStart
+        if (options$rowEnd != "") end <- options$rowEnd
+      }
+      tryDate <- try(as.POSIXct(dat$t, tz = "UTC"))
+      if (options$filterBy == "time") {
+        if (!jaspBase::isTryError(tryDate))
+          .quitAnalysis(gettext("The 'Time' variable has a date-like format, please filter by date instead."))
+        start <- min(dat$t)
+        end <- max(dat$t)
+        if (options$timeStart != "") start <- options$timeStart
+        if (options$timeEnd != "") end <- options$timeEnd
+      }
+      if (options$filterBy == "date") {
+        if (jaspBase::isTryError(tryDate))
+          .quitAnalysis(gettext("The 'Time' variable is not in a date-like format (e.g., yyyy-mm-dd hh:mm:ss). Try to filter by time index instead."))
+        first <- min(tryDate)
+        last <- max(tryDate)
+        if (options$dateStart != "") {
+          start <- try(as.POSIXct(options$dateStart, tz = "UTC"))
+          if (jaspBase::isTryError(start))
+            .quitAnalysis(gettext("'Start' must be in a date-like format (e.g., yyyy-mm-dd hh:mm:ss)."))
+          if (start >= last) {
+            .quitAnalysis(gettext("The 'Start' value of the filter should be before last observation."))
+          }
+          if (start < first) {
+            start <- 1
+          } else {
+            start <- min(which(tryDate >= start))
+          }
+        }
+        if (options$dateEnd != "") {
+          end <- try(as.POSIXct(options$dateEnd, tz = "UTC"))
+          if (jaspBase::isTryError(end))
+            .quitAnalysis(gettext("'End' must be in a date-like format (e.g., yyyy-mm-dd hh:mm:ss)."))
+          if (end <= first)
+             .quitAnalysis(gettext("The 'End' value of the filter should be larger/later than the 'Start' value."))
+          if (end > last) {
+            end <- nrow(dat)
+          } else {
+            end <- max(which(tryDate <= end))
+          }
+        }
+      }
+      if (start >= nrow(dat)) .quitAnalysis(gettext("The 'Start' value of the filter should be before last observation."))
+      if (end > nrow(dat)) end <- nrow(dat)
+      if (end <= start)
+        .quitAnalysis(gettext("The 'End' value of the filter should be larger/later than the 'Start' value."))
+      dat <- dat[start:end, ]
+    }
     dat <- .tsDataWithMissingRowsHandler(dat)
     return(dat)
   }
@@ -56,11 +110,11 @@
 
   datZoo <- zoo::zoo(dataset$y, dataset$t)
   if (!zoo::is.regular(datZoo)) {
-    .quitAnalysis("The time series data should be equally-spaced.")
+    .quitAnalysis(gettext("The time series data should be equally-spaced."))
   }
 
   if (any(duplicated(dataset$t))) {
-    .quitAnalysis("The time variable should have unique values only.")
+    .quitAnalysis(gettext("The time variable should have unique values only."))
   }
 }
 
@@ -90,8 +144,9 @@
   tryDate <- try(as.POSIXct(dataset$t, tz = "UTC"))
 
   if (jaspBase::isTryError(tryDate)) {
+    minT <- min(dataset$t)
     maxT <- max(dataset$t)
-    newT <- 1:maxT
+    newT <- minT:maxT
   } else {
     dataset$t <- as.POSIXct(dataset$t, tz = "UTC")
     increment <- .tsGuessInterval(dataset)

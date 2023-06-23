@@ -111,7 +111,7 @@ Form
             label: qsTr("Autocorrelation function")
             IntegerField { name: "acfMaxLag"; label: qsTr("Maximum lag"); min: 1; defaultValue: 10 }
             CheckBox { name: "acfZeroLag"; label: qsTr("Zero lag") }
-            info: qsTr("Plots the autocorrelation for a specified number of lags. The confidence interval may be given assuming either a white noise process, or assuming for a lag q a moving average process of order q - 1")
+            info: qsTr("Plots the autocorrelation for a specified number of lags. The confidence interval may be given assuming either a white noise process, or assuming for a lag q a moving average process of order q - 1.")
             CheckBox
             {
                 name: "acfCi"

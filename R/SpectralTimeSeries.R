@@ -58,7 +58,7 @@ SpectralTimeSeries <- function(jaspResults, dataset, options) {
       na.action = na.exclude # should probably add other options at some point
     ))
 
-    if (jaspBase::isTryError(res)) .quitAnalysis("The spectral analysis failed.")
+    if (jaspBase::isTryError(res)) .quitAnalysis(gettext("The spectral analysis failed."))
 
     jaspResults[["spectralResult"]] <- createJaspState(res)
     jaspResults[["spectralResult"]]$dependOn(.tsSpectralDependencies)
