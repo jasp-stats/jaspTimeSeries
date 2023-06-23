@@ -363,7 +363,7 @@ ARIMATimeSeries <- function(jaspResults, dataset, options) {
       type = "ACF", dataset, options,
       zeroLag = options$residualAcfZeroLag, maxLag = options$residualMaxLag,
       ci = options$residualAcfCi, ciValue = options$residualAcfCiLevel,
-      ciType = "normal"
+      ciType = "whiteNoise"
     )
   }
 

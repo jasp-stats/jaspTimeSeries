@@ -192,7 +192,8 @@
 }
 
 .tsFillACF <- function(plot, type, dataset, options, zeroLag = F, maxLag, ci, ciValue, ciType) {
-  y <- na.omit(dataset$y)
+
+  y <- na.omit(as.numeric(dataset$y))
 
   if (type == "ACF") {
     ac <- stats::acf(y, plot = FALSE, lag.max = maxLag)
