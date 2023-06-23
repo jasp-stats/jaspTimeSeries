@@ -143,12 +143,16 @@
   return(dataset)
 }
 
-.tsDataWithMissingRowsHandler <- function(dataset, ready) {
+.tsDataWithMissingRowsHandler <- function(dataset, options, ready) {
   # Sometimes time series data sets do not have NA's for missing data,
   # but skip rows with a column indicating the time / date
   # so e.g., when third measurement is missing at t = 3,
   # the data set goes from t = 2 on the second row, to t = 4 on the third.
   # This function imputes NA's for the missing time stamps.
+  if (options$time == "") {
+    return(dataset)
+  }
+
   if (ready) {
     tryDate <- try(as.POSIXct(dataset$t, tz = "UTC"))
 

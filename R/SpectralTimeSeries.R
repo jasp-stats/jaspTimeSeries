@@ -22,7 +22,7 @@ SpectralTimeSeries <- function(jaspResults, dataset, options) {
 
   datasetFiltered <- .tsDataFilterHandler(datasetRaw, options, ready)
 
-  dataset <- .tsDataWithMissingRowsHandler(datasetFiltered, ready)
+  dataset <- .tsDataWithMissingRowsHandler(datasetFiltered, options, ready)
 
   .tsErrorHandler(dataset, ready)
 

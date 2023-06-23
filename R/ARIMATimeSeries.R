@@ -22,7 +22,7 @@ ARIMATimeSeries <- function(jaspResults, dataset, options) {
 
   datasetFiltered <- .tsDataFilterHandler(datasetRaw, options, ready)
 
-  dataset <- .tsDataWithMissingRowsHandler(datasetFiltered, ready)
+  dataset <- .tsDataWithMissingRowsHandler(datasetFiltered, options, ready)
 
   .tsArimaResults(jaspResults, dataset, options, ready, dependencies = c(.tsArimaDependencies, .tsDataDependencies))
   fit <- jaspResults[["arimaResult"]]$object

@@ -1,4 +1,4 @@
-Context("Stationarity Time Series")
+context("Stationarity Time Series")
 
 options <- jaspTools::analysisOptions("StationarityTimeSeries")
 options$dependent <- "visits"

@@ -22,7 +22,7 @@ StationarityTimeSeries <- function(jaspResults, dataset, options) {
 
   datasetFiltered <- .tsDataFilterHandler(datasetRaw, options, ready)
 
-  dataset <- .tsDataWithMissingRowsHandler(datasetFiltered, ready)
+  dataset <- .tsDataWithMissingRowsHandler(datasetFiltered, options, ready)
 
   transformedDataset <- .tsTransformData(jaspResults, dataset, options, ready)
 
