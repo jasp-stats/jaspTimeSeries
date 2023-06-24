@@ -9,6 +9,7 @@ options$kernelTerm <- list(list(kernelDimension = 2))
 set.seed(1)
 results <- jaspTools::runAnalysis("SpectralTimeSeries", "JASP Webpage Visits.csv", options)
 
+
 test_that("Spectral Density table results match", {
   table <- results[["results"]][["bandWidthTable"]][["data"]]
   jaspTools::expect_equal_tables(table,

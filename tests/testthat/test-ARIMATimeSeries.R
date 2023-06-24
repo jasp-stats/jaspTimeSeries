@@ -52,7 +52,7 @@ test_that("Q-Q Plot matches", {
 test_that("Time Series Plot matches", {
   plotName <- results[["results"]][["residContainer"]][["collection"]][["residContainer_residualTimeSeriesPlot"]][["data"]]
   testPlot <- results[["state"]][["figures"]][[plotName]][["obj"]]
-  jaspTools::expect_equal_plots(testPlot, "time-series-plot")
+  jaspTools::expect_equal_plots(testPlot, "time-series-plot1")
 })
 
 test_that("Time Series Plot matches", {
@@ -60,7 +60,6 @@ test_that("Time Series Plot matches", {
   testPlot <- results[["state"]][["figures"]][[plotName]][["obj"]]
   jaspTools::expect_equal_plots(testPlot, "time-series-plot2")
 })
-
 # test with forecasting
 options <- jaspTools::analysisOptions("ARIMATimeSeries")
 options$dependent <- "visits"
