@@ -281,15 +281,10 @@
     is.null(xName) || is.character(xName) || is.expression(xName),
     is.null(yName) || is.character(yName) || is.expression(yName),
     is.logical(addSmooth),
-    # is.logical(emulateGgMarginal),
     is.logical(showLegend),
     length(x) == length(y) && (is.null(group) || length(x) == length(group))
   )
   plotRight <- match.arg(plotRight)
-
-  # if (emulateGgMarginal) {
-  #   colorAreaUnderDensity <- FALSE
-  # }
 
   tryDate <- try(as.POSIXct(x, tz = "UTC"))
 
@@ -333,10 +328,6 @@
     ggplot2::scale_y_continuous(breaks = yBreaks, limits = range(yBreaks)) +
     jaspGraphs::geom_rangeframe() +
     do.call(jaspGraphs::themeJaspRaw, dots)
-
-  if (emulateGgMarginal) {
-    mainPlot <- mainPlot + ggplot2::theme(plot.margin = unit(c(0, 0, 0.25, 0.25), "cm"))
-  }
 
   gb <- ggplot2::ggplot_build(mainPlot)
   scales <- gb$layout$get_scales(1L)
