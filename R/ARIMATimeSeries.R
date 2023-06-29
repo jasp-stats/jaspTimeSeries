@@ -279,25 +279,25 @@ ARIMATimeSeries <- function(jaspResults, dataset, options) {
 
   # add coefficients to table
   if (p >= 1) {
-    ar <- gettextf("AR(%d$1)", 1:p)
+    ar <- gettextf("AR(%i)", 1:p)
     coefficients <- c(coefficients, ar)
     group <- c(group, TRUE, rep(FALSE, p - 1))
   }
 
   if (q >= 1) {
-    ma <- gettextf("MA(%d$1)", 1:q)
+    ma <- gettextf("MA(%i)", 1:q)
     coefficients <- c(coefficients, ma)
     group <- c(group, TRUE, rep(FALSE, q - 1))
   }
 
   if (P >= 1) {
-    sar <- gettextf("seasonal AR(%d$1)", 1:P)
+    sar <- gettextf("seasonal AR(%i)", 1:P)
     coefficients <- c(coefficients, sar)
     group <- c(group, TRUE, rep(FALSE, P - 1))
   }
 
   if (Q >= 1) {
-    sma <- gettextf("seasonal MA(%d$1)", 1:Q)
+    sma <- gettextf("seasonal MA(%i)", 1:Q)
     coefficients <- c(coefficients, sma)
     group <- c(group, TRUE, rep(FALSE, Q - 1))
   }
