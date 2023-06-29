@@ -30,7 +30,7 @@ SpectralTimeSeries <- function(jaspResults, dataset, options) {
   .tsCreateTableBandWith(jaspResults, dataset, options, ready, position = 1, dependencies = .tsSpectralDependencies())
 }
 
-. <- function() {
+.tsSpectralDependencies <- function() {
   return(c(
     "dependent", "time",
     "kernel", "kernelMethod", "kernelTerm", "kernelDimension",
