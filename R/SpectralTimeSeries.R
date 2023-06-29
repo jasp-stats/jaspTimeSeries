@@ -26,16 +26,18 @@ SpectralTimeSeries <- function(jaspResults, dataset, options) {
 
   .tsErrorHandler(dataset, ready)
 
-  .tsPowerSpectralDensity(jaspResults, dataset, options, ready, position = 2, dependencies = .tsSpectralDependencies)
-  .tsCreateTableBandWith(jaspResults, dataset, options, ready, position = 1, dependencies = .tsSpectralDependencies)
+  .tsPowerSpectralDensity(jaspResults, dataset, options, ready, position = 2, dependencies = .tsSpectralDependencies())
+  .tsCreateTableBandWith(jaspResults, dataset, options, ready, position = 1, dependencies = .tsSpectralDependencies())
 }
 
-.tsSpectralDependencies <- c(
-  "dependent", "time",
-  "kernel", "kernelMethod", "kernelTerm", "kernelDimension",
-  "taper", "log", "detrend", "demean",
-  "filter", "filterBy", "rowStart", "rowEnd", "timeStart", "timeEnd", "dateStart", "dateEnd"
-)
+. <- function() {
+  return(c(
+    "dependent", "time",
+    "kernel", "kernelMethod", "kernelTerm", "kernelDimension",
+    "taper", "log", "detrend", "demean",
+    "filter", "filterBy", "rowStart", "rowEnd", "timeStart", "timeEnd", "dateStart", "dateEnd"
+  ))
+}
 
 .tsComputeSpectralResults <- function(dataset, options, jaspResults, ready) {
   if (!is.null(jaspResults[["spectralResult"]])) {
@@ -66,13 +68,13 @@ SpectralTimeSeries <- function(jaspResults, dataset, options) {
     if (jaspBase::isTryError(res)) .quitAnalysis(gettext("The spectral analysis failed."))
 
     jaspResults[["spectralResult"]] <- createJaspState(res)
-    jaspResults[["spectralResult"]]$dependOn(.tsSpectralDependencies)
+    jaspResults[["spectralResult"]]$dependOn(.tsSpectralDependencies())
   }
 }
 
 .tsPowerSpectralDensity <- function(jaspResults, dataset, options, ready, position, dependencies) {
   if (is.null(jaspResults[["powerSpectralDensity"]])) {
-    plot <- createJaspPlot(title = "Power Spectral Density Plot")
+    plot <- createJaspPlot(title = gettext("Power Spectral Density Plot"))
     plot$dependOn(c(dependencies, "whiteNoise", "pinkNoise", "brownNoise"))
     plot$position <- position
 

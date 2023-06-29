@@ -201,7 +201,7 @@
   return(df)
 }
 
-.tsFillACF <- function(plot, type, dataset, options, zeroLag = F, maxLag, ci, ciValue, ciType) {
+.tsFillACF <- function(plot, type, dataset, options, zeroLag = FALSE, maxLag, ci, ciValue, ciType) {
   y <- na.omit(as.numeric(dataset$y))
 
   if (type == "ACF") {
@@ -213,7 +213,7 @@
   }
 
   dat <- data.frame(acf = ac$acf, lag = ac$lag)
-  if (type == "ACF" & !zeroLag) {
+  if (type == "ACF" && !zeroLag) {
     dat <- dat[-1, ]
   } # remove lag 0
 
@@ -249,7 +249,7 @@
   yBreaks <- jaspGraphs::getPrettyAxisBreaks(yRange)
 
   p <- p +
-    ggplot2::scale_x_continuous(name = "Lag", breaks = xBreaks, limits = range(xBreaks)) +
+    ggplot2::scale_x_continuous(name = gettext("Lag"), breaks = xBreaks, limits = range(xBreaks)) +
     ggplot2::scale_y_continuous(name = type, breaks = yBreaks, limits = range(yBreaks)) +
     ggplot2::geom_linerange(data = dat, ggplot2::aes(x = lag, ymin = 0, ymax = acf), size = 1) +
     ggplot2::geom_segment(ggplot2::aes(x = xMin, xend = xMax, y = 0, yend = 0), alpha = 0.5) +
@@ -270,7 +270,6 @@
                                alphaAreaUnderDensity = .5,
                                showLegend = !is.null(group),
                                legendTitle = NULL,
-                               emulateGgMarginal = FALSE,
                                type = "both",
                                ...) {
 
@@ -282,15 +281,15 @@
     is.null(xName) || is.character(xName) || is.expression(xName),
     is.null(yName) || is.character(yName) || is.expression(yName),
     is.logical(addSmooth),
-    is.logical(emulateGgMarginal),
+    # is.logical(emulateGgMarginal),
     is.logical(showLegend),
     length(x) == length(y) && (is.null(group) || length(x) == length(group))
   )
   plotRight <- match.arg(plotRight)
 
-  if (emulateGgMarginal) {
-    colorAreaUnderDensity <- FALSE
-  }
+  # if (emulateGgMarginal) {
+  #   colorAreaUnderDensity <- FALSE
+  # }
 
   tryDate <- try(as.POSIXct(x, tz = "UTC"))
 

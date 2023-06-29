@@ -26,22 +26,24 @@ DescriptivesTimeSeries <- function(jaspResults, dataset, options) {
 
   .tsErrorHandler(dataset, ready)
 
-  .tsDescriptivesTable(jaspResults, dataset, options, ready, position = 1, dependencies = c(.tsDescriptivesDependencies, "descriptivesTableTransposed"))
+  .tsDescriptivesTable(jaspResults, dataset, options, ready, position = 1, dependencies = c(.tsDescriptivesDependencies(), "descriptivesTableTransposed"))
 
-  .tsTimeSeriesPlotDescriptives(jaspResults, dataset, options, ready, position = 2, dependencies = c(.tsDescriptivesDependencies, "timeSeriesPlot", "timeSeriesPlotType", "timeSeriesPlotDistribution"))
+  .tsTimeSeriesPlotDescriptives(jaspResults, dataset, options, ready, position = 2, dependencies = c(.tsDescriptivesDependencies(), "timeSeriesPlot", "timeSeriesPlotType", "timeSeriesPlotDistribution"))
 
-  .tslagPlotDescriptives(jaspResults, dataset, options, ready, position = 3, dependencies = c(.tsDescriptivesDependencies, "lagPlot", "lagPlotLag", "lagPlotRegressionType", "lagPlotRegressionLine", "lagPlotRegressionCi", "lagPlotRegressionCiLevel"))
+  .tslagPlotDescriptives(jaspResults, dataset, options, ready, position = 3, dependencies = c(.tsDescriptivesDependencies(), "lagPlot", "lagPlotLag", "lagPlotRegressionType", "lagPlotRegressionLine", "lagPlotRegressionCi", "lagPlotRegressionCiLevel"))
 
-  .tsACFDescriptives(jaspResults, dataset, options, ready, position = 4, dependencies = c(.tsDescriptivesDependencies, "acf", "acfCi", "acfCiLevel", "acfCiType", "acfZeroLag", "acfMaxLag"))
+  .tsACFDescriptives(jaspResults, dataset, options, ready, position = 4, dependencies = c(.tsDescriptivesDependencies(), "acf", "acfCi", "acfCiLevel", "acfCiType", "acfZeroLag", "acfMaxLag"))
 
-  .tsPACFDescriptives(jaspResults, dataset, options, ready, position = 5, dependencies = c(.tsDescriptivesDependencies, "pacf", "pacfCi", "pacfCiLevel", "pacfCiType", "pacfMaxLag"))
+  .tsPACFDescriptives(jaspResults, dataset, options, ready, position = 5, dependencies = c(.tsDescriptivesDependencies(), "pacf", "pacfCi", "pacfCiLevel", "pacfCiType", "pacfMaxLag"))
 }
 
-.tsDescriptivesDependencies <- c(
-  "dependent", "time",
-  "filter", "filterBy", "rowStart", "rowEnd",
-  "timeStart", "timeEnd", "dateStart", "dateEnd"
-)
+.tsDescriptivesDependencies <- function() {
+  return(c(
+    "dependent", "time",
+    "filter", "filterBy", "rowStart", "rowEnd",
+    "timeStart", "timeEnd", "dateStart", "dateEnd"
+  ))
+}
 
 .tsTimeSeriesPlotDescriptives <- function(jaspResults, dataset, options, ready, position, dependencies) {
   if (!options$timeSeriesPlot) {
@@ -49,7 +51,7 @@ DescriptivesTimeSeries <- function(jaspResults, dataset, options) {
   }
 
   if (is.null(jaspResults[["timeSeriesPlot"]])) {
-    plot <- createJaspPlot(title = "Time Series Plot", width = 660)
+    plot <- createJaspPlot(title = gettext("Time Series Plot"), width = 660)
     plot$dependOn(dependencies)
     plot$position <- position
 
@@ -73,7 +75,7 @@ DescriptivesTimeSeries <- function(jaspResults, dataset, options) {
   }
 
   if (is.null(jaspResults[["lagPlot"]])) {
-    plot <- createJaspPlot(title = "Lag Plot")
+    plot <- createJaspPlot(title = gettext("Lag Plot"))
     plot$dependOn(dependencies)
     plot$position <- position
 
@@ -129,7 +131,7 @@ DescriptivesTimeSeries <- function(jaspResults, dataset, options) {
   }
 
   if (is.null(jaspResults[["acfPlot"]])) {
-    plot <- createJaspPlot(title = "Autocorrelation Function")
+    plot <- createJaspPlot(title = gettext("Autocorrelation Function"))
     plot$dependOn(dependencies)
     plot$position <- position
 
@@ -156,7 +158,7 @@ DescriptivesTimeSeries <- function(jaspResults, dataset, options) {
   }
 
   if (is.null(jaspResults[["pacfPlot"]])) {
-    plot <- createJaspPlot(title = "Partial Autocorrelation Function")
+    plot <- createJaspPlot(title = gettext("Partial Autocorrelation Function"))
     plot$dependOn(dependencies)
     plot$position <- position
 

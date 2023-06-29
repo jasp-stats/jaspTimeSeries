@@ -28,26 +28,28 @@ StationarityTimeSeries <- function(jaspResults, dataset, options) {
 
   .tsErrorHandler(dataset, ready)
 
-  .tsCreateTableStationarityTests(jaspResults, transformedDataset, options, ready, position = 2, dependencies = c(.tsTransformationDependencies, "adfTest", "ppTestRegressionCoefficient", "ppTestStudentized", "kpssLevel", "kpssTrend"))
+  .tsCreateTableStationarityTests(jaspResults, transformedDataset, options, ready, position = 2, dependencies = c(.tsTransformationDependencies(), "adfTest", "ppTestRegressionCoefficient", "ppTestStudentized", "kpssLevel", "kpssTrend"))
 
-  .tsSaveTransformation(transformedDataset, datasetRaw, options, jaspResults, ready, dependencies = c(.tsTransformationDependencies, "transformationColumn", "transformationSavedToData"))
+  .tsSaveTransformation(transformedDataset, datasetRaw, options, jaspResults, ready, dependencies = c(.tsTransformationDependencies(), "transformationColumn", "transformationSavedToData"))
 
-  .tsTimeSeriesPlotTransformation(jaspResults, transformedDataset, options, ready, position = 1, dependencies = c(.tsTransformationDependencies, "timeSeriesPlot", "timeSeriesPlotType", "timeSeriesPlotDistribution"))
+  .tsTimeSeriesPlotTransformation(jaspResults, transformedDataset, options, ready, position = 1, dependencies = c(.tsTransformationDependencies(), "timeSeriesPlot", "timeSeriesPlotType", "timeSeriesPlotDistribution"))
 
-  .tsACFTransformation(jaspResults, transformedDataset, options, ready, position = 3, dependencies = c(.tsTransformationDependencies, "acf", "acfCi", "acfCiLevel", "acfCiType", "acfZeroLag", "acfMaxLag"))
+  .tsACFTransformation(jaspResults, transformedDataset, options, ready, position = 3, dependencies = c(.tsTransformationDependencies(), "acf", "acfCi", "acfCiLevel", "acfCiType", "acfZeroLag", "acfMaxLag"))
 
-  .tsPACFTransformation(jaspResults, transformedDataset, options, ready, position = 4, dependencies = c(.tsTransformationDependencies, "pacf", "pacfCi", "pacfCiLevel", "pacfCiType", "pacfMaxLag"))
+  .tsPACFTransformation(jaspResults, transformedDataset, options, ready, position = 4, dependencies = c(.tsTransformationDependencies(), "pacf", "pacfCi", "pacfCiLevel", "pacfCiType", "pacfMaxLag"))
 
-  .tsCreateTablePolynomials(jaspResults, transformedDataset, options, ready, position = 5, dependencies = .tsTransformationDependencies)
+  .tsCreateTablePolynomials(jaspResults, transformedDataset, options, ready, position = 5, dependencies = .tsTransformationDependencies())
 }
 
-.tsTransformationDependencies <- c(
-  "dependent", "time", "detrend", "detrendPoly", "log", "logBase", "root",
-  "rootIndex", "boxCox", "boxCoxLambdaSpecification", "boxCoxLambda",
-  "difference", "differenceLag", "differenceOrder", "polynomialSpecification",
-  "polynomialSpecificationAutoIc", "polynomialSpecificationAutoMax",
-  "filter", "filterBy", "rowStart", "rowEnd", "timeStart", "timeEnd", "dateStart", "dateEnd"
-)
+.tsTransformationDependencies <- function() {
+  return(c(
+    "dependent", "time", "detrend", "detrendPoly", "log", "logBase", "root",
+    "rootIndex", "boxCox", "boxCoxLambdaSpecification", "boxCoxLambda",
+    "difference", "differenceLag", "differenceOrder", "polynomialSpecification",
+    "polynomialSpecificationAutoIc", "polynomialSpecificationAutoMax",
+    "filter", "filterBy", "rowStart", "rowEnd", "timeStart", "timeEnd", "dateStart", "dateEnd"
+  ))
+}
 
 .tsTransformData <- function(jaspResults, dataset, options, ready) {
   if (!ready) {
@@ -176,7 +178,7 @@ StationarityTimeSeries <- function(jaspResults, dataset, options) {
     res <- sapply(0:(options$polynomialSpecificationAutoMax), .tsFitPoly, x = dataset$y, t = as.integer(dataset$t))
 
     jaspResults[["polyResult"]] <- createJaspState(res)
-    jaspResults[["polyResult"]]$dependOn(.tsTransformationDependencies)
+    jaspResults[["polyResult"]]$dependOn(.tsTransformationDependencies())
   }
 }
 
@@ -206,7 +208,7 @@ StationarityTimeSeries <- function(jaspResults, dataset, options) {
   stationaryTable$addColumnInfo(name = "statistic", title = gettext("Statistic"), type = "number")
   stationaryTable$addColumnInfo(name = "lag", title = gettext("Truncation lag parameter"), type = "integer")
   stationaryTable$addColumnInfo(name = "p", title = gettext("p"), type = "pvalue")
-  stationaryTable$addColumnInfo(name = "null", title = sprintf("H\u2080"), type = "string")
+  stationaryTable$addColumnInfo(name = "null", title = gettextf("H\u2080"), type = "string")
 
   jaspResults[["stationaryTable"]] <- stationaryTable
 
@@ -250,7 +252,7 @@ StationarityTimeSeries <- function(jaspResults, dataset, options) {
 
   df <- data.frame(test, statistic = numeric(5), lag = numeric(5), p = numeric(5), null)
 
-  smallerA <- smallerPr <- smallerPs <- smallerKl <- smallerKt <- greaterA <- greaterPr <- greaterPs <- greaterKl <- greaterKt <- F
+  smallerA <- smallerPr <- smallerPs <- smallerKl <- smallerKt <- greaterA <- greaterPr <- greaterPs <- greaterKl <- greaterKt <- FALSE
   if (options$adfTest) {
     fit <- try(tseries::adf.test(dataset$y))
     if (jaspBase::isTryError(fit)) .quitAnalysis(gettext("The ADF test failed."))
@@ -332,7 +334,7 @@ StationarityTimeSeries <- function(jaspResults, dataset, options) {
   }
 
   if (is.null(jaspResults[["timeSeriesPlot"]])) {
-    plot <- createJaspPlot(title = "Time Series Plot", width = 660)
+    plot <- createJaspPlot(title = gettext("Time Series Plot"), width = 660)
     plot$dependOn(dependencies)
     plot$position <- position
 
@@ -352,7 +354,7 @@ StationarityTimeSeries <- function(jaspResults, dataset, options) {
   }
 
   if (is.null(jaspResults[["acfPlot"]])) {
-    plot <- createJaspPlot(title = "Autocorrelation Function")
+    plot <- createJaspPlot(title = gettext("Autocorrelation Function"))
     plot$dependOn(dependencies)
     plot$position <- position
 
@@ -379,7 +381,7 @@ StationarityTimeSeries <- function(jaspResults, dataset, options) {
   }
 
   if (is.null(jaspResults[["pacfPlot"]])) {
-    plot <- createJaspPlot(title = "Partial Autocorrelation Function")
+    plot <- createJaspPlot(title = gettext("Partial Autocorrelation Function"))
     plot$dependOn(dependencies)
     plot$position <- position
 
