@@ -279,25 +279,25 @@ ARIMATimeSeries <- function(jaspResults, dataset, options) {
 
   # add coefficients to table
   if (p >= 1) {
-    ar <- gettextf("AR(%i)", 1:p)
+    ar <- gettextf("AR(%1$i)", 1:p)
     coefficients <- c(coefficients, ar)
     group <- c(group, TRUE, rep(FALSE, p - 1))
   }
 
   if (q >= 1) {
-    ma <- gettextf("MA(%i)", 1:q)
+    ma <- gettextf("MA(%1$i)", 1:q)
     coefficients <- c(coefficients, ma)
     group <- c(group, TRUE, rep(FALSE, q - 1))
   }
 
   if (P >= 1) {
-    sar <- gettextf("seasonal AR(%i)", 1:P)
+    sar <- gettextf("seasonal AR(%1$i)", 1:P)
     coefficients <- c(coefficients, sar)
     group <- c(group, TRUE, rep(FALSE, P - 1))
   }
 
   if (Q >= 1) {
-    sma <- gettextf("seasonal MA(%i)", 1:Q)
+    sma <- gettextf("seasonal MA(%1$i)", 1:Q)
     coefficients <- c(coefficients, sma)
     group <- c(group, TRUE, rep(FALSE, Q - 1))
   }
@@ -322,9 +322,9 @@ ARIMATimeSeries <- function(jaspResults, dataset, options) {
   coefTable$addRows(rows)
 
   if (P >= 1 | D >= 1 | Q >= 1) {
-    coefTable$addFootnote(gettextf("An ARIMA(%s$1, %s$2, %s$3)(%s$4, %s$5, %s$6)[%s$7] model was fitted.", p, d, q, P, D, Q, m))
+    coefTable$addFootnote(gettextf("An ARIMA(%1$s, %2$s, %3$s)(%4$s, %5$s, %6$s)[%7$s] model was fitted.", p, d, q, P, D, Q, m))
   } else {
-    coefTable$addFootnote(gettextf("An ARIMA(%s$1, %s$2, %s$3) model was fitted.", p, d, q))
+    coefTable$addFootnote(gettextf("An ARIMA(%1$s, %2$s, %3$s) model was fitted.", p, d, q))
   }
 }
 
@@ -473,7 +473,7 @@ ARIMATimeSeries <- function(jaspResults, dataset, options) {
       if (length(rangeForecast) > length(firstForecast:nrow(datasetRaw))) {
         .quitAnalysis(
           gettextf(
-            "Not enough observations in the covariate%s$1. The maximum number of forecasts is %s$2.",
+            "Not enough observations in the covariate%1$s. The maximum number of forecasts is %2$s.",
             ifelse(is.vector(covariates), "", "s"), length(firstForecast:nrow(dataset))
           )
         )
