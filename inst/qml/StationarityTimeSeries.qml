@@ -178,9 +178,9 @@ Form
                     }
                     RadioButton
                     {
-                        value: "manual"
+                        value: "custom"
                         id: manual
-                        label: qsTr("Manual")
+                        label: qsTr("Custom")
                         childrenOnSameRow: true
                         DoubleField { name: "boxCoxLambda"; defaultValue: 0; min: -5; max: 5; }
                     }

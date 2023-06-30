@@ -157,29 +157,17 @@ ARIMATimeSeries <- function(jaspResults, dataset, options) {
   jaspResults[["modelTable"]] <- table
 
   # Check if ready
-  if (!ready) {
+  if (ready) {
     rows <- data.frame(
-      sigma = ".",
-      ll = ".",
-      aicc = ".",
-      aic = ".",
-      bic = "."
+      sigma = fit$sigma2,
+      ll = fit$loglik,
+      aicc = fit$aicc,
+      aic = fit$aic,
+      bic = fit$bic
     )
     row.names(rows) <- paste0("row", 1)
     table$addRows(rows)
-    return()
   }
-
-
-  rows <- data.frame(
-    sigma = fit$sigma2,
-    ll = fit$loglik,
-    aicc = fit$aicc,
-    aic = fit$aic,
-    bic = fit$bic
-  )
-  row.names(rows) <- paste0("row", 1)
-  table$addRows(rows)
 }
 
 .tsCreateTableCoefficients <- function(jaspResults, fit, dataset, options, ready, position, dependencies) {
@@ -204,127 +192,114 @@ ARIMATimeSeries <- function(jaspResults, dataset, options) {
   jaspResults[["coefTable"]] <- coefTable
 
   # Check if ready
-  if (!ready) {
-    rows <- data.frame(
-      coefficients = ".",
-      estimate = ".",
-      SE = ".",
-      t = ".",
-      p = ".",
-      lower = ".",
-      upper = "."
-    )
-    row.names(rows) <- paste0("row", 1)
-    coefTable$addRows(rows)
-    return()
-  }
+  if (ready) {
+    # fit$arma order
+    # p q P Q f d D
+    # f is frequency (or period) of time series
+    p <- fit$arma[1]
+    d <- fit$arma[6]
+    q <- fit$arma[2]
+    P <- fit$arma[3]
+    D <- fit$arma[7]
+    Q <- fit$arma[4]
+    m <- fit$arma[5]
 
-  # fit$arma order
-  # p q P Q f d D
-  # f is frequency (or period) of time series
-  p <- fit$arma[1]
-  d <- fit$arma[6]
-  q <- fit$arma[2]
-  P <- fit$arma[3]
-  D <- fit$arma[7]
-  Q <- fit$arma[4]
-  m <- fit$arma[5]
+    estimate <- fit$coef
+    SE <- sqrt(diag(fit$var.coef))
+    t <- fit$coef / SE
+    df <- fit$nobs - length(estimate)
+    p.val <- 2 * (1 - stats::pt(abs(t), df))
+    me <- stats::qt(.95 / 2 + 0.5, df = df) * SE
+    lower <- estimate - me
+    upper <- estimate + me
+    coefficients <- character()
+    group <- logical()
 
-  estimate <- fit$coef
-  SE <- sqrt(diag(fit$var.coef))
-  t <- fit$coef / SE
-  df <- fit$nobs - length(estimate)
-  p.val <- 2 * (1 - stats::pt(abs(t), df))
-  me <- stats::qt(.95 / 2 + 0.5, df = df) * SE
-  lower <- estimate - me
-  upper <- estimate + me
-  coefficients <- character()
-  group <- logical()
+    # if intercept and/or drift is in included
+    hasIntercept <- any(names(fit$coef) == "intercept")
+    hasDrift <- any(names(fit$coef) == "drift")
+    if (hasIntercept | hasDrift) {
+      if (options$intercept && hasIntercept) {
+        group <- TRUE
+        coefficients <- gettext("Intercept")
 
-  # if intercept and/or drift is in included
-  hasIntercept <- any(names(fit$coef) == "intercept")
-  hasDrift <- any(names(fit$coef) == "drift")
-  if (hasIntercept | hasDrift) {
-    if (options$intercept && hasIntercept) {
-      group <- TRUE
-      coefficients <- gettext("Intercept")
-
-      # I want the intercept to be the first row...
-      idxInt <- which(names(estimate) == "intercept")
-      idxNotInt <- which(names(estimate) != "intercept")
-      idx <- c(idxInt, idxNotInt)
-    }
-
-    if (hasDrift) {
-      coefficients <- c(coefficients, "Drift")
-      group <- c(group, TRUE)
-
-      # Drift should be on the second row if intercept, otherwise first row
-      idxDrift <- which(names(estimate) == "drift")
-      idxNotDrift <- which(names(estimate) != "drift")
-      idx <- c(idxDrift, idxNotDrift)
-
-      if (hasIntercept) {
-        idxNotDrift <- which(names(estimate) != "drift" & names(estimate) != "intercept")
-        idx <- c(idxInt, idxDrift, idxNotDrift)
+        # I want the intercept to be the first row...
+        idxInt <- which(names(estimate) == "intercept")
+        idxNotInt <- which(names(estimate) != "intercept")
+        idx <- c(idxInt, idxNotInt)
       }
+
+      if (hasDrift) {
+        coefficients <- c(coefficients, "Drift")
+        group <- c(group, TRUE)
+
+        # Drift should be on the second row if intercept, otherwise first row
+        idxDrift <- which(names(estimate) == "drift")
+        idxNotDrift <- which(names(estimate) != "drift")
+        idx <- c(idxDrift, idxNotDrift)
+
+        if (hasIntercept) {
+          idxNotDrift <- which(names(estimate) != "drift" & names(estimate) != "intercept")
+          idx <- c(idxInt, idxDrift, idxNotDrift)
+        }
+      }
+      estimate <- estimate[idx]
+      SE <- SE[idx]
+      t <- t[idx]
+      p.val <- p.val[idx]
+      lower <- lower[idx]
+      upper <- upper[idx]
     }
-    estimate <- estimate[idx]
-    SE <- SE[idx]
-    t <- t[idx]
-    p.val <- p.val[idx]
-    lower <- lower[idx]
-    upper <- upper[idx]
-  }
 
-  # add coefficients to table
-  if (p >= 1) {
-    ar <- gettextf("AR(%1$i)", 1:p)
-    coefficients <- c(coefficients, ar)
-    group <- c(group, TRUE, rep(FALSE, p - 1))
-  }
+    # add coefficients to table
+    if (p >= 1) {
+      ar <- gettextf("AR(%1$i)", 1:p)
+      coefficients <- c(coefficients, ar)
+      group <- c(group, TRUE, rep(FALSE, p - 1))
+    }
 
-  if (q >= 1) {
-    ma <- gettextf("MA(%1$i)", 1:q)
-    coefficients <- c(coefficients, ma)
-    group <- c(group, TRUE, rep(FALSE, q - 1))
-  }
+    if (q >= 1) {
+      ma <- gettextf("MA(%1$i)", 1:q)
+      coefficients <- c(coefficients, ma)
+      group <- c(group, TRUE, rep(FALSE, q - 1))
+    }
 
-  if (P >= 1) {
-    sar <- gettextf("seasonal AR(%1$i)", 1:P)
-    coefficients <- c(coefficients, sar)
-    group <- c(group, TRUE, rep(FALSE, P - 1))
-  }
+    if (P >= 1) {
+      sar <- gettextf("seasonal AR(%1$i)", 1:P)
+      coefficients <- c(coefficients, sar)
+      group <- c(group, TRUE, rep(FALSE, P - 1))
+    }
 
-  if (Q >= 1) {
-    sma <- gettextf("seasonal MA(%1$i)", 1:Q)
-    coefficients <- c(coefficients, sma)
-    group <- c(group, TRUE, rep(FALSE, Q - 1))
-  }
+    if (Q >= 1) {
+      sma <- gettextf("seasonal MA(%1$i)", 1:Q)
+      coefficients <- c(coefficients, sma)
+      group <- c(group, TRUE, rep(FALSE, Q - 1))
+    }
 
-  if (length(options[["covariates"]]) > 0) {
-    xreg <- options$covariates
-    coefficients <- c(coefficients, xreg)
-    group <- c(group, TRUE, rep(FALSE, length(xreg) - 1))
-  }
+    if (length(options[["covariates"]]) > 0) {
+      xreg <- options$covariates
+      coefficients <- c(coefficients, xreg)
+      group <- c(group, TRUE, rep(FALSE, length(xreg) - 1))
+    }
 
-  rows <- data.frame(
-    coefficients = coefficients,
-    estimate = estimate,
-    SE = SE,
-    t = t,
-    p = p.val,
-    lower = lower,
-    upper = upper,
-    .isNewGroup = group
-  )
-  row.names(rows) <- paste0("row", 1:length(coefficients))
-  coefTable$addRows(rows)
+    rows <- data.frame(
+      coefficients = coefficients,
+      estimate = estimate,
+      SE = SE,
+      t = t,
+      p = p.val,
+      lower = lower,
+      upper = upper,
+      .isNewGroup = group
+    )
+    row.names(rows) <- paste0("row", 1:length(coefficients))
+    coefTable$addRows(rows)
 
-  if (P >= 1 | D >= 1 | Q >= 1) {
-    coefTable$addFootnote(gettextf("An ARIMA(%1$s, %2$s, %3$s)(%4$s, %5$s, %6$s)[%7$s] model was fitted.", p, d, q, P, D, Q, m))
-  } else {
-    coefTable$addFootnote(gettextf("An ARIMA(%1$s, %2$s, %3$s) model was fitted.", p, d, q))
+    if (P >= 1 | D >= 1 | Q >= 1) {
+      coefTable$addFootnote(gettextf("An ARIMA(%1$s, %2$s, %3$s)(%4$s, %5$s, %6$s)[%7$s] model was fitted.", p, d, q, P, D, Q, m))
+    } else {
+      coefTable$addFootnote(gettextf("An ARIMA(%1$s, %2$s, %3$s) model was fitted.", p, d, q))
+    }
   }
 }
 
@@ -612,31 +587,19 @@ ARIMATimeSeries <- function(jaspResults, dataset, options) {
   jaspResults[["forecastTable"]] <- table
 
   # Check if ready
-  if (!ready || options$forecastLength == 0) {
+  if (ready && options$forecastLength > 0) {
+    .tsForecasts(fit, dataset, datasetRaw, options, jaspResults, ready)
+    pred <- jaspResults[["forecastResult"]]$object
+
     rows <- data.frame(
-      t = ".",
-      y = ".",
-      lower80 = ".",
-      upper80 = ".",
-      lower95 = ".",
-      upper95 = "."
+      t = as.character(pred$t),
+      y = pred$y,
+      lower80 = pred$lower80,
+      upper80 = pred$upper80,
+      lower95 = pred$lower95,
+      upper95 = pred$upper95
     )
-    row.names(rows) <- paste0("row", 1)
+    row.names(rows) <- paste0("row", 1:nrow(pred))
     table$addRows(rows)
-    return()
   }
-
-  .tsForecasts(fit, dataset, datasetRaw, options, jaspResults, ready)
-  pred <- jaspResults[["forecastResult"]]$object
-
-  rows <- data.frame(
-    t = as.character(pred$t),
-    y = pred$y,
-    lower80 = pred$lower80,
-    upper80 = pred$upper80,
-    lower95 = pred$lower95,
-    upper95 = pred$upper95
-  )
-  row.names(rows) <- paste0("row", 1:nrow(pred))
-  table$addRows(rows)
 }

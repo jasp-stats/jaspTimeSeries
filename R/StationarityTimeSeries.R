@@ -132,31 +132,21 @@ StationarityTimeSeries <- function(jaspResults, dataset, options) {
 
   jaspResults[["polyTable"]] <- table
 
-  # Check if ready
-  if (!ready) {
+  if (ready) {
+    .tsComputePolyResults(dataset, options, jaspResults, ready)
+    lmFit <- jaspResults[["polyResult"]]$object
+    best <- lmFit["degree", which.min(unlist(lmFit[options$polynomialSpecificationAutoIc, ]))]
+
     rows <- data.frame(
-      degree = ".",
-      aic = ".",
-      bic = "."
+      degree = unlist(lmFit["degree", ]),
+      aic = unlist(lmFit["aic", ]),
+      bic = unlist(lmFit["bic", ])
     )
-    row.names(rows) <- paste0("row", 1)
+    row.names(rows) <- paste0("row", 1:length(unlist(lmFit["degree", ])))
     table$addRows(rows)
-    return()
+
+    table$addFootnote(gettextf("A polynomial regression with a degree of %s was fitted.", best))
   }
-
-  .tsComputePolyResults(dataset, options, jaspResults, ready)
-  lmFit <- jaspResults[["polyResult"]]$object
-  best <- lmFit["degree", which.min(unlist(lmFit[options$polynomialSpecificationAutoIc, ]))]
-
-  rows <- data.frame(
-    degree = unlist(lmFit["degree", ]),
-    aic = unlist(lmFit["aic", ]),
-    bic = unlist(lmFit["bic", ])
-  )
-  row.names(rows) <- paste0("row", 1:length(unlist(lmFit["degree", ])))
-  table$addRows(rows)
-
-  table$addFootnote(gettextf("A polynomial regression with a degree of %s was fitted.", best))
 }
 
 .tsFitPoly <- function(degree, x, t) {

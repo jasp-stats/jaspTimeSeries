@@ -334,7 +334,7 @@
   x.range <- scales$x$get_limits()
   y.range <- scales$y$get_limits()
 
-  rightPlot <- jaspGraphs:::JASPScatterSubPlot(y, group, plotRight, y.range, colorAreaUnderDensity, alphaAreaUnderDensity, flip = TRUE)
+  rightPlot <- jaspGraphs:::JASPScatterSubPlot(na.omit(y), group, plotRight, y.range, colorAreaUnderDensity, alphaAreaUnderDensity, flip = TRUE)
 
   plotList <- list(mainPlot = mainPlot, rightPlot = rightPlot)
   plotList <- plotList[lengths(plotList) > 0L]

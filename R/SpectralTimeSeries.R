@@ -159,17 +159,12 @@ SpectralTimeSeries <- function(jaspResults, dataset, options) {
   jaspResults[["bandWidthTable"]] <- table
 
   # Check if ready
-  if (!ready) {
-    rows <- data.frame(bandwidth = ".")
+  if (ready) {
+    .tsComputeSpectralResults(dataset, options, jaspResults, ready)
+    res <- jaspResults[["spectralResult"]]$object
+
+    rows <- data.frame(bandwidth = res$bandwidth)
     row.names(rows) <- paste0("row", 1)
     table$addRows(rows)
-    return()
   }
-
-  .tsComputeSpectralResults(dataset, options, jaspResults, ready)
-  res <- jaspResults[["spectralResult"]]$object
-
-  rows <- data.frame(bandwidth = res$bandwidth)
-  row.names(rows) <- paste0("row", 1)
-  table$addRows(rows)
 }
