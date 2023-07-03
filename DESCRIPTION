@@ -1,17 +1,18 @@
-Package: jaspModule
+Package: jaspTimeSeries
 Type: Package
-Title: A module for JASP
+Title: A Time Series module for JASP
 Version: 0.1.0
-Date: 2020-10-15
-Author: JASP Team
-Website: jasp-stats.org
-Maintainer: JASP Team <info@jasp-stats.org>
-Description: This module offers analyses.
+Date: 2023-06-23
+Author: Sophie Berkhout
+Website: https://sophieberkhout.github.io/
+Maintainer: Sophie Berkhout <s.w.berkhout@uu.nl>
+Description: This module offers time series analyses.
 License: GPL (>= 2)
 Encoding: UTF-8
 Imports:
   jaspBase,
-  jaspGraphs
+  jaspGraphs,
+  forecast
 Suggests:
   testthat
 Remotes:
