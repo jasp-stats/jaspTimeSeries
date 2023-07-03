@@ -4,7 +4,7 @@ import JASP.Module	1.0
 Description
 {
 	name		: "jaspTimeSeries"
-	title		: qsTr("Time Series")
+	title		: qsTr("Time Series (beta)")
 	description	: qsTr("This module offers time series analyses.")
 	version		: "0.1"
 	author		: "Sophie Berkhout"
