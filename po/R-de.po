@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: jaspTimeSeries 0.17.3\n"
 "POT-Creation-Date: 2023-07-08 03:29\n"
-"PO-Revision-Date: 2023-07-26 08:06+0000\n"
+"PO-Revision-Date: 2023-07-28 19:32+0000\n"
 "Last-Translator: Johannes Keyser <joke@fsfe.org>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/jasp/"
 "jasptimeseries-r/de/>\n"
@@ -56,11 +56,9 @@ msgstr "p"
 msgid "%s%% CI"
 msgstr "%s%% KI"
 
-#, fuzzy
 msgid "Lower"
 msgstr "Untergrenze"
 
-#, fuzzy
 msgid "Upper"
 msgstr "Obergrenze"
 
