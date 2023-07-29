@@ -1,6 +1,6 @@
 msgid ""
 msgstr ""
-"PO-Revision-Date: 2023-07-27 12:25+0000\n"
+"PO-Revision-Date: 2023-07-30 09:07+0000\n"
 "Last-Translator: Johannes Keyser <joke@fsfe.org>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/jasp/"
 "jasptimeseries-qml/de/>\n"
@@ -931,31 +931,31 @@ msgstr ""
 
 msgctxt "StationarityTimeSeries|"
 msgid "Line"
-msgstr ""
+msgstr "Linie"
 
 msgctxt "StationarityTimeSeries|"
 msgid "Both"
-msgstr ""
+msgstr "Beide"
 
 msgctxt "StationarityTimeSeries|"
 msgid "Distribution"
-msgstr ""
+msgstr "Verteilung"
 
 msgctxt "StationarityTimeSeries|"
 msgid "Density"
-msgstr ""
+msgstr "Dichte"
 
 msgctxt "StationarityTimeSeries|"
 msgid "Histogram"
-msgstr ""
+msgstr "Histogramm"
 
 msgctxt "StationarityTimeSeries|"
 msgid "None"
-msgstr ""
+msgstr "Keine"
 
 msgctxt "StationarityTimeSeries|"
 msgid "Autocorrelation function"
-msgstr ""
+msgstr "Autokorrelationsfunktion"
 
 msgctxt "StationarityTimeSeries|"
 msgid ""
