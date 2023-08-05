@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: jaspTimeSeries 0.17.3\n"
 "POT-Creation-Date: 2023-07-08 03:29\n"
-"PO-Revision-Date: 2023-07-28 19:32+0000\n"
+"PO-Revision-Date: 2023-07-30 09:07+0000\n"
 "Last-Translator: Johannes Keyser <joke@fsfe.org>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/jasp/"
 "jasptimeseries-r/de/>\n"
@@ -176,7 +176,7 @@ msgid "Power Spectral Density Plot"
 msgstr ""
 
 msgid "Spectral Density"
-msgstr ""
+msgstr "Spektrale Leistungsdichte"
 
 msgid "Bandwidth"
 msgstr "Bandbreite"
@@ -209,16 +209,16 @@ msgid "Truncation lag parameter"
 msgstr ""
 
 msgid "H₀"
-msgstr ""
+msgstr "H₀"
 
 msgid "Level"
-msgstr ""
+msgstr "Stufe"
 
 msgid "Trend"
-msgstr ""
+msgstr "Trend"
 
 msgid "Non-stationary"
-msgstr ""
+msgstr "Nichtstationär"
 
 msgid "Level stationary"
 msgstr ""
@@ -227,13 +227,15 @@ msgid "Trend stationary"
 msgstr ""
 
 msgid "The ADF test failed."
-msgstr ""
+msgstr "Der ADF-Test ist fehlgeschlagen."
 
+#, fuzzy
 msgid "The PP regression coefficient test failed."
-msgstr ""
+msgstr "Der PP-Regressionskoeffiziententest ist fehlgeschlagen."
 
+#, fuzzy
 msgid "The PP studentized test failed."
-msgstr ""
+msgstr "Der PP-studentisierte Test ist fehlgeschlagen."
 
 msgid "The KPSS test for level stationarity failed."
 msgstr ""
@@ -243,30 +245,43 @@ msgstr ""
 
 msgid "The p-value is actually less than p-value shown (see Help file)."
 msgstr ""
+"Der p-Wert ist tatsächlich kleiner als der angezeigte p-Wert (siehe "
+"Hilfedatei)."
 
 msgid "The p-value is actually greater than p-value shown (see Help file)."
 msgstr ""
+"Der p-Wert ist tatsächlich größer als der angezeigte p-Wert (siehe "
+"Hilfedatei)."
 
 msgid "The time series data should be equally-spaced."
-msgstr ""
+msgstr "Die Zeitreihendaten sollten gleichmäßige Abstände aufweisen."
 
 msgid "The time variable should have unique values only."
-msgstr ""
+msgstr "Die Zeitvariable sollte nur einzigartige Werte haben."
 
 msgid "The 'Time' variable has a date-like format, please filter by date instead."
 msgstr ""
+"Die Variable 'Zeit' hat ein datumsähnliches Format, bitte filtern Sie "
+"stattdessen nach dem Datum."
 
 msgid "The 'Time' variable is not in a date-like format (e.g., yyyy-mm-dd hh:mm:ss). Try to filter by time index instead."
 msgstr ""
+"Die Variable 'Zeit' hat kein datumsähnliches Format (z. B. jjjj-mm-tt "
+"hh:mm:ss). Versuchen Sie stattdessen, nach dem Zeitindex zu filtern."
 
 msgid "'Start' must be in a date-like format (e.g., yyyy-mm-dd hh:mm:ss)."
 msgstr ""
+"'Start' muss in einem datumsähnlichen Format angegeben werden (z. B. jjjj-mm-"
+"tt hh:mm:ss)."
 
 msgid "The 'Start' value of the filter should be before last observation."
-msgstr ""
+msgstr "Der 'Start'-Wert des Filters sollte vor der letzten Beobachtung liegen."
 
 msgid "'End' must be in a date-like format (e.g., yyyy-mm-dd hh:mm:ss)."
 msgstr ""
+"'Ende' muss in einem datumsähnlichen Format angegeben werden (z. B. jjjj-mm-"
+"tt hh:mm:ss)."
 
 msgid "The 'End' value of the filter should be larger/later than the 'Start' value."
 msgstr ""
+"Der 'Ende'-Wert des Filters sollte größer/später sein als der 'Start'-Wert."

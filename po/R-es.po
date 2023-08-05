@@ -1,0 +1,283 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: jaspTimeSeries 0.17.3\n"
+"POT-Creation-Date: 2023-07-08 03:29\n"
+"PO-Revision-Date: 2023-08-04 12:03+0000\n"
+"Last-Translator: ecadrian <ecadrian@hotmail.com>\n"
+"Language-Team: Spanish <https://hosted.weblate.org/projects/jasp/"
+"jasptimeseries-r/es/>\n"
+"Language: es\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 5.0-dev\n"
+
+msgid "Time Series Plot"
+msgstr "Gráfico de serie temporal"
+
+msgid "The ARIMA model could not be fit."
+msgstr "Non se puede ajustar el modelo ARIMA."
+
+msgid "No parameters are estimated."
+msgstr "Non se estimó ningún parámetro."
+
+msgid "Model Summary"
+msgstr "Resumen del Modelo"
+
+msgid "Log-Likelihood"
+msgstr "Log-Verosimilitud"
+
+msgid "AICc"
+msgstr "AICc"
+
+msgid "AIC"
+msgstr "AIC"
+
+msgid "BIC"
+msgstr "BIC"
+
+msgid "Coefficients"
+msgstr "Coeficientes"
+
+msgid "Estimate"
+msgstr "Estimar"
+
+msgid "Standard Error"
+msgstr "Error Típico"
+
+msgid "t"
+msgstr "t"
+
+msgid "p"
+msgstr "p"
+
+msgid "%s%% CI"
+msgstr "IC del %s%%"
+
+msgid "Lower"
+msgstr "Inferior"
+
+msgid "Upper"
+msgstr "Superior"
+
+msgid "Intercept"
+msgstr "Constante"
+
+msgid "AR(%1$i)"
+msgstr "AR(%1$i)"
+
+msgid "MA(%1$i)"
+msgstr "MA(%1$i)"
+
+msgid "seasonal AR(%1$i)"
+msgstr "AR(%1$i) estacional"
+
+msgid "seasonal MA(%1$i)"
+msgstr "MA(%1$i) estacional"
+
+msgid "An ARIMA(%1$s, %2$s, %3$s)(%4$s, %5$s, %6$s)[%7$s] model was fitted."
+msgstr "Se ajustó un modelo ARIMA(%1$s, %2$s, %3$s)(%4$s, %5$s, %6$s)[%7$s]."
+
+msgid "An ARIMA(%1$s, %2$s, %3$s) model was fitted."
+msgstr "Se ajustó un modelo ARIMA(%1$s, %2$s, %3$s)."
+
+msgid "Residual Diagnostics Plots"
+msgstr "Gráficos de diagnósticos de los errores"
+
+msgid "Autocorrelation Function Plot"
+msgstr "Gráfico de la función de Autocorrelación"
+
+msgid "Q-Q Plot"
+msgstr "Gráfico Q-Q"
+
+msgid "Ljung-Box Plot"
+msgstr "Gráfico de Ljung-Box"
+
+msgid "Lag"
+msgstr "Retardo"
+
+msgid "p-value"
+msgstr "Valor p"
+
+msgid "When 'Covariates' are used in the model, predictions cannot be carried out unless the covariates are also observed for the predicted period."
+msgstr ""
+"Cuando se utiliza 'Covariables' en el modelo, las predicciones no se pueden "
+"llevar a cabo a no ser que las covariables se observen también para el "
+"período de predicción."
+
+msgid "Not enough observations in the covariate%1$s. The maximum number of forecasts is %2$s."
+msgstr ""
+"No hay observaciones suficientes en las covariantes %1$s. El número máximo "
+"de predicciones es %2$s."
+
+msgid "Forecasting failed."
+msgstr "Falló la predicción."
+
+msgid "Forecast Time Series Plot"
+msgstr "Gráfico de predicción de serie temporal"
+
+msgid "Forecasts"
+msgstr "Predicciones"
+
+msgid "Lag Plot"
+msgstr "Gráfico de retardos"
+
+msgid "Autocorrelation Function"
+msgstr "Función de Autocorrelación"
+
+msgid "Partial Autocorrelation Function"
+msgstr "Función de Autocorrelación Parcial"
+
+msgid "Descriptive Statistics"
+msgstr "Estadísticos Descriptivos"
+
+msgid "Valid"
+msgstr "Válido"
+
+msgid "Missing"
+msgstr "Ausente"
+
+msgid "Mean"
+msgstr "Media"
+
+msgid "Std. Deviation"
+msgstr "Desviación Típica"
+
+msgid "Variance"
+msgstr "Varianza"
+
+msgid "Range"
+msgstr "Rango"
+
+msgid "Minimum"
+msgstr "Mínimo"
+
+msgid "Maximum"
+msgstr "Máximo"
+
+msgid "Start"
+msgstr "Inicio"
+
+msgid "End"
+msgstr "Fin"
+
+msgid "Lag 1 Autocorrelation"
+msgstr "Autocorrelación de orden 1"
+
+msgid "The spectral analysis failed."
+msgstr "Falló el análisis espectral."
+
+msgid "Power Spectral Density Plot"
+msgstr "Gráfico de densidad espectal de potencia"
+
+msgid "Spectral Density"
+msgstr "Densidad espectral"
+
+msgid "Bandwidth"
+msgstr "Ancho de banda"
+
+msgid "Data cannot be zero or negative for log transformation."
+msgstr ""
+"Los datos no pueden ser nulos o negativos con la transformación logarítmica."
+
+msgid "Data cannot be negative for root transformation."
+msgstr "Los datos non pueden ser nagativos con la transformación raíz cuadrada."
+
+msgid "Detrend using linear regression"
+msgstr "Quitar la tendencia usando regresión lineal"
+
+msgid "Degree"
+msgstr "Grado"
+
+msgid "A polynomial regression with a degree of %s was fitted."
+msgstr "Se ajustó una regresión polinómica de grado %s."
+
+msgid "Stationarity Tests"
+msgstr "Contrastes de Estacionaridad"
+
+msgid "Test"
+msgstr "Contraste"
+
+msgid "Statistic"
+msgstr "Estadístico"
+
+msgid "Truncation lag parameter"
+msgstr "Parámetro de truncamiento de retardos"
+
+msgid "H₀"
+msgstr "H₀"
+
+msgid "Level"
+msgstr "Nivel"
+
+msgid "Trend"
+msgstr "Tendencia"
+
+msgid "Non-stationary"
+msgstr "No estacionario"
+
+msgid "Level stationary"
+msgstr "Estacionario en nivel"
+
+msgid "Trend stationary"
+msgstr "Estacionario en tendencia"
+
+msgid "The ADF test failed."
+msgstr "Falló el contraste ADF."
+
+msgid "The PP regression coefficient test failed."
+msgstr "Falló el contraste de coeficientes de la regresión de PP."
+
+msgid "The PP studentized test failed."
+msgstr "Falló el contraste tipificado de PP."
+
+msgid "The KPSS test for level stationarity failed."
+msgstr "Falló el contraste KPSS para la estacionariedad en nivel."
+
+msgid "The KPSS test for trend stationarity failed."
+msgstr "Falló el contraste KPSS para la estacionaridad en tendencia."
+
+msgid "The p-value is actually less than p-value shown (see Help file)."
+msgstr ""
+"La Probabilidad Asociada (valor p) es en este momento menor que la mostrada ("
+"consulta el fichero de Ayuda)."
+
+msgid "The p-value is actually greater than p-value shown (see Help file)."
+msgstr ""
+"La Probabilidad Asociada (valor p) es en este momento mayor que la mostrada ("
+"consulta el fichero de Ayuda)."
+
+msgid "The time series data should be equally-spaced."
+msgstr "Los datos de la serie temporal deben estar equidistantes."
+
+msgid "The time variable should have unique values only."
+msgstr "La variable de tiempo debe tener solo valores que no se repitan."
+
+msgid "The 'Time' variable has a date-like format, please filter by date instead."
+msgstr ""
+"La variable 'Tiempo' tiene un formato semejante al de fechas; por favor, "
+"mejor filtre por fecha."
+
+msgid "The 'Time' variable is not in a date-like format (e.g., yyyy-mm-dd hh:mm:ss). Try to filter by time index instead."
+msgstr ""
+"La variable 'Tiempo' no tiene un formato semejante al de fechas (p.e. aaaa-"
+"mm-dd hh:mm:ss). Mejor intente filtrar mediante un índice temporal."
+
+msgid "'Start' must be in a date-like format (e.g., yyyy-mm-dd hh:mm:ss)."
+msgstr ""
+"'Inicio' debe estar en formato semejante al de fechas (p.e. aaaa-mm-dd "
+"hh:mm:ss)."
+
+msgid "The 'Start' value of the filter should be before last observation."
+msgstr ""
+"El valor de 'Inicio' del filtro debe ser anterior a la última observación."
+
+msgid "'End' must be in a date-like format (e.g., yyyy-mm-dd hh:mm:ss)."
+msgstr ""
+"'Fin' debe estar en formato semejante al de fechas (p.e. aaaa-mm-dd "
+"hh:mm:ss)."
+
+msgid "The 'End' value of the filter should be larger/later than the 'Start' value."
+msgstr ""
+"El valor de 'Fin' del filtro debe ser mayor/posterior al valor de 'Inicio'."
