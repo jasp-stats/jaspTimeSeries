@@ -1,0 +1,260 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: jaspTimeSeries 0.17.3\n"
+"POT-Creation-Date: 2023-07-08 03:29\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: Automatically generated\n"
+"Language-Team: none\n"
+"Language: pl\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+msgid "Time Series Plot"
+msgstr ""
+
+msgid "The ARIMA model could not be fit."
+msgstr ""
+
+msgid "No parameters are estimated."
+msgstr ""
+
+msgid "Model Summary"
+msgstr ""
+
+msgid "Log-Likelihood"
+msgstr ""
+
+msgid "AICc"
+msgstr ""
+
+msgid "AIC"
+msgstr ""
+
+msgid "BIC"
+msgstr ""
+
+msgid "Coefficients"
+msgstr ""
+
+msgid "Estimate"
+msgstr ""
+
+msgid "Standard Error"
+msgstr ""
+
+msgid "t"
+msgstr ""
+
+msgid "p"
+msgstr ""
+
+msgid "%s%% CI"
+msgstr ""
+
+msgid "Lower"
+msgstr ""
+
+msgid "Upper"
+msgstr ""
+
+msgid "Intercept"
+msgstr ""
+
+msgid "AR(%1$i)"
+msgstr ""
+
+msgid "MA(%1$i)"
+msgstr ""
+
+msgid "seasonal AR(%1$i)"
+msgstr ""
+
+msgid "seasonal MA(%1$i)"
+msgstr ""
+
+msgid "An ARIMA(%1$s, %2$s, %3$s)(%4$s, %5$s, %6$s)[%7$s] model was fitted."
+msgstr ""
+
+msgid "An ARIMA(%1$s, %2$s, %3$s) model was fitted."
+msgstr ""
+
+msgid "Residual Diagnostics Plots"
+msgstr ""
+
+msgid "Autocorrelation Function Plot"
+msgstr ""
+
+msgid "Q-Q Plot"
+msgstr ""
+
+msgid "Ljung-Box Plot"
+msgstr ""
+
+msgid "Lag"
+msgstr ""
+
+msgid "p-value"
+msgstr ""
+
+msgid "When 'Covariates' are used in the model, predictions cannot be carried out unless the covariates are also observed for the predicted period."
+msgstr ""
+
+msgid "Not enough observations in the covariate%1$s. The maximum number of forecasts is %2$s."
+msgstr ""
+
+msgid "Forecasting failed."
+msgstr ""
+
+msgid "Forecast Time Series Plot"
+msgstr ""
+
+msgid "Forecasts"
+msgstr ""
+
+msgid "Lag Plot"
+msgstr ""
+
+msgid "Autocorrelation Function"
+msgstr ""
+
+msgid "Partial Autocorrelation Function"
+msgstr ""
+
+msgid "Descriptive Statistics"
+msgstr ""
+
+msgid "Valid"
+msgstr ""
+
+msgid "Missing"
+msgstr ""
+
+msgid "Mean"
+msgstr ""
+
+msgid "Std. Deviation"
+msgstr ""
+
+msgid "Variance"
+msgstr ""
+
+msgid "Range"
+msgstr ""
+
+msgid "Minimum"
+msgstr ""
+
+msgid "Maximum"
+msgstr ""
+
+msgid "Start"
+msgstr ""
+
+msgid "End"
+msgstr ""
+
+msgid "Lag 1 Autocorrelation"
+msgstr ""
+
+msgid "The spectral analysis failed."
+msgstr ""
+
+msgid "Power Spectral Density Plot"
+msgstr ""
+
+msgid "Spectral Density"
+msgstr ""
+
+msgid "Bandwidth"
+msgstr ""
+
+msgid "Data cannot be zero or negative for log transformation."
+msgstr ""
+
+msgid "Data cannot be negative for root transformation."
+msgstr ""
+
+msgid "Detrend using linear regression"
+msgstr ""
+
+msgid "Degree"
+msgstr ""
+
+msgid "A polynomial regression with a degree of %s was fitted."
+msgstr ""
+
+msgid "Stationarity Tests"
+msgstr ""
+
+msgid "Test"
+msgstr ""
+
+msgid "Statistic"
+msgstr ""
+
+msgid "Truncation lag parameter"
+msgstr ""
+
+msgid "H₀"
+msgstr ""
+
+msgid "Level"
+msgstr ""
+
+msgid "Trend"
+msgstr ""
+
+msgid "Non-stationary"
+msgstr ""
+
+msgid "Level stationary"
+msgstr ""
+
+msgid "Trend stationary"
+msgstr ""
+
+msgid "The ADF test failed."
+msgstr ""
+
+msgid "The PP regression coefficient test failed."
+msgstr ""
+
+msgid "The PP studentized test failed."
+msgstr ""
+
+msgid "The KPSS test for level stationarity failed."
+msgstr ""
+
+msgid "The KPSS test for trend stationarity failed."
+msgstr ""
+
+msgid "The p-value is actually less than p-value shown (see Help file)."
+msgstr ""
+
+msgid "The p-value is actually greater than p-value shown (see Help file)."
+msgstr ""
+
+msgid "The time series data should be equally-spaced."
+msgstr ""
+
+msgid "The time variable should have unique values only."
+msgstr ""
+
+msgid "The 'Time' variable has a date-like format, please filter by date instead."
+msgstr ""
+
+msgid "The 'Time' variable is not in a date-like format (e.g., yyyy-mm-dd hh:mm:ss). Try to filter by time index instead."
+msgstr ""
+
+msgid "'Start' must be in a date-like format (e.g., yyyy-mm-dd hh:mm:ss)."
+msgstr ""
+
+msgid "The 'Start' value of the filter should be before last observation."
+msgstr ""
+
+msgid "'End' must be in a date-like format (e.g., yyyy-mm-dd hh:mm:ss)."
+msgstr ""
+
+msgid "The 'End' value of the filter should be larger/later than the 'Start' value."
+msgstr ""
