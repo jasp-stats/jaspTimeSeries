@@ -1,6 +1,6 @@
 msgid ""
 msgstr ""
-"PO-Revision-Date: 2023-09-05 14:44+0000\n"
+"PO-Revision-Date: 2023-09-10 11:54+0000\n"
 "Last-Translator: Johannes Keyser <joke@fsfe.org>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/jasp/"
 "jasptimeseries-qml/de/>\n"
@@ -789,13 +789,15 @@ msgid ""
 "critical values, a note is added to the table."
 msgstr ""
 
+#, fuzzy
 msgctxt "StationarityTimeSeries|"
 msgid "Regression coefficient test"
-msgstr ""
+msgstr "Regressionskoeffizenttest"
 
+#, fuzzy
 msgctxt "StationarityTimeSeries|"
 msgid "Studentized test"
-msgstr ""
+msgstr "Studentischer Test"
 
 msgctxt "StationarityTimeSeries|"
 msgid "Kwiatkowski-Phillips-Schmidt-Shin"
