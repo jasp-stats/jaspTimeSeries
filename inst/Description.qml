@@ -6,7 +6,7 @@ Description
 	name		: "jaspTimeSeries"
 	title		: qsTr("Time Series (beta)")
 	description	: qsTr("This module offers time series analyses.")
-	version			: "0.18.0"
+	version			: "0.18.1"
 	author		: "Sophie Berkhout"
 	maintainer	: "Sophie Berkhout <s.w.berkhout@uu.nl>"
 	website		: "https://sophieberkhout.github.io/"
