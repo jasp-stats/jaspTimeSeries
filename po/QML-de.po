@@ -13,8 +13,8 @@ msgstr ""
 "X-Qt-Contexts: true\n"
 
 msgctxt "Description|"
-msgid "Time Series (beta)"
-msgstr "Zeitreihen (Beta)"
+msgid "Time Series"
+msgstr "Zeitreihen"
 
 msgctxt "Description|"
 msgid "This module offers time series analyses."
