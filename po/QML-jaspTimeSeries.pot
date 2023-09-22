@@ -6,7 +6,7 @@ msgstr ""
 "X-Qt-Contexts: true\n"
 
 msgctxt "Description|"
-msgid "Time Series (beta)"
+msgid "Time Series"
 msgstr ""
 
 msgctxt "Description|"
