@@ -6,10 +6,6 @@ msgstr ""
 "X-Qt-Contexts: true\n"
 
 msgctxt "Description|"
-msgid "Time Series (beta)"
-msgstr ""
-
-msgctxt "Description|"
 msgid "This module offers time series analyses."
 msgstr ""
 
@@ -971,4 +967,8 @@ msgstr ""
 
 msgctxt "StationarityTimeSeries|"
 msgid "Plots the partial autocorrelation for a specified number of lags."
+msgstr ""
+
+msgctxt "Description|"
+msgid "Time Series"
 msgstr ""
