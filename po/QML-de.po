@@ -1,6 +1,6 @@
 msgid ""
 msgstr ""
-"PO-Revision-Date: 2023-10-05 13:10+0000\n"
+"PO-Revision-Date: 2023-10-13 04:14+0000\n"
 "Last-Translator: Johannes Keyser <joke@fsfe.org>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/jasp/"
 "jasptimeseries-qml/de/>\n"
@@ -823,11 +823,11 @@ msgstr ""
 
 msgctxt "StationarityTimeSeries|"
 msgid "Level stationary"
-msgstr "Niveaustationär"
+msgstr "Niveau-stationär"
 
 msgctxt "StationarityTimeSeries|"
 msgid "Trend stationary"
-msgstr "Trendstationär"
+msgstr "Trend-stationär"
 
 msgctxt "StationarityTimeSeries|"
 msgid "Filter by"
