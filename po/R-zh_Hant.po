@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: jaspTimeSeries 0.18.0\n"
 "POT-Creation-Date: 2023-09-02 03:22\n"
-"PO-Revision-Date: 2023-10-01 11:02+0000\n"
-"Last-Translator: 陳寬裕 <pf.kuan.yu.chen@gmail.com>\n"
+"PO-Revision-Date: 2023-12-16 07:41+0000\n"
+"Last-Translator: Ginger Shu-Ying Yeh <gingershuying@gmail.com>\n"
 "Language-Team: Chinese (Traditional) <https://hosted.weblate.org/projects/"
 "jasp/jasptimeseries-r/zh_Hant/>\n"
 "Language: zh_Hant\n"
@@ -11,64 +11,64 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 5.1-dev\n"
+"X-Generator: Weblate 5.3\n"
 
 msgid "Time Series Plot"
-msgstr ""
+msgstr "時間序列圖"
 
 msgid "The ARIMA model could not be fit."
-msgstr ""
+msgstr "無法擬合 ARIMA 模型。"
 
 msgid "No parameters are estimated."
-msgstr ""
+msgstr "未估計任何參數。"
 
 msgid "Model Summary"
-msgstr ""
+msgstr "模型摘要"
 
 msgid "Log-Likelihood"
-msgstr ""
+msgstr "Log-Likelihood"
 
 msgid "AICc"
 msgstr ""
 
 msgid "AIC"
-msgstr ""
+msgstr "AIC"
 
 msgid "BIC"
-msgstr ""
+msgstr "BIC"
 
 msgid "Coefficients"
-msgstr ""
+msgstr "係數"
 
 msgid "Estimate"
-msgstr ""
+msgstr "估計"
 
 msgid "Standard Error"
-msgstr ""
+msgstr "標準誤"
 
 msgid "t"
-msgstr ""
+msgstr "t"
 
 msgid "p"
-msgstr ""
+msgstr "p"
 
 msgid "%s%% CI"
-msgstr ""
+msgstr "%s%% 信賴區間"
 
 msgid "Lower"
-msgstr ""
+msgstr "下界"
 
 msgid "Upper"
-msgstr ""
+msgstr "上界"
 
 msgid "Intercept"
-msgstr ""
+msgstr "截距"
 
 msgid "AR(%1$i)"
-msgstr ""
+msgstr "AR(%1$i)"
 
 msgid "MA(%1$i)"
-msgstr ""
+msgstr "MA(%1$i)"
 
 msgid "seasonal AR(%1$i)"
 msgstr ""
@@ -77,28 +77,28 @@ msgid "seasonal MA(%1$i)"
 msgstr ""
 
 msgid "An ARIMA(%1$s, %2$s, %3$s)(%4$s, %5$s, %6$s)[%7$s] model was fitted."
-msgstr ""
+msgstr "使用 ARIMA(%1$s, %2$s, %3$s)(%4$s, %5$s, %6$s)[%7$s] 模型擬合。"
 
 msgid "An ARIMA(%1$s, %2$s, %3$s) model was fitted."
-msgstr ""
+msgstr "使用 ARIMA(%1$s, %2$s, %3$s) 模型擬合。"
 
 msgid "Residual Diagnostics Plots"
-msgstr ""
+msgstr "殘差診斷圖"
 
 msgid "Autocorrelation Function Plot"
-msgstr ""
+msgstr "自相關函數圖"
 
 msgid "Q-Q Plot"
-msgstr ""
+msgstr "Q-Q 圖"
 
 msgid "Ljung-Box Plot"
-msgstr ""
+msgstr "Ljung-Box 圖"
 
 msgid "Lag"
 msgstr ""
 
 msgid "p-value"
-msgstr ""
+msgstr "p值"
 
 msgid "When 'Covariates' are used in the model, predictions cannot be carried out unless the covariates are also observed for the predicted period."
 msgstr ""
@@ -107,49 +107,49 @@ msgid "Not enough observations in the covariate%1$s. The maximum number of forec
 msgstr ""
 
 msgid "Forecasting failed."
-msgstr ""
+msgstr "預測失敗。"
 
 msgid "Forecast Time Series Plot"
-msgstr ""
+msgstr "預測時間序列圖"
 
 msgid "Forecasts"
-msgstr ""
+msgstr "預測"
 
 msgid "Lag Plot"
 msgstr ""
 
 msgid "Autocorrelation Function"
-msgstr ""
+msgstr "自相關函數"
 
 msgid "Partial Autocorrelation Function"
-msgstr ""
+msgstr "偏自相關函數"
 
 msgid "Descriptive Statistics"
-msgstr ""
+msgstr "敘述統計量"
 
 msgid "Valid"
-msgstr ""
+msgstr "有效"
 
 msgid "Missing"
 msgstr ""
 
 msgid "Mean"
-msgstr ""
+msgstr "平均數"
 
 msgid "Std. Deviation"
 msgstr "標準差"
 
 msgid "Variance"
-msgstr ""
+msgstr "變異數"
 
 msgid "Range"
 msgstr ""
 
 msgid "Minimum"
-msgstr ""
+msgstr "最小值"
 
 msgid "Maximum"
-msgstr ""
+msgstr "最大值"
 
 msgid "Start"
 msgstr ""
@@ -203,7 +203,7 @@ msgid "H₀"
 msgstr ""
 
 msgid "Level"
-msgstr ""
+msgstr "水準"
 
 msgid "Trend"
 msgstr ""
