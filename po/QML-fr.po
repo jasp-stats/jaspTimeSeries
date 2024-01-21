@@ -1,6 +1,6 @@
 msgid ""
 msgstr ""
-"PO-Revision-Date: 2024-01-21 19:01+0000\n"
+"PO-Revision-Date: 2024-01-22 18:11+0000\n"
 "Last-Translator: robachowyk <kaya.robach@gmail.com>\n"
 "Language-Team: French <https://hosted.weblate.org/projects/jasp/"
 "jasptimeseries-qml/fr/>\n"
@@ -30,12 +30,14 @@ msgstr ""
 
 msgctxt "Description|"
 msgid "Spectral Analysis"
-msgstr ""
+msgstr "Analyse Spectrale"
 
 msgctxt "ARIMATimeSeries|"
 msgid ""
 "Allows the user to fit a (seasonal) AR/MA/ARMA/ARIMA model to a time series."
 msgstr ""
+"Permet à l'utilisateur d'ajuster un modèle (périodique) AR/MA/ARMA/ARIMA sur "
+"une série temporelle."
 
 msgctxt "ARIMATimeSeries|"
 msgid "Dependent Variable"
