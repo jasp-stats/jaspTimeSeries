@@ -19,4 +19,4 @@ Suggests:
 Remotes:
   jasp-stats/jaspBase,
   jasp-stats/jaspGraphs,
-  boutinb/jaspDescriptives
+  jasp-stats/jaspDescriptives
