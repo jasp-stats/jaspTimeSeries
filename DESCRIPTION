@@ -12,9 +12,11 @@ Encoding: UTF-8
 Imports:
   jaspBase,
   jaspGraphs,
+  jaspDescriptives,
   forecast
 Suggests:
   testthat
 Remotes:
   jasp-stats/jaspBase,
-  jasp-stats/jaspGraphs
+  jasp-stats/jaspGraphs,
+  boutinb/jaspDescriptives
