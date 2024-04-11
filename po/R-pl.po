@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: jaspTimeSeries 0.17.3\n"
-"POT-Creation-Date: 2023-07-08 03:29\n"
+"POT-Creation-Date: 2024-04-11 13:27\n"
 "PO-Revision-Date: 2023-09-20 11:21+0000\n"
 "Last-Translator: Tomasz Misiuro <tomaszmisiuro@gmail.com>\n"
 "Language-Team: Polish <https://hosted.weblate.org/projects/jasp/"
@@ -103,12 +103,16 @@ msgstr ""
 msgid "p-value"
 msgstr "wartość p"
 
-msgid "When 'Covariates' are used in the model, predictions cannot be carried out unless the covariates are also observed for the predicted period."
+msgid ""
+"When 'Covariates' are used in the model, predictions cannot be carried out "
+"unless the covariates are also observed for the predicted period."
 msgstr ""
 "Jeżeli w modelu stosowane są 'Współzmienne' nie można wykonać predykcji, "
 "chyba że współzmienne są także obserwowalne w przewidywanym okresie."
 
-msgid "Not enough observations in the covariate%1$s. The maximum number of forecasts is %2$s."
+msgid ""
+"Not enough observations in the covariate%1$s. The maximum number of "
+"forecasts is %2$s."
 msgstr ""
 "Niewystarczająca liczba obserwacji dla współzmiennej%1$s. Maksymalna liczba "
 "prognoz wynosi %2$s."
@@ -121,51 +125,6 @@ msgstr "Prognozowany wykres szeregu czasowego"
 
 msgid "Forecasts"
 msgstr "Prognozy"
-
-msgid "Lag Plot"
-msgstr ""
-
-msgid "Autocorrelation Function"
-msgstr ""
-
-msgid "Partial Autocorrelation Function"
-msgstr ""
-
-msgid "Descriptive Statistics"
-msgstr "Statystyki opisowe"
-
-msgid "Valid"
-msgstr "Ważne"
-
-msgid "Missing"
-msgstr "Braki danych"
-
-msgid "Mean"
-msgstr "Średnia"
-
-msgid "Std. Deviation"
-msgstr "Odch. stand."
-
-msgid "Variance"
-msgstr "Wariancja"
-
-msgid "Range"
-msgstr "Rozstęp"
-
-msgid "Minimum"
-msgstr "Minimum"
-
-msgid "Maximum"
-msgstr "Maksimum"
-
-msgid "Start"
-msgstr "Początek"
-
-msgid "End"
-msgstr "Koniec"
-
-msgid "Lag 1 Autocorrelation"
-msgstr ""
 
 msgid "The spectral analysis failed."
 msgstr "Analiza spektralna nie powiodła się."
@@ -248,33 +207,77 @@ msgid "The p-value is actually greater than p-value shown (see Help file)."
 msgstr ""
 "Wartość p jest w rzeczywistości wyższa niż wyświetlona (zob. plik pomocy)."
 
-msgid "The time series data should be equally-spaced."
-msgstr "Dane szeregów czasowych powinny być równomiernie rozmieszczone."
-
-msgid "The time variable should have unique values only."
-msgstr "Zmienna czasu powinna mieć wyłącznie unikalne wartości."
-
-msgid "The 'Time' variable has a date-like format, please filter by date instead."
+msgid "Autocorrelation Function"
 msgstr ""
-"Zmienna 'Czas' ma format daty. Zamiast tego należy wykonać filtrowanie "
-"według daty."
 
-msgid "The 'Time' variable is not in a date-like format (e.g., yyyy-mm-dd hh:mm:ss). Try to filter by time index instead."
+msgid "Partial Autocorrelation Function"
 msgstr ""
-"Zmienna 'Czas' nie ma formatu daty (np. rrrr-mm-dd gg:mm:ss). Zamiast tego "
-"spróbuj filtrować według indeksu czasu."
 
-msgid "'Start' must be in a date-like format (e.g., yyyy-mm-dd hh:mm:ss)."
-msgstr "Wartość 'Początek' musi mieć format daty (np. rrrr-mm-dd gg:mm:ss)."
+#~ msgid "Descriptive Statistics"
+#~ msgstr "Statystyki opisowe"
 
-msgid "The 'Start' value of the filter should be before last observation."
-msgstr ""
-"Wartość 'Początek' filtra powinna znajdować się przed ostatnią obserwacją."
+#~ msgid "Valid"
+#~ msgstr "Ważne"
 
-msgid "'End' must be in a date-like format (e.g., yyyy-mm-dd hh:mm:ss)."
-msgstr "Wartość 'Koniec' musi mieć format daty (np. rrrr-mm-dd gg:mm:ss)."
+#~ msgid "Missing"
+#~ msgstr "Braki danych"
 
-msgid "The 'End' value of the filter should be larger/later than the 'Start' value."
-msgstr ""
-"Wartość 'Koniec' filtra powinna być większa/późniejsza niż wartość "
-"'Początek'."
+#~ msgid "Mean"
+#~ msgstr "Średnia"
+
+#~ msgid "Std. Deviation"
+#~ msgstr "Odch. stand."
+
+#~ msgid "Variance"
+#~ msgstr "Wariancja"
+
+#~ msgid "Range"
+#~ msgstr "Rozstęp"
+
+#~ msgid "Minimum"
+#~ msgstr "Minimum"
+
+#~ msgid "Maximum"
+#~ msgstr "Maksimum"
+
+#~ msgid "Start"
+#~ msgstr "Początek"
+
+#~ msgid "End"
+#~ msgstr "Koniec"
+
+#~ msgid "The time series data should be equally-spaced."
+#~ msgstr "Dane szeregów czasowych powinny być równomiernie rozmieszczone."
+
+#~ msgid "The time variable should have unique values only."
+#~ msgstr "Zmienna czasu powinna mieć wyłącznie unikalne wartości."
+
+#~ msgid ""
+#~ "The 'Time' variable has a date-like format, please filter by date instead."
+#~ msgstr ""
+#~ "Zmienna 'Czas' ma format daty. Zamiast tego należy wykonać filtrowanie "
+#~ "według daty."
+
+#~ msgid ""
+#~ "The 'Time' variable is not in a date-like format (e.g., yyyy-mm-dd hh:mm:"
+#~ "ss). Try to filter by time index instead."
+#~ msgstr ""
+#~ "Zmienna 'Czas' nie ma formatu daty (np. rrrr-mm-dd gg:mm:ss). Zamiast "
+#~ "tego spróbuj filtrować według indeksu czasu."
+
+#~ msgid "'Start' must be in a date-like format (e.g., yyyy-mm-dd hh:mm:ss)."
+#~ msgstr "Wartość 'Początek' musi mieć format daty (np. rrrr-mm-dd gg:mm:ss)."
+
+#~ msgid "The 'Start' value of the filter should be before last observation."
+#~ msgstr ""
+#~ "Wartość 'Początek' filtra powinna znajdować się przed ostatnią obserwacją."
+
+#~ msgid "'End' must be in a date-like format (e.g., yyyy-mm-dd hh:mm:ss)."
+#~ msgstr "Wartość 'Koniec' musi mieć format daty (np. rrrr-mm-dd gg:mm:ss)."
+
+#~ msgid ""
+#~ "The 'End' value of the filter should be larger/later than the 'Start' "
+#~ "value."
+#~ msgstr ""
+#~ "Wartość 'Koniec' filtra powinna być większa/późniejsza niż wartość "
+#~ "'Początek'."

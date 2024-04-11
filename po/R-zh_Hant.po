@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: jaspTimeSeries 0.18.0\n"
-"POT-Creation-Date: 2023-09-02 03:22\n"
+"POT-Creation-Date: 2024-04-11 13:27\n"
 "PO-Revision-Date: 2023-12-16 07:41+0000\n"
 "Last-Translator: Ginger Shu-Ying Yeh <gingershuying@gmail.com>\n"
 "Language-Team: Chinese (Traditional) <https://hosted.weblate.org/projects/"
@@ -100,10 +100,14 @@ msgstr ""
 msgid "p-value"
 msgstr "p值"
 
-msgid "When 'Covariates' are used in the model, predictions cannot be carried out unless the covariates are also observed for the predicted period."
+msgid ""
+"When 'Covariates' are used in the model, predictions cannot be carried out "
+"unless the covariates are also observed for the predicted period."
 msgstr ""
 
-msgid "Not enough observations in the covariate%1$s. The maximum number of forecasts is %2$s."
+msgid ""
+"Not enough observations in the covariate%1$s. The maximum number of "
+"forecasts is %2$s."
 msgstr ""
 
 msgid "Forecasting failed."
@@ -114,51 +118,6 @@ msgstr "預測時間序列圖"
 
 msgid "Forecasts"
 msgstr "預測"
-
-msgid "Lag Plot"
-msgstr ""
-
-msgid "Autocorrelation Function"
-msgstr "自相關函數"
-
-msgid "Partial Autocorrelation Function"
-msgstr "偏自相關函數"
-
-msgid "Descriptive Statistics"
-msgstr "敘述統計量"
-
-msgid "Valid"
-msgstr "有效"
-
-msgid "Missing"
-msgstr ""
-
-msgid "Mean"
-msgstr "平均數"
-
-msgid "Std. Deviation"
-msgstr "標準差"
-
-msgid "Variance"
-msgstr "變異數"
-
-msgid "Range"
-msgstr ""
-
-msgid "Minimum"
-msgstr "最小值"
-
-msgid "Maximum"
-msgstr "最大值"
-
-msgid "Start"
-msgstr ""
-
-msgid "End"
-msgstr ""
-
-msgid "Lag 1 Autocorrelation"
-msgstr ""
 
 msgid "The spectral analysis failed."
 msgstr ""
@@ -238,26 +197,29 @@ msgstr ""
 msgid "The p-value is actually greater than p-value shown (see Help file)."
 msgstr ""
 
-msgid "The time series data should be equally-spaced."
-msgstr ""
+msgid "Autocorrelation Function"
+msgstr "自相關函數"
 
-msgid "The time variable should have unique values only."
-msgstr ""
+msgid "Partial Autocorrelation Function"
+msgstr "偏自相關函數"
 
-msgid "The 'Time' variable has a date-like format, please filter by date instead."
-msgstr ""
+#~ msgid "Descriptive Statistics"
+#~ msgstr "敘述統計量"
 
-msgid "The 'Time' variable is not in a date-like format (e.g., yyyy-mm-dd hh:mm:ss). Try to filter by time index instead."
-msgstr ""
+#~ msgid "Valid"
+#~ msgstr "有效"
 
-msgid "'Start' must be in a date-like format (e.g., yyyy-mm-dd hh:mm:ss)."
-msgstr ""
+#~ msgid "Mean"
+#~ msgstr "平均數"
 
-msgid "The 'Start' value of the filter should be before last observation."
-msgstr ""
+#~ msgid "Std. Deviation"
+#~ msgstr "標準差"
 
-msgid "'End' must be in a date-like format (e.g., yyyy-mm-dd hh:mm:ss)."
-msgstr ""
+#~ msgid "Variance"
+#~ msgstr "變異數"
 
-msgid "The 'End' value of the filter should be larger/later than the 'Start' value."
-msgstr ""
+#~ msgid "Minimum"
+#~ msgstr "最小值"
+
+#~ msgid "Maximum"
+#~ msgstr "最大值"
