@@ -22,7 +22,7 @@ Form
         {
             name: "time"
             label: qsTr("Time")
-            allowedColumns: ["ordinal", "nominalText"]
+            allowedColumns: ["ordinal", "nominal"]
             singleVariable: true
             allowAnalysisOwnComputedColumns: false
             info: qsTr("Optional. Can either be an ordinal variable indicating the order of the observations, or a text variable indicating the date/time stamp of the observations. Combined date and time values should be in the standard format 'YYYY-MM-DD HH:MM:SS', where seconds (':SS') can also be omitted. Date-only values should be in the format 'YYYY-MM-DD'. If a time variable is not supplied, the row order of the data is used.")
