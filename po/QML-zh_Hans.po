@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
-"PO-Revision-Date: 2023-11-09 09:07+0000\n"
-"Last-Translator: Shun Wang <shuonwang@gmail.com>\n"
+"PO-Revision-Date: 2024-04-30 09:07+0000\n"
+"Last-Translator: Cochrane <cunyikang@qq.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "jasp/jasptimeseries-qml/zh_Hans/>\n"
 "Language: zh_Hans\n"
@@ -9,7 +9,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 5.2-dev\n"
+"X-Generator: Weblate 5.5.2\n"
 "X-Qt-Contexts: true\n"
 
 msgctxt "Description|"
@@ -540,15 +540,15 @@ msgstr ""
 
 msgctxt "SpectralTimeSeries|"
 msgid "Variable"
-msgstr ""
+msgstr "变量"
 
 msgctxt "SpectralTimeSeries|"
 msgid "A variable that is measured repeatedly over time."
-msgstr ""
+msgstr "随时间的推移重复测量的变量。"
 
 msgctxt "SpectralTimeSeries|"
 msgid "Time"
-msgstr ""
+msgstr "时间"
 
 msgctxt "SpectralTimeSeries|"
 msgid ""
@@ -614,19 +614,19 @@ msgstr ""
 
 msgctxt "SpectralTimeSeries|"
 msgid "Start"
-msgstr ""
+msgstr "起始"
 
 msgctxt "SpectralTimeSeries|"
 msgid "End"
-msgstr ""
+msgstr "终止"
 
 msgctxt "SpectralTimeSeries|"
 msgid "Time index"
-msgstr ""
+msgstr "时间索引"
 
 msgctxt "SpectralTimeSeries|"
 msgid "Date"
-msgstr ""
+msgstr "日期"
 
 msgctxt "SpectralTimeSeries|"
 msgid "Noise shape line"
@@ -674,15 +674,15 @@ msgstr ""
 
 msgctxt "StationarityTimeSeries|"
 msgid "Variable"
-msgstr ""
+msgstr "变量"
 
 msgctxt "StationarityTimeSeries|"
 msgid "A variable that is measured repeatedly over time."
-msgstr ""
+msgstr "随时间的推移重复测量的变量。"
 
 msgctxt "StationarityTimeSeries|"
 msgid "Time"
-msgstr ""
+msgstr "时间"
 
 msgctxt "StationarityTimeSeries|"
 msgid ""
@@ -696,11 +696,11 @@ msgstr ""
 
 msgctxt "StationarityTimeSeries|"
 msgid "Stationarity Tests"
-msgstr ""
+msgstr "平稳性检验"
 
 msgctxt "StationarityTimeSeries|"
 msgid "Augmented Dickey-Fuller"
-msgstr ""
+msgstr "ADF 检验（Augmented Dickey-Fuller）"
 
 msgctxt "StationarityTimeSeries|"
 msgid ""
@@ -712,7 +712,7 @@ msgstr ""
 
 msgctxt "StationarityTimeSeries|"
 msgid "Phillips-Perron"
-msgstr ""
+msgstr "Phillips-Perron"
 
 msgctxt "StationarityTimeSeries|"
 msgid ""
@@ -732,7 +732,7 @@ msgstr ""
 
 msgctxt "StationarityTimeSeries|"
 msgid "Kwiatkowski-Phillips-Schmidt-Shin"
-msgstr ""
+msgstr "KPSS检验（Kwiatkowski-Phillips-Schmidt-Shin）"
 
 msgctxt "StationarityTimeSeries|"
 msgid ""
@@ -776,11 +776,11 @@ msgstr ""
 
 msgctxt "StationarityTimeSeries|"
 msgid "Time index"
-msgstr ""
+msgstr "时间索引"
 
 msgctxt "StationarityTimeSeries|"
 msgid "Date"
-msgstr ""
+msgstr "日期"
 
 msgctxt "StationarityTimeSeries|"
 msgid "Transformation"
@@ -788,7 +788,7 @@ msgstr ""
 
 msgctxt "StationarityTimeSeries|"
 msgid "Log"
-msgstr ""
+msgstr "对数"
 
 msgctxt "StationarityTimeSeries|"
 msgid "Takes the log of the dependent variable."
@@ -796,15 +796,15 @@ msgstr ""
 
 msgctxt "StationarityTimeSeries|"
 msgid "Base 10"
-msgstr ""
+msgstr "以10为底的对数"
 
 msgctxt "StationarityTimeSeries|"
 msgid "Base e"
-msgstr ""
+msgstr "以e为底的对数"
 
 msgctxt "StationarityTimeSeries|"
 msgid "Root"
-msgstr ""
+msgstr "根"
 
 msgctxt "StationarityTimeSeries|"
 msgid "Takes the root of the dependent variable."
@@ -812,15 +812,15 @@ msgstr ""
 
 msgctxt "StationarityTimeSeries|"
 msgid "Square"
-msgstr ""
+msgstr "平方"
 
 msgctxt "StationarityTimeSeries|"
 msgid "Cube"
-msgstr ""
+msgstr "立方"
 
 msgctxt "StationarityTimeSeries|"
 msgid "Box-Cox"
-msgstr ""
+msgstr "Box-Cox变换"
 
 msgctxt "StationarityTimeSeries|"
 msgid ""
@@ -832,7 +832,7 @@ msgstr ""
 
 msgctxt "StationarityTimeSeries|"
 msgid "Lambda"
-msgstr ""
+msgstr "λ"
 
 msgctxt "StationarityTimeSeries|"
 msgid "Auto"
@@ -840,7 +840,7 @@ msgstr ""
 
 msgctxt "StationarityTimeSeries|"
 msgid "Custom"
-msgstr ""
+msgstr "自定义"
 
 msgctxt "StationarityTimeSeries|"
 msgid "Detrend using linear regression"
@@ -855,15 +855,15 @@ msgstr ""
 
 msgctxt "StationarityTimeSeries|"
 msgid "Polynomial"
-msgstr ""
+msgstr "多项式"
 
 msgctxt "StationarityTimeSeries|"
 msgid "Best fitting"
-msgstr ""
+msgstr "最佳拟合"
 
 msgctxt "StationarityTimeSeries|"
 msgid "Maximum"
-msgstr ""
+msgstr "最大值"
 
 msgctxt "StationarityTimeSeries|"
 msgid "Information criterion"
@@ -871,15 +871,15 @@ msgstr ""
 
 msgctxt "StationarityTimeSeries|"
 msgid "AIC"
-msgstr ""
+msgstr "AIC"
 
 msgctxt "StationarityTimeSeries|"
 msgid "BIC"
-msgstr ""
+msgstr "BIC"
 
 msgctxt "StationarityTimeSeries|"
 msgid "Difference"
-msgstr ""
+msgstr "差值"
 
 msgctxt "StationarityTimeSeries|"
 msgid ""
@@ -889,11 +889,11 @@ msgstr ""
 
 msgctxt "StationarityTimeSeries|"
 msgid "Lag"
-msgstr ""
+msgstr "滞后"
 
 msgctxt "StationarityTimeSeries|"
 msgid "Order"
-msgstr ""
+msgstr "秩次(order)"
 
 msgctxt "StationarityTimeSeries|"
 msgid "Append transformation to spreadsheet"
@@ -907,7 +907,7 @@ msgstr ""
 
 msgctxt "StationarityTimeSeries|"
 msgid "Column name"
-msgstr ""
+msgstr "列名"
 
 msgctxt "StationarityTimeSeries|"
 msgid "e.g., transformed"
@@ -915,7 +915,7 @@ msgstr ""
 
 msgctxt "StationarityTimeSeries|"
 msgid "Plots"
-msgstr ""
+msgstr "绘图"
 
 msgctxt "StationarityTimeSeries|"
 msgid "Time series plot"
@@ -931,7 +931,7 @@ msgstr ""
 
 msgctxt "StationarityTimeSeries|"
 msgid "Line"
-msgstr ""
+msgstr "线"
 
 msgctxt "StationarityTimeSeries|"
 msgid "Both"
@@ -939,15 +939,15 @@ msgstr ""
 
 msgctxt "StationarityTimeSeries|"
 msgid "Distribution"
-msgstr ""
+msgstr "分布"
 
 msgctxt "StationarityTimeSeries|"
 msgid "Density"
-msgstr ""
+msgstr "密度"
 
 msgctxt "StationarityTimeSeries|"
 msgid "Histogram"
-msgstr ""
+msgstr "直方图"
 
 msgctxt "StationarityTimeSeries|"
 msgid "None"
@@ -955,7 +955,7 @@ msgstr ""
 
 msgctxt "StationarityTimeSeries|"
 msgid "Autocorrelation function"
-msgstr ""
+msgstr "自相关函数"
 
 msgctxt "StationarityTimeSeries|"
 msgid ""
@@ -966,15 +966,15 @@ msgstr ""
 
 msgctxt "StationarityTimeSeries|"
 msgid "Maximum lag"
-msgstr ""
+msgstr "最大滞后"
 
 msgctxt "StationarityTimeSeries|"
 msgid "Zero lag"
-msgstr ""
+msgstr "零滞后"
 
 msgctxt "StationarityTimeSeries|"
 msgid "Confidence interval"
-msgstr ""
+msgstr "置信区间"
 
 msgctxt "StationarityTimeSeries|"
 msgid "Based on white noise"
@@ -986,8 +986,8 @@ msgstr ""
 
 msgctxt "StationarityTimeSeries|"
 msgid "Partial autocorrelation function"
-msgstr ""
+msgstr "偏自相关函数"
 
 msgctxt "StationarityTimeSeries|"
 msgid "Plots the partial autocorrelation for a specified number of lags."
-msgstr ""
+msgstr "绘制指定滞后阶数的偏自相关图。"
