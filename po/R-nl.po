@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: jaspTimeSeries 0.19.0\n"
 "POT-Creation-Date: 2024-05-04 03:24\n"
-"PO-Revision-Date: 2024-05-22 15:57+0000\n"
+"PO-Revision-Date: 2024-05-23 21:09+0000\n"
 "Last-Translator: Koen Derks <koen-derks@hotmail.com>\n"
 "Language-Team: Dutch <https://hosted.weblate.org/projects/jasp/"
 "jasptimeseries-r/nl/>\n"
@@ -14,46 +14,46 @@ msgstr ""
 "X-Generator: Weblate 5.6-dev\n"
 
 msgid "Time Series Plot"
-msgstr ""
+msgstr "Tijdreeksfiguur"
 
 msgid "The ARIMA model could not be fit."
-msgstr ""
+msgstr "Het ARIMA-model kon niet worden gefit."
 
 msgid "No parameters are estimated."
-msgstr ""
+msgstr "Er worden geen parameters geschat."
 
 msgid "Model Summary"
 msgstr "Model Samenvatting"
 
 msgid "Log-Likelihood"
-msgstr ""
+msgstr "Log-Likelihood"
 
 msgid "AICc"
-msgstr ""
+msgstr "AICc"
 
 msgid "AIC"
-msgstr ""
+msgstr "AIC"
 
 msgid "BIC"
-msgstr ""
+msgstr "BIC"
 
 msgid "Coefficients"
 msgstr "Coëfficiënten"
 
 msgid "Estimate"
-msgstr ""
+msgstr "Schatting"
 
 msgid "Standard Error"
-msgstr ""
+msgstr "Standaardfout"
 
 msgid "t"
-msgstr ""
+msgstr "t"
 
 msgid "p"
-msgstr ""
+msgstr "p"
 
 msgid "%s%% CI"
-msgstr ""
+msgstr "%s%% BI"
 
 msgid "Lower"
 msgstr "Onder"
@@ -62,143 +62,151 @@ msgid "Upper"
 msgstr "Boven"
 
 msgid "Intercept"
-msgstr ""
+msgstr "Intercept"
 
 msgid "AR(%1$i)"
-msgstr ""
+msgstr "AR(%1$i)"
 
 msgid "MA(%1$i)"
-msgstr ""
+msgstr "MA(%1$i)"
 
 msgid "seasonal AR(%1$i)"
-msgstr ""
+msgstr "seizoensgebonden AR(%1$i)"
 
 msgid "seasonal MA(%1$i)"
-msgstr ""
+msgstr "seizoensgebonden MA(%1$i)"
 
 msgid "An ARIMA(%1$s, %2$s, %3$s)(%4$s, %5$s, %6$s)[%7$s] model was fitted."
 msgstr ""
+"Er werd een ARIMA(%1$s, %2$s, %3$s)(%4$s, %5$s, %6$s)[%7$s] model toegepast."
 
 msgid "An ARIMA(%1$s, %2$s, %3$s) model was fitted."
-msgstr ""
+msgstr "Er werd een ARIMA(%1$s, %2$s, %3$s) model toegepast."
 
 msgid "Residual Diagnostics Plots"
-msgstr ""
+msgstr "Residuele Diagnostische Figuren"
 
 msgid "Autocorrelation Function Plot"
-msgstr ""
+msgstr "Autocorrelatiefunctie figuur"
 
 msgid "Q-Q Plot"
-msgstr ""
+msgstr "Q-Q Figuur"
 
 msgid "Ljung-Box Plot"
-msgstr ""
+msgstr "Ljung-Box Figuur"
 
 msgid "Lag"
-msgstr ""
+msgstr "Vertraging"
 
 msgid "p-value"
-msgstr ""
+msgstr "p-waarde"
 
 msgid ""
 "When 'Covariates' are used in the model, predictions cannot be carried out "
 "unless the covariates are also observed for the predicted period."
 msgstr ""
+"Wanneer 'Covariaten' worden gebruikt in het model, kunnen geen "
+"voorspellingen worden gedaan tenzij de covariaten ook worden waargenomen "
+"voor de voorspelde periode."
 
 msgid ""
 "Not enough observations in the covariate%1$s. The maximum number of "
 "forecasts is %2$s."
 msgstr ""
+"Niet genoeg waarnemingen in het covariaat%1$s. Het maximum aantal "
+"voorspellingen is %2$s."
 
 msgid "Forecasting failed."
-msgstr ""
+msgstr "Prognose mislukt."
 
 msgid "Forecast Time Series Plot"
-msgstr ""
+msgstr "Tijdreeksprognose Figuur"
 
 msgid "Forecasts"
-msgstr ""
+msgstr "Prognoses"
 
 msgid "The spectral analysis failed."
-msgstr ""
+msgstr "The spectrale analyse is mislukt."
 
 msgid "Power Spectral Density Plot"
-msgstr ""
+msgstr "Power Spectrale Dichtheid Figuur"
 
 msgid "Spectral Density"
-msgstr ""
+msgstr "Spectrale Dichtheid"
 
 msgid "Bandwidth"
-msgstr ""
+msgstr "Bandbreedte"
 
 msgid "Data cannot be zero or negative for log transformation."
-msgstr ""
+msgstr "Gegevens kunnen niet nul of negatief zijn voor logtransformatie."
 
 msgid "Data cannot be negative for root transformation."
-msgstr ""
+msgstr "Gegevens kunnen niet negatief zijn voor worteltransformatie."
 
 msgid "Detrend using linear regression"
-msgstr ""
+msgstr "Trendcorrectie met lineaire regressie"
 
 msgid "Degree"
-msgstr ""
+msgstr "Graad"
 
 msgid "A polynomial regression with a degree of %s was fitted."
-msgstr ""
+msgstr "Er werd een polynomiale regressie met een graad van %s toegepast."
 
 msgid "Stationarity Tests"
-msgstr ""
+msgstr "Stationariteitstoetsen"
 
 msgid "Test"
-msgstr ""
+msgstr "Toets"
 
 msgid "Statistic"
-msgstr ""
+msgstr "Statistiek"
 
 msgid "Truncation lag parameter"
-msgstr ""
+msgstr "Truncatie vertragingsparameter"
 
 msgid "H₀"
-msgstr ""
+msgstr "H₀"
 
 msgid "Level"
-msgstr ""
+msgstr "Niveau"
 
 msgid "Trend"
-msgstr ""
+msgstr "Trend"
 
 msgid "Non-stationary"
-msgstr ""
+msgstr "Niet-stationair"
 
 msgid "Level stationary"
-msgstr ""
+msgstr "Niveau stationariteit"
 
 msgid "Trend stationary"
-msgstr ""
+msgstr "Trend stationariteit"
 
 msgid "The ADF test failed."
-msgstr ""
+msgstr "De ADF test is mislukt."
 
 msgid "The PP regression coefficient test failed."
-msgstr ""
+msgstr "De PP-regressiecoëfficiënttest is mislukt."
 
 msgid "The PP studentized test failed."
-msgstr ""
+msgstr "De PP-studententest is mislukt."
 
 msgid "The KPSS test for level stationarity failed."
-msgstr ""
+msgstr "De KPSS-test voor niveaustationariteit is mislukt."
 
 msgid "The KPSS test for trend stationarity failed."
-msgstr ""
+msgstr "De KPSS-test voor trendstationariteit is mislukt."
 
 msgid "The p-value is actually less than p-value shown (see Help file)."
 msgstr ""
+"De p-waarde is eigenlijk lager dan de getoonde p-waarde (zie Help-bestand)."
 
 msgid "The p-value is actually greater than p-value shown (see Help file)."
 msgstr ""
+"De p-waarde is eigenlijk groter dan de getoonde p-waarde (zie Help-bestand)."
 
 msgid "Autocorrelation Function"
-msgstr ""
+msgstr "Autocorrelatiefunctie"
 
 msgid "Partial Autocorrelation Function"
-msgstr ""
+msgstr "Gedeeltelijke Autocorrelatiefunctie"
