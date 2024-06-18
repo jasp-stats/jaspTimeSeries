@@ -13,7 +13,7 @@ Form
         {
             name: "dependent"
             label: qsTr("Variable")
-            allowedColumns: ["ordinal", "scale"]
+            allowedColumns: ["scale"]
             singleVariable: true
             allowAnalysisOwnComputedColumns: false
             info: qsTr("A variable that is measured repeatedly over time.")

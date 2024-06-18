@@ -13,7 +13,7 @@ Form
         {
             name: "dependent"
             label: qsTr("Dependent Variable")
-            allowedColumns: ["ordinal", "scale"]
+            allowedColumns: ["scale"]
             singleVariable: true
             info: qsTr("A variable that is measured repeatedly over time.")
         }
@@ -30,7 +30,7 @@ Form
         {
             name: "covariates"
             label: qsTr("Covariates")
-            allowedColumns: ["ordinal", "scale"]
+            allowedColumns: ["scale"]
             height: 120
             info: qsTr("Optional. A numerical variable to include in the model as external regressor.")
         }
