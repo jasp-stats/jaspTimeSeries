@@ -1,6 +1,6 @@
 msgid ""
 msgstr ""
-"PO-Revision-Date: 2024-09-02 15:52+0000\n"
+"PO-Revision-Date: 2024-09-03 16:09+0000\n"
 "Last-Translator: Alperen Koçyiğit <muh.alperenkocyigit@gmail.com>\n"
 "Language-Team: Turkish <https://hosted.weblate.org/projects/jasp/"
 "jasptimeseries-qml/tr/>\n"
@@ -62,12 +62,15 @@ msgstr ""
 
 msgctxt "ARIMATimeSeries|"
 msgid "Covariates"
-msgstr ""
+msgstr "Karıştırıcılar"
 
+#, fuzzy
 msgctxt "ARIMATimeSeries|"
 msgid ""
 "Optional. A numerical variable to include in the model as external regressor."
 msgstr ""
+"İsteğe bağlı. Harici regresör olarak modele dahil edilecek nümerik bir "
+"değişken."
 
 msgctxt "ARIMATimeSeries|"
 msgid "Time series plot"
@@ -75,7 +78,7 @@ msgstr "Zaman serisi grafiği"
 
 msgctxt "ARIMATimeSeries|"
 msgid "Plots the dependent variable (y-axis) over time (x-axis)."
-msgstr ""
+msgstr "Bağımlı değişkeni (y ekseni) zamana göre (x ekseni) çizer."
 
 msgctxt "ARIMATimeSeries|"
 msgid "Points"
@@ -123,27 +126,27 @@ msgstr ""
 
 msgctxt "ARIMATimeSeries|"
 msgid "Start"
-msgstr ""
+msgstr "Başlangıç"
 
 msgctxt "ARIMATimeSeries|"
 msgid "End"
-msgstr ""
+msgstr "Bitiş"
 
 msgctxt "ARIMATimeSeries|"
 msgid "Time index"
-msgstr ""
+msgstr "Zaman indexi"
 
 msgctxt "ARIMATimeSeries|"
 msgid "Date"
-msgstr ""
+msgstr "Tarih"
 
 msgctxt "ARIMATimeSeries|"
 msgid "Model"
-msgstr ""
+msgstr "Model"
 
 msgctxt "ARIMATimeSeries|"
 msgid "Intercept"
-msgstr ""
+msgstr "Engelleme"
 
 msgctxt "ARIMATimeSeries|"
 msgid "Include an intercept in the model."
