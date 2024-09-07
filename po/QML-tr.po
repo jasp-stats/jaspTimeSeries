@@ -1,17 +1,11 @@
 msgid ""
 msgstr ""
-"PO-Revision-Date: 2024-09-03 16:09+0000\n"
-"Last-Translator: Alperen Koçyiğit <muh.alperenkocyigit@gmail.com>\n"
-"Language-Team: Turkish <https://hosted.weblate.org/projects/jasp/"
-"jasptimeseries-qml/tr/>\n"
-"Language: tr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.8-dev\n"
-"X-Qt-Contexts: true\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
 "X-Language: tr\n"
+"X-Qt-Contexts: true\n"
 
 msgctxt "Description|"
 msgid "This module offers time series analyses."
@@ -363,9 +357,10 @@ msgctxt "SpectralTimeSeries|"
 msgid "A variable that is measured repeatedly over time."
 msgstr ""
 
+#, fuzzy
 msgctxt "SpectralTimeSeries|"
 msgid "Time"
-msgstr ""
+msgstr "Zaman"
 
 msgctxt "SpectralTimeSeries|"
 msgid ""
@@ -429,21 +424,25 @@ msgctxt "SpectralTimeSeries|"
 msgid "Row number"
 msgstr ""
 
+#, fuzzy
 msgctxt "SpectralTimeSeries|"
 msgid "Start"
-msgstr ""
+msgstr "Başlangıç"
 
+#, fuzzy
 msgctxt "SpectralTimeSeries|"
 msgid "End"
-msgstr ""
+msgstr "Bitiş"
 
+#, fuzzy
 msgctxt "SpectralTimeSeries|"
 msgid "Time index"
-msgstr ""
+msgstr "Zaman indexi"
 
+#, fuzzy
 msgctxt "SpectralTimeSeries|"
 msgid "Date"
-msgstr ""
+msgstr "Tarih"
 
 msgctxt "SpectralTimeSeries|"
 msgid "Noise shape line"
@@ -497,9 +496,10 @@ msgctxt "StationarityTimeSeries|"
 msgid "A variable that is measured repeatedly over time."
 msgstr ""
 
+#, fuzzy
 msgctxt "StationarityTimeSeries|"
 msgid "Time"
-msgstr ""
+msgstr "Zaman"
 
 msgctxt "StationarityTimeSeries|"
 msgid ""
@@ -583,21 +583,25 @@ msgctxt "StationarityTimeSeries|"
 msgid "Row number"
 msgstr ""
 
+#, fuzzy
 msgctxt "StationarityTimeSeries|"
 msgid "Start"
-msgstr ""
+msgstr "Başlangıç"
 
+#, fuzzy
 msgctxt "StationarityTimeSeries|"
 msgid "End"
-msgstr ""
+msgstr "Bitiş"
 
+#, fuzzy
 msgctxt "StationarityTimeSeries|"
 msgid "Time index"
-msgstr ""
+msgstr "Zaman indexi"
 
+#, fuzzy
 msgctxt "StationarityTimeSeries|"
 msgid "Date"
-msgstr ""
+msgstr "Tarih"
 
 msgctxt "StationarityTimeSeries|"
 msgid "Transformation"
@@ -734,9 +738,10 @@ msgctxt "StationarityTimeSeries|"
 msgid "Plots"
 msgstr ""
 
+#, fuzzy
 msgctxt "StationarityTimeSeries|"
 msgid "Time series plot"
-msgstr ""
+msgstr "Zaman serisi grafiği"
 
 msgctxt "StationarityTimeSeries|"
 msgid "Plots the (transformed) dependent variable (y-axis) over time (x-axis)."

@@ -1,17 +1,11 @@
 msgid ""
 msgstr ""
-"PO-Revision-Date: 2024-05-06 03:07+0000\n"
-"Last-Translator: Cochrane <cunyikang@qq.com>\n"
-"Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
-"jasp/jasptimeseries-qml/zh_Hans/>\n"
-"Language: zh_Hans\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 5.5.3\n"
-"X-Qt-Contexts: true\n"
 "X-Language: zh_Hans\n"
+"X-Qt-Contexts: true\n"
 
 msgctxt "Description|"
 msgid "Time Series"
@@ -358,181 +352,6 @@ msgctxt "ARIMATimeSeries|"
 msgid "Forecasts table"
 msgstr "预测表"
 
-msgctxt "DescriptivesTimeSeries|"
-msgid ""
-"Descriptives allows the user to obtain descriptive statistics and "
-"descriptive plots for univariate time-series."
-msgstr "描述性允许用户获得单变量时间序列的描述性统计数据和描述性图。"
-
-msgctxt "DescriptivesTimeSeries|"
-msgid "Variable"
-msgstr "变量"
-
-msgctxt "DescriptivesTimeSeries|"
-msgid "A variable that is measured repeatedly over time."
-msgstr "随着时间的推移重复测量的变量。"
-
-msgctxt "DescriptivesTimeSeries|"
-msgid "Time"
-msgstr "时间"
-
-msgctxt "DescriptivesTimeSeries|"
-msgid ""
-"Optional. Can either be an ordinal variable indicating the order of the "
-"observations, or a text variable indicating the date/time stamp of the "
-"observations. Combined date and time values should be in the standard format "
-"'YYYY-MM-DD HH:MM:SS', where seconds (':SS') can also be omitted. Date-only "
-"values should be in the format 'YYYY-MM-DD'. If a time variable is not "
-"supplied, the row order of the data is used."
-msgstr ""
-"可选。 可以是指代观察的时间索引/顺序的序数变量，也可以是指代观察的日期/时间戳"
-"的文本变量。 如有日期和时间组合值应采用“年-月-日 时:分:秒”这样的标准格式，其"
-"中秒 (':SS') 也可以省略。 如仅有日期值应采用“年-月-日”格式。 如果未提供时间变"
-"量，则使用数据的行顺序作为序列。"
-
-msgctxt "DescriptivesTimeSeries|"
-msgid "Transpose descriptives table"
-msgstr "转置描述表"
-
-msgctxt "DescriptivesTimeSeries|"
-msgid "Filter by"
-msgstr "筛选规则"
-
-msgctxt "DescriptivesTimeSeries|"
-msgid ""
-"Filters the time series so only a specific range will be used for further "
-"analyses. Row number refers to the row number in the spreadsheet. If a "
-"'Time' variable is supplied it is also possible to filter by time index or "
-"date, depending on the format of the 'Time' variable."
-msgstr ""
-
-msgctxt "DescriptivesTimeSeries|"
-msgid "Row number"
-msgstr ""
-
-msgctxt "DescriptivesTimeSeries|"
-msgid "Start"
-msgstr ""
-
-msgctxt "DescriptivesTimeSeries|"
-msgid "End"
-msgstr ""
-
-msgctxt "DescriptivesTimeSeries|"
-msgid "Time index"
-msgstr ""
-
-msgctxt "DescriptivesTimeSeries|"
-msgid "Date"
-msgstr ""
-
-msgctxt "DescriptivesTimeSeries|"
-msgid "Plots"
-msgstr ""
-
-msgctxt "DescriptivesTimeSeries|"
-msgid "Time series plot"
-msgstr ""
-
-msgctxt "DescriptivesTimeSeries|"
-msgid "Plots the dependent variable (y-axis) over time (x-axis)."
-msgstr ""
-
-msgctxt "DescriptivesTimeSeries|"
-msgid "Points"
-msgstr ""
-
-msgctxt "DescriptivesTimeSeries|"
-msgid "Line"
-msgstr ""
-
-msgctxt "DescriptivesTimeSeries|"
-msgid "Both"
-msgstr ""
-
-msgctxt "DescriptivesTimeSeries|"
-msgid "Distribution"
-msgstr ""
-
-msgctxt "DescriptivesTimeSeries|"
-msgid "Density"
-msgstr ""
-
-msgctxt "DescriptivesTimeSeries|"
-msgid "Histogram"
-msgstr ""
-
-msgctxt "DescriptivesTimeSeries|"
-msgid "None"
-msgstr ""
-
-msgctxt "DescriptivesTimeSeries|"
-msgid "Lag plot"
-msgstr ""
-
-msgctxt "DescriptivesTimeSeries|"
-msgid ""
-"Plots the dependent variable (y-axis) against a lagged version of itself (x-"
-"axis). The lag stands for the amount of observations in between the "
-"dependent variable and the lagged version of itself. The regression line is "
-"the autoregression at the specified lag."
-msgstr ""
-
-msgctxt "DescriptivesTimeSeries|"
-msgid "Lag"
-msgstr ""
-
-msgctxt "DescriptivesTimeSeries|"
-msgid "Add regression line"
-msgstr ""
-
-msgctxt "DescriptivesTimeSeries|"
-msgid "Smooth"
-msgstr ""
-
-msgctxt "DescriptivesTimeSeries|"
-msgid "Linear"
-msgstr ""
-
-msgctxt "DescriptivesTimeSeries|"
-msgid "Confidence interval"
-msgstr ""
-
-msgctxt "DescriptivesTimeSeries|"
-msgid "Autocorrelation function"
-msgstr ""
-
-msgctxt "DescriptivesTimeSeries|"
-msgid "Maximum lag"
-msgstr ""
-
-msgctxt "DescriptivesTimeSeries|"
-msgid "Zero lag"
-msgstr ""
-
-msgctxt "DescriptivesTimeSeries|"
-msgid ""
-"Plots the autocorrelation for a specified number of lags. The confidence "
-"interval may be given assuming either a white noise process, or assuming for "
-"a lag q a moving average process of order q - 1."
-msgstr ""
-
-msgctxt "DescriptivesTimeSeries|"
-msgid "Based on white noise"
-msgstr ""
-
-msgctxt "DescriptivesTimeSeries|"
-msgid "Based on moving average"
-msgstr ""
-
-msgctxt "DescriptivesTimeSeries|"
-msgid "Partial autocorrelation function"
-msgstr ""
-
-msgctxt "DescriptivesTimeSeries|"
-msgid "Plots the partial autocorrelation for a specified number of lags."
-msgstr ""
-
 msgctxt "SpectralTimeSeries|"
 msgid ""
 "Spectral analysis allows the user to assess the frequency components and "
@@ -551,6 +370,7 @@ msgctxt "SpectralTimeSeries|"
 msgid "Time"
 msgstr "时间"
 
+#, fuzzy
 msgctxt "SpectralTimeSeries|"
 msgid ""
 "Optional. Can either be an ordinal variable indicating the order of the "
@@ -560,6 +380,10 @@ msgid ""
 "values should be in the format 'YYYY-MM-DD'. If a time variable is not "
 "supplied, the row order of the data is used."
 msgstr ""
+"可选。 可以是指代观察的时间索引/顺序的序数变量，也可以是指代观察的日期/时间戳"
+"的文本变量。 如有日期和时间组合值应采用“年-月-日 时:分:秒”这样的标准格式，其"
+"中秒 (':SS') 也可以省略。 如仅有日期值应采用“年-月-日”格式。 如果未提供时间变"
+"量，则使用数据的行顺序作为序列。"
 
 msgctxt "SpectralTimeSeries|"
 msgid "Spectral density"
@@ -601,6 +425,7 @@ msgctxt "SpectralTimeSeries|"
 msgid "Filter by"
 msgstr "筛选规则"
 
+#, fuzzy
 msgctxt "SpectralTimeSeries|"
 msgid ""
 "Filters the time series so only a specific range will be used for further "
@@ -608,6 +433,8 @@ msgid ""
 "'Time' variable is supplied it is also possible to filter by time index or "
 "date, depending on the format of the 'Time' variable."
 msgstr ""
+"过滤时间序列，以便仅在特定范围进行分析。 行号是指表格中的行数。 如果提供“时"
+"间”变量，则还可以按时间索引或日期进行过滤，具体取决于“时间”变量的格式。"
 
 msgctxt "SpectralTimeSeries|"
 msgid "Row number"
@@ -685,6 +512,7 @@ msgctxt "StationarityTimeSeries|"
 msgid "Time"
 msgstr "时间"
 
+#, fuzzy
 msgctxt "StationarityTimeSeries|"
 msgid ""
 "Optional. Can either be an ordinal variable indicating the order of the "
@@ -694,6 +522,10 @@ msgid ""
 "values should be in the format 'YYYY-MM-DD'. If a time variable is not "
 "supplied, the row order of the data is used."
 msgstr ""
+"可选。 可以是指代观察的时间索引/顺序的序数变量，也可以是指代观察的日期/时间戳"
+"的文本变量。 如有日期和时间组合值应采用“年-月-日 时:分:秒”这样的标准格式，其"
+"中秒 (':SS') 也可以省略。 如仅有日期值应采用“年-月-日”格式。 如果未提供时间变"
+"量，则使用数据的行顺序作为序列。"
 
 msgctxt "StationarityTimeSeries|"
 msgid "Stationarity Tests"
@@ -751,10 +583,12 @@ msgctxt "StationarityTimeSeries|"
 msgid "Trend stationary"
 msgstr ""
 
+#, fuzzy
 msgctxt "StationarityTimeSeries|"
 msgid "Filter by"
-msgstr ""
+msgstr "筛选规则"
 
+#, fuzzy
 msgctxt "StationarityTimeSeries|"
 msgid ""
 "Filters the time series so only a specific range will be used for further "
@@ -762,18 +596,23 @@ msgid ""
 "'Time' variable is supplied it is also possible to filter by time index or "
 "date, depending on the format of the 'Time' variable."
 msgstr ""
+"过滤时间序列，以便仅在特定范围进行分析。 行号是指表格中的行数。 如果提供“时"
+"间”变量，则还可以按时间索引或日期进行过滤，具体取决于“时间”变量的格式。"
 
+#, fuzzy
 msgctxt "StationarityTimeSeries|"
 msgid "Row number"
-msgstr ""
+msgstr "行数"
 
+#, fuzzy
 msgctxt "StationarityTimeSeries|"
 msgid "Start"
-msgstr ""
+msgstr "起始"
 
+#, fuzzy
 msgctxt "StationarityTimeSeries|"
 msgid "End"
-msgstr ""
+msgstr "终止"
 
 msgctxt "StationarityTimeSeries|"
 msgid "Time index"
@@ -868,9 +707,10 @@ msgctxt "StationarityTimeSeries|"
 msgid "Maximum"
 msgstr "最大值"
 
+#, fuzzy
 msgctxt "StationarityTimeSeries|"
 msgid "Information criterion"
-msgstr ""
+msgstr "信息准则"
 
 msgctxt "StationarityTimeSeries|"
 msgid "AIC"
@@ -920,25 +760,28 @@ msgctxt "StationarityTimeSeries|"
 msgid "Plots"
 msgstr "绘图"
 
+#, fuzzy
 msgctxt "StationarityTimeSeries|"
 msgid "Time series plot"
-msgstr ""
+msgstr "绘制时间序列图"
 
 msgctxt "StationarityTimeSeries|"
 msgid "Plots the (transformed) dependent variable (y-axis) over time (x-axis)."
 msgstr ""
 
+#, fuzzy
 msgctxt "StationarityTimeSeries|"
 msgid "Points"
-msgstr ""
+msgstr "时间点"
 
 msgctxt "StationarityTimeSeries|"
 msgid "Line"
 msgstr "线"
 
+#, fuzzy
 msgctxt "StationarityTimeSeries|"
 msgid "Both"
-msgstr ""
+msgstr "两者"
 
 msgctxt "StationarityTimeSeries|"
 msgid "Distribution"
@@ -952,9 +795,10 @@ msgctxt "StationarityTimeSeries|"
 msgid "Histogram"
 msgstr "直方图"
 
+#, fuzzy
 msgctxt "StationarityTimeSeries|"
 msgid "None"
-msgstr ""
+msgstr "无"
 
 msgctxt "StationarityTimeSeries|"
 msgid "Autocorrelation function"
