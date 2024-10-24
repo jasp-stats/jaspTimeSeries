@@ -13,7 +13,7 @@ msgstr ""
 
 msgctxt "Description|"
 msgid "Descriptives"
-msgstr ""
+msgstr "記述統計量"
 
 msgctxt "Description|"
 msgid "Stationarity"
