@@ -377,7 +377,7 @@ ARIMATimeSeries <- function(jaspResults, dataset, options) {
   # append residuals to spreadsheet
   if (options[["residualSavedToData"]] && is.null(jaspResults[["residualColumn"]]) && options[["residualColumn"]] != "" && ready) {
     residualColumn <- rep(NA, max(as.numeric(rownames(datasetRaw))))
-    matchT <- match(as.POSIXct(datasetRaw$t, tz = "UTC"), dataset$t)
+    matchT <- match(datasetRaw$t, dataset$t)
     residualColumn[as.numeric(rownames(datasetRaw))] <- fit$residuals[matchT]
     jaspResults[["residualColumn"]] <- createJaspColumn(columnName = options[["residualColumn"]])
     jaspResults[["residualColumn"]]$dependOn(options = dependencies)
@@ -417,12 +417,12 @@ ARIMATimeSeries <- function(jaspResults, dataset, options) {
 
   if (ready && options$forecastLength > 0) {
     # test if time is a date or a numeric variable
-    tryDate <- try(as.POSIXct(dataset$t, tz = "UTC"))
+    isDate <- lubridate::is.POSIXct(dataset$t)
 
     # get the last non-NA observation
     lastObsY <- max(which(!is.na(dataset$y)))
     lastT <- dataset$t[lastObsY]
-    if (jaspBase::isTryError(tryDate)) {
+    if (!isDate) {
       tPred <- data.frame(t = (lastObsY + 1):(lastObsY + options$forecastLength))
     } else {
       increment <- .tsGuessInterval(dataset)
@@ -438,9 +438,7 @@ ARIMATimeSeries <- function(jaspResults, dataset, options) {
       # get idx last observation in raw dataset
       # if a filter is used, there may be covariates outside of the filter
       # to use for forecasting
-      rawT <- try(as.POSIXct(datasetRaw$t, tz = "UTC"))
-      if (jaspBase::isTryError(rawT)) rawT <- datasetRaw$t
-      lastRaw <- match(lastT, rawT)
+      lastRaw <- match(lastT, datasetRaw$t)
       firstForecast <- lastRaw + 1
       lastForecast <- lastRaw + options$forecastLength
       rangeForecast <- firstForecast:lastForecast
@@ -514,14 +512,13 @@ ARIMATimeSeries <- function(jaspResults, dataset, options) {
   cols <- cols[idx]
   df <- df[idx, ]
   yBreaks <- jaspGraphs::getPrettyAxisBreaks(c(df$y, pred$lower95, pred$upper95))
-  tryDate <- try(as.POSIXct(df$t, tz = "UTC"))
+  isDate <- lubridate::is.POSIXct(df$t)
 
-  if (jaspBase::isTryError(tryDate)) {
+  if (!isDate) {
     df$t <- as.numeric(df$t)
     xBreaks <- jaspGraphs::getPrettyAxisBreaks(df$t)
     xScale <- ggplot2::scale_x_continuous("t", breaks = xBreaks, limits = range(xBreaks))
   } else {
-    df$t <- as.POSIXct(df$t, tz = "UTC")
     xBreaks <- pretty(df$t)
     xLabels <- attr(xBreaks, "labels")
     xScale <- ggplot2::scale_x_datetime("t", breaks = xBreaks, labels = xLabels, limits = range(xBreaks))
