@@ -331,11 +331,11 @@
 <polyline points='398.25,518.64 398.25,510.14 ' style='stroke-width: 0.64; stroke-linecap: butt;' />
 <polyline points='544.57,518.64 544.57,510.14 ' style='stroke-width: 0.64; stroke-linecap: butt;' />
 <polyline points='690.89,518.64 690.89,510.14 ' style='stroke-width: 0.64; stroke-linecap: butt;' />
-<text x='108.78' y='537.32' text-anchor='middle' style='font-size: 17.00px; font-family: sans;' textLength='22.68px' lengthAdjust='spacingAndGlyphs'>jan</text>
-<text x='253.52' y='537.32' text-anchor='middle' style='font-size: 17.00px; font-family: sans;' textLength='24.57px' lengthAdjust='spacingAndGlyphs'>apr</text>
-<text x='398.25' y='537.32' text-anchor='middle' style='font-size: 17.00px; font-family: sans;' textLength='17.00px' lengthAdjust='spacingAndGlyphs'>jul</text>
-<text x='544.57' y='537.32' text-anchor='middle' style='font-size: 17.00px; font-family: sans;' textLength='22.68px' lengthAdjust='spacingAndGlyphs'>okt</text>
-<text x='690.89' y='537.32' text-anchor='middle' style='font-size: 17.00px; font-family: sans;' textLength='22.68px' lengthAdjust='spacingAndGlyphs'>jan</text>
+<text x='108.78' y='537.32' text-anchor='middle' style='font-size: 17.00px; font-family: sans;' textLength='27.42px' lengthAdjust='spacingAndGlyphs'>Jan</text>
+<text x='253.52' y='537.32' text-anchor='middle' style='font-size: 17.00px; font-family: sans;' textLength='26.46px' lengthAdjust='spacingAndGlyphs'>Apr</text>
+<text x='398.25' y='537.32' text-anchor='middle' style='font-size: 17.00px; font-family: sans;' textLength='21.74px' lengthAdjust='spacingAndGlyphs'>Jul</text>
+<text x='544.57' y='537.32' text-anchor='middle' style='font-size: 17.00px; font-family: sans;' textLength='26.46px' lengthAdjust='spacingAndGlyphs'>Oct</text>
+<text x='690.89' y='537.32' text-anchor='middle' style='font-size: 17.00px; font-family: sans;' textLength='27.42px' lengthAdjust='spacingAndGlyphs'>Jan</text>
 <text x='399.84' y='567.49' text-anchor='middle' style='font-size: 17.00px; font-family: sans;' textLength='4.72px' lengthAdjust='spacingAndGlyphs'>t</text>
 <text transform='translate(16.68,265.42) rotate(-90)' text-anchor='middle' style='font-size: 17.00px; font-family: sans;' textLength='179.58px' lengthAdjust='spacingAndGlyphs'>Standardized Residuals</text>
 <text x='399.84' y='11.70' text-anchor='middle' style='font-size: 17.00px; font-family: sans;' textLength='201.27px' lengthAdjust='spacingAndGlyphs'>time-series-plot1-subplot-1</text>
