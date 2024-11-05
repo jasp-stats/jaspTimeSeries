@@ -1,6 +1,7 @@
 context("Descriptives Time Series")
 
-options <- jaspTools::analysisOptions("DescriptivesTimeSeries")
+# options <- jaspTools::analysisOptions("DescriptivesTimeSeries")
+options <- analysisOptionsFromJaspDescriptives("DescriptivesTimeSeries")
 options$dependent <- "visits"
 options$time <- "date"
 options$lagPlot <- TRUE

@@ -92,7 +92,7 @@ StationarityTimeSeries <- function(jaspResults, dataset, options) {
       transformedDataset$y <- residuals(lm(y ~ poly(as.integer(t), options$detrendPoly), data = transformedDataset))
     }
     if (options$polynomialSpecification == "auto") {
-      .tsComputePolyResults(dataset, options, jaspResults, ready)
+      .tsComputePolyResults(transformedDataset, options, jaspResults, ready)
       lmFit <- jaspResults[["polyResult"]]$object
       best <- which.min(unlist(lmFit[options$polynomialSpecificationAutoIc, ]))
       transformedDataset$y <- unlist(lmFit["residuals", best])

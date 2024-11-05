@@ -13,7 +13,8 @@ Imports:
   jaspBase,
   jaspGraphs,
   jaspDescriptives,
-  forecast
+  forecast,
+  lubridate
 Suggests:
   testthat
 Remotes:

@@ -37,7 +37,7 @@ Form
             name:   "adfTest"
             id:     adfTest
             label:  qsTr("Augmented Dickey-Fuller")
-            info:   qsTr("Computes an ADF test where the null assumes that the time-series has a unit root. The p-values are interpolated from a table of critical values in Banerjee et al. (1993), when the statistic lies outside the range of critical values, a note is added to the table.")
+            info:   qsTr("Computes an ADF test that accounts for a constant (drift) and a linear trend, where the null assumes that the time-series has a unit root. A default lag order is used based on T-1^(1/3). The p-values are interpolated from a table of critical values in Banerjee et al. (1993), when the statistic lies outside the range of critical values, a note is added to the table.")
         }
         Group
         {
