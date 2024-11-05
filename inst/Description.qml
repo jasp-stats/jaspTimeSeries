@@ -12,6 +12,7 @@ Description
 	website		: "https://sophieberkhout.github.io/"
 	license		: "GPL (>= 2)"
 	icon		: "analysis-time-series.svg"
+	preloadData: true
 
 	Analysis
 	{
