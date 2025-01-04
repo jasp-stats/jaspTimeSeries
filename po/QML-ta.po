@@ -1,0 +1,806 @@
+msgid ""
+msgstr ""
+"Language: ta\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Qt-Contexts: true\n"
+
+msgctxt "Description|"
+msgid "Time Series"
+msgstr ""
+
+msgctxt "Description|"
+msgid "This module offers time series analyses."
+msgstr ""
+
+msgctxt "Description|"
+msgid "Descriptives"
+msgstr ""
+
+msgctxt "Description|"
+msgid "Stationarity"
+msgstr ""
+
+msgctxt "Description|"
+msgid "ARIMA"
+msgstr ""
+
+msgctxt "Description|"
+msgid "Spectral Analysis"
+msgstr ""
+
+msgctxt "ARIMATimeSeries|"
+msgid ""
+"Allows the user to fit a (seasonal) AR/MA/ARMA/ARIMA model to a time series."
+msgstr ""
+
+msgctxt "ARIMATimeSeries|"
+msgid "Dependent Variable"
+msgstr ""
+
+msgctxt "ARIMATimeSeries|"
+msgid "A variable that is measured repeatedly over time."
+msgstr ""
+
+msgctxt "ARIMATimeSeries|"
+msgid "Time"
+msgstr ""
+
+msgctxt "ARIMATimeSeries|"
+msgid ""
+"Optional. Can either be an ordinal variable indicating the time index/order "
+"of the observations, or a text variable indicating the date/time stamp of "
+"the observations. Combined date and time values should be in the standard "
+"format 'YYYY-MM-DD HH:MM:SS', where seconds (':SS') can also be omitted. "
+"Date-only values should be in the format 'YYYY-MM-DD'. If a time variable is "
+"not supplied, the row order of the data is used."
+msgstr ""
+
+msgctxt "ARIMATimeSeries|"
+msgid "Covariates"
+msgstr ""
+
+msgctxt "ARIMATimeSeries|"
+msgid ""
+"Optional. A numerical variable to include in the model as external regressor."
+msgstr ""
+
+msgctxt "ARIMATimeSeries|"
+msgid "Time series plot"
+msgstr ""
+
+msgctxt "ARIMATimeSeries|"
+msgid "Plots the dependent variable (y-axis) over time (x-axis)."
+msgstr ""
+
+msgctxt "ARIMATimeSeries|"
+msgid "Points"
+msgstr ""
+
+msgctxt "ARIMATimeSeries|"
+msgid "Line"
+msgstr ""
+
+msgctxt "ARIMATimeSeries|"
+msgid "Both"
+msgstr ""
+
+msgctxt "ARIMATimeSeries|"
+msgid "Distribution"
+msgstr ""
+
+msgctxt "ARIMATimeSeries|"
+msgid "Density"
+msgstr ""
+
+msgctxt "ARIMATimeSeries|"
+msgid "Histogram"
+msgstr ""
+
+msgctxt "ARIMATimeSeries|"
+msgid "None"
+msgstr ""
+
+msgctxt "ARIMATimeSeries|"
+msgid "Filter by"
+msgstr ""
+
+msgctxt "ARIMATimeSeries|"
+msgid ""
+"Filters the time series so only a specific range will be used for further "
+"analyses. Row number refers to the row number in the spreadsheet. If a "
+"'Time' variable is supplied it is also possible to filter by time index or "
+"date, depending on the format of the 'Time' variable."
+msgstr ""
+
+msgctxt "ARIMATimeSeries|"
+msgid "Row number"
+msgstr ""
+
+msgctxt "ARIMATimeSeries|"
+msgid "Start"
+msgstr ""
+
+msgctxt "ARIMATimeSeries|"
+msgid "End"
+msgstr ""
+
+msgctxt "ARIMATimeSeries|"
+msgid "Time index"
+msgstr ""
+
+msgctxt "ARIMATimeSeries|"
+msgid "Date"
+msgstr ""
+
+msgctxt "ARIMATimeSeries|"
+msgid "Model"
+msgstr ""
+
+msgctxt "ARIMATimeSeries|"
+msgid "Intercept"
+msgstr ""
+
+msgctxt "ARIMATimeSeries|"
+msgid "Include an intercept in the model."
+msgstr ""
+
+msgctxt "ARIMATimeSeries|"
+msgid "Seasonal components"
+msgstr ""
+
+msgctxt "ARIMATimeSeries|"
+msgid ""
+"Fit a seasonal ARIMA model. If the frequency is not known, a dominant "
+"frequency may be determined from a spectral analysis."
+msgstr ""
+
+msgctxt "ARIMATimeSeries|"
+msgid "Period"
+msgstr ""
+
+msgctxt "ARIMATimeSeries|"
+msgid "Custom"
+msgstr ""
+
+msgctxt "ARIMATimeSeries|"
+msgid "Dominant"
+msgstr ""
+
+msgctxt "ARIMATimeSeries|"
+msgid "Model Specification"
+msgstr ""
+
+msgctxt "ARIMATimeSeries|"
+msgid ""
+"Specifies what ARIMA model to fit. The best fitting model is determined by "
+"the Hyndman-Khandakar algorithm."
+msgstr ""
+
+msgctxt "ARIMATimeSeries|"
+msgid "Best fitting"
+msgstr ""
+
+msgctxt "ARIMATimeSeries|"
+msgid "Information criterion"
+msgstr ""
+
+msgctxt "ARIMATimeSeries|"
+msgid "AICc"
+msgstr ""
+
+msgctxt "ARIMATimeSeries|"
+msgid "AIC"
+msgstr ""
+
+msgctxt "ARIMATimeSeries|"
+msgid "BIC"
+msgstr ""
+
+msgctxt "ARIMATimeSeries|"
+msgid "Manual"
+msgstr ""
+
+msgctxt "ARIMATimeSeries|"
+msgid "Nonseasonal"
+msgstr ""
+
+msgctxt "ARIMATimeSeries|"
+msgid "Autoregressive (AR) order p"
+msgstr ""
+
+msgctxt "ARIMATimeSeries|"
+msgid "Difference (I) degree d"
+msgstr ""
+
+msgctxt "ARIMATimeSeries|"
+msgid "Moving average (MA) order q"
+msgstr ""
+
+msgctxt "ARIMATimeSeries|"
+msgid "Seasonal"
+msgstr ""
+
+msgctxt "ARIMATimeSeries|"
+msgid "Autoregressive (AR) order P"
+msgstr ""
+
+msgctxt "ARIMATimeSeries|"
+msgid "Difference (I) degree D"
+msgstr ""
+
+msgctxt "ARIMATimeSeries|"
+msgid "Moving average (MA) order Q"
+msgstr ""
+
+msgctxt "ARIMATimeSeries|"
+msgid "Residual Diagnostics"
+msgstr ""
+
+msgctxt "ARIMATimeSeries|"
+msgid "Plots"
+msgstr ""
+
+msgctxt "ARIMATimeSeries|"
+msgid "Plots the residuals (y-axis) over time (x-axis)."
+msgstr ""
+
+msgctxt "ARIMATimeSeries|"
+msgid "Q-Q plot"
+msgstr ""
+
+msgctxt "ARIMATimeSeries|"
+msgid "Plots the quantile-quantile plot of the residuals."
+msgstr ""
+
+msgctxt "ARIMATimeSeries|"
+msgid "Autocorrelation"
+msgstr ""
+
+msgctxt "ARIMATimeSeries|"
+msgid "Autocorrelation function"
+msgstr ""
+
+msgctxt "ARIMATimeSeries|"
+msgid ""
+"Plots the autocorrelation for a specified number of lags. The confidence "
+"interval may be given assuming a white noise process."
+msgstr ""
+
+msgctxt "ARIMATimeSeries|"
+msgid "Zero lag"
+msgstr ""
+
+msgctxt "ARIMATimeSeries|"
+msgid "Confidence interval"
+msgstr ""
+
+msgctxt "ARIMATimeSeries|"
+msgid "Ljung-Box p-values"
+msgstr ""
+
+msgctxt "ARIMATimeSeries|"
+msgid ""
+"Plots the p-values of the Ljung-Box test for a number of lags of which the "
+"null hypothesis assumes that the data independently distributed and "
+"therefore have no autocorrelation."
+msgstr ""
+
+msgctxt "ARIMATimeSeries|"
+msgid "Significance level"
+msgstr ""
+
+msgctxt "ARIMATimeSeries|"
+msgid "Maximum lag"
+msgstr ""
+
+msgctxt "ARIMATimeSeries|"
+msgid "Append residuals to spreadsheet"
+msgstr ""
+
+msgctxt "ARIMATimeSeries|"
+msgid "Column name"
+msgstr ""
+
+msgctxt "ARIMATimeSeries|"
+msgid "e.g., residuals"
+msgstr ""
+
+msgctxt "ARIMATimeSeries|"
+msgid "Forecasting"
+msgstr ""
+
+msgctxt "ARIMATimeSeries|"
+msgid "Number of forecasts"
+msgstr ""
+
+msgctxt "ARIMATimeSeries|"
+msgid "Determines the number forecasts to make."
+msgstr ""
+
+msgctxt "ARIMATimeSeries|"
+msgid "Save forecasts as"
+msgstr ""
+
+msgctxt "ARIMATimeSeries|"
+msgid "e.g. forecasts.csv"
+msgstr ""
+
+msgctxt "ARIMATimeSeries|"
+msgid "Saves the forecasts in a seperate .csv file."
+msgstr ""
+
+msgctxt "ARIMATimeSeries|"
+msgid "Plots the forecasts (and observed values) (y-axis) over time (x-axis)"
+msgstr ""
+
+msgctxt "ARIMATimeSeries|"
+msgid "Observed data"
+msgstr ""
+
+msgctxt "ARIMATimeSeries|"
+msgid "Forecasts table"
+msgstr ""
+
+msgctxt "SpectralTimeSeries|"
+msgid ""
+"Spectral analysis allows the user to assess the frequency components and "
+"power distribution of a time series."
+msgstr ""
+
+msgctxt "SpectralTimeSeries|"
+msgid "Variable"
+msgstr ""
+
+msgctxt "SpectralTimeSeries|"
+msgid "A variable that is measured repeatedly over time."
+msgstr ""
+
+msgctxt "SpectralTimeSeries|"
+msgid "Time"
+msgstr ""
+
+msgctxt "SpectralTimeSeries|"
+msgid ""
+"Optional. Can either be an ordinal variable indicating the order of the "
+"observations, or a text variable indicating the date/time stamp of the "
+"observations. Combined date and time values should be in the standard format "
+"'YYYY-MM-DD HH:MM:SS', where seconds (':SS') can also be omitted. Date-only "
+"values should be in the format 'YYYY-MM-DD'. If a time variable is not "
+"supplied, the row order of the data is used."
+msgstr ""
+
+msgctxt "SpectralTimeSeries|"
+msgid "Spectral density"
+msgstr ""
+
+msgctxt "SpectralTimeSeries|"
+msgid "Kernel smoother"
+msgstr ""
+
+msgctxt "SpectralTimeSeries|"
+msgid ""
+"Smooths the power spectral density using a kernel. The dimension determines "
+"the convolution of kernels. The taper specifies the proportion of data to "
+"which a split cosine bell taper is applied at the beginning and end of the "
+"series."
+msgstr ""
+
+msgctxt "SpectralTimeSeries|"
+msgid "Daniell"
+msgstr ""
+
+msgctxt "SpectralTimeSeries|"
+msgid "Modified Daniell"
+msgstr ""
+
+msgctxt "SpectralTimeSeries|"
+msgid "Dimension"
+msgstr ""
+
+msgctxt "SpectralTimeSeries|"
+msgid "Term "
+msgstr ""
+
+msgctxt "SpectralTimeSeries|"
+msgid "Taper"
+msgstr ""
+
+msgctxt "SpectralTimeSeries|"
+msgid "Filter by"
+msgstr ""
+
+msgctxt "SpectralTimeSeries|"
+msgid ""
+"Filters the time series so only a specific range will be used for further "
+"analyses. Row number refers to the row number in the spreadsheet. If a "
+"'Time' variable is supplied it is also possible to filter by time index or "
+"date, depending on the format of the 'Time' variable."
+msgstr ""
+
+msgctxt "SpectralTimeSeries|"
+msgid "Row number"
+msgstr ""
+
+msgctxt "SpectralTimeSeries|"
+msgid "Start"
+msgstr ""
+
+msgctxt "SpectralTimeSeries|"
+msgid "End"
+msgstr ""
+
+msgctxt "SpectralTimeSeries|"
+msgid "Time index"
+msgstr ""
+
+msgctxt "SpectralTimeSeries|"
+msgid "Date"
+msgstr ""
+
+msgctxt "SpectralTimeSeries|"
+msgid "Noise shape line"
+msgstr ""
+
+msgctxt "SpectralTimeSeries|"
+msgid ""
+"Add a line to the spectral density indicating the power spectral density of "
+"a white, pink or brown noise process."
+msgstr ""
+
+msgctxt "SpectralTimeSeries|"
+msgid "White noise"
+msgstr ""
+
+msgctxt "SpectralTimeSeries|"
+msgid "Pink noise"
+msgstr ""
+
+msgctxt "SpectralTimeSeries|"
+msgid "Brown noise"
+msgstr ""
+
+msgctxt "SpectralTimeSeries|"
+msgid "Transformation"
+msgstr ""
+
+msgctxt "SpectralTimeSeries|"
+msgid "Transforms the time series by removing the trend or mean."
+msgstr ""
+
+msgctxt "SpectralTimeSeries|"
+msgid "Detrend"
+msgstr ""
+
+msgctxt "SpectralTimeSeries|"
+msgid "Demean"
+msgstr ""
+
+msgctxt "StationarityTimeSeries|"
+msgid ""
+"Stationarity allows the user to test a univariate time-series for "
+"stationarity and to transform the time-series if necessary."
+msgstr ""
+
+msgctxt "StationarityTimeSeries|"
+msgid "Variable"
+msgstr ""
+
+msgctxt "StationarityTimeSeries|"
+msgid "A variable that is measured repeatedly over time."
+msgstr ""
+
+msgctxt "StationarityTimeSeries|"
+msgid "Time"
+msgstr ""
+
+msgctxt "StationarityTimeSeries|"
+msgid ""
+"Optional. Can either be an ordinal variable indicating the order of the "
+"observations, or a text variable indicating the date/time stamp of the "
+"observations. Combined date and time values should be in the standard format "
+"'YYYY-MM-DD HH:MM:SS', where seconds (':SS') can also be omitted. Date-only "
+"values should be in the format 'YYYY-MM-DD'. If a time variable is not "
+"supplied, the row order of the data is used."
+msgstr ""
+
+msgctxt "StationarityTimeSeries|"
+msgid "Stationarity Tests"
+msgstr ""
+
+msgctxt "StationarityTimeSeries|"
+msgid "Augmented Dickey-Fuller"
+msgstr ""
+
+msgctxt "StationarityTimeSeries|"
+msgid "Phillips-Perron"
+msgstr ""
+
+msgctxt "StationarityTimeSeries|"
+msgid ""
+"Computes a PP test where the null assumes that the time-series has a unit "
+"root. The p-values are interpolated from a table of critical values in "
+"Banerjee et al. (1993), when the statistic lies outside the range of "
+"critical values, a note is added to the table."
+msgstr ""
+
+msgctxt "StationarityTimeSeries|"
+msgid "Regression coefficient test"
+msgstr ""
+
+msgctxt "StationarityTimeSeries|"
+msgid "Studentized test"
+msgstr ""
+
+msgctxt "StationarityTimeSeries|"
+msgid "Kwiatkowski-Phillips-Schmidt-Shin"
+msgstr ""
+
+msgctxt "StationarityTimeSeries|"
+msgid ""
+"Computes a KPSS test where the null assumes that the time-series is level or "
+"trend stationary. The p-values are interpolated from a table of critical "
+"values in Kwiatkowski et al. (1992), when the statistic lies outside the "
+"range of critical values, a note is added to the table."
+msgstr ""
+
+msgctxt "StationarityTimeSeries|"
+msgid "Level stationary"
+msgstr ""
+
+msgctxt "StationarityTimeSeries|"
+msgid "Trend stationary"
+msgstr ""
+
+msgctxt "StationarityTimeSeries|"
+msgid "Filter by"
+msgstr ""
+
+msgctxt "StationarityTimeSeries|"
+msgid ""
+"Filters the time series so only a specific range will be used for further "
+"analyses. Row number refers to the row number in the spreadsheet. If a "
+"'Time' variable is supplied it is also possible to filter by time index or "
+"date, depending on the format of the 'Time' variable."
+msgstr ""
+
+msgctxt "StationarityTimeSeries|"
+msgid "Row number"
+msgstr ""
+
+msgctxt "StationarityTimeSeries|"
+msgid "Start"
+msgstr ""
+
+msgctxt "StationarityTimeSeries|"
+msgid "End"
+msgstr ""
+
+msgctxt "StationarityTimeSeries|"
+msgid "Time index"
+msgstr ""
+
+msgctxt "StationarityTimeSeries|"
+msgid "Date"
+msgstr ""
+
+msgctxt "StationarityTimeSeries|"
+msgid "Transformation"
+msgstr ""
+
+msgctxt "StationarityTimeSeries|"
+msgid "Log"
+msgstr ""
+
+msgctxt "StationarityTimeSeries|"
+msgid "Takes the log of the dependent variable."
+msgstr ""
+
+msgctxt "StationarityTimeSeries|"
+msgid "Base 10"
+msgstr ""
+
+msgctxt "StationarityTimeSeries|"
+msgid "Base e"
+msgstr ""
+
+msgctxt "StationarityTimeSeries|"
+msgid "Root"
+msgstr ""
+
+msgctxt "StationarityTimeSeries|"
+msgid "Takes the root of the dependent variable."
+msgstr ""
+
+msgctxt "StationarityTimeSeries|"
+msgid "Square"
+msgstr ""
+
+msgctxt "StationarityTimeSeries|"
+msgid "Cube"
+msgstr ""
+
+msgctxt "StationarityTimeSeries|"
+msgid "Box-Cox"
+msgstr ""
+
+msgctxt "StationarityTimeSeries|"
+msgid ""
+"Transforms the dependent variable using a Box-Cox transformation. Lambda is "
+"the transformation parameter. If lambda is chosen automatically, it "
+"minimizes the coefficient of variation for the dependent variable using "
+"Guerrero's method."
+msgstr ""
+
+msgctxt "StationarityTimeSeries|"
+msgid "Lambda"
+msgstr ""
+
+msgctxt "StationarityTimeSeries|"
+msgid "Auto"
+msgstr ""
+
+msgctxt "StationarityTimeSeries|"
+msgid "Custom"
+msgstr ""
+
+msgctxt "StationarityTimeSeries|"
+msgid "Detrend using linear regression"
+msgstr ""
+
+msgctxt "StationarityTimeSeries|"
+msgid ""
+"Fits a polynomial regression to the dependent variable with time as "
+"predictor, and keeps only the residuals. If best fitting is selected, the "
+"polynomial regression is chosen based on the information criterion."
+msgstr ""
+
+msgctxt "StationarityTimeSeries|"
+msgid "Polynomial"
+msgstr ""
+
+msgctxt "StationarityTimeSeries|"
+msgid "Best fitting"
+msgstr ""
+
+msgctxt "StationarityTimeSeries|"
+msgid "Maximum"
+msgstr ""
+
+msgctxt "StationarityTimeSeries|"
+msgid "Information criterion"
+msgstr ""
+
+msgctxt "StationarityTimeSeries|"
+msgid "AIC"
+msgstr ""
+
+msgctxt "StationarityTimeSeries|"
+msgid "BIC"
+msgstr ""
+
+msgctxt "StationarityTimeSeries|"
+msgid "Difference"
+msgstr ""
+
+msgctxt "StationarityTimeSeries|"
+msgid ""
+"Differences the dependent variable. Note that differencing leads to a "
+"shorter time-series (n - lag) as a lag is used."
+msgstr ""
+
+msgctxt "StationarityTimeSeries|"
+msgid "Lag"
+msgstr ""
+
+msgctxt "StationarityTimeSeries|"
+msgid "Order"
+msgstr ""
+
+msgctxt "StationarityTimeSeries|"
+msgid "Append transformation to spreadsheet"
+msgstr ""
+
+msgctxt "StationarityTimeSeries|"
+msgid ""
+"Appends the transformed dependent variable to the spreadsheet, so these can "
+"be used in further analyses."
+msgstr ""
+
+msgctxt "StationarityTimeSeries|"
+msgid "Column name"
+msgstr ""
+
+msgctxt "StationarityTimeSeries|"
+msgid "e.g., transformed"
+msgstr ""
+
+msgctxt "StationarityTimeSeries|"
+msgid "Plots"
+msgstr ""
+
+msgctxt "StationarityTimeSeries|"
+msgid "Time series plot"
+msgstr ""
+
+msgctxt "StationarityTimeSeries|"
+msgid "Plots the (transformed) dependent variable (y-axis) over time (x-axis)."
+msgstr ""
+
+msgctxt "StationarityTimeSeries|"
+msgid "Points"
+msgstr ""
+
+msgctxt "StationarityTimeSeries|"
+msgid "Line"
+msgstr ""
+
+msgctxt "StationarityTimeSeries|"
+msgid "Both"
+msgstr ""
+
+msgctxt "StationarityTimeSeries|"
+msgid "Distribution"
+msgstr ""
+
+msgctxt "StationarityTimeSeries|"
+msgid "Density"
+msgstr ""
+
+msgctxt "StationarityTimeSeries|"
+msgid "Histogram"
+msgstr ""
+
+msgctxt "StationarityTimeSeries|"
+msgid "None"
+msgstr ""
+
+msgctxt "StationarityTimeSeries|"
+msgid "Autocorrelation function"
+msgstr ""
+
+msgctxt "StationarityTimeSeries|"
+msgid ""
+"Plots the autocorrelation for a specified number of lags. The confidence "
+"interval may be given assuming either a white noise process, or assuming for "
+"a lag q a moving average process of order q - 1"
+msgstr ""
+
+msgctxt "StationarityTimeSeries|"
+msgid "Maximum lag"
+msgstr ""
+
+msgctxt "StationarityTimeSeries|"
+msgid "Zero lag"
+msgstr ""
+
+msgctxt "StationarityTimeSeries|"
+msgid "Confidence interval"
+msgstr ""
+
+msgctxt "StationarityTimeSeries|"
+msgid "Based on white noise"
+msgstr ""
+
+msgctxt "StationarityTimeSeries|"
+msgid "Based on moving average"
+msgstr ""
+
+msgctxt "StationarityTimeSeries|"
+msgid "Partial autocorrelation function"
+msgstr ""
+
+msgctxt "StationarityTimeSeries|"
+msgid "Plots the partial autocorrelation for a specified number of lags."
+msgstr ""
+
+msgctxt "StationarityTimeSeries|"
+msgid ""
+"Computes an ADF test that accounts for a constant (drift) and a linear "
+"trend, where the null assumes that the time-series has a unit root. A "
+"default lag order is used based on T-1^(1/3). The p-values are interpolated "
+"from a table of critical values in Banerjee et al. (1993), when the "
+"statistic lies outside the range of critical values, a note is added to the "
+"table."
+msgstr ""
