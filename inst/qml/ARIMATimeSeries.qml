@@ -322,7 +322,7 @@ Form
             id:		residualSavedToData
             name:	"residualSavedToData"
             text:	qsTr("Append residuals to spreadsheet")
-            info: qstr("Appends the residuals to the spreadsheet, so these can be used in further analyses.")
+            info: qsTr("Appends the residuals to the spreadsheet, so these can be used in further analyses.")
             ComputedColumnField
             {
                 id:						    residualColumn
