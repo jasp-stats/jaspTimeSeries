@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: jaspTimeSeries 0.19.0\n"
 "POT-Creation-Date: 2024-06-10 08:31\n"
-"PO-Revision-Date: 2025-03-19 23:04+0000\n"
+"PO-Revision-Date: 2025-03-20 03:45+0000\n"
 "Last-Translator: Uğur ÇELİK <prof_ugur@hotmail.com>\n"
 "Language-Team: Turkish <https://hosted.weblate.org/projects/jasp/"
 "jasptimeseries-r/tr/>\n"
@@ -17,43 +17,43 @@ msgid "Time Series Plot"
 msgstr "Zaman Serisi Grafiği"
 
 msgid "The ARIMA model could not be fit."
-msgstr ""
+msgstr "ARIMA modeli uygulanamadı."
 
 msgid "No parameters are estimated."
-msgstr ""
+msgstr "Hiçbir parametre tahmin edilmemiştir."
 
 msgid "Model Summary"
-msgstr ""
+msgstr "Model Özeti"
 
 msgid "Log-Likelihood"
-msgstr ""
+msgstr "Log-Olasılık"
 
 msgid "AICc"
-msgstr ""
+msgstr "AICc"
 
 msgid "AIC"
-msgstr ""
+msgstr "AIC"
 
 msgid "BIC"
-msgstr ""
+msgstr "BIC"
 
 msgid "Coefficients"
-msgstr ""
+msgstr "Katsayılar"
 
 msgid "Estimate"
-msgstr ""
+msgstr "Tahmin et/Hesapla"
 
 msgid "Standard Error"
 msgstr "Standart Hata"
 
 msgid "t"
-msgstr ""
+msgstr "t"
 
 msgid "p"
-msgstr ""
+msgstr "p"
 
 msgid "%s%% CI"
-msgstr ""
+msgstr "%s%% CI"
 
 msgid "Lower"
 msgstr "Daha düşük"
@@ -62,136 +62,143 @@ msgid "Upper"
 msgstr "Üst"
 
 msgid "Intercept"
-msgstr ""
+msgstr "Kesişim"
 
 msgid "AR(%1$i)"
-msgstr ""
+msgstr "AR(%1$i)"
 
 msgid "MA(%1$i)"
-msgstr ""
+msgstr "MA(%1$i)"
 
 msgid "seasonal AR(%1$i)"
-msgstr ""
+msgstr "dönemsel AR(%1$i)"
 
 msgid "seasonal MA(%1$i)"
-msgstr ""
+msgstr "dönemsel MA(%1$i)"
 
 msgid "An ARIMA(%1$s, %2$s, %3$s)(%4$s, %5$s, %6$s)[%7$s] model was fitted."
-msgstr ""
+msgstr "ARIMA(%1$s, %2$s, %3$s)(%4$s, %5$s, %6$s)[%7$s] modeli uygulandı."
 
 msgid "An ARIMA(%1$s, %2$s, %3$s) model was fitted."
-msgstr ""
+msgstr "Bir ARIMA(%1$s, %2$s, %3$s) modeli uygulandı."
 
 msgid "Residual Diagnostics Plots"
-msgstr ""
+msgstr "Artık(artan) Tespit Grafikleri"
 
 msgid "Autocorrelation Function Plot"
-msgstr ""
+msgstr "Otokorelasyon Fonksiyonu Grafiği"
 
 msgid "Q-Q Plot"
 msgstr "Q-Q Grafiği"
 
 msgid "Ljung-Box Plot"
-msgstr ""
+msgstr "Ljung-Kutu Grafiği"
 
 msgid "Lag"
 msgstr "Gecikme"
 
 msgid "p-value"
-msgstr ""
+msgstr "p-değeri"
 
 msgid "When 'Covariates' are used in the model, predictions cannot be carried out unless the covariates are also observed for the predicted period."
 msgstr ""
+"Modelde 'Ortak değişkenler' kullanıldığında, ortak değişkenler tahmin edilen "
+"dönem için de gözlenmediği sürece tahminler yapılamaz."
 
 msgid "Not enough observations in the covariate%1$s. The maximum number of forecasts is %2$s."
-msgstr ""
+msgstr "Ortak değişken %1$s'de yeterli gözlem yok. Maksimum tahmin sayısı %2$s."
 
 msgid "Forecasting failed."
-msgstr ""
+msgstr "Tahmin başarısız oldu."
 
 msgid "Forecast Time Series Plot"
-msgstr ""
+msgstr "Tahmin Zaman Serisi Grafiği"
 
 msgid "Forecasts"
-msgstr ""
+msgstr "Tahminler"
 
 msgid "The spectral analysis failed."
-msgstr ""
+msgstr "Spektral analiz başarısız oldu."
 
 msgid "Power Spectral Density Plot"
-msgstr ""
+msgstr "Güç Spektral Yoğunluk Grafiği"
 
 msgid "Spectral Density"
-msgstr ""
+msgstr "Spektral Yoğunluk"
 
 msgid "Bandwidth"
-msgstr ""
+msgstr "Bant genişliği"
 
 msgid "Data cannot be zero or negative for log transformation."
-msgstr ""
+msgstr "Log dönüşümü için veri sıfır veya negatif olamaz."
 
 msgid "Data cannot be negative for root transformation."
-msgstr ""
+msgstr "Kök dönüşümü için veri negatif olamaz."
 
 msgid "Detrend using linear regression"
-msgstr ""
+msgstr "Doğrusal regresyon kullanarak trendi ortadan kaldırın"
 
 msgid "Degree"
-msgstr ""
+msgstr "Derece"
 
 msgid "A polynomial regression with a degree of %s was fitted."
-msgstr ""
+msgstr "%s derecesine sahip polinom regresyonu uygulandı."
 
 msgid "Stationarity Tests"
-msgstr ""
+msgstr "Durağanlık Testleri"
 
 msgid "Test"
-msgstr ""
+msgstr "Test/ Test Et"
 
 msgid "Statistic"
-msgstr ""
+msgstr "İstatistik"
 
 msgid "Truncation lag parameter"
-msgstr ""
+msgstr "Kesme gecikme parametresi"
 
 msgid "H₀"
-msgstr ""
+msgstr "H₀"
 
 msgid "Level"
-msgstr ""
+msgstr "Seviye"
 
 msgid "Trend"
-msgstr ""
+msgstr "Eğilim"
 
 msgid "Non-stationary"
-msgstr ""
+msgstr "Sabit olmayan"
 
 msgid "Level stationary"
-msgstr ""
+msgstr "Seviye sabit"
 
 msgid "Trend stationary"
-msgstr ""
+msgstr "Durağan eğilim"
 
 msgid "The ADF test failed."
-msgstr ""
+msgstr "ADF testi başarısız oldu."
 
 msgid "The PP regression coefficient test failed."
-msgstr ""
+msgstr "PP regresyon katsayısı testi başarısız oldu."
 
+#, fuzzy
 msgid "The PP studentized test failed."
-msgstr ""
+msgstr "PP öğrencilik sınavı başarısız oldu."
 
 msgid "The KPSS test for level stationarity failed."
-msgstr ""
+msgstr "KPSS seviye sabitliği sınavında başarısız oldum."
 
 msgid "The KPSS test for trend stationarity failed."
-msgstr ""
+msgstr "KPSS trend durağanlığı testi başarısız oldu."
 
 msgid "The p-value is actually less than p-value shown (see Help file)."
 msgstr ""
+"p-değeri aslında gösterilen p-değerinden daha küçüktür (Yardım dosyasına "
+"bakın)."
 
 msgid "The p-value is actually greater than p-value shown (see Help file)."
 msgstr ""
+"p-değeri aslında gösterilen p-değerinden daha büyüktür (Yardım dosyasına "
+"bakın)."
 
 msgid "Autocorrelation Function"
 msgstr "Otokorelasyon Fonksiyonu"
