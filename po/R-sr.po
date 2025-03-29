@@ -1,0 +1,208 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: jaspTimeSeries 0.19.2\n"
+"POT-Creation-Date: 2024-10-19 03:27\n"
+"PO-Revision-Date: 2025-03-28 12:20+0000\n"
+"Last-Translator: Marko Bojović <bojovicmarko@outlook.com>\n"
+"Language-Team: Serbian <https://hosted.weblate.org/projects/jasp/"
+"jasptimeseries-r/sr/>\n"
+"Language: sr\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
+"n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
+"X-Generator: Weblate 5.11-dev\n"
+
+msgid "Time Series Plot"
+msgstr "Графикон временске серије"
+
+msgid "The ARIMA model could not be fit."
+msgstr "ARIMA модел није могао бити прилагођен."
+
+msgid "No parameters are estimated."
+msgstr "Нема процењених параметара."
+
+msgid "Model Summary"
+msgstr "Резиме модела"
+
+msgid "Log-Likelihood"
+msgstr "Лог-вероватноћа"
+
+msgid "AICc"
+msgstr "AICc"
+
+msgid "AIC"
+msgstr "AIC"
+
+msgid "BIC"
+msgstr "BIC"
+
+msgid "Coefficients"
+msgstr "Коефицијенти"
+
+msgid "Estimate"
+msgstr "Проценити"
+
+msgid "Standard Error"
+msgstr "Стандардна грешка"
+
+msgid "t"
+msgstr "t"
+
+msgid "p"
+msgstr "p"
+
+msgid "%s%% CI"
+msgstr "%s%% CI"
+
+msgid "Lower"
+msgstr "Ниже"
+
+msgid "Upper"
+msgstr "Горњи"
+
+msgid "Intercept"
+msgstr "Пресек"
+
+msgid "AR(%1$i)"
+msgstr "AR(%1$i)"
+
+msgid "MA(%1$i)"
+msgstr "MA(%1$i)"
+
+msgid "seasonal AR(%1$i)"
+msgstr "сезонски AR(%1$i)"
+
+msgid "seasonal MA(%1$i)"
+msgstr "сезонски MA(%1$i)"
+
+msgid "An ARIMA(%1$s, %2$s, %3$s)(%4$s, %5$s, %6$s)[%7$s] model was fitted."
+msgstr "ARIMA(%1$s, %2$s, %3$s)(%4$s, %5$s, %6$s)[%7$s] модел је прилагођен."
+
+msgid "An ARIMA(%1$s, %2$s, %3$s) model was fitted."
+msgstr "ARIMA(%1$s, %2$s, %3$s) модел је прилагођен."
+
+msgid "Residual Diagnostics Plots"
+msgstr "Графикони дијагностике остатака"
+
+msgid "Autocorrelation Function Plot"
+msgstr "Графикон функције ауто-корелације"
+
+msgid "Q-Q Plot"
+msgstr "Q-Q графикон"
+
+msgid "Ljung-Box Plot"
+msgstr "Ljung-Box графикон"
+
+msgid "Lag"
+msgstr "Кашњење"
+
+msgid "p-value"
+msgstr "p-вредност"
+
+msgid "When 'Covariates' are used in the model, predictions cannot be carried out unless the covariates are also observed for the predicted period."
+msgstr ""
+"Када се „Коваријате“ користе у моделу, предвиђања се не могу извршити осим "
+"ако су коваријате такође посматране за период предвиђања."
+
+msgid "Not enough observations in the covariate%1$s. The maximum number of forecasts is %2$s."
+msgstr ""
+"Недовољно опажања у коваријати %1$s. Максималан број предвиђаја је %2$s."
+
+msgid "Forecasting failed."
+msgstr "Предвиђање није успело."
+
+msgid "Forecast Time Series Plot"
+msgstr "Графикон предвиђања временске серије"
+
+msgid "Forecasts"
+msgstr "Прогнозе"
+
+msgid "The spectral analysis failed."
+msgstr "Спектрална анализа није успела."
+
+msgid "Power Spectral Density Plot"
+msgstr "Графикон спектралне густине снаге"
+
+msgid "Spectral Density"
+msgstr "Спектрална густина"
+
+msgid "Bandwidth"
+msgstr "Ширина пропустног опсега"
+
+msgid "Data cannot be zero or negative for log transformation."
+msgstr "Подаци не могу бити нула или негативни за логаритамску трансформацију."
+
+msgid "Data cannot be negative for root transformation."
+msgstr "Подаци не могу бити негативни за корен трансформацију."
+
+msgid "Detrend using linear regression"
+msgstr "Уклоните тренд помоћу линеарне регресије"
+
+msgid "Degree"
+msgstr "Степен"
+
+msgid "A polynomial regression with a degree of %s was fitted."
+msgstr "Полиномијална регресија степена %s је прилагођена."
+
+msgid "Stationarity Tests"
+msgstr "Тестови стационарности"
+
+msgid "Test"
+msgstr "Тест"
+
+msgid "Statistic"
+msgstr "Статистика"
+
+msgid "Truncation lag parameter"
+msgstr "Скрати параметар кашњења"
+
+msgid "H₀"
+msgstr "H₀"
+
+msgid "Level"
+msgstr "Ниво"
+
+msgid "Trend"
+msgstr "Тренд"
+
+msgid "Non-stationary"
+msgstr "Нестационарни"
+
+msgid "Level stationary"
+msgstr "Ниво стационаран"
+
+msgid "Trend stationary"
+msgstr "Тренд стационаран"
+
+msgid "The ADF test failed."
+msgstr "ADF тест није успео."
+
+msgid "The PP regression coefficient test failed."
+msgstr "Тест коефицијента PP регресије није успео."
+
+msgid "The PP studentized test failed."
+msgstr "PP студентски тест није успео."
+
+msgid "The KPSS test for level stationarity failed."
+msgstr "KPSS тест за стационарност нивоа није успео."
+
+msgid "The KPSS test for trend stationarity failed."
+msgstr "KPSS тест за стационарност тренда није успео."
+
+msgid "The p-value is actually less than p-value shown (see Help file)."
+msgstr ""
+"p-вредност је заправо мања од приказане p-вредности (погледајте датотеку "
+"помоћи)."
+
+msgid "The p-value is actually greater than p-value shown (see Help file)."
+msgstr ""
+"p-вредност је заправо већа од приказане p-вредности (погледајте датотеку "
+"помоћи)."
+
+msgid "Autocorrelation Function"
+msgstr "Функција аутокорелације"
+
+msgid "Partial Autocorrelation Function"
+msgstr "Функција парцијалне аутокорелације"
