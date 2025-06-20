@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2013-2022 University of Amsterdam
+# Copyright (C) 2013-2025 University of Amsterdam
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -15,11 +15,27 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 
-# This is a generated file. Don't change it
+# This is a generated file. Don't change it!
 
+#' Descriptives
+#'
+#' Time Series Descriptives allows the user to obtain descriptive statistics and descriptive plots for univariate time-series.
+#'
+#' @param acf, Plots the autocorrelation for a specified number of lags. The confidence interval may be given assuming either a white noise process, or assuming for a lag q a moving average process of order q - 1.
+#'    Defaults to \code{FALSE}.
+#' @param dependent, A variable that is measured repeatedly over time.
+#' @param filter, Filters the time series so only a specific range will be used for further analyses. Row number refers to the row number in the spreadsheet. If a 'Time' variable is supplied it is also possible to filter by time index or date, depending on the format of the 'Time' variable.
+#'    Defaults to \code{FALSE}.
+#' @param lagPlot, Plots the dependent variable (y-axis) against a lagged version of itself (x-axis). The lag stands for the amount of observations in between the dependent variable and the lagged version of itself. The regression line is the autoregression at the specified lag.
+#'    Defaults to \code{FALSE}.
+#' @param pacf, Plots the partial autocorrelation for a specified number of lags.
+#'    Defaults to \code{FALSE}.
+#' @param time, Optional. Can either be an ordinal variable indicating the order of the observations, or a text variable indicating the date/time stamp of the observations. Combined date and time values should be in the standard format 'YYYY-MM-DD HH:MM:SS', where seconds (':SS') can also be omitted. Date-only values should be in the format 'YYYY-MM-DD'. If a time variable is not supplied, the row order of the data is used.
+#' @param timeSeriesPlot, Plots the dependent variable (y-axis) over time (x-axis).
+#'    Defaults to \code{TRUE}.
 DescriptivesTimeSeries <- function(
           data = NULL,
-          version = "0.18.3",
+          version = "0.20",
           acf = FALSE,
           acfCi = TRUE,
           acfCiLevel = 0.95,
@@ -28,7 +44,7 @@ DescriptivesTimeSeries <- function(
           acfZeroLag = FALSE,
           dateEnd = "",
           dateStart = "",
-          dependent = "",
+          dependent = list(types = list(), value = ""),
           descriptivesTableTransposed = FALSE,
           filter = FALSE,
           filterBy = "row",
@@ -46,7 +62,7 @@ DescriptivesTimeSeries <- function(
           plotWidth = 480,
           rowEnd = 100,
           rowStart = 1,
-          time = "",
+          time = list(types = list(), value = ""),
           timeEnd = 100,
           timeSeriesPlot = TRUE,
           timeSeriesPlotDistribution = "none",
@@ -62,9 +78,14 @@ DescriptivesTimeSeries <- function(
    options[["data"]] <- NULL
    options[["version"]] <- NULL
 
+
+   if (!jaspBase::jaspResultsCalledFromJasp() && !is.null(data)) {
+      jaspBase::storeDataSet(data)
+   }
+
    optionsWithFormula <- c("dependent", "time")
    for (name in optionsWithFormula) {
       if ((name %in% optionsWithFormula) && inherits(options[[name]], "formula")) options[[name]] = jaspBase::jaspFormula(options[[name]], data)   }
 
-   return(jaspBase::runWrappedAnalysis("jaspTimeSeries::DescriptivesTimeSeries", data, options, version))
+   return(jaspBase::runWrappedAnalysis("jaspTimeSeries", "DescriptivesTimeSeries", "DescriptivesTimeSeries.qml", options, version, TRUE))
 }
