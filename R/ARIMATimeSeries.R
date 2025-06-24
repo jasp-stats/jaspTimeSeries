@@ -451,7 +451,8 @@ ARIMATimeSeries <- function(jaspResults, dataset, options) {
           )
         )
       }
-      covariatesForecast <- covariates[rangeForecast]
+      # covariatesForecast <- covariates[rangeForecast]
+      covariatesForecast <- covariates[rangeForecast, ]
       xreg <- as.matrix(covariatesForecast)
     }
 
