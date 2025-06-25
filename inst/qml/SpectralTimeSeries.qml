@@ -46,55 +46,38 @@ Form
                 ]
             }
         }
-        Group
-        {
-            Layout.leftMargin: 25 * preferencesModel.uiScale
-            enabled: kernel.checked
-            RowLayout
-            {
-                Label
-                {
-                    text:						        qsTr("Dimension")
-                    Layout.leftMargin:			130 * preferencesModel.uiScale
-                    Layout.preferredWidth:	70 * preferencesModel.uiScale
-                }
-            }
+		Item
+		{
+			Layout.leftMargin: 25 * preferencesModel.uiScale
+			Layout.preferredHeight: kernelTerm.implicitHeight
 
-            ComponentsList
-            {
-                name:							"kernelTerm"
-                defaultValues:		[1]
-                minimumItems:			1
-                rowComponent:			RowLayout
-                {
-                    Row
-                    {
-                        spacing:				          4 * preferencesModel.uiScale
-                        Layout.preferredWidth:	110 * preferencesModel.uiScale
+			ComponentsList
+			{
+				id:					kernelTerm
+				name:				"kernelTerm"
+				enabled:			kernel.checked
+				defaultValues:		[1]
+				minimumItems:		1
+				headerLabels:		[{"kernelDimension": qsTr("Dimension")}]
+				rowComponent: RowLayout
+				{
 
-                        Label
-                        {
-                            text:				qsTr("Term ") + (rowIndex + 1)
-                        }
-                    }
-
-                    RowLayout
-                    {
-                        spacing:				          4 * preferencesModel.uiScale
-                        Layout.preferredWidth:	 50 * preferencesModel.uiScale
-
-                        IntegerField
-                        {
-                            id:					  dimension
-                            name:				  "kernelDimension"
-                            useExternalBorder:	true
-                            min:				    1
-                            defaultValue:		1
-                        }
-                    }
-                }
-            }
-        }
+					Label
+					{
+						Layout.preferredWidth:	110 * preferencesModel.uiScale
+						text:					qsTr("Term ") + (rowIndex + 1)
+					}
+					IntegerField
+					{
+						id:						dimension
+						name:					"kernelDimension"
+						useExternalBorder:		true
+						min:				    1
+						defaultValue:			1
+					}
+				}
+			}
+		}
         DoubleField
         {
             name: "taper"
