@@ -89,15 +89,22 @@ StationarityTimeSeries <- function(jaspResults, dataset, options) {
   # apply detrend using linear regression and save only residuals
   if (options$detrend) {
     if (options$polynomialSpecification == "custom") {
-      transformedDataset$y <- residuals(lm(y ~ poly(as.integer(t), options$detrendPoly), data = transformedDataset))
+      completeRows <- complete.cases(transformedDataset[, c("y", "t")])
+      fit <- lm(y ~ poly(as.integer(t), options$detrendPoly), data = transformedDataset[completeRows, ])
+      residualsVec <- residuals(fit)
+      transformedDataset$y[completeRows] <- residualsVec
     }
+
     if (options$polynomialSpecification == "auto") {
+      completeRows <- complete.cases(transformedDataset[, c("y", "t")])
       .tsComputePolyResults(transformedDataset, options, jaspResults, ready)
       lmFit <- jaspResults[["polyResult"]]$object
       best <- which.min(unlist(lmFit[options$polynomialSpecificationAutoIc, ]))
-      transformedDataset$y <- unlist(lmFit["residuals", best])
+      residualsVec <- unlist(lmFit["residuals", best])
+      transformedDataset$y[completeRows] <- residualsVec
     }
   }
+
 
   # apply differencing
   if (options$difference) {
