@@ -23,7 +23,7 @@ msgid "No parameters are estimated."
 msgstr "அளவுருக்கள் எதுவும் மதிப்பிடப்படவில்லை."
 
 msgid "Model Summary"
-msgstr ""
+msgstr "மாதிரி சுருக்கம்"
 
 msgid "Log-Likelihood"
 msgstr "பதிவு-நிகழ்தகவு"
@@ -38,10 +38,10 @@ msgid "BIC"
 msgstr ""
 
 msgid "Coefficients"
-msgstr ""
+msgstr "குணகங்கள்"
 
 msgid "Estimate"
-msgstr "மதிப்பீடு"
+msgstr "மதிப்பிடு"
 
 msgid "Standard Error"
 msgstr ""
@@ -96,7 +96,7 @@ msgid "Ljung-Box Plot"
 msgstr "லுங்-பாக்ச் சூழ்ச்சி"
 
 msgid "Lag"
-msgstr ""
+msgstr "பின்னடைவு"
 
 msgid "p-value"
 msgstr "பி-மதிப்பு"
@@ -155,7 +155,7 @@ msgid "Stationarity Tests"
 msgstr "நிலைத்தன்மை சோதனைகள்"
 
 msgid "Test"
-msgstr "தேர்வு"
+msgstr "சோதனை"
 
 msgid "Statistic"
 msgstr ""
