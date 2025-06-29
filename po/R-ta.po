@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: jaspTimeSeries 0.19.2\n"
 "POT-Creation-Date: 2024-10-19 03:27\n"
-"PO-Revision-Date: 2025-05-17 07:56+0000\n"
-"Last-Translator: Shun Wang <shuonwang@gmail.com>\n"
+"PO-Revision-Date: 2025-06-29 13:01+0000\n"
+"Last-Translator: தமிழ்நேரம் <anishprabu.t@gmail.com>\n"
 "Language-Team: Tamil <https://hosted.weblate.org/projects/jasp/"
 "jasptimeseries-r/ta/>\n"
 "Language: ta\n"
@@ -11,7 +11,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.12-dev\n"
+"X-Generator: Weblate 5.13-dev\n"
 
 msgid "Time Series Plot"
 msgstr "நேர தொடர் சூழ்ச்சி"
@@ -23,7 +23,7 @@ msgid "No parameters are estimated."
 msgstr "அளவுருக்கள் எதுவும் மதிப்பிடப்படவில்லை."
 
 msgid "Model Summary"
-msgstr ""
+msgstr "மாதிரி சுருக்கம்"
 
 msgid "Log-Likelihood"
 msgstr "பதிவு-நிகழ்தகவு"
@@ -38,28 +38,28 @@ msgid "BIC"
 msgstr ""
 
 msgid "Coefficients"
-msgstr ""
+msgstr "குணகங்கள்"
 
 msgid "Estimate"
-msgstr ""
+msgstr "மதிப்பிடு"
 
 msgid "Standard Error"
 msgstr ""
 
 msgid "t"
-msgstr ""
+msgstr "டி"
 
 msgid "p"
-msgstr ""
+msgstr "ப"
 
 msgid "%s%% CI"
 msgstr "%s%% தொஒ"
 
 msgid "Lower"
-msgstr ""
+msgstr "கீழ்"
 
 msgid "Upper"
-msgstr ""
+msgstr "மேல்"
 
 msgid "Intercept"
 msgstr ""
@@ -96,7 +96,7 @@ msgid "Ljung-Box Plot"
 msgstr "லுங்-பாக்ச் சூழ்ச்சி"
 
 msgid "Lag"
-msgstr ""
+msgstr "பின்னடைவு"
 
 msgid "p-value"
 msgstr "பி-மதிப்பு"
@@ -155,7 +155,7 @@ msgid "Stationarity Tests"
 msgstr "நிலைத்தன்மை சோதனைகள்"
 
 msgid "Test"
-msgstr "தேர்வு"
+msgstr "சோதனை"
 
 msgid "Statistic"
 msgstr ""
