@@ -552,15 +552,19 @@ ARIMATimeSeries <- function(jaspResults, dataset, options) {
   # save forecasts in a seperate .csv file
   # it is not possible to append forecasts to the spreadsheet
   # because that would require adding rows instead of columns
-  if (options$forecastSave != "") {
+  if (options$forecastSave != "" && ready && options$forecastLength > 0) {
     yName <- decodeColNames(options$dependent[1])
 
     .tsForecasts(fit, dataset, datasetRaw, options, jaspResults, ready)
     pred <- jaspResults[["forecastResult"]]$object
-    names(pred) <- c("t", yName, "lower80", "upper80", "lower95", "upper95")
-    utils::write.csv(pred, file = options$forecastSave, row.names = FALSE)
+
+    if (!is.null(pred)) {
+      names(pred) <- c("t", yName, "lower80", "upper80", "lower95", "upper95")
+      utils::write.csv(pred, file = options$forecastSave, row.names = FALSE)
+    }
   }
 }
+
 
 .tsCreateTableForecasts <- function(jaspResults, fit, dataset, datasetRaw, options, ready, position, dependencies) {
   if (!is.null(jaspResults[["forecastTable"]]) || !options$forecastTable) {
