@@ -155,7 +155,7 @@ msgid "Stationarity Tests"
 msgstr "நிலைத்தன்மை சோதனைகள்"
 
 msgid "Test"
-msgstr "தேர்வு"
+msgstr "சோதனை"
 
 msgid "Statistic"
 msgstr ""
