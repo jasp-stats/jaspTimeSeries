@@ -2,197 +2,210 @@ msgid ""
 msgstr ""
 "Project-Id-Version: jaspTimeSeries 0.95.0\n"
 "POT-Creation-Date: 2025-06-21 03:37\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: Automatically generated\n"
-"Language-Team: none\n"
+"PO-Revision-Date: 2025-08-26 09:56+0000\n"
+"Last-Translator: Wendel Paulo Silvestre <wpsilvestre@ucs.br>\n"
+"Language-Team: Portuguese <https://hosted.weblate.org/projects/jasp/"
+"jasptimeseries-r/pt/>\n"
 "Language: pt\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
+"X-Generator: Weblate 5.13\n"
 
 msgid "Time Series Plot"
-msgstr ""
+msgstr "Gráfico de Séries Temporais"
 
 msgid "The ARIMA model could not be fit."
-msgstr ""
+msgstr "O modelo ARIMA não pôde ser ajustado."
 
 msgid "No parameters are estimated."
-msgstr ""
+msgstr "Nenhum parâmetro foi estimado."
 
 msgid "Model Summary"
-msgstr ""
+msgstr "Resumo do Modelo"
 
 msgid "Log-Likelihood"
-msgstr ""
+msgstr "Log-Verossimilhança"
 
 msgid "AICc"
-msgstr ""
+msgstr "AICc"
 
 msgid "AIC"
-msgstr ""
+msgstr "AIC"
 
 msgid "BIC"
-msgstr ""
+msgstr "CIB"
 
 msgid "Coefficients"
-msgstr ""
+msgstr "Coeficientes"
 
 msgid "Estimate"
-msgstr ""
+msgstr "Estimativa"
 
 msgid "Standard Error"
-msgstr ""
+msgstr "Erro Padrão"
 
 msgid "t"
-msgstr ""
+msgstr "t"
 
 msgid "p"
-msgstr ""
+msgstr "p"
 
 msgid "%s%% CI"
-msgstr ""
+msgstr "IC de %s%%"
 
 msgid "Lower"
-msgstr ""
+msgstr "Inferior"
 
 msgid "Upper"
-msgstr ""
+msgstr "Superior"
 
 msgid "Intercept"
-msgstr ""
+msgstr "Intercepto"
 
 msgid "AR(%1$i)"
-msgstr ""
+msgstr "AR(%1$i)"
 
 msgid "MA(%1$i)"
-msgstr ""
+msgstr "MA(%1$i)"
 
 msgid "seasonal AR(%1$i)"
-msgstr ""
+msgstr "sazonal AR(%1$i)"
 
 msgid "seasonal MA(%1$i)"
-msgstr ""
+msgstr "MA(%1$i) sazonal"
 
 msgid "An ARIMA(%1$s, %2$s, %3$s)(%4$s, %5$s, %6$s)[%7$s] model was fitted."
 msgstr ""
+"Um modelo ARIMA (%1$s, %2$s, %3$s)(%4$s, %5$s, %6$s)[%7$s] foi ajustado."
 
 msgid "An ARIMA(%1$s, %2$s, %3$s) model was fitted."
-msgstr ""
+msgstr "Um modelo ARIMA (%1$s, %2$s, %3$s) foi ajustado."
 
 msgid "Residual Diagnostics Plots"
-msgstr ""
+msgstr "Gráficos de Diagnóstico Residual"
 
 msgid "Autocorrelation Function Plot"
-msgstr ""
+msgstr "Gráfico de Função de Autocorrelação"
 
 msgid "Q-Q Plot"
-msgstr ""
+msgstr "Gráfico Q-Q"
 
 msgid "Ljung-Box Plot"
-msgstr ""
+msgstr "Gráfico Ljung-Box"
 
 msgid "Lag"
-msgstr ""
+msgstr "Atraso"
 
 msgid "p-value"
-msgstr ""
+msgstr "valor-p"
 
 msgid "When 'Covariates' are used in the model, predictions cannot be carried out unless the covariates are also observed for the predicted period."
 msgstr ""
+"Quando 'Covariáveis' são usadas no modelo, as previsões não podem ser "
+"realizadas a menos que as covariáveis também sejam observadas durante o "
+"período previsto."
 
 msgid "Not enough observations in the covariate%1$s. The maximum number of forecasts is %2$s."
 msgstr ""
+"Não há observações suficientes na covariável %1$s. O número máximo de "
+"previsões é %2$s."
 
 msgid "Forecasting failed."
-msgstr ""
+msgstr "A previsão falhou."
 
 msgid "Forecast Time Series Plot"
-msgstr ""
+msgstr "Gráfico de Séries Temporais de Previsão"
 
 msgid "Forecasts"
-msgstr ""
+msgstr "Previsões"
 
 msgid "The spectral analysis failed."
-msgstr ""
+msgstr "A análise espectral falhou."
 
 msgid "Power Spectral Density Plot"
-msgstr ""
+msgstr "Gráfico de Densidade Espectral de Potência"
 
 msgid "Spectral Density"
-msgstr ""
+msgstr "Densidade Espectral"
 
 msgid "Bandwidth"
-msgstr ""
+msgstr "Largura de banda"
 
 msgid "Data cannot be zero or negative for log transformation."
 msgstr ""
+"Os dados não podem ser zero ou negativos para transformação logarítmica."
 
 msgid "Data cannot be negative for root transformation."
-msgstr ""
+msgstr "Os dados não podem ser negativos para transformação de raiz."
 
 msgid "Detrend using linear regression"
-msgstr ""
+msgstr "Remover a tendência usando regressão linear"
 
 msgid "Degree"
-msgstr ""
+msgstr "Grau"
 
 msgid "A polynomial regression with a degree of %s was fitted."
-msgstr ""
+msgstr "Uma regressão polinomial com grau %s foi ajustada."
 
 msgid "Stationarity Tests"
-msgstr ""
+msgstr "Testes de Estacionariedade"
 
 msgid "Test"
-msgstr ""
+msgstr "Teste"
 
 msgid "Statistic"
-msgstr ""
+msgstr "Estatística"
 
 msgid "Truncation lag parameter"
-msgstr ""
+msgstr "Parâmetro de atraso de truncamento"
 
 msgid "H₀"
-msgstr ""
+msgstr "H₀"
 
 msgid "Level"
-msgstr ""
+msgstr "Nível"
 
 msgid "Trend"
-msgstr ""
+msgstr "Tendência"
 
 msgid "Non-stationary"
-msgstr ""
+msgstr "Não estacionário"
 
 msgid "Level stationary"
-msgstr ""
+msgstr "Nível estacionário"
 
 msgid "Trend stationary"
-msgstr ""
+msgstr "Tendência estacionária"
 
 msgid "The ADF test failed."
-msgstr ""
+msgstr "O teste ADF falhou."
 
 msgid "The PP regression coefficient test failed."
-msgstr ""
+msgstr "O teste do coeficiente de regressão PP falhou."
 
 msgid "The PP studentized test failed."
-msgstr ""
+msgstr "O teste PP estudentizado falhou."
 
 msgid "The KPSS test for level stationarity failed."
-msgstr ""
+msgstr "O teste KPSS para estacionariedade de nível falhou."
 
 msgid "The KPSS test for trend stationarity failed."
-msgstr ""
+msgstr "O teste KPSS para estacionariedade de tendência falhou."
 
 msgid "The p-value is actually less than p-value shown (see Help file)."
 msgstr ""
+"O valor-p é, na verdade, menor que o valor-p mostrado (veja o arquivo de "
+"Ajuda)."
 
 msgid "The p-value is actually greater than p-value shown (see Help file)."
 msgstr ""
+"O valor-p é, na verdade, maior que o valor-p mostrado (veja o arquivo de "
+"Ajuda)."
 
 msgid "Autocorrelation Function"
-msgstr ""
+msgstr "Função de Autocorrelação"
 
 msgid "Partial Autocorrelation Function"
-msgstr ""
+msgstr "Função de Autocorrelação Parcial"
