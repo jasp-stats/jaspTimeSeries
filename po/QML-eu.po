@@ -1,26 +1,25 @@
 msgid ""
 msgstr ""
-"PO-Revision-Date: 2025-07-16 23:02+0000\n"
-"Last-Translator: Tomasz Misiuro <tomaszmisiuro@gmail.com>\n"
-"Language-Team: Polish <https://hosted.weblate.org/projects/jasp/"
-"jasptimeseries-qml/pl/>\n"
-"Language: pl\n"
+"Last-Translator: Automatically generated\n"
+"Language-Team: none\n"
+"Language: eu\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=3; plural=(n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
-"|| n%100>=20) ? 1 : 2);\n"
-"X-Generator: Weblate 5.13-dev\n"
-"X-Language: pl\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
 "X-Qt-Contexts: true\n"
 
 msgctxt "Description|"
+msgid "Time Series"
+msgstr ""
+
+msgctxt "Description|"
 msgid "This module offers time series analyses."
-msgstr "Moduł ten oferuje analizę szeregów czasowych."
+msgstr ""
 
 msgctxt "Description|"
 msgid "Descriptives"
-msgstr "Statystyki opisowe"
+msgstr ""
 
 msgctxt "Description|"
 msgid "Stationarity"
@@ -28,11 +27,11 @@ msgstr ""
 
 msgctxt "Description|"
 msgid "ARIMA"
-msgstr "ARIMA"
+msgstr ""
 
 msgctxt "Description|"
 msgid "Spectral Analysis"
-msgstr "Analiza spektralna"
+msgstr ""
 
 msgctxt "ARIMATimeSeries|"
 msgid ""
@@ -41,15 +40,15 @@ msgstr ""
 
 msgctxt "ARIMATimeSeries|"
 msgid "Dependent Variable"
-msgstr "Zmienna zależna"
+msgstr ""
 
 msgctxt "ARIMATimeSeries|"
 msgid "A variable that is measured repeatedly over time."
-msgstr "Zmienna, która jest mierzona wielokrotnie w ciągu czasowym."
+msgstr ""
 
 msgctxt "ARIMATimeSeries|"
 msgid "Time"
-msgstr "Czas"
+msgstr ""
 
 msgctxt "ARIMATimeSeries|"
 msgid ""
@@ -63,7 +62,7 @@ msgstr ""
 
 msgctxt "ARIMATimeSeries|"
 msgid "Covariates"
-msgstr "Współzmienne"
+msgstr ""
 
 msgctxt "ARIMATimeSeries|"
 msgid ""
@@ -72,43 +71,43 @@ msgstr ""
 
 msgctxt "ARIMATimeSeries|"
 msgid "Time series plot"
-msgstr "Wykres szeregu czasowego"
+msgstr ""
 
 msgctxt "ARIMATimeSeries|"
 msgid "Plots the dependent variable (y-axis) over time (x-axis)."
-msgstr "Tworzy wykres wartości zmiennej zależnej (oś y) w czasie (oś x)."
+msgstr ""
 
 msgctxt "ARIMATimeSeries|"
 msgid "Points"
-msgstr "Punkty"
+msgstr ""
 
 msgctxt "ARIMATimeSeries|"
 msgid "Line"
-msgstr "Linia"
+msgstr ""
 
 msgctxt "ARIMATimeSeries|"
 msgid "Both"
-msgstr "Oba"
+msgstr ""
 
 msgctxt "ARIMATimeSeries|"
 msgid "Distribution"
-msgstr "Rozkład"
+msgstr ""
 
 msgctxt "ARIMATimeSeries|"
 msgid "Density"
-msgstr "Gęstość"
+msgstr ""
 
 msgctxt "ARIMATimeSeries|"
 msgid "Histogram"
-msgstr "Histogram"
+msgstr ""
 
 msgctxt "ARIMATimeSeries|"
 msgid "None"
-msgstr "Żadne"
+msgstr ""
 
 msgctxt "ARIMATimeSeries|"
 msgid "Filter by"
-msgstr "Filtruj przez"
+msgstr ""
 
 msgctxt "ARIMATimeSeries|"
 msgid ""
@@ -120,35 +119,35 @@ msgstr ""
 
 msgctxt "ARIMATimeSeries|"
 msgid "Row number"
-msgstr "Numer wiersza"
+msgstr ""
 
 msgctxt "ARIMATimeSeries|"
 msgid "Start"
-msgstr "Początek"
+msgstr ""
 
 msgctxt "ARIMATimeSeries|"
 msgid "End"
-msgstr "Koniec"
+msgstr ""
 
 msgctxt "ARIMATimeSeries|"
 msgid "Time index"
-msgstr "Indeks czasu"
+msgstr ""
 
 msgctxt "ARIMATimeSeries|"
 msgid "Date"
-msgstr "Data"
+msgstr ""
 
 msgctxt "ARIMATimeSeries|"
 msgid "Model"
-msgstr "Model"
+msgstr ""
 
 msgctxt "ARIMATimeSeries|"
 msgid "Intercept"
-msgstr "Wyraz wolny"
+msgstr ""
 
 msgctxt "ARIMATimeSeries|"
 msgid "Include an intercept in the model."
-msgstr "Uwzględnij wyraz wolny w modelu."
+msgstr ""
 
 msgctxt "ARIMATimeSeries|"
 msgid "Seasonal components"
@@ -162,11 +161,11 @@ msgstr ""
 
 msgctxt "ARIMATimeSeries|"
 msgid "Period"
-msgstr "Okres"
+msgstr ""
 
 msgctxt "ARIMATimeSeries|"
 msgid "Custom"
-msgstr "Niestandardowy"
+msgstr ""
 
 msgctxt "ARIMATimeSeries|"
 msgid "Dominant"
@@ -174,7 +173,7 @@ msgstr ""
 
 msgctxt "ARIMATimeSeries|"
 msgid "Model Specification"
-msgstr "Ustawienia modelu"
+msgstr ""
 
 msgctxt "ARIMATimeSeries|"
 msgid ""
@@ -184,27 +183,27 @@ msgstr ""
 
 msgctxt "ARIMATimeSeries|"
 msgid "Best fitting"
-msgstr "Najlepsze dopasowanie"
+msgstr ""
 
 msgctxt "ARIMATimeSeries|"
 msgid "Information criterion"
-msgstr "Kryterium informacyjne"
+msgstr ""
 
 msgctxt "ARIMATimeSeries|"
 msgid "AICc"
-msgstr "AICc"
+msgstr ""
 
 msgctxt "ARIMATimeSeries|"
 msgid "AIC"
-msgstr "AIC"
+msgstr ""
 
 msgctxt "ARIMATimeSeries|"
 msgid "BIC"
-msgstr "BIC"
+msgstr ""
 
 msgctxt "ARIMATimeSeries|"
 msgid "Manual"
-msgstr "Ręcznie"
+msgstr ""
 
 msgctxt "ARIMATimeSeries|"
 msgid "Nonseasonal"
@@ -244,15 +243,15 @@ msgstr ""
 
 msgctxt "ARIMATimeSeries|"
 msgid "Plots"
-msgstr "Wykresy"
+msgstr ""
 
 msgctxt "ARIMATimeSeries|"
 msgid "Plots the residuals (y-axis) over time (x-axis)."
-msgstr "Tworzy wykres reszt (oś y) w czasie (oś x)."
+msgstr ""
 
 msgctxt "ARIMATimeSeries|"
 msgid "Q-Q plot"
-msgstr "Wykres K-K"
+msgstr ""
 
 msgctxt "ARIMATimeSeries|"
 msgid "Plots the quantile-quantile plot of the residuals."
@@ -260,7 +259,7 @@ msgstr ""
 
 msgctxt "ARIMATimeSeries|"
 msgid "Autocorrelation"
-msgstr "Autokorelacja"
+msgstr ""
 
 msgctxt "ARIMATimeSeries|"
 msgid "Autocorrelation function"
@@ -278,11 +277,11 @@ msgstr ""
 
 msgctxt "ARIMATimeSeries|"
 msgid "Confidence interval"
-msgstr "Przedział ufności"
+msgstr ""
 
 msgctxt "ARIMATimeSeries|"
 msgid "Ljung-Box p-values"
-msgstr "Wartość p Ljung-Boxa"
+msgstr ""
 
 msgctxt "ARIMATimeSeries|"
 msgid ""
@@ -293,7 +292,7 @@ msgstr ""
 
 msgctxt "ARIMATimeSeries|"
 msgid "Significance level"
-msgstr "Poziom istotności"
+msgstr ""
 
 msgctxt "ARIMATimeSeries|"
 msgid "Maximum lag"
@@ -301,51 +300,51 @@ msgstr ""
 
 msgctxt "ARIMATimeSeries|"
 msgid "Append residuals to spreadsheet"
-msgstr "Dołącz reszty do danych"
+msgstr ""
 
 msgctxt "ARIMATimeSeries|"
 msgid "Column name"
-msgstr "Nazwa kolumny"
+msgstr ""
 
 msgctxt "ARIMATimeSeries|"
 msgid "e.g., residuals"
-msgstr "np. reszty"
+msgstr ""
 
 msgctxt "ARIMATimeSeries|"
 msgid "Forecasting"
-msgstr "Prognozowanie"
+msgstr ""
 
 msgctxt "ARIMATimeSeries|"
 msgid "Number of forecasts"
-msgstr "Liczba prognoz"
+msgstr ""
 
 msgctxt "ARIMATimeSeries|"
 msgid "Determines the number forecasts to make."
-msgstr "Określa liczbę prognoz do wykonania."
+msgstr ""
 
 msgctxt "ARIMATimeSeries|"
 msgid "Save forecasts as"
-msgstr "Zapis prognozy jako"
+msgstr ""
 
 msgctxt "ARIMATimeSeries|"
 msgid "e.g. forecasts.csv"
-msgstr "np. prognozy.csv"
+msgstr ""
 
 msgctxt "ARIMATimeSeries|"
 msgid "Saves the forecasts in a seperate .csv file."
-msgstr "Zapis prognozy w oddzielnym pliku .csv."
+msgstr ""
 
 msgctxt "ARIMATimeSeries|"
 msgid "Plots the forecasts (and observed values) (y-axis) over time (x-axis)"
-msgstr "Tworzy wykres prognoz (i wartości obserwowanych; oś y) w czasie (oś x)"
+msgstr ""
 
 msgctxt "ARIMATimeSeries|"
 msgid "Observed data"
-msgstr "Dane obserwowane"
+msgstr ""
 
 msgctxt "ARIMATimeSeries|"
 msgid "Forecasts table"
-msgstr "Tabela prognoz"
+msgstr ""
 
 msgctxt "SpectralTimeSeries|"
 msgid ""
@@ -355,15 +354,15 @@ msgstr ""
 
 msgctxt "SpectralTimeSeries|"
 msgid "Variable"
-msgstr "Zmienna"
+msgstr ""
 
 msgctxt "SpectralTimeSeries|"
 msgid "A variable that is measured repeatedly over time."
-msgstr "Zmienna, która jest mierzona wielokrotnie w ciągu czasowym."
+msgstr ""
 
 msgctxt "SpectralTimeSeries|"
 msgid "Time"
-msgstr "Czas"
+msgstr ""
 
 msgctxt "SpectralTimeSeries|"
 msgid ""
@@ -401,11 +400,11 @@ msgstr ""
 
 msgctxt "SpectralTimeSeries|"
 msgid "Dimension"
-msgstr "Wymiar"
+msgstr ""
 
 msgctxt "SpectralTimeSeries|"
 msgid "Term "
-msgstr "Składnik "
+msgstr ""
 
 msgctxt "SpectralTimeSeries|"
 msgid "Taper"
@@ -413,7 +412,7 @@ msgstr ""
 
 msgctxt "SpectralTimeSeries|"
 msgid "Filter by"
-msgstr "Filtruj przez"
+msgstr ""
 
 msgctxt "SpectralTimeSeries|"
 msgid ""
@@ -425,23 +424,23 @@ msgstr ""
 
 msgctxt "SpectralTimeSeries|"
 msgid "Row number"
-msgstr "Numer wiersza"
+msgstr ""
 
 msgctxt "SpectralTimeSeries|"
 msgid "Start"
-msgstr "Początek"
+msgstr ""
 
 msgctxt "SpectralTimeSeries|"
 msgid "End"
-msgstr "Koniec"
+msgstr ""
 
 msgctxt "SpectralTimeSeries|"
 msgid "Time index"
-msgstr "Indeks czasu"
+msgstr ""
 
 msgctxt "SpectralTimeSeries|"
 msgid "Date"
-msgstr "Data"
+msgstr ""
 
 msgctxt "SpectralTimeSeries|"
 msgid "Noise shape line"
@@ -455,23 +454,23 @@ msgstr ""
 
 msgctxt "SpectralTimeSeries|"
 msgid "White noise"
-msgstr "Biały szum"
+msgstr ""
 
 msgctxt "SpectralTimeSeries|"
 msgid "Pink noise"
-msgstr "Różowy szum"
+msgstr ""
 
 msgctxt "SpectralTimeSeries|"
 msgid "Brown noise"
-msgstr "Brązowy szum"
+msgstr ""
 
 msgctxt "SpectralTimeSeries|"
 msgid "Transformation"
-msgstr "Transformacja"
+msgstr ""
 
 msgctxt "SpectralTimeSeries|"
 msgid "Transforms the time series by removing the trend or mean."
-msgstr "Przekształca szereg czasowy poprzez usunięcie trendu lub średniej."
+msgstr ""
 
 msgctxt "SpectralTimeSeries|"
 msgid "Detrend"
@@ -489,15 +488,15 @@ msgstr ""
 
 msgctxt "StationarityTimeSeries|"
 msgid "Variable"
-msgstr "Zmienna"
+msgstr ""
 
 msgctxt "StationarityTimeSeries|"
 msgid "A variable that is measured repeatedly over time."
-msgstr "Zmienna, która jest mierzona wielokrotnie w ciągu czasowym."
+msgstr ""
 
 msgctxt "StationarityTimeSeries|"
 msgid "Time"
-msgstr "Czas"
+msgstr ""
 
 msgctxt "StationarityTimeSeries|"
 msgid ""
@@ -519,7 +518,7 @@ msgstr ""
 
 msgctxt "StationarityTimeSeries|"
 msgid "Phillips-Perron"
-msgstr "Phillips-Perron"
+msgstr ""
 
 msgctxt "StationarityTimeSeries|"
 msgid ""
@@ -535,11 +534,11 @@ msgstr ""
 
 msgctxt "StationarityTimeSeries|"
 msgid "Studentized test"
-msgstr "Test studentyzowany"
+msgstr ""
 
 msgctxt "StationarityTimeSeries|"
 msgid "Kwiatkowski-Phillips-Schmidt-Shin"
-msgstr "Kwiatkowski-Phillips-Schmidt-Shin"
+msgstr ""
 
 msgctxt "StationarityTimeSeries|"
 msgid ""
@@ -559,7 +558,7 @@ msgstr ""
 
 msgctxt "StationarityTimeSeries|"
 msgid "Filter by"
-msgstr "Filtruj przez"
+msgstr ""
 
 msgctxt "StationarityTimeSeries|"
 msgid ""
@@ -571,63 +570,63 @@ msgstr ""
 
 msgctxt "StationarityTimeSeries|"
 msgid "Row number"
-msgstr "Numer wiersza"
+msgstr ""
 
 msgctxt "StationarityTimeSeries|"
 msgid "Start"
-msgstr "Początek"
+msgstr ""
 
 msgctxt "StationarityTimeSeries|"
 msgid "End"
-msgstr "Koniec"
+msgstr ""
 
 msgctxt "StationarityTimeSeries|"
 msgid "Time index"
-msgstr "Indeks czasu"
+msgstr ""
 
 msgctxt "StationarityTimeSeries|"
 msgid "Date"
-msgstr "Data"
+msgstr ""
 
 msgctxt "StationarityTimeSeries|"
 msgid "Transformation"
-msgstr "Transformacja"
+msgstr ""
 
 msgctxt "StationarityTimeSeries|"
 msgid "Log"
-msgstr "Logarytmiczna"
+msgstr ""
 
 msgctxt "StationarityTimeSeries|"
 msgid "Takes the log of the dependent variable."
-msgstr "Oblicza logarytm ze zmiennej zależnej."
+msgstr ""
 
 msgctxt "StationarityTimeSeries|"
 msgid "Base 10"
-msgstr "Podstawa 10"
+msgstr ""
 
 msgctxt "StationarityTimeSeries|"
 msgid "Base e"
-msgstr "Podstawa e"
+msgstr ""
 
 msgctxt "StationarityTimeSeries|"
 msgid "Root"
-msgstr "Pierwiastkowanie"
+msgstr ""
 
 msgctxt "StationarityTimeSeries|"
 msgid "Takes the root of the dependent variable."
-msgstr "Oblicza pierwiastek ze zmiennej zależnej."
+msgstr ""
 
 msgctxt "StationarityTimeSeries|"
 msgid "Square"
-msgstr "Kwadrat"
+msgstr ""
 
 msgctxt "StationarityTimeSeries|"
 msgid "Cube"
-msgstr "3. stopnia"
+msgstr ""
 
 msgctxt "StationarityTimeSeries|"
 msgid "Box-Cox"
-msgstr "Box-Cox"
+msgstr ""
 
 msgctxt "StationarityTimeSeries|"
 msgid ""
@@ -639,15 +638,15 @@ msgstr ""
 
 msgctxt "StationarityTimeSeries|"
 msgid "Lambda"
-msgstr "Lambda"
+msgstr ""
 
 msgctxt "StationarityTimeSeries|"
 msgid "Auto"
-msgstr "Automatyczny"
+msgstr ""
 
 msgctxt "StationarityTimeSeries|"
 msgid "Custom"
-msgstr "Niestandardowy"
+msgstr ""
 
 msgctxt "StationarityTimeSeries|"
 msgid "Detrend using linear regression"
@@ -662,31 +661,31 @@ msgstr ""
 
 msgctxt "StationarityTimeSeries|"
 msgid "Polynomial"
-msgstr "Wielomian"
+msgstr ""
 
 msgctxt "StationarityTimeSeries|"
 msgid "Best fitting"
-msgstr "Najlepsze dopasowanie"
+msgstr ""
 
 msgctxt "StationarityTimeSeries|"
 msgid "Maximum"
-msgstr "Maksimum"
+msgstr ""
 
 msgctxt "StationarityTimeSeries|"
 msgid "Information criterion"
-msgstr "Kryterium informacyjne"
+msgstr ""
 
 msgctxt "StationarityTimeSeries|"
 msgid "AIC"
-msgstr "AIC"
+msgstr ""
 
 msgctxt "StationarityTimeSeries|"
 msgid "BIC"
-msgstr "BIC"
+msgstr ""
 
 msgctxt "StationarityTimeSeries|"
 msgid "Difference"
-msgstr "Różnica"
+msgstr ""
 
 msgctxt "StationarityTimeSeries|"
 msgid ""
@@ -700,7 +699,7 @@ msgstr ""
 
 msgctxt "StationarityTimeSeries|"
 msgid "Order"
-msgstr "Uporządkowanie"
+msgstr ""
 
 msgctxt "StationarityTimeSeries|"
 msgid "Append transformation to spreadsheet"
@@ -714,53 +713,51 @@ msgstr ""
 
 msgctxt "StationarityTimeSeries|"
 msgid "Column name"
-msgstr "Nazwa kolumny"
+msgstr ""
 
 msgctxt "StationarityTimeSeries|"
 msgid "e.g., transformed"
-msgstr "np. przekształcone"
+msgstr ""
 
 msgctxt "StationarityTimeSeries|"
 msgid "Plots"
-msgstr "Wykresy"
+msgstr ""
 
 msgctxt "StationarityTimeSeries|"
 msgid "Time series plot"
-msgstr "Wykres szeregu czasowego"
+msgstr ""
 
 msgctxt "StationarityTimeSeries|"
 msgid "Plots the (transformed) dependent variable (y-axis) over time (x-axis)."
 msgstr ""
-"Tworzy wykres wartości (przekształconej) zmiennej zależnej (oś y) w czasie "
-"(oś x)."
 
 msgctxt "StationarityTimeSeries|"
 msgid "Points"
-msgstr "Punkty"
+msgstr ""
 
 msgctxt "StationarityTimeSeries|"
 msgid "Line"
-msgstr "Linia"
+msgstr ""
 
 msgctxt "StationarityTimeSeries|"
 msgid "Both"
-msgstr "Oba"
+msgstr ""
 
 msgctxt "StationarityTimeSeries|"
 msgid "Distribution"
-msgstr "Rozkład"
+msgstr ""
 
 msgctxt "StationarityTimeSeries|"
 msgid "Density"
-msgstr "Gęstość"
+msgstr ""
 
 msgctxt "StationarityTimeSeries|"
 msgid "Histogram"
-msgstr "Histogram"
+msgstr ""
 
 msgctxt "StationarityTimeSeries|"
 msgid "None"
-msgstr "Żadne"
+msgstr ""
 
 msgctxt "StationarityTimeSeries|"
 msgid "Autocorrelation function"
@@ -783,12 +780,11 @@ msgstr ""
 
 msgctxt "StationarityTimeSeries|"
 msgid "Confidence interval"
-msgstr "Przedział ufności"
+msgstr ""
 
-#, fuzzy
 msgctxt "StationarityTimeSeries|"
 msgid "Based on white noise"
-msgstr "Bazuje na białym szumie"
+msgstr ""
 
 msgctxt "StationarityTimeSeries|"
 msgid "Based on moving average"
@@ -800,10 +796,6 @@ msgstr ""
 
 msgctxt "StationarityTimeSeries|"
 msgid "Plots the partial autocorrelation for a specified number of lags."
-msgstr ""
-
-msgctxt "Description|"
-msgid "Time Series"
 msgstr ""
 
 msgctxt "StationarityTimeSeries|"
