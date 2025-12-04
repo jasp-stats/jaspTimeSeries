@@ -1,6 +1,6 @@
 msgid ""
 msgstr ""
-"PO-Revision-Date: 2025-12-01 06:15+0000\n"
+"PO-Revision-Date: 2025-12-05 22:00+0000\n"
 "Last-Translator: Marko Bojović <bojovicmarko@outlook.com>\n"
 "Language-Team: Serbian <https://hosted.weblate.org/projects/jasp/"
 "jasptimeseries-qml/sr/>\n"
@@ -15,44 +15,46 @@ msgstr ""
 
 msgctxt "Description|"
 msgid "Time Series"
-msgstr ""
+msgstr "Временске серије"
 
 msgctxt "Description|"
 msgid "This module offers time series analyses."
-msgstr ""
+msgstr "Овај модул нуди анализу временских серија."
 
 msgctxt "Description|"
 msgid "Descriptives"
-msgstr ""
+msgstr "Дескриптивна"
 
 msgctxt "Description|"
 msgid "Stationarity"
-msgstr ""
+msgstr "Стационарност"
 
 msgctxt "Description|"
 msgid "ARIMA"
-msgstr ""
+msgstr "ARIMA"
 
 msgctxt "Description|"
 msgid "Spectral Analysis"
-msgstr ""
+msgstr "Спектрална анализа"
 
 msgctxt "ARIMATimeSeries|"
 msgid ""
 "Allows the user to fit a (seasonal) AR/MA/ARMA/ARIMA model to a time series."
 msgstr ""
+"Ова функција омогућава кориснику да прилагоди (сезонски) AR/MA/ARMA/ARIMA "
+"модел временској серији."
 
 msgctxt "ARIMATimeSeries|"
 msgid "Dependent Variable"
-msgstr ""
+msgstr "Зависна варијабла"
 
 msgctxt "ARIMATimeSeries|"
 msgid "A variable that is measured repeatedly over time."
-msgstr ""
+msgstr "Варијабла која се мери више пута током времена."
 
 msgctxt "ARIMATimeSeries|"
 msgid "Time"
-msgstr ""
+msgstr "Време"
 
 msgctxt "ARIMATimeSeries|"
 msgid ""
@@ -372,7 +374,7 @@ msgstr ""
 
 msgctxt "SpectralTimeSeries|"
 msgid "Time"
-msgstr ""
+msgstr "Време"
 
 msgctxt "SpectralTimeSeries|"
 msgid ""
@@ -506,7 +508,7 @@ msgstr ""
 
 msgctxt "StationarityTimeSeries|"
 msgid "Time"
-msgstr ""
+msgstr "Време"
 
 msgctxt "StationarityTimeSeries|"
 msgid ""
