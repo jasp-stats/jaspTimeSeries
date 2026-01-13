@@ -1,4 +1,4 @@
 import QtQuick
-import jaspDescriptives
+import "../../../jaspDescriptives"
 
 DescriptivesTimeSeriesForm {}
