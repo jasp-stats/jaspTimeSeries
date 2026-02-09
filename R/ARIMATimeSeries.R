@@ -16,7 +16,7 @@
 #
 
 ARIMATimeSeries <- function(jaspResults, dataset, options) {
-  ready <- options$dependent != ""
+  ready <- options[["dependent"]] != ""
 
   datasetRaw <- .tsReadData(jaspResults, dataset, options, ready, covariates = TRUE)
 
@@ -63,7 +63,7 @@ ARIMATimeSeries <- function(jaspResults, dataset, options) {
 }
 
 .tsTimeSeriesPlot <- function(jaspResults, dataset, options, ready, position, dependencies) {
-  if (!options$timeSeriesPlot) {
+  if (!options[["timeSeriesPlot"]]) {
     return()
   }
 
@@ -78,7 +78,7 @@ ARIMATimeSeries <- function(jaspResults, dataset, options) {
       return()
     }
 
-    .tsFillTimeSeriesPlot(plot, dataset, options, type = options$timeSeriesPlotType, distribution = options$timeSeriesPlotDistribution)
+    .tsFillTimeSeriesPlot(plot, dataset, options, type = options[["timeSeriesPlotType"]], distribution = options[["timeSeriesPlotDistribution"]])
   }
 }
 
@@ -88,12 +88,12 @@ ARIMATimeSeries <- function(jaspResults, dataset, options) {
   }
 
   if (ready) {
-    if (options$seasonal) {
-      P <- options$P
-      D <- options$D
-      Q <- options$Q
-      if (options$periodSpecification == "custom") m <- options$m
-      if (options$periodSpecification == "dominant") m <- forecast::findfrequency(dataset$y)
+    if (options[["seasonal"]]) {
+      P <- options[["P"]]
+      D <- options[["D"]]
+      Q <- options[["Q"]]
+      if (options[["periodSpecification"]] == "custom") m <- options[["m"]]
+      if (options[["periodSpecification"]] == "dominant") m <- forecast::findfrequency(dataset$y)
     } else {
       m <- 1
       P <- D <- Q <- 0
@@ -107,24 +107,24 @@ ARIMATimeSeries <- function(jaspResults, dataset, options) {
       xreg <- as.matrix(covariates)
     }
 
-    if (options$modelSpecification == "custom") {
+    if (options[["modelSpecification"]] == "custom") {
       fit <- try(forecast::Arima(
         y,
-        include.constant = options$intercept,
-        order = c(options$p, options$d, options$q),
+        include.constant = options[["intercept"]],
+        order = c(options[["p"]], options[["d"]], options[["q"]]),
         xreg = xreg,
         seasonal = seasonOrder
       ))
     }
 
-    if (options$modelSpecification == "auto") {
+    if (options[["modelSpecification"]] == "auto") {
       fit <- try(forecast::auto.arima(
         y,
-        allowdrift = options$intercept,
-        allowmean = options$intercept,
-        ic = options$modelSpecificationAutoIc,
+        allowdrift = options[["intercept"]],
+        allowmean = options[["intercept"]],
+        ic = options[["modelSpecificationAutoIc"]],
         xreg = xreg,
-        seasonal = options$seasonal
+        seasonal = options[["seasonal"]]
       ))
     }
 
@@ -219,7 +219,7 @@ ARIMATimeSeries <- function(jaspResults, dataset, options) {
     hasIntercept <- any(names(fit$coef) == "intercept")
     hasDrift <- any(names(fit$coef) == "drift")
     if (hasIntercept | hasDrift) {
-      if (options$intercept && hasIntercept) {
+      if (options[["intercept"]] && hasIntercept) {
         group <- TRUE
         coefficients <- gettext("Intercept")
 
@@ -277,7 +277,7 @@ ARIMATimeSeries <- function(jaspResults, dataset, options) {
     }
 
     if (length(options[["covariates"]]) > 0) {
-      xreg <- options$covariates
+      xreg <- options[["covariates"]]
       coefficients <- c(coefficients, xreg)
       group <- c(group, TRUE, rep(FALSE, length(xreg) - 1))
     }
@@ -315,7 +315,7 @@ ARIMATimeSeries <- function(jaspResults, dataset, options) {
 
   dataset$y <- residuals(fit)
 
-  if (is.null(residContainer[["residualTimeSeriesPlot"]]) && options$residualTimeSeries) {
+  if (is.null(residContainer[["residualTimeSeriesPlot"]]) && options[["residualTimeSeries"]]) {
     residualTimeSeriesPlot <- createJaspPlot(title = gettext("Time Series Plot"), width = 660)
     residualTimeSeriesPlot$dependOn(c("residualTimeSeries", "residualTimeSeriesType", "residualTimeSeriesDistribution"))
     residualTimeSeriesPlot$position <- 1
@@ -325,10 +325,10 @@ ARIMATimeSeries <- function(jaspResults, dataset, options) {
       return()
     }
 
-    .tsFillTimeSeriesPlot(residualTimeSeriesPlot, dataset, options, type = options$residualTimeSeriesType, distribution = options$residualTimeSeriesDistribution, yName = "Standardized Residuals")
+    .tsFillTimeSeriesPlot(residualTimeSeriesPlot, dataset, options, type = options[["residualTimeSeriesType"]], distribution = options[["residualTimeSeriesDistribution"]], yName = "Standardized Residuals")
   }
 
-  if (is.null(residContainer[["residualACFPlot"]]) && options$residualAcf) {
+  if (is.null(residContainer[["residualACFPlot"]]) && options[["residualAcf"]]) {
     residualACFPlot <- createJaspPlot(title = gettext("Autocorrelation Function Plot"))
     residualACFPlot$dependOn(c("residualAcf", "residualAcfCi", "residualAcfCiLevel", "residualAcfZeroLag", "residualMaxLag"))
     residualACFPlot$position <- 2
@@ -340,13 +340,13 @@ ARIMATimeSeries <- function(jaspResults, dataset, options) {
 
     .tsFillACF(residualACFPlot,
       type = "ACF", dataset, options,
-      zeroLag = options$residualAcfZeroLag, maxLag = options$residualMaxLag,
-      ci = options$residualAcfCi, ciValue = options$residualAcfCiLevel,
+      zeroLag = options[["residualAcfZeroLag"]], maxLag = options[["residualMaxLag"]],
+      ci = options[["residualAcfCi"]], ciValue = options[["residualAcfCiLevel"]],
       ciType = "whiteNoise"
     )
   }
 
-  if (is.null(residContainer[["residualQQPlot"]]) && options$residualQQ) {
+  if (is.null(residContainer[["residualQQPlot"]]) && options[["residualQQ"]]) {
     residualQQPlot <- createJaspPlot(title = gettext("Q-Q Plot"))
     residualQQPlot$dependOn("residualQQ")
     residualQQPlot$position <- 4
@@ -359,7 +359,7 @@ ARIMATimeSeries <- function(jaspResults, dataset, options) {
     residualQQPlot$plotObject <- jaspGraphs::plotQQnorm(dataset$y, ablineColor = "darkred")
   }
 
-  if (is.null(residContainer[["ljungPlot"]]) && options$residualLjungBox) {
+  if (is.null(residContainer[["ljungPlot"]]) && options[["residualLjungBox"]]) {
     ljungPlot <- createJaspPlot(title = gettext("Ljung-Box Plot"))
     ljungPlot$dependOn(c("residualLjungBox", "residualMaxLag", "ljungBoxSignificanceLevel"))
     ljungPlot$position <- 3
@@ -386,8 +386,8 @@ ARIMATimeSeries <- function(jaspResults, dataset, options) {
 }
 
 .tsFillLjungBoxPlot <- function(ljungPlot, dataset, options) {
-  pValues <- numeric(options$residualMaxLag)
-  nLags <- 1:options$residualMaxLag
+  pValues <- numeric(options[["residualMaxLag"]])
+  nLags <- 1:options[["residualMaxLag"]]
   for (i in nLags) {
     pValues[i] <- stats::Box.test(dataset$y, i, type = "Ljung-Box")$p.value
   }
@@ -397,7 +397,7 @@ ARIMATimeSeries <- function(jaspResults, dataset, options) {
   yBreaks <- jaspGraphs::getPrettyAxisBreaks(c(0, 1))
   xBreaks <- jaspGraphs::getPrettyAxisBreaks(nLags)
 
-  sig <- options$ljungBoxSignificanceLevel
+  sig <- options[["ljungBoxSignificanceLevel"]]
 
   p <- ggplot2::ggplot() +
     ggplot2::scale_x_continuous(name = gettext("Lag"), breaks = xBreaks, limits = range(xBreaks)) +
@@ -415,7 +415,7 @@ ARIMATimeSeries <- function(jaspResults, dataset, options) {
     return()
   }
 
-  if (ready && options$forecastLength > 0) {
+  if (ready && options[["forecastLength"]] > 0) {
     # test if time is a date or a numeric variable
     isDate <- lubridate::is.POSIXct(dataset$t)
 
@@ -423,11 +423,11 @@ ARIMATimeSeries <- function(jaspResults, dataset, options) {
     lastObsY <- max(which(!is.na(dataset$y)))
     lastT <- dataset$t[lastObsY]
     if (!isDate) {
-      tPred <- data.frame(t = (lastObsY + 1):(lastObsY + options$forecastLength))
+      tPred <- data.frame(t = (lastObsY + 1):(lastObsY + options[["forecastLength"]]))
     } else {
       increment <- .tsGuessInterval(dataset)
       # get future dates for forecasts
-      tPred <- seq.POSIXt(lastT, by = increment, length.out = (options$forecastLength + 1))
+      tPred <- seq.POSIXt(lastT, by = increment, length.out = (options[["forecastLength"]] + 1))
       tPred <- tPred[-1] # remove last value
     }
 
@@ -440,7 +440,7 @@ ARIMATimeSeries <- function(jaspResults, dataset, options) {
       # to use for forecasting
       lastRaw <- match(lastT, datasetRaw$t)
       firstForecast <- lastRaw + 1
-      lastForecast <- lastRaw + options$forecastLength
+      lastForecast <- lastRaw + options[["forecastLength"]]
       rangeForecast <- firstForecast:lastForecast
       if (firstForecast > nrow(datasetRaw)) .quitAnalysis(gettext("When 'Covariates' are used in the model, predictions cannot be carried out unless the covariates are also observed for the predicted period."))
       if (length(rangeForecast) > length(firstForecast:nrow(datasetRaw))) {
@@ -456,11 +456,11 @@ ARIMATimeSeries <- function(jaspResults, dataset, options) {
     }
 
     tPred <- data.frame(t = tPred)
-    pred <- try(as.data.frame(forecast::forecast(fit, h = options$forecastLength, xreg = xreg)))
+    pred <- try(as.data.frame(forecast::forecast(fit, h = options[["forecastLength"]], xreg = xreg)))
     if (jaspBase::isTryError(pred)) .quitAnalysis(gettext("Forecasting failed."))
     pred <- cbind(tPred, pred)
 
-    yName <- options$dependent[1]
+    yName <- options[["dependent"]][1]
     names(pred) <- c("t", "y", "lower80", "upper80", "lower95", "upper95")
 
     jaspResults[["forecastResult"]] <- createJaspState(pred)
@@ -469,7 +469,7 @@ ARIMATimeSeries <- function(jaspResults, dataset, options) {
 }
 
 .tsForecastPlot <- function(jaspResults, fit, dataset, datasetRaw, options, ready, position, dependencies) {
-  if (!options$forecastTimeSeries) {
+  if (!options[["forecastTimeSeries"]]) {
     return()
   }
 
@@ -480,7 +480,7 @@ ARIMATimeSeries <- function(jaspResults, dataset, options) {
 
     jaspResults[["forecastPlot"]] <- plot
 
-    if (!ready || options$forecastLength == 0) {
+    if (!ready || options[["forecastLength"]] == 0) {
       return()
     }
 
@@ -489,7 +489,7 @@ ARIMATimeSeries <- function(jaspResults, dataset, options) {
 }
 
 .tsFillforecastPlot <- function(plot, fit, dataset, datasetRaw, options, jaspResults, ready) {
-  yName <- options$dependent[1]
+  yName <- options[["dependent"]][1]
 
   .tsForecasts(fit, dataset, datasetRaw, options, jaspResults, ready)
   pred <- jaspResults[["forecastResult"]]$object
@@ -505,7 +505,7 @@ ARIMATimeSeries <- function(jaspResults, dataset, options) {
   cols <- rep(c("black", "blue"), c(nrow(obs), nrow(fcs)))
   # plot only forecasts or also observations
   idx <- (nrow(obs) + 1):nrow(df)
-  if (options$forecastTimeSeriesObserved) {
+  if (options[["forecastTimeSeriesObserved"]]) {
     idx <- 1:nrow(df)
   }
 
@@ -524,12 +524,12 @@ ARIMATimeSeries <- function(jaspResults, dataset, options) {
     xScale <- ggplot2::scale_x_datetime("t", breaks = xBreaks, labels = xLabels, limits = range(xBreaks))
   }
 
-  geomPoint <- if (options$forecastTimeSeriesType == "points" || options$forecastTimeSeriesType == "both") {
+  geomPoint <- if (options[["forecastTimeSeriesType"]] == "points" || options[["forecastTimeSeriesType"]] == "both") {
     jaspGraphs::geom_point(color = cols)
   } else {
     NULL
   }
-  geomLine <- if (options$forecastTimeSeriesType == "line" || options$forecastTimeSeriesType == "both") {
+  geomLine <- if (options[["forecastTimeSeriesType"]] == "line" || options[["forecastTimeSeriesType"]] == "both") {
     jaspGraphs::geom_line(color = cols)
   } else {
     NULL
@@ -552,22 +552,22 @@ ARIMATimeSeries <- function(jaspResults, dataset, options) {
   # save forecasts in a seperate .csv file
   # it is not possible to append forecasts to the spreadsheet
   # because that would require adding rows instead of columns
-  if (options$forecastSave != "" && ready && options$forecastLength > 0) {
-    yName <- decodeColNames(options$dependent[1])
+  if (options[["forecastSave"]] != "" && ready && options[["forecastLength"]] > 0) {
+    yName <- decodeColNames(options[["dependent"]][1])
 
     .tsForecasts(fit, dataset, datasetRaw, options, jaspResults, ready)
     pred <- jaspResults[["forecastResult"]]$object
 
     if (!is.null(pred)) {
       names(pred) <- c("t", yName, "lower80", "upper80", "lower95", "upper95")
-      utils::write.csv(pred, file = options$forecastSave, row.names = FALSE)
+      utils::write.csv(pred, file = options[["forecastSave"]], row.names = FALSE)
     }
   }
 }
 
 
 .tsCreateTableForecasts <- function(jaspResults, fit, dataset, datasetRaw, options, ready, position, dependencies) {
-  if (!is.null(jaspResults[["forecastTable"]]) || !options$forecastTable) {
+  if (!is.null(jaspResults[["forecastTable"]]) || !options[["forecastTable"]]) {
     return()
   }
 
@@ -575,7 +575,7 @@ ARIMATimeSeries <- function(jaspResults, dataset, options) {
   table$dependOn(c(dependencies, "forecastLength", "forecastTable"))
   table$position <- position
 
-  yName <- options$dependent[1]
+  yName <- options[["dependent"]][1]
   table$addColumnInfo(name = "t", title = "t", type = "string")
   table$addColumnInfo(name = "y", title = yName, type = "number")
   overtitle80 <- gettextf("%s%% CI", 100 * .80)
@@ -588,7 +588,7 @@ ARIMATimeSeries <- function(jaspResults, dataset, options) {
   jaspResults[["forecastTable"]] <- table
 
   # Check if ready
-  if (ready && options$forecastLength > 0) {
+  if (ready && options[["forecastLength"]] > 0) {
     .tsForecasts(fit, dataset, datasetRaw, options, jaspResults, ready)
     pred <- jaspResults[["forecastResult"]]$object
 
