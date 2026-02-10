@@ -2,4 +2,5 @@
 ^renv\.lock$
 ^.*\.Rproj$
 ^\.Rproj\.user$
-^tests/upgrades$^examples$
+^tests/upgrades$
+^examples$
