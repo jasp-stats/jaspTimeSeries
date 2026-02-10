@@ -15,8 +15,9 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 
+#' @export
 StationarityTimeSeries <- function(jaspResults, dataset, options) {
-  ready <- options$dependent != ""
+  ready <- options[["dependent"]] != ""
 
   datasetRaw <- .tsReadData(jaspResults, dataset, options, ready)
 
@@ -59,47 +60,47 @@ StationarityTimeSeries <- function(jaspResults, dataset, options) {
   transformedDataset <- dataset
 
   # apply log
-  if (options$log) {
+  if (options[["log"]]) {
     if (any(transformedDataset$y <= 0)) {
       .quitAnalysis(gettext("Data cannot be zero or negative for log transformation."))
     }
 
-    if (options$logBase == "10") transformedDataset$y <- log10(transformedDataset$y)
-    if (options$logBase == "e") transformedDataset$y <- log(transformedDataset$y)
+    if (options[["logBase"]] == "10") transformedDataset$y <- log10(transformedDataset$y)
+    if (options[["logBase"]] == "e") transformedDataset$y <- log(transformedDataset$y)
   }
 
   # apply root
-  if (options$root) {
+  if (options[["root"]]) {
     if (any(transformedDataset$y < 0)) {
       .quitAnalysis(gettext("Data cannot be negative for root transformation."))
     }
 
-    if (options$rootIndex == "square") transformedDataset$y <- sqrt(transformedDataset$y)
-    if (options$rootIndex == "cube") transformedDataset$y <- transformedDataset$y^(1 / 3)
+    if (options[["rootIndex"]] == "square") transformedDataset$y <- sqrt(transformedDataset$y)
+    if (options[["rootIndex"]] == "cube") transformedDataset$y <- transformedDataset$y^(1 / 3)
   }
 
   # apply Box-Cox transformation
-  if (options$boxCox) {
-    if (options$boxCoxLambdaSpecification == "auto") lambda <- "auto"
-    if (options$boxCoxLambdaSpecification == "custom") lambda <- options$boxCoxLambda
+  if (options[["boxCox"]]) {
+    if (options[["boxCoxLambdaSpecification"]] == "auto") lambda <- "auto"
+    if (options[["boxCoxLambdaSpecification"]] == "custom") lambda <- options[["boxCoxLambda"]]
 
     transformedDataset$y <- forecast::BoxCox(transformedDataset$y, lambda = lambda)
   }
 
   # apply detrend using linear regression and save only residuals
-  if (options$detrend) {
-    if (options$polynomialSpecification == "custom") {
+  if (options[["detrend"]]) {
+    if (options[["polynomialSpecification"]] == "custom") {
       completeRows <- complete.cases(transformedDataset[, c("y", "t")])
-      fit <- lm(y ~ poly(as.integer(t), options$detrendPoly), data = transformedDataset[completeRows, ])
+      fit <- lm(y ~ poly(as.integer(t), options[["detrendPoly"]]), data = transformedDataset[completeRows, ])
       residualsVec <- residuals(fit)
       transformedDataset$y[completeRows] <- residualsVec
     }
 
-    if (options$polynomialSpecification == "auto") {
+    if (options[["polynomialSpecification"]] == "auto") {
       completeRows <- complete.cases(transformedDataset[, c("y", "t")])
       .tsComputePolyResults(transformedDataset, options, jaspResults, ready)
       lmFit <- jaspResults[["polyResult"]]$object
-      best <- which.min(unlist(lmFit[options$polynomialSpecificationAutoIc, ]))
+      best <- which.min(unlist(lmFit[options[["polynomialSpecificationAutoIc"]], ]))
       residualsVec <- unlist(lmFit["residuals", best])
       transformedDataset$y[completeRows] <- residualsVec
     }
@@ -107,11 +108,11 @@ StationarityTimeSeries <- function(jaspResults, dataset, options) {
 
 
   # apply differencing
-  if (options$difference) {
+  if (options[["difference"]]) {
     differencedY <- diff(
       transformedDataset$y,
-      lag = options$differenceLag,
-      order = options$differenceOrder
+      lag = options[["differenceLag"]],
+      order = options[["differenceOrder"]]
     )
 
     # add NA's to start of the transformed dependent variable
@@ -126,7 +127,7 @@ StationarityTimeSeries <- function(jaspResults, dataset, options) {
 }
 
 .tsCreateTablePolynomials <- function(jaspResults, dataset, options, ready, position, dependencies) {
-  if (!is.null(jaspResults[["polyTable"]]) || !(options$detrend && options$polynomialSpecification == "auto")) {
+  if (!is.null(jaspResults[["polyTable"]]) || !(options[["detrend"]] && options[["polynomialSpecification"]] == "auto")) {
     return()
   }
 
@@ -142,7 +143,7 @@ StationarityTimeSeries <- function(jaspResults, dataset, options) {
   if (ready) {
     .tsComputePolyResults(dataset, options, jaspResults, ready)
     lmFit <- jaspResults[["polyResult"]]$object
-    best <- lmFit["degree", which.min(unlist(lmFit[options$polynomialSpecificationAutoIc, ]))]
+    best <- lmFit["degree", which.min(unlist(lmFit[options[["polynomialSpecificationAutoIc"]], ]))]
 
     rows <- data.frame(
       degree = unlist(lmFit["degree", ]),
@@ -172,7 +173,7 @@ StationarityTimeSeries <- function(jaspResults, dataset, options) {
   }
 
   if (ready) {
-    res <- sapply(0:(options$polynomialSpecificationAutoMax), .tsFitPoly, x = dataset$y, t = as.integer(dataset$t))
+    res <- sapply(0:(options[["polynomialSpecificationAutoMax"]]), .tsFitPoly, x = dataset$y, t = as.integer(dataset$t))
 
     jaspResults[["polyResult"]] <- createJaspState(res)
     jaspResults[["polyResult"]]$dependOn(.tsTransformationDependencies())
@@ -192,7 +193,7 @@ StationarityTimeSeries <- function(jaspResults, dataset, options) {
 }
 
 .tsCreateTableStationarityTests <- function(jaspResults, dataset, options, ready, position, dependencies) {
-  if (!is.null(jaspResults[["stationaryTable"]]) || !(options$adfTest || options$ppTestRegressionCoefficient || options$ppTestStudentized || options$kpssLevel || options$kpssTrend)) {
+  if (!is.null(jaspResults[["stationaryTable"]]) || !(options[["adfTest"]] || options[["ppTestRegressionCoefficient"]] || options[["ppTestStudentized"]] || options[["kpssLevel"]] || options[["kpssTrend"]])) {
     return()
   }
 
@@ -223,11 +224,11 @@ StationarityTimeSeries <- function(jaspResults, dataset, options) {
 
   # each checkbox indicates a row in the table
   idx <- c(
-    options$adfTest,
-    options$ppTestRegressionCoefficient,
-    options$ppTestStudentized,
-    options$kpssLevel,
-    options$kpssTrend
+    options[["adfTest"]],
+    options[["ppTestRegressionCoefficient"]],
+    options[["ppTestStudentized"]],
+    options[["kpssLevel"]],
+    options[["kpssTrend"]]
   )
   rows <- 1:5
   rowsIdx <- rows[idx]
@@ -250,7 +251,7 @@ StationarityTimeSeries <- function(jaspResults, dataset, options) {
   df <- data.frame(test, statistic = numeric(5), lag = numeric(5), p = numeric(5), null)
 
   smallerA <- smallerPr <- smallerPs <- smallerKl <- smallerKt <- greaterA <- greaterPr <- greaterPs <- greaterKl <- greaterKt <- FALSE
-  if (options$adfTest) {
+  if (options[["adfTest"]]) {
     fit <- try(tseries::adf.test(dataset$y))
     if (jaspBase::isTryError(fit)) .quitAnalysis(gettext("The ADF test failed."))
     df[1, c("statistic", "lag", "p")] <- c(fit$statistic, fit$parameter, fit$p.value)
@@ -259,7 +260,7 @@ StationarityTimeSeries <- function(jaspResults, dataset, options) {
     smallerA <- fit$p.value == 0.01
     greaterA <- fit$p.value == 0.99 # p value 0.01 - 0.99
   }
-  if (options$ppTestRegressionCoefficient) {
+  if (options[["ppTestRegressionCoefficient"]]) {
     # type = c("Z(alpha)", "Z(t_alpha)")
     # rho normalized bias test (regression coefficient) vs. tau studentized test
     fit <- try(tseries::pp.test(dataset$y, type = "Z(alpha)"))
@@ -270,7 +271,7 @@ StationarityTimeSeries <- function(jaspResults, dataset, options) {
     smallerPr <- fit$p.value == 0.01
     greaterPr <- fit$p.value == 0.99 # p value 0.01 - 0.99
   }
-  if (options$ppTestStudentized) {
+  if (options[["ppTestStudentized"]]) {
     fit <- try(tseries::pp.test(dataset$y, type = "Z(t_alpha)"))
     if (jaspBase::isTryError(fit)) .quitAnalysis(gettext("The PP studentized test failed."))
     df[3, c("statistic", "lag", "p")] <- c(fit$statistic, fit$parameter, fit$p.value)
@@ -279,7 +280,7 @@ StationarityTimeSeries <- function(jaspResults, dataset, options) {
     smallerPs <- fit$p.value == 0.01
     greaterPs <- fit$p.value == 0.99 # p value 0.01 - 0.99
   }
-  if (options$kpssLevel) {
+  if (options[["kpssLevel"]]) {
     fit <- try(tseries::kpss.test(dataset$y, null = "Level"))
     if (jaspBase::isTryError(fit)) .quitAnalysis(gettext("The KPSS test for level stationarity failed."))
     df[4, c("statistic", "lag", "p")] <- c(fit$statistic, fit$parameter, fit$p.value)
@@ -288,7 +289,7 @@ StationarityTimeSeries <- function(jaspResults, dataset, options) {
     smallerKl <- fit$p.value == 0.01
     greaterKl <- fit$p.value == 0.1 # p value 0.1 - 0.01
   }
-  if (options$kpssTrend) {
+  if (options[["kpssTrend"]]) {
     fit <- try(tseries::kpss.test(dataset$y, null = "Trend"))
     if (jaspBase::isTryError(fit)) .quitAnalysis(gettext("The KPSS test for trend stationarity failed."))
     df[5, c("statistic", "lag", "p")] <- c(fit$statistic, fit$parameter, fit$p.value)
@@ -317,16 +318,16 @@ StationarityTimeSeries <- function(jaspResults, dataset, options) {
 .stationaryFootnoteRows <- function(A, Pr, Ps, Kl, Kt, options) {
   # add footnote only for relevant p-values
   footRow <- NULL
-  if (options$adfTest & A) footRow <- c(footRow, "adf")
-  if (options$ppTestRegressionCoefficient & Pr) footRow <- c(footRow, "ppRegression")
-  if (options$ppTestStudentized & Ps) footRow <- c(footRow, "ppStudentized")
-  if (options$kpssLevel & Kl) footRow <- c(footRow, "kpssLevel")
-  if (options$kpssTrend & Kt) footRow <- c(footRow, "kpssTrend")
+  if (options[["adfTest"]] & A) footRow <- c(footRow, "adf")
+  if (options[["ppTestRegressionCoefficient"]] & Pr) footRow <- c(footRow, "ppRegression")
+  if (options[["ppTestStudentized"]] & Ps) footRow <- c(footRow, "ppStudentized")
+  if (options[["kpssLevel"]] & Kl) footRow <- c(footRow, "kpssLevel")
+  if (options[["kpssTrend"]] & Kt) footRow <- c(footRow, "kpssTrend")
   return(footRow)
 }
 
 .tsTimeSeriesPlotTransformation <- function(jaspResults, dataset, options, ready, position, dependencies) {
-  if (!options$timeSeriesPlot) {
+  if (!options[["timeSeriesPlot"]]) {
     return()
   }
 
@@ -341,12 +342,12 @@ StationarityTimeSeries <- function(jaspResults, dataset, options) {
       return()
     }
 
-    .tsFillTimeSeriesPlot(plot, dataset, options, type = options$timeSeriesPlotType, distribution = options$timeSeriesPlotDistribution)
+    .tsFillTimeSeriesPlot(plot, dataset, options, type = options[["timeSeriesPlotType"]], distribution = options[["timeSeriesPlotDistribution"]])
   }
 }
 
 .tsACFTransformation <- function(jaspResults, dataset, options, ready, position, dependencies) {
-  if (!options$acf) {
+  if (!options[["acf"]]) {
     return()
   }
 
@@ -363,17 +364,17 @@ StationarityTimeSeries <- function(jaspResults, dataset, options) {
 
     .tsFillACF(plot,
       type = "ACF", dataset, options,
-      zeroLag = options$acfZeroLag,
-      maxLag = options$acfMaxLag,
-      ci = options$acfCi,
-      ciValue = options$acfCiLevel,
-      ciType = options$acfCiType
+      zeroLag = options[["acfZeroLag"]],
+      maxLag = options[["acfMaxLag"]],
+      ci = options[["acfCi"]],
+      ciValue = options[["acfCiLevel"]],
+      ciType = options[["acfCiType"]]
     )
   }
 }
 
 .tsPACFTransformation <- function(jaspResults, dataset, options, ready, position, dependencies) {
-  if (!options$pacf) {
+  if (!options[["pacf"]]) {
     return()
   }
 
@@ -390,10 +391,10 @@ StationarityTimeSeries <- function(jaspResults, dataset, options) {
 
     .tsFillACF(plot,
       type = "PACF", dataset, options,
-      maxLag = options$pacfMaxLag,
-      ci = options$pacfCi,
-      ciValue = options$pacfCiLevel,
-      ciType = options$pacfCiType
+      maxLag = options[["pacfMaxLag"]],
+      ci = options[["pacfCi"]],
+      ciValue = options[["pacfCiLevel"]],
+      ciType = options[["pacfCiType"]]
     )
   }
 }

@@ -15,8 +15,9 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 
+#' @export
 SpectralTimeSeries <- function(jaspResults, dataset, options) {
-  ready <- options$dependent != ""
+  ready <- options[["dependent"]] != ""
 
   datasetRaw <- .tsReadData(jaspResults, dataset, options, ready)
 
@@ -51,16 +52,16 @@ SpectralTimeSeries <- function(jaspResults, dataset, options) {
 
     dims <- .tsGetKernellDimensions(options)
 
-    if (options$kernel) {
-      k <- stats::kernel(options$kernelMethod, dims)
+    if (options[["kernel"]]) {
+      k <- stats::kernel(options[["kernelMethod"]], dims)
     }
 
     res <- try(stats::spec.pgram(
       y,
       kernel    = k,
-      taper     = options$taper,
-      demean    = options$demean,
-      detrend   = options$detrend,
+      taper     = options[["taper"]],
+      demean    = options[["demean"]],
+      detrend   = options[["detrend"]],
       plot      = FALSE,
       na.action = na.exclude # should probably add other options at some point
     ))
@@ -118,15 +119,15 @@ SpectralTimeSeries <- function(jaspResults, dataset, options) {
   yRange <- dat$y
   p <- ggplot2::ggplot(dat, ggplot2::aes(x = x, y = y))
 
-  if (options$whiteNoise) {
+  if (options[["whiteNoise"]]) {
     yRange <- c(yRange, dat$whiteNoise)
     p <- p + jaspGraphs::geom_line(ggplot2::aes(x = x, y = whiteNoise), colour = "grey")
   }
-  if (options$pinkNoise) {
+  if (options[["pinkNoise"]]) {
     yRange <- c(yRange, dat$pinkNoise)
     p <- p + jaspGraphs::geom_line(ggplot2::aes(x = x, y = pinkNoise), colour = "pink")
   }
-  if (options$brownNoise) {
+  if (options[["brownNoise"]]) {
     yRange <- c(yRange, dat$brownNoise)
     p <- p + jaspGraphs::geom_line(ggplot2::aes(x = x, y = brownNoise), colour = "brown")
   }

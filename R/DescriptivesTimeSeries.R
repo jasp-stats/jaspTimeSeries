@@ -15,6 +15,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 
+#' @export
 DescriptivesTimeSeriesInternal <- function(jaspResults, dataset, options) {
     jaspDescriptives::.DescriptivesTimeSeries(jaspResults, dataset, options)
 }

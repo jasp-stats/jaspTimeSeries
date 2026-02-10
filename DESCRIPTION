@@ -17,6 +17,8 @@ Imports:
   lubridate
 Suggests:
   testthat
+LazyData: true
+RoxygenNote: 7.3.3
 Remotes:
   jasp-stats/jaspBase,
   jasp-stats/jaspGraphs,
