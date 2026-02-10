@@ -8,7 +8,7 @@ Description
 	description	: qsTr("This module offers time series analyses.")
 	version			: "0.95.0"
 	author		: "Sophie Berkhout"
-	maintainer	: "Sophie Berkhout <s.w.berkhout@uu.nl>"
+	maintainer	: "Henrik Godmann"
 	website		: "https://sophieberkhout.github.io/"
 	license		: "GPL (>= 2)"
 	icon		: "analysis-time-series.svg"
