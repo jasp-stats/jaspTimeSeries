@@ -16,7 +16,7 @@ Description
 
 	Analysis
 	{
-		title:		qsTr("Descriptives")
+		title:		qsTr("Time Series Descriptives")
 		func:		"DescriptivesTimeSeries"
 		hasWrapper:	true
 	}
