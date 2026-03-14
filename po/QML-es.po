@@ -16,10 +16,6 @@ msgid "This module offers time series analyses."
 msgstr "Este módulo ofrece el análisis de series temporales."
 
 msgctxt "Description|"
-msgid "Descriptives"
-msgstr "Descriptivos"
-
-msgctxt "Description|"
 msgid "Stationarity"
 msgstr "Estacionaridad"
 
@@ -910,3 +906,7 @@ msgid ""
 msgstr ""
 "Añade los errores a la hoja de cálculo, de forma que poden utilizarse en "
 "análisis posteriores."
+
+msgctxt "Description|"
+msgid "Time Series Descriptives"
+msgstr ""

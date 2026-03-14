@@ -16,10 +16,6 @@ msgid "This module offers time series analyses."
 msgstr "该模块提供时间序列分析."
 
 msgctxt "Description|"
-msgid "Descriptives"
-msgstr "描述统计"
-
-msgctxt "Description|"
 msgid "Stationarity"
 msgstr "平稳性"
 
@@ -847,4 +843,8 @@ msgctxt "ARIMATimeSeries|"
 msgid ""
 "Appends the residuals to the spreadsheet, so these can be used in further "
 "analyses."
+msgstr ""
+
+msgctxt "Description|"
+msgid "Time Series Descriptives"
 msgstr ""

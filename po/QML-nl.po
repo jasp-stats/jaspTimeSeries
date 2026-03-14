@@ -12,10 +12,6 @@ msgid "This module offers time series analyses."
 msgstr "Deze module biedt tijdreeksanalyses."
 
 msgctxt "Description|"
-msgid "Descriptives"
-msgstr "Beschrijvende statistiek"
-
-msgctxt "Description|"
 msgid "Stationarity"
 msgstr "Stationariteit"
 
@@ -910,3 +906,7 @@ msgid ""
 msgstr ""
 "Voegt de residuen toe aan de spreadsheet, zodat deze kunnen worden gebruikt "
 "in verdere analyses."
+
+msgctxt "Description|"
+msgid "Time Series Descriptives"
+msgstr ""

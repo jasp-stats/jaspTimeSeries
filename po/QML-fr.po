@@ -12,10 +12,6 @@ msgid "This module offers time series analyses."
 msgstr "Ce module permet d'analyser des séries temporelles."
 
 msgctxt "Description|"
-msgid "Descriptives"
-msgstr "Descriptives"
-
-msgctxt "Description|"
 msgid "Stationarity"
 msgstr "Stationnarité"
 
@@ -835,4 +831,8 @@ msgctxt "ARIMATimeSeries|"
 msgid ""
 "Appends the residuals to the spreadsheet, so these can be used in further "
 "analyses."
+msgstr ""
+
+msgctxt "Description|"
+msgid "Time Series Descriptives"
 msgstr ""
