@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: jaspTimeSeries 0.95.0\n"
 "POT-Creation-Date: 2025-06-21 03:37\n"
-"PO-Revision-Date: 2026-03-18 03:09+0000\n"
+"PO-Revision-Date: 2026-03-21 23:09+0000\n"
 "Last-Translator: Zahid Rizky Fakhri <zahidrizkyfakhri@gmail.com>\n"
 "Language-Team: Indonesian <https://hosted.weblate.org/projects/jasp/"
 "jasptimeseries-r/id/>\n"
@@ -14,187 +14,193 @@ msgstr ""
 "X-Generator: Weblate 5.17-dev\n"
 
 msgid "Time Series Plot"
-msgstr ""
+msgstr "Diagram Seri Waktu"
 
 msgid "The ARIMA model could not be fit."
-msgstr ""
+msgstr "Model ARIMA tidak dapat disesuaikan."
 
 msgid "No parameters are estimated."
-msgstr ""
+msgstr "Tidak ada parameter diestimasi."
 
 msgid "Model Summary"
-msgstr ""
+msgstr "Ringkasan Model"
 
 msgid "Log-Likelihood"
-msgstr ""
+msgstr "Log-Kemungkinan"
 
 msgid "AICc"
-msgstr ""
+msgstr "AICc"
 
 msgid "AIC"
-msgstr ""
+msgstr "AIC"
 
 msgid "BIC"
-msgstr ""
+msgstr "BIC"
 
 msgid "Coefficients"
-msgstr ""
+msgstr "Koefisien"
 
 msgid "Estimate"
-msgstr ""
+msgstr "Estimasi"
 
 msgid "Standard Error"
-msgstr ""
+msgstr "Galat Standar"
 
 msgid "t"
-msgstr ""
+msgstr "t"
 
 msgid "p"
-msgstr ""
+msgstr "p"
 
 msgid "%s%% CI"
-msgstr ""
+msgstr "%s%% CI"
 
 msgid "Lower"
-msgstr ""
+msgstr "Bawah"
 
 msgid "Upper"
-msgstr ""
+msgstr "Atas"
 
 msgid "Intercept"
-msgstr ""
+msgstr "Intersepsi"
 
 msgid "AR(%1$i)"
-msgstr ""
+msgstr "AR(%1$i)"
 
 msgid "MA(%1$i)"
-msgstr ""
+msgstr "MA(%1$i)"
 
 msgid "seasonal AR(%1$i)"
-msgstr ""
+msgstr "AR musiman(%1$i)"
 
 msgid "seasonal MA(%1$i)"
-msgstr ""
+msgstr "MA musiman(%1$i)"
 
 msgid "An ARIMA(%1$s, %2$s, %3$s)(%4$s, %5$s, %6$s)[%7$s] model was fitted."
-msgstr ""
+msgstr "Model ARIMA(%1$s, %2$s, %3$s)(%4$s, %5$s, %6$s)[%7$s] disesuaikan."
 
 msgid "An ARIMA(%1$s, %2$s, %3$s) model was fitted."
-msgstr ""
+msgstr "Model ARIMA(%1$s, %2$s, %3$s) disesuaikan."
 
 msgid "Residual Diagnostics Plots"
-msgstr ""
+msgstr "Diagram Diagnostik Residu"
 
 msgid "Autocorrelation Function Plot"
-msgstr ""
+msgstr "Diagram Fungsi Korelasi Otomatis"
 
 msgid "Q-Q Plot"
-msgstr ""
+msgstr "Diagram Q-Q"
 
 msgid "Ljung-Box Plot"
-msgstr ""
+msgstr "Diagram Kotak-Ljung"
 
 msgid "Lag"
-msgstr ""
+msgstr "Penundaan"
 
 msgid "p-value"
-msgstr ""
+msgstr "nilai-p"
 
 msgid "When 'Covariates' are used in the model, predictions cannot be carried out unless the covariates are also observed for the predicted period."
 msgstr ""
+"Ketika 'Kovariat' digunakan dalam model, prediksi tidak dapat dilakukan "
+"kecuali kovariat juga diobservasi untuk periode terprediksi."
 
 msgid "Not enough observations in the covariate%1$s. The maximum number of forecasts is %2$s."
 msgstr ""
+"Tidak cukup observasi dalam kovariat%1$s. Jumlah maksimum perkiraan adalah "
+"%$2s."
 
 msgid "Forecasting failed."
-msgstr ""
+msgstr "Perkiraan gagal."
 
 msgid "Forecast Time Series Plot"
-msgstr ""
+msgstr "Diagram Seri Waktu Perkiraan"
 
 msgid "Forecasts"
-msgstr ""
+msgstr "Perkiraan"
 
 msgid "The spectral analysis failed."
-msgstr ""
+msgstr "Analisis spektral gagal."
 
 msgid "Power Spectral Density Plot"
-msgstr ""
+msgstr "Diagram Kepadatan Spektral Daya"
 
 msgid "Spectral Density"
-msgstr ""
+msgstr "Kepadatan Spektral"
 
 msgid "Bandwidth"
-msgstr ""
+msgstr "Kemampuan"
 
 msgid "Data cannot be zero or negative for log transformation."
-msgstr ""
+msgstr "Data tidak dapat nol atau negatif untuk transformasi log."
 
 msgid "Data cannot be negative for root transformation."
-msgstr ""
+msgstr "Data tidak dapat negatif untuk transformasi akar."
 
 msgid "Detrend using linear regression"
-msgstr ""
+msgstr "Detren menggunakan regresi linear"
 
 msgid "Degree"
-msgstr ""
+msgstr "Derajat"
 
 msgid "A polynomial regression with a degree of %s was fitted."
-msgstr ""
+msgstr "Regresi polinomial dengan derajat %s disesuaikan."
 
 msgid "Stationarity Tests"
-msgstr ""
+msgstr "Uji Stasioneritas"
 
 msgid "Test"
 msgstr "Uji"
 
 msgid "Statistic"
-msgstr ""
+msgstr "Statistik"
 
 msgid "Truncation lag parameter"
-msgstr ""
+msgstr "Parameter penundaan trunkasi"
 
 msgid "H₀"
-msgstr ""
+msgstr "H₀"
 
 msgid "Level"
-msgstr ""
+msgstr "Tingkat"
 
 msgid "Trend"
-msgstr ""
+msgstr "Tren"
 
 msgid "Non-stationary"
-msgstr ""
+msgstr "Non-stasioner"
 
 msgid "Level stationary"
-msgstr ""
+msgstr "Stasioner tingkat"
 
 msgid "Trend stationary"
-msgstr ""
+msgstr "Stasioner tren"
 
 msgid "The ADF test failed."
-msgstr ""
+msgstr "Uji ADF gagal."
 
 msgid "The PP regression coefficient test failed."
-msgstr ""
+msgstr "Uji koefisien regresi PP gagal."
 
 msgid "The PP studentized test failed."
-msgstr ""
+msgstr "Uji terstudent PP gagal."
 
 msgid "The KPSS test for level stationarity failed."
-msgstr ""
+msgstr "Uji KPSS untuk stasioneritas tingkat gagal."
 
 msgid "The KPSS test for trend stationarity failed."
-msgstr ""
+msgstr "Uji KPSS untuk stasioneritas tren gagal."
 
 msgid "The p-value is actually less than p-value shown (see Help file)."
 msgstr ""
+"Nilai-p benar-benar kurang dari nilai-p tertampil (lihat berkas Bantuan)."
 
 msgid "The p-value is actually greater than p-value shown (see Help file)."
 msgstr ""
+"Nilai-p benar-benar lebih dari nilai-p tertampil (lihat berkas Bantuan)."
 
 msgid "Autocorrelation Function"
-msgstr ""
+msgstr "Fungsi Korelasi Otomatis"
 
 msgid "Partial Autocorrelation Function"
-msgstr ""
+msgstr "Fungsi Korelasi Otomatis Parsial"
