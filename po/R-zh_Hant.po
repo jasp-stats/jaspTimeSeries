@@ -161,7 +161,6 @@ msgstr ""
 msgid "H₀"
 msgstr ""
 
-#, fuzzy
 msgid "Level"
 msgstr "水準"
 
