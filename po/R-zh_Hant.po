@@ -29,7 +29,7 @@ msgid "Log-Likelihood"
 msgstr "對數概似值"
 
 msgid "AICc"
-msgstr ""
+msgstr "AICc"
 
 msgid "AIC"
 msgstr "AIC"
@@ -71,10 +71,10 @@ msgid "MA(%1$i)"
 msgstr "MA(%1$i)"
 
 msgid "seasonal AR(%1$i)"
-msgstr ""
+msgstr "季節性 AR(%1$i)"
 
 msgid "seasonal MA(%1$i)"
-msgstr ""
+msgstr "季節性 MA(%1$i)"
 
 msgid "An ARIMA(%1$s, %2$s, %3$s)(%4$s, %5$s, %6$s)[%7$s] model was fitted."
 msgstr "使用 ARIMA(%1$s, %2$s, %3$s)(%4$s, %5$s, %6$s)[%7$s] 模型擬合。"
@@ -104,11 +104,14 @@ msgid ""
 "When 'Covariates' are used in the model, predictions cannot be carried out "
 "unless the covariates are also observed for the predicted period."
 msgstr ""
+"當模型中使用了「共變量」時，除非在預測期間亦觀測到這些共變量，否則無法進行預"
+"測。"
 
 msgid ""
 "Not enough observations in the covariate%1$s. The maximum number of "
 "forecasts is %2$s."
 msgstr ""
+"共變量%1$s中的觀察值不足。最大預測個數為 %2$s。"
 
 msgid "Forecasting failed."
 msgstr "預測失敗。"
@@ -120,34 +123,34 @@ msgid "Forecasts"
 msgstr "預測"
 
 msgid "The spectral analysis failed."
-msgstr ""
+msgstr "頻譜分析失敗。"
 
 msgid "Power Spectral Density Plot"
-msgstr ""
+msgstr "功率頻譜密度圖"
 
 msgid "Spectral Density"
-msgstr ""
+msgstr "頻譜密度"
 
 msgid "Bandwidth"
-msgstr ""
+msgstr "帶寬"
 
 msgid "Data cannot be zero or negative for log transformation."
-msgstr ""
+msgstr "對數轉換要求資料不得為零或負數。"
 
 msgid "Data cannot be negative for root transformation."
-msgstr ""
+msgstr "開根號轉換要求資料不得為負數。"
 
 msgid "Detrend using linear regression"
-msgstr ""
+msgstr "使用線性迴歸去除趨勢"
 
 msgid "Degree"
-msgstr ""
+msgstr "階次"
 
 msgid "A polynomial regression with a degree of %s was fitted."
-msgstr ""
+msgstr "擬合了階次為 %s 的多項式迴歸。"
 
 msgid "Stationarity Tests"
-msgstr ""
+msgstr "平穩性檢定"
 
 msgid "Test"
 msgstr "檢定"
@@ -156,46 +159,46 @@ msgid "Statistic"
 msgstr "統計量"
 
 msgid "Truncation lag parameter"
-msgstr ""
+msgstr "截斷滯後參數"
 
 msgid "H₀"
-msgstr ""
+msgstr "H₀"
 
 msgid "Level"
 msgstr "水準"
 
 msgid "Trend"
-msgstr ""
+msgstr "趨勢"
 
 msgid "Non-stationary"
-msgstr ""
+msgstr "非平穩"
 
 msgid "Level stationary"
-msgstr ""
+msgstr "水準平穩"
 
 msgid "Trend stationary"
-msgstr ""
+msgstr "趨勢平穩"
 
 msgid "The ADF test failed."
-msgstr ""
+msgstr "ADF 檢定失敗。"
 
 msgid "The PP regression coefficient test failed."
-msgstr ""
+msgstr "PP 迴歸係數檢定失敗。"
 
 msgid "The PP studentized test failed."
-msgstr ""
+msgstr "PP 學生化檢定失敗。"
 
 msgid "The KPSS test for level stationarity failed."
-msgstr ""
+msgstr "KPSS 水準平穩性檢定失敗。"
 
 msgid "The KPSS test for trend stationarity failed."
-msgstr ""
+msgstr "KPSS 趨勢平穩性檢定失敗。"
 
 msgid "The p-value is actually less than p-value shown (see Help file)."
-msgstr ""
+msgstr "p 值實際上小於所顯示之 p 值（請參閱說明檔）。"
 
 msgid "The p-value is actually greater than p-value shown (see Help file)."
-msgstr ""
+msgstr "p 值實際上大於所顯示之 p 值（請參閱說明檔）。"
 
 msgid "Autocorrelation Function"
 msgstr "自我相關函數"
