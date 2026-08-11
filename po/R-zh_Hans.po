@@ -1,0 +1,199 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: jaspTimeSeries 0.1\n"
+"Report-Msgid-Bugs-To: github.com/jasp-stats/jasp-issues/issues\n"
+"POT-Creation-Date: 2026-01-01 00:00+0000\n"
+"PO-Revision-Date: 2026-01-01 00:00+0000\n"
+"Last-Translator: JASP translators\n"
+"Language-Team: Chinese (Simplified)\n"
+"Language: zh_Hans\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+
+msgid "Time Series Plot"
+msgstr "时间序列图"
+
+msgid "The ARIMA model could not be fit."
+msgstr "ARIMA 模型无法拟合。"
+
+msgid "No parameters are estimated."
+msgstr "未估计任何参数。"
+
+msgid "Model Summary"
+msgstr "模型汇总"
+
+msgid "Log-Likelihood"
+msgstr "对数似然"
+
+msgid "AICc"
+msgstr "AICc"
+
+msgid "AIC"
+msgstr "AIC"
+
+msgid "BIC"
+msgstr "BIC"
+
+msgid "Coefficients"
+msgstr "系数"
+
+msgid "Estimate"
+msgstr "估计值"
+
+msgid "Standard Error"
+msgstr "标准误"
+
+msgid "t"
+msgstr "t"
+
+msgid "p"
+msgstr "p"
+
+msgid "%s%% CI"
+msgstr "%s%% 置信区间"
+
+msgid "Lower"
+msgstr "下界"
+
+msgid "Upper"
+msgstr "上界"
+
+msgid "Intercept"
+msgstr "截距"
+
+msgid "AR(%1$i)"
+msgstr "AR(%1$i)"
+
+msgid "MA(%1$i)"
+msgstr "MA(%1$i)"
+
+msgid "seasonal AR(%1$i)"
+msgstr "季节性 AR(%1$i)"
+
+msgid "seasonal MA(%1$i)"
+msgstr "季节性 MA(%1$i)"
+
+msgid "An ARIMA(%1$s, %2$s, %3$s)(%4$s, %5$s, %6$s)[%7$s] model was fitted."
+msgstr "已拟合 ARIMA(%1$s, %2$s, %3$s)(%4$s, %5$s, %6$s)[%7$s] 模型。"
+
+msgid "An ARIMA(%1$s, %2$s, %3$s) model was fitted."
+msgstr "已拟合 ARIMA(%1$s, %2$s, %3$s) 模型。"
+
+msgid "Residual Diagnostics Plots"
+msgstr "残差诊断图"
+
+msgid "Autocorrelation Function Plot"
+msgstr "自相关函数图"
+
+msgid "Q-Q Plot"
+msgstr "Q-Q 图"
+
+msgid "Ljung-Box Plot"
+msgstr "Ljung-Box 图"
+
+msgid "Lag"
+msgstr "滞后"
+
+msgid "p-value"
+msgstr "p 值"
+
+msgid "When 'Covariates' are used in the model, predictions cannot be carried out unless the covariates are also observed for the predicted period."
+msgstr "当模型中使用“协变量”时，除非预测期内也观测到这些协变量，否则无法进行预测。"
+
+msgid "Not enough observations in the covariate%1$s. The maximum number of forecasts is %2$s."
+msgstr "协变量%1$s中的观测数不足。最大预测数为 %2$s。"
+
+msgid "Forecasting failed."
+msgstr "预测失败。"
+
+msgid "Forecast Time Series Plot"
+msgstr "预测时间序列图"
+
+msgid "Forecasts"
+msgstr "预测值"
+
+msgid "The spectral analysis failed."
+msgstr "频谱分析失败。"
+
+msgid "Power Spectral Density Plot"
+msgstr "功率谱密度图"
+
+msgid "Spectral Density"
+msgstr "谱密度"
+
+msgid "Bandwidth"
+msgstr "带宽"
+
+msgid "Data cannot be zero or negative for log transformation."
+msgstr "对数变换要求数据不能为零或负数。"
+
+msgid "Data cannot be negative for root transformation."
+msgstr "根变换要求数据不能为负数。"
+
+msgid "Detrend using linear regression"
+msgstr "使用线性回归去趋势"
+
+msgid "Degree"
+msgstr "阶数"
+
+msgid "A polynomial regression with a degree of %s was fitted."
+msgstr "已拟合阶数为 %s 的多项式回归。"
+
+msgid "Stationarity Tests"
+msgstr "平稳性检验"
+
+msgid "Test"
+msgstr "检验"
+
+msgid "Statistic"
+msgstr "统计量"
+
+msgid "Truncation lag parameter"
+msgstr "截断滞后参数"
+
+msgid "H₀"
+msgstr "H₀"
+
+msgid "Level"
+msgstr "水平"
+
+msgid "Trend"
+msgstr "趋势"
+
+msgid "Non-stationary"
+msgstr "非平稳"
+
+msgid "Level stationary"
+msgstr "水平平稳"
+
+msgid "Trend stationary"
+msgstr "趋势平稳"
+
+msgid "The ADF test failed."
+msgstr "ADF 检验失败。"
+
+msgid "The PP regression coefficient test failed."
+msgstr "PP 回归系数检验失败。"
+
+msgid "The PP studentized test failed."
+msgstr "PP 学生化检验失败。"
+
+msgid "The KPSS test for level stationarity failed."
+msgstr "水平平稳性的 KPSS 检验失败。"
+
+msgid "The KPSS test for trend stationarity failed."
+msgstr "趋势平稳性的 KPSS 检验失败。"
+
+msgid "The p-value is actually less than p-value shown (see Help file)."
+msgstr "实际 p 值小于所示 p 值（参见帮助文件）。"
+
+msgid "The p-value is actually greater than p-value shown (see Help file)."
+msgstr "实际 p 值大于所示 p 值（参见帮助文件）。"
+
+msgid "Autocorrelation Function"
+msgstr "自相关函数"
+
+msgid "Partial Autocorrelation Function"
+msgstr "偏自相关函数"
