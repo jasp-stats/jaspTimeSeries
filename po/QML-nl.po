@@ -909,4 +909,4 @@ msgstr ""
 
 msgctxt "Description|"
 msgid "Time Series Descriptives"
-msgstr ""
+msgstr "Beschrijvende statistiek voor Tijdreeksen"
