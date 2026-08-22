@@ -2,197 +2,201 @@ msgid ""
 msgstr ""
 "Project-Id-Version: jaspTimeSeries 0.95.0\n"
 "POT-Creation-Date: 2025-06-21 03:37\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: Automatically generated\n"
-"Language-Team: none\n"
+"PO-Revision-Date: 2026-08-10 14:04+0000\n"
+"Last-Translator: Koji Kosugi <kosugitti@gmail.com>\n"
+"Language-Team: Japanese <https://hosted.weblate.org/projects/jasp/"
+"jasptimeseries-r/ja/>\n"
 "Language: ja\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
+"X-Generator: Weblate 2026.9.dev0\n"
 
 msgid "Time Series Plot"
-msgstr ""
+msgstr "時系列プロット"
 
 msgid "The ARIMA model could not be fit."
-msgstr ""
+msgstr "ARIMAモデルをあてはめられませんでした。"
 
 msgid "No parameters are estimated."
-msgstr ""
+msgstr "推定されるパラメータがありません。"
 
 msgid "Model Summary"
-msgstr ""
+msgstr "モデルの要約"
 
 msgid "Log-Likelihood"
-msgstr ""
+msgstr "対数尤度"
 
 msgid "AICc"
-msgstr ""
+msgstr "AICc"
 
 msgid "AIC"
-msgstr ""
+msgstr "AIC"
 
 msgid "BIC"
-msgstr ""
+msgstr "BIC"
 
 msgid "Coefficients"
-msgstr ""
+msgstr "係数"
 
 msgid "Estimate"
-msgstr ""
+msgstr "推定値"
 
 msgid "Standard Error"
-msgstr ""
+msgstr "標準誤差"
 
 msgid "t"
-msgstr ""
+msgstr "t"
 
 msgid "p"
-msgstr ""
+msgstr "p"
 
 msgid "%s%% CI"
-msgstr ""
+msgstr "%s%% 信頼区間"
 
 msgid "Lower"
-msgstr ""
+msgstr "下限"
 
 msgid "Upper"
-msgstr ""
+msgstr "上限"
 
 msgid "Intercept"
-msgstr ""
+msgstr "切片"
 
 msgid "AR(%1$i)"
-msgstr ""
+msgstr "AR(%1$i)"
 
 msgid "MA(%1$i)"
-msgstr ""
+msgstr "MA(%1$i)"
 
 msgid "seasonal AR(%1$i)"
-msgstr ""
+msgstr "季節AR(%1$i)"
 
 msgid "seasonal MA(%1$i)"
-msgstr ""
+msgstr "季節MA(%1$i)"
 
 msgid "An ARIMA(%1$s, %2$s, %3$s)(%4$s, %5$s, %6$s)[%7$s] model was fitted."
-msgstr ""
+msgstr "ARIMA(%1$s, %2$s, %3$s)(%4$s, %5$s, %6$s)[%7$s] モデルをあてはめました。"
 
 msgid "An ARIMA(%1$s, %2$s, %3$s) model was fitted."
-msgstr ""
+msgstr "ARIMA(%1$s, %2$s, %3$s) モデルをあてはめました。"
 
 msgid "Residual Diagnostics Plots"
-msgstr ""
+msgstr "残差診断のプロット"
 
 msgid "Autocorrelation Function Plot"
-msgstr ""
+msgstr "自己相関関数のプロット"
 
 msgid "Q-Q Plot"
-msgstr ""
+msgstr "Q-Qプロット"
 
 msgid "Ljung-Box Plot"
-msgstr ""
+msgstr "Ljung-Boxプロット"
 
 msgid "Lag"
-msgstr ""
+msgstr "ラグ"
 
 msgid "p-value"
-msgstr ""
+msgstr "p値"
 
 msgid "When 'Covariates' are used in the model, predictions cannot be carried out unless the covariates are also observed for the predicted period."
 msgstr ""
+"モデルに「共変量」を使う場合、予測する期間についても共変量が観測されていなけ"
+"れば予測は行えません。"
 
 msgid "Not enough observations in the covariate%1$s. The maximum number of forecasts is %2$s."
-msgstr ""
+msgstr "共変量 %1$s の観測数が足りません。予測できるのは最大 %2$s 個までです。"
 
 msgid "Forecasting failed."
-msgstr ""
+msgstr "予測に失敗しました。"
 
 msgid "Forecast Time Series Plot"
-msgstr ""
+msgstr "予測の時系列プロット"
 
 msgid "Forecasts"
-msgstr ""
+msgstr "予測値"
 
 msgid "The spectral analysis failed."
-msgstr ""
+msgstr "スペクトル分析に失敗しました。"
 
 msgid "Power Spectral Density Plot"
-msgstr ""
+msgstr "パワースペクトル密度のプロット"
 
 msgid "Spectral Density"
-msgstr ""
+msgstr "スペクトル密度"
 
 msgid "Bandwidth"
-msgstr ""
+msgstr "バンド幅"
 
 msgid "Data cannot be zero or negative for log transformation."
-msgstr ""
+msgstr "対数変換では、データが0や負の値であってはいけません。"
 
 msgid "Data cannot be negative for root transformation."
-msgstr ""
+msgstr "べき根変換では、データが負の値であってはいけません。"
 
 msgid "Detrend using linear regression"
-msgstr ""
+msgstr "線形回帰によるトレンド除去"
 
 msgid "Degree"
-msgstr ""
+msgstr "次数"
 
 msgid "A polynomial regression with a degree of %s was fitted."
-msgstr ""
+msgstr "次数 %s の多項式回帰をあてはめました。"
 
 msgid "Stationarity Tests"
-msgstr ""
+msgstr "定常性の検定"
 
 msgid "Test"
-msgstr ""
+msgstr "検定"
 
 msgid "Statistic"
-msgstr ""
+msgstr "統計量"
 
 msgid "Truncation lag parameter"
-msgstr ""
+msgstr "打ち切りラグのパラメータ"
 
 msgid "H₀"
-msgstr ""
+msgstr "H₀"
 
 msgid "Level"
-msgstr ""
+msgstr "水準"
 
 msgid "Trend"
-msgstr ""
+msgstr "トレンド"
 
 msgid "Non-stationary"
-msgstr ""
+msgstr "非定常"
 
 msgid "Level stationary"
-msgstr ""
+msgstr "水準定常"
 
 msgid "Trend stationary"
-msgstr ""
+msgstr "トレンド定常"
 
 msgid "The ADF test failed."
-msgstr ""
+msgstr "ADF検定に失敗しました。"
 
 msgid "The PP regression coefficient test failed."
-msgstr ""
+msgstr "PP回帰係数の検定に失敗しました。"
 
 msgid "The PP studentized test failed."
-msgstr ""
+msgstr "PPスチューデント化検定に失敗しました。"
 
 msgid "The KPSS test for level stationarity failed."
-msgstr ""
+msgstr "水準定常性のKPSS検定に失敗しました。"
 
 msgid "The KPSS test for trend stationarity failed."
-msgstr ""
+msgstr "トレンド定常性のKPSS検定に失敗しました。"
 
 msgid "The p-value is actually less than p-value shown (see Help file)."
-msgstr ""
+msgstr "実際のp値は、表示されているp値より小さくなります(ヘルプを参照)。"
 
 msgid "The p-value is actually greater than p-value shown (see Help file)."
-msgstr ""
+msgstr "実際のp値は、表示されているp値より大きくなります(ヘルプを参照)。"
 
 msgid "Autocorrelation Function"
-msgstr ""
+msgstr "自己相関関数"
 
 msgid "Partial Autocorrelation Function"
-msgstr ""
+msgstr "偏自己相関関数"
