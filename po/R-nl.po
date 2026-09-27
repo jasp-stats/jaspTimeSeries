@@ -153,7 +153,7 @@ msgstr ""
 
 #, fuzzy
 msgid "%1$d MCMC draws out of %2$d are discarded as burn in."
-msgstr "worden weggegooid als burn in."
+msgstr ""
 
 msgid ""
 "The local level component has been selected (by default). If you wish to "

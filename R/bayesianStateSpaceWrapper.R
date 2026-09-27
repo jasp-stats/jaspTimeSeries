@@ -17,7 +17,7 @@
 
 # This is a generated file. Don't change it!
 
-#' Bayesian State Space Models
+#' Gaussian State Space Models
 #'
 #' @param dynamicRegregressionComponent, This component allows you to model the effect of covariates or fixed factors on the dependent variable. The lag of coefficients can be specified to account for delayed effects. Only available when covariates or fixed factors are present in the model.
 #'    Defaults to \code{FALSE}.
@@ -39,6 +39,8 @@ bayesianStateSpace <- function(
           covariates = list(types = list(), value = list()),
           dependent = list(types = list(), value = ""),
           dynamicRegregressionComponent = FALSE,
+          # Ignored legacy argument; retain for syntax compatibility when regenerating.
+          dynamicRegregressionLags = 0,
           expectedPredictors = 1,
           fixedFactors = list(types = list(), value = list()),
           forecastErrorPlot = FALSE,

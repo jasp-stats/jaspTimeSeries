@@ -915,7 +915,7 @@ msgid "Bayesian"
 msgstr ""
 
 msgctxt "Description|"
-msgid "Bayesian State Space Models"
+msgid "Gaussian State Space Models"
 msgstr ""
 
 msgctxt "bayesianStateSpace|"
@@ -1095,7 +1095,7 @@ msgid "σ threshold"
 msgstr "Limiar σ"
 
 msgctxt "bayesianStateSpace|"
-msgid "Show probalistic control plot"
+msgid "Show probabilistic control plot"
 msgstr "Mostrar o gráfico de controle probabilístico"
 
 msgctxt "bayesianStateSpace|"
@@ -1107,7 +1107,7 @@ msgid "Desired MCMC draws"
 msgstr "Extrações MCMC desejadas"
 
 msgctxt "bayesianStateSpace|"
-msgid "Timout in seconds"
+msgid "Timeout in seconds"
 msgstr "Tempo limite em segundos"
 
 msgctxt "bayesianStateSpace|"

@@ -909,7 +909,7 @@ msgid "Bayesian"
 msgstr ""
 
 msgctxt "Description|"
-msgid "Bayesian State Space Models"
+msgid "Gaussian State Space Models"
 msgstr ""
 
 msgctxt "bayesianStateSpace|"
@@ -1085,7 +1085,7 @@ msgid "σ threshold"
 msgstr "σ வாசல்"
 
 msgctxt "bayesianStateSpace|"
-msgid "Show probalistic control plot"
+msgid "Show probabilistic control plot"
 msgstr "நிகழ்தகவு கட்டுப்பாட்டு சதித்திட்டத்தைக் காட்டு"
 
 msgctxt "bayesianStateSpace|"
@@ -1097,7 +1097,7 @@ msgid "Desired MCMC draws"
 msgstr "விரும்பிய எம்.சி.எம்.சி டிராக்கள்"
 
 msgctxt "bayesianStateSpace|"
-msgid "Timout in seconds"
+msgid "Timeout in seconds"
 msgstr "விநாடிகளில் நேரம் முடிந்தது"
 
 msgctxt "bayesianStateSpace|"

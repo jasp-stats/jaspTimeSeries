@@ -1,7 +1,7 @@
-Bayesian State Space Model
+Gaussian State Space Models
 ===
 
-The Bayesian State Space Model decomposes the hidden state of a time series into different additive state components (e.g. trend, seasonality) and estimates them via the Kalman Filter. MCMC samples are drawn from the posterior distribution to allow for Bayesian inference. It also allows for inclusion of predictors and variable selection by the means of spike and slab regression and Bayesian model averaging.
+The Gaussian State Space Model decomposes the hidden state of a time series into different additive state components (e.g. trend, seasonality) and estimates them via the Kalman Filter. MCMC samples are drawn from the posterior distribution to allow for Bayesian inference. It also allows for inclusion of predictors and variable selection by the means of spike and slab regression and Bayesian model averaging.
 
 ### Assumptions
 - continuous response variable
@@ -15,7 +15,7 @@ The Bayesian State Space Model decomposes the hidden state of a time series into
 #### Assignment Box
 - Dependent Variable: Response variable to be estimated (needed)
 - Covariates: Numerical predictor variables (optional)
-- Factors: Categorical predictor variables that will be recoded internally to dummy variables (optional)
+- Fixed Factors: Categorical predictor variables that will be recoded internally to dummy variables (optional)
 
 #### Output
 - Posterior summary of coefficients: Output table containing the marginal posterior summary of coefficients
@@ -81,9 +81,11 @@ The Bayesian State Space Model decomposes the hidden state of a time series into
 
 #### Burn-in Specification
 - Automatic Suggestion: Suggests a burn-in period that ends when a certain threshold of log-likelihood is exceeded. This threshold is determined by looking at the tail fraction of all MCMC draws for the log-likelihood and then taking the 90% percent quantile as a cut-off/threshold.
-  - Proportion: Determines the tail fraction from which the log-likelihood will be determined.
+  - Proportion: Determines the tail fraction from which the log-likelihood will be determined, not the fraction of draws discarded. The proportion must be greater than zero and large enough for the tail to contain at least one completed draw after rounding. If too few draws were completed, increase the proportion, request more draws or use manual burn-in.
 - Manual: Manually select how many MCMC draws will be discarded as a burn-in
-  - Number: Every draw before this number will be considered a burn-in period.
+  - Number: Discard the first specified number of MCMC draws. Enter a whole number from zero up to one less than the number of draws actually completed. Zero retains all draws; at least one draw must remain. Retaining very few draws does not provide reliable posterior summaries.
+
+All posterior tables, state and diagnostic plots, and forecasts use the same selected burn-in count. Changing burn-in updates these outputs using the existing fitted model without drawing a new MCMC sample.
 
 ### Output
 ---

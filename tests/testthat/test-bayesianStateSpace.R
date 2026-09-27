@@ -121,7 +121,7 @@ test_that("Model Summary table results match (seasonal)", {
   options$dependent <- "contNormal"
   options$localLevelComponent <- TRUE
   options$seasonalities <- list(list(normalPriorMean = 0,
-                                     numbers = 2,
+                                     number = 2,
                                      name = "season",
                                      inverseGammaPriorN = 0.01,
                                      duration = 1,
@@ -408,7 +408,7 @@ test_that("Prediction plot matches", {
     options$dependent <- "contNormal"
     options$localLevelComponent <- TRUE
     options$seasonalities <- list(list(normalPriorMean = 0,
-                                       numbers = 2,
+                                       number = 2,
                                        name = "season",
                                        inverseGammaPriorN = 0.01,
                                        duration = 1,
@@ -464,10 +464,10 @@ test_that("Prediction plot matches", {
       results <- jaspTools::runAnalysis("bayesianStateSpace", "bstsTest.csv", options)
       table <- results[["results"]][["bstsMainContainer"]][["collection"]][["bstsMainContainer_bstsCoefficientSummaryTable"]][["data"]]
       jaspTools::expect_equal_tables(table,
-                                     list("<unicode>", "contcor1", 0.0437460818434989, 0.275790341778563,
-                                          1, 1, 0.142009518230305, 0.434946375191193, "<unicode>", "contcor2",
-                                          -0.321932103241681, -0.173635046880455, 1, 1, 0.105996027757027,
-                                          -0.0310099257617435, 0, "(Intercept)", 0, 0, 0, 1, 0, 0))
+                                     list("<unicode>", "contcor1", 0.0429510436385786, 0.275790341778563,
+                                          1, 1, 0.142009518230305, 0.435037630573049, "<unicode>", "contcor2",
+                                          -0.322952545322784, -0.173635046880455, 1, 1, 0.105996027757027,
+                                          -0.0292218650017882, 0, "(Intercept)", 0, 0, 0, 1, 0, 0))
 
     }
 
@@ -509,10 +509,10 @@ test_that("Prediction plot matches", {
       results <- jaspTools::runAnalysis("bayesianStateSpace", "bstsTest.csv", options)
       table <- results[["results"]][["bstsMainContainer"]][["collection"]][["bstsMainContainer_bstsCoefficientSummaryTable"]][["data"]]
       jaspTools::expect_equal_tables(table,
-                                     list("<unicode>", "facGenderm", 0.136625688072959, 0.461928614855287,
-                                          1, 1, 0.220891318762768, 0.742348181051067, "<unicode>", "facExperimexperimental",
-                                          -0.275546362761004, -0.0501265437197341, 1, 1, 0.163978897116324,
-                                          0.172523964528349, 0, "(Intercept)", 0, 0, 0, 1, 0, 0))
+                                     list("<unicode>", "facGenderm", 0.136009570139266, 0.461928614855287,
+                                          1, 1, 0.220891318762768, 0.744007895018616, "<unicode>", "facExperimexperimental",
+                                          -0.276943358988277, -0.0501265437197341, 1, 1, 0.163978897116324,
+                                          0.17497797444898, 0, "(Intercept)", 0, 0, 0, 1, 0, 0))
 
     }
 

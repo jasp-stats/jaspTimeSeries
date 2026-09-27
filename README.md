@@ -18,4 +18,4 @@ This module offers time series analyses for JASP, including:
   - ARIMA
   - Spectral Analysis
 - **Bayesian**
-  - Bayesian State Space Models
+  - Gaussian State Space Models

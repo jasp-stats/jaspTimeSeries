@@ -35,11 +35,12 @@ bayesianStateSpaceInternal <- function(jaspResults, dataset, options) {
 
   .bstsCreateContainerMain(jaspResults,options,ready)
 
-  # Compute (a list of) results from which tables and plots can be created
+  # Fit once; burn-in selection only affects derived results.
   .bstsComputeResults(jaspResults, dataset, options,ready)
 
   # Compute burn amount and pass it to/create options$burn
   options <- .bstsBurnHelper(jaspResults,options)
+  .bstsComputePredictions(jaspResults, options, ready)
   options <- .bstsTimeHelper(jaspResults,dataset,options)
 
   # Output containers, tables, and plots based on the results. These functions should not return anything!
@@ -79,16 +80,15 @@ bayesianStateSpaceInternal <- function(jaspResults, dataset, options) {
 }
 
 .bstsErrorHandling <- function(dataset, options) {
-  # Custom function to check whether we missing values in predictors
-
-
-  .hasErrors(dataset = dataset,
-             type = 'missingValues',
-             missingValues.target = options$covariates,
-             exitAnalysisIfErrors = TRUE)
-
-
-
+  # Numeric conversion can introduce missing values for text covariates.
+  errors <- .hasErrors(dataset = dataset,
+                       type = "missingValues",
+                       missingValues.target = options$covariates,
+                       exitAnalysisIfErrors = FALSE)
+  if (!identical(errors, FALSE))
+    .quitAnalysis(gettextf("The following covariates contain missing values or values that cannot be interpreted as numbers: %1$s. Covariates must be numeric. For categorical predictors, use Fixed Factors.",
+                          paste(errors$missingValues, collapse = ", ")))
+  return(FALSE)
 }
 
 .bstsModelDependencies <- function() {
@@ -99,6 +99,7 @@ bayesianStateSpaceInternal <- function(jaspResults, dataset, options) {
            "posteriorSummaryCiLevel",
            "distFam",
            "samples",
+           "seed",
            "modelTerms",
            "seasonalities",
            "autoregressiveComponent","lagSelectionMethod","lags","maxLags","arSdPrior","arSigmaGuess","arSigmaWeight",
@@ -110,16 +111,22 @@ bayesianStateSpaceInternal <- function(jaspResults, dataset, options) {
   ))
 }
 .bstsStatePlotDependencies <- function(){
-  return(c('aggregatedStatesPlot','aggregatedStatesPlotCiLevel',"aggregatedStatesPlotObservationsShown",'componentStatesPlot'))
+  return(c('aggregatedStatesPlot','aggregatedStatesPlotCiLevel',"aggregatedStatesPlotObservationsShown",'componentStatesPlot',
+           "time", .bstsBurnDependencies()))
+}
+
+.bstsBurnDependencies <- function() {
+  return(c("burninMethod", "automaticBurninProportion", "manualBurninAmount"))
 }
 
 .bstsPredictionDependencies <- function(){
-  return(c("predictionHorizon"))
+  return(c("predictionHorizon", "seed", .bstsBurnDependencies()))
 }
 
 
 .bstsControlDependencies <- function(){
-  return(c('controlChartPlot',"controlPeriod","controlSigma","probalisticControlPlot"))
+  return(c('controlChartPlot',"controlPeriod","controlSigma","probalisticControlPlot",
+           "time", .bstsBurnDependencies()))
 }
 
 
@@ -137,11 +144,18 @@ bayesianStateSpaceInternal <- function(jaspResults, dataset, options) {
     jaspResults[["bstsMainContainer"]][["bstsModelResults"]] <- bstsModelResultsState
   }
 
+  return()
+}
+
+.bstsComputePredictions <- function(jaspResults, options, ready) {
+  if (!ready) return()
+
   if (is.null(jaspResults[["bstsMainContainer"]][["bstsModelPredictions"]]) && options$predictionHorizon > 0) {
     bstsResults <- jaspResults[["bstsMainContainer"]][["bstsModelResults"]]$object
     bstsModelPredictionsState <- createJaspState()
     bstsModelPredictionsState$dependOn(.bstsPredictionDependencies())
-    bstsPredictionResults <- bsts::predict.bsts(object = bstsResults, horizon = options$predictionHorizon, seed = options$seed)
+    bstsPredictionResults <- bsts::predict.bsts(object = bstsResults, horizon = options$predictionHorizon,
+                                             burn = options$burn, seed = options$seed)
     bstsModelPredictionsState$object <- bstsPredictionResults
     jaspResults[["bstsMainContainer"]][["bstsModelPredictions"]] <- bstsModelPredictionsState
   }
@@ -206,7 +220,7 @@ bayesianStateSpaceInternal <- function(jaspResults, dataset, options) {
   }
 
 
-  model <- bsts::bsts(formula = formula,
+  model <- tryCatch(bsts::bsts(formula = formula,
                       data=dataset,
                       state.specification = ss,
                       niter = options$samples,
@@ -214,6 +228,7 @@ bayesianStateSpaceInternal <- function(jaspResults, dataset, options) {
                       seed = options$seed,
                       expected.model.size = options$expectedPredictors,
                       model.options = bsts::BstsOptions(timeout.seconds = options$timeout )
+  ), error = function(e) .quitAnalysis(gettextf("Model estimation failed.\n\n%1$s", conditionMessage(e)))
   )
 
   return(model)
@@ -227,14 +242,53 @@ bayesianStateSpaceInternal <- function(jaspResults, dataset, options) {
 .bstsBurnHelper <- function(jaspResults,options) {
 
   bstsResults <- jaspResults[["bstsMainContainer"]][["bstsModelResults"]]$object
-  if(options$burninMethod == "auto")
-    options$burn <- bsts::SuggestBurn(options$automaticBurninProportion,bstsResults)
+  # No fit exists while the analysis is not ready.
+  if (is.null(bstsResults)) {
+    options$burn <- 0L
+    return(options)
+  }
 
-  if(options$burninMethod == "manual")
-    options$burn <- options$manualBurninAmount
-
-
+  options$burn <- tryCatch(.bstsResolveBurn(bstsResults, options),
+                          error = function(e) .quitAnalysis(conditionMessage(e)))
   return(options)
+}
+
+.bstsResolveBurn <- function(bstsResults, options) {
+  niter <- bstsResults$niter
+  isFiniteScalar <- function(x) is.numeric(x) && length(x) == 1L && is.finite(x)
+
+  if (!isFiniteScalar(niter) || niter < 1 || niter != floor(niter))
+    stop(gettext("No completed MCMC draws are available for burn-in selection."), call. = FALSE)
+
+  if (identical(options$burninMethod, "auto")) {
+    proportion <- options$automaticBurninProportion
+    if (!isFiniteScalar(proportion) || proportion <= 0 || proportion > 1)
+      stop(gettext("The automatic burn-in proportion must be greater than 0 and at most 1. To discard no draws, select manual burn-in and enter 0."), call. = FALSE)
+
+    # Preserve SuggestBurn's likelihood-threshold algorithm, but check its tail
+    # length before it fails with an internal assertion on short runs.
+    if (!is.null(bstsResults$log.likelihood) &&
+        round(proportion * length(bstsResults$log.likelihood)) < 1)
+      stop(gettext("Automatic burn-in needs a larger tail proportion or more completed MCMC draws. Alternatively, select manual burn-in."), call. = FALSE)
+
+    burn <- bsts::SuggestBurn(proportion, bstsResults)
+  } else if (identical(options$burninMethod, "manual")) {
+    burn <- options$manualBurninAmount
+  } else {
+    stop(gettext("Select automatic or manual burn-in."), call. = FALSE)
+  }
+
+  if (!isFiniteScalar(burn) || burn < 0 || burn != floor(burn) || burn >= niter)
+    stop(gettextf("Burn-in must be a whole number between 0 and %1$d, leaving at least one of the %2$d completed MCMC draws.",
+                  niter - 1, niter), call. = FALSE)
+
+  return(burn)
+}
+
+.bstsRetainedDraws <- function(bstsResults, burn) {
+  # Positive selection is safe at burn = 0, unlike -(1:burn).
+  draws <- seq_len(bstsResults$niter)
+  return(draws[draws > burn])
 }
 
 
@@ -278,7 +332,7 @@ bayesianStateSpaceInternal <- function(jaspResults, dataset, options) {
   return(predictors)
 }
 
-.bstsGetFormula <- function(dependent,options, predictors = NULL, includeConstant) {
+.bstsGetFormula <- function(dependent,options, predictors = NULL) {
 
 
   if (is.null(predictors))
@@ -327,7 +381,7 @@ quantInv <- function(distr, value){
   bstsResults <- jaspResults[["bstsMainContainer"]][["bstsModelResults"]]$object
 
   bstsTable <- createJaspTable(title = gettext("Model Summary"))
-  bstsTable$dependOn(c("burninMethod",'automaticBurninProportion','manualBurninAmount'))
+  bstsTable$dependOn(.bstsBurnDependencies())
   bstsTable$position <- 1
 
   bstsTable$addColumnInfo(name="resSd",   title=gettext("Residual SD"),               type= "number")
@@ -347,7 +401,7 @@ quantInv <- function(distr, value){
   }
 
   if(!is.null(bstsResults)){
-    .bstsFillModelSummaryTable(bstsTable,bstsResults,ready)
+    .bstsFillModelSummaryTable(bstsTable,bstsResults,ready,options$burn)
   }
 
   jaspResults[["bstsMainContainer"]][["bstsModelSummaryTable"]] <- bstsTable
@@ -356,10 +410,19 @@ quantInv <- function(distr, value){
 }
 
 
-.bstsFillModelSummaryTable <- function(bstsTable,bstsResults,ready) {
+.bstsFillModelSummaryTable <- function(bstsTable,bstsResults,ready,burn) {
   if(!ready) return()
 
-  res <- summary(bstsResults)
+  res <- summary(bstsResults, burn = burn)
+
+  if (is.na(res$relative.gof)) {
+    res$relative.gof <- "."
+    message <- if (anyNA(bstsResults$original.series))
+      gettext("Harvey's goodness of fit is unavailable because the dependent variable contains missing observations.")
+    else
+      gettext("Harvey's goodness of fit could not be computed.")
+    bstsTable$addFootnote(message, colNames = "relGof")
+  }
 
   bstsTable$addRows(list(
     resSd   = res$residual.sd,
@@ -378,7 +441,8 @@ quantInv <- function(distr, value){
 
   bstsResults <- jaspResults[["bstsMainContainer"]][["bstsModelResults"]]$object
   bstsCoefficientTable <- createJaspTable(title = gettext("Posterior Summary of Coefficients"))
-  bstsCoefficientTable$dependOn(c("posteriorSummaryTable","showCoefMeanInc","posteriorSummaryCiLevel"))
+  bstsCoefficientTable$dependOn(c("posteriorSummaryTable","showCoefMeanInc","posteriorSummaryCiLevel",
+                                 .bstsBurnDependencies()))
   bstsCoefficientTable$position <- 2
 
   overtitle <- gettextf("%s%% Credible Interval", format(100*options[["posteriorSummaryCiLevel"]], digits = 3))
@@ -386,8 +450,8 @@ quantInv <- function(distr, value){
   bstsCoefficientTable$addColumnInfo(name = "priorIncP",  title = gettext("P(incl)"),                type = "number")
   bstsCoefficientTable$addColumnInfo(name = "postIncP",   title = gettext("P(incl|data)"),           type = "number")
   bstsCoefficientTable$addColumnInfo(name = "BFinc",      title = gettext("BF<sub>inclusion</sub>"), type = "number")
-  bstsCoefficientTable$addColumnInfo(name = 'mean',       title = gettext("Mean"),                   type = "number", format= "dp:3")
-  bstsCoefficientTable$addColumnInfo(name = "sd",         title = gettext("SD"),                     type = "number",format= "dp:3")
+  bstsCoefficientTable$addColumnInfo(name = 'mean',       title = gettext("Mean"),                   type = "number")
+  bstsCoefficientTable$addColumnInfo(name = "sd",         title = gettext("SD"),                     type = "number")
   if (options$showCoefMeanInc){
     bstsCoefficientTable$addColumnInfo(name = 'meanInc',  title = gettext("Mean<sub>inclusion</sub>"), type = "number")
     bstsCoefficientTable$addColumnInfo(name = "sdInc",    title = gettext("SD<sub>inclusion</sub>"), type = "number")
@@ -402,7 +466,7 @@ quantInv <- function(distr, value){
 }
 
 .bstsFillCoefficientTable <- function(bstsResults,bstsCoefficientTable,options,ready) {
-  res <- as.data.frame(summary(bstsResults,order = F)$coefficients)
+  res <- as.data.frame(summary(bstsResults, burn = options$burn, order = FALSE)$coefficients)
   res$priorInc <- bstsResults$prior$prior.inclusion.probabilities
   res$BFinc <- res$inc.prob/(1-res$inc.prob)
 
@@ -414,8 +478,9 @@ quantInv <- function(distr, value){
     return(0)
   }
   ci <- options$posteriorSummaryCiLevel
-  res$lo_ci <- apply(bstsResults$coefficients, 2,condQuantile,((1- ci)/2))
-  res$hi_ci <- apply(bstsResults$coefficients, 2,condQuantile,1-((1- ci)/2))
+  coefficients <- bstsResults$coefficients[.bstsRetainedDraws(bstsResults, options$burn), , drop = FALSE]
+  res$lo_ci <- apply(coefficients, 2,condQuantile,((1- ci)/2))
+  res$hi_ci <- apply(coefficients, 2,condQuantile,1-((1- ci)/2))
   res <- res[order(res$inc.prob,decreasing = TRUE),]
 
 
@@ -447,13 +512,14 @@ quantInv <- function(distr, value){
 .bstsCreateStatePlots <- function(jaspResults,dataset,options,ready) {
 
 
-  if (!is.null(jaspResults[["bstsStatePlots"]])) return()
+  if (!is.null(jaspResults[["bstsMainContainer"]][["bstsStatePlots"]])) return()
 
 
   bstsStatePlots <- createJaspContainer(title = gettext("State Plots"))
 
 
   bstsStatePlots$dependOn(.bstsStatePlotDependencies())
+  jaspResults[["bstsMainContainer"]][["bstsStatePlots"]] <- bstsStatePlots
 
 
   bstsResults <- jaspResults[["bstsMainContainer"]][["bstsModelResults"]]$object
@@ -463,7 +529,6 @@ quantInv <- function(distr, value){
     .bstsComponentStatePlot(bstsStatePlots,bstsResults,options,ready)
 
 
-  jaspResults[["bstsMainContainer"]][["bstsStatePlots"]] <- bstsStatePlots
   return()
 }
 
@@ -475,9 +540,9 @@ quantInv <- function(distr, value){
 
 
   # get all states
-  state <- bstsResults$state.contribution
+  state <- bstsResults$state.contributions
   # discard burn ins
-  state <- state[-(1:options$burn), , , drop = FALSE]
+  state <- state[.bstsRetainedDraws(bstsResults, options$burn), , , drop = FALSE]
   # sum to final state
   state <- rowSums(aperm(state, c(1, 3, 2)), dims = 2)
   actualValues <- as.numeric(bstsResults$original.series)
@@ -512,15 +577,19 @@ quantInv <- function(distr, value){
 }
 
 .bstsComponentStatePlot <- function(bstsStatePlots,bstsResults,options,ready){
+  if (!ready) return()
 
   bstsComponentStatePlot <- createJaspPlot(title= gettext("Component States"), height = 320, width = 480)
 
-  means <- as.data.frame(apply(bstsResults$state.contribution, 2, colMeans))
+  state <- bstsResults$state.contributions[.bstsRetainedDraws(bstsResults, options$burn), , , drop = FALSE]
+  # Summarize iterations only, preserving time/component dimensions even when
+  # a single draw remains.
+  means <- as.data.frame(t(apply(state, c(2, 3), mean)))
 
   means$time <- options$time
 
-  ymin <- as.data.frame(apply(bstsResults$state.contribution, 2,matrixStats::colQuantiles,probs=c(0.025)))
-  ymax <- as.data.frame(apply(bstsResults$state.contribution, 2,matrixStats::colQuantiles,probs=c(0.975)))
+  ymin <- as.data.frame(t(apply(state, c(2, 3), quantile, probs = 0.025)))
+  ymax <- as.data.frame(t(apply(state, c(2, 3), quantile, probs = 0.975)))
   ymin$time <- options$time
   ymax$time <- options$time
 
@@ -547,6 +616,7 @@ quantInv <- function(distr, value){
 
 .bstsCreatePredictionPlot <- function(jaspResults,options,ready) {
   if(!ready | !options$predictionHorizon>0) return()
+  if (!is.null(jaspResults[["bstsMainContainer"]][["bstsPredictionPlot"]])) return()
 
   bstsPredictionPlot <- createJaspPlot(title=gettext("Prediction plot"), height = 320, width = 480)
   bstsPredictionPlot$dependOn(.bstsPredictionDependencies())
@@ -581,14 +651,32 @@ quantInv <- function(distr, value){
 # control plot
 
 .bstsCreateControlPlots <- function(jaspResults,options,ready){
-  if (!is.null(jaspResults[["bstsControlPlots"]]) | !ready) return()
+  if (!is.null(jaspResults[["bstsMainContainer"]][["bstsControlPlots"]]) | !ready) return()
 
 
   bstsControlPlots <- createJaspContainer(title = gettext("Control Plots"))
 
   bstsControlPlots$dependOn(.bstsControlDependencies())
+  jaspResults[["bstsMainContainer"]][["bstsControlPlots"]] <- bstsControlPlots
   bstsResults <- jaspResults[["bstsMainContainer"]][["bstsModelResults"]]$object
 
+  if (options$controlChartPlot || options$probalisticControlPlot) {
+    period <- options$controlPeriod
+    nTime <- dim(bstsResults$state.contributions)[3L]
+    if (!is.numeric(period) || length(period) != 1L || !is.finite(period) ||
+        period != floor(period) || period < 2 || period > nTime) {
+      message <- gettextf("Control period end must be a whole number of at least 2 and cannot exceed the number of time points (%1$d).", nTime)
+      titles <- c(bstsControlPlotThreshold = gettext("Threshold Plot"),
+                  bstsControlPlotProbability = gettext("Probability Plot"))
+      requested <- c(options$controlChartPlot, options$probalisticControlPlot)
+      for (key in names(titles)[requested]) {
+        plot <- createJaspPlot(title = titles[[key]], height = 320, width = 480)
+        plot$setError(message)
+        bstsControlPlots[[key]] <- plot
+      }
+      return()
+    }
+  }
 
   if(options$controlChartPlot)
     .bstsFillControlPlotThreshold(bstsControlPlots,bstsResults,options,ready)
@@ -597,7 +685,6 @@ quantInv <- function(distr, value){
     .bstsFillControlPlotProbability(bstsControlPlots,bstsResults,options,ready)
 
 
-  jaspResults[["bstsMainContainer"]][["bstsControlPlots"]] <- bstsControlPlots
   return()
 
 }
@@ -610,9 +697,9 @@ quantInv <- function(distr, value){
   bstsControlPlotThreshold <- createJaspPlot(title=gettext("Threshold Plot"), height = 320, width = 480)
 
   # extract model components
-  state <- bstsResults$state.contribution
+  state <- bstsResults$state.contributions
   # discard burn ins
-  state <- state[-(1:options$burn), , , drop = FALSE]
+  state <- state[.bstsRetainedDraws(bstsResults, options$burn), , , drop = FALSE]
   # sum to final state
   state <- rowSums(aperm(state, c(1, 3, 2)), dims = 2)
 
@@ -684,9 +771,9 @@ quantInv <- function(distr, value){
   bstsControlPlotThreshold <- createJaspPlot(title=gettext("Threshold Plot"))
 
   # extract model components
-  state <- bstsResults$state.contribution
+  state <- bstsResults$state.contributions
   # discard burn ins
-  state <- state[-(1:options$burn), , , drop = FALSE]
+  state <- state[.bstsRetainedDraws(bstsResults, options$burn), , , drop = FALSE]
   # sum to final state
   state <- rowSums(aperm(state, c(1, 3, 2)), dims = 2)
 
@@ -730,10 +817,13 @@ quantInv <- function(distr, value){
 }
 
 .bstsCreateErrorPlots <- function(jaspResults,options,ready) {
-  if (!is.null(jaspResults[["bstsErrorPlots"]])) return()
+  if (!is.null(jaspResults[["bstsMainContainer"]][["bstsErrorPlots"]])) return()
 
 
   bstsErrorPlots <- createJaspContainer(title = gettext("Error Plots"))
+  bstsErrorPlots$dependOn(c("residualPlot", "forecastErrorPlot", "aggregatedStatesPlotCiLevel",
+                          "time", .bstsBurnDependencies()))
+  jaspResults[["bstsMainContainer"]][["bstsErrorPlots"]] <- bstsErrorPlots
 
   bstsResults <- jaspResults[["bstsMainContainer"]][["bstsModelResults"]]$object
 
@@ -742,7 +832,6 @@ quantInv <- function(distr, value){
     .bstsForecastErrorPlot(bstsErrorPlots,bstsResults,options,ready)
 
 
-  jaspResults[["bstsMainContainer"]][["bstsErrorPlots"]] <- bstsErrorPlots
   return()
 }
 
@@ -804,4 +893,3 @@ quantInv <- function(distr, value){
 
   return()
 }
-

@@ -345,9 +345,9 @@ Form
 			{
 				name:"controlChartPlot"; label: qsTr("Show control chart")
 
-				DoubleField {name: "controlPeriod"; label:qsTr("Control period end"); defaultValue: 100}
+				IntegerField {name: "controlPeriod"; label:qsTr("Control period end"); defaultValue: 100; min: 2}
 				DoubleField {name: "controlSigma"; label:qsTr("σ threshold"); defaultValue: 2}
-				CheckBox{name: "probalisticControlPlot";label: qsTr("Show probalistic control plot")}
+				CheckBox{name: "probalisticControlPlot";label: qsTr("Show probabilistic control plot")}
 
 			}
 
@@ -382,7 +382,7 @@ Form
 
 		DoubleField { name:"samples";		label: qsTr("Desired MCMC draws");	fieldWidth: 60; defaultValue: 2000}
 
-		DoubleField { name:"timeout";		label: qsTr("Timout in seconds");	fieldWidth: 60; defaultValue: 120}
+		DoubleField { name:"timeout";		label: qsTr("Timeout in seconds");	fieldWidth: 60; defaultValue: 120}
 
 		RadioButtonGroup
 		{

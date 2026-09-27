@@ -881,7 +881,7 @@ msgid "Bayesian"
 msgstr ""
 
 msgctxt "Description|"
-msgid "Bayesian State Space Models"
+msgid "Gaussian State Space Models"
 msgstr ""
 
 msgctxt "bayesianStateSpace|"
@@ -1058,7 +1058,7 @@ msgid "σ threshold"
 msgstr "σ しきい値"
 
 msgctxt "bayesianStateSpace|"
-msgid "Show probalistic control plot"
+msgid "Show probabilistic control plot"
 msgstr "確率的な管理図を表示"
 
 msgctxt "bayesianStateSpace|"
@@ -1070,7 +1070,7 @@ msgid "Desired MCMC draws"
 msgstr "希望するMCMCドロー数"
 
 msgctxt "bayesianStateSpace|"
-msgid "Timout in seconds"
+msgid "Timeout in seconds"
 msgstr "タイムアウト(秒)"
 
 msgctxt "bayesianStateSpace|"
