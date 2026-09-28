@@ -1,3 +1,4 @@
+#
 msgid ""
 msgstr ""
 "MIME-Version: 1.0\n"
@@ -809,3 +810,231 @@ msgstr ""
 msgctxt "Description|"
 msgid "Time Series Descriptives"
 msgstr ""
+
+msgctxt "Description|"
+msgid "Descriptives"
+msgstr ""
+
+msgctxt "Description|"
+msgid "Classical"
+msgstr ""
+
+msgctxt "Description|"
+msgid "Bayesian"
+msgstr ""
+
+msgctxt "Description|"
+msgid "Gaussian State Space Models"
+msgstr ""
+
+msgctxt "bayesianStateSpace|"
+msgid "Dependent Variable"
+msgstr "متغیر وابسته"
+
+msgctxt "bayesianStateSpace|"
+msgid "Covariates"
+msgstr "هم‌متغیرها"
+
+msgctxt "bayesianStateSpace|"
+msgid "Fixed Factors"
+msgstr "عامل‌های ثابت"
+
+msgctxt "bayesianStateSpace|"
+msgid "Time"
+msgstr "زمان"
+
+msgctxt "bayesianStateSpace|"
+msgid "Output"
+msgstr "خروجی"
+
+msgctxt "bayesianStateSpace|"
+msgid "Posterior summary of coefficients"
+msgstr "خلاصه پسین ضریب‌ها"
+
+msgctxt "bayesianStateSpace|"
+msgid "Show means across draws included"
+msgstr "نمایش میانگین‌ها در بین استخراج‌های گنجانده‌شده"
+
+msgctxt "bayesianStateSpace|"
+msgid "Credible interval"
+msgstr "بازه باورپذیر"
+
+msgctxt "bayesianStateSpace|"
+msgid "Expected predictors"
+msgstr "پیش‌بین‌های مورد انتظار"
+
+msgctxt "bayesianStateSpace|"
+msgid "Model Components"
+msgstr "مؤلفه‌های مدل"
+
+msgctxt "bayesianStateSpace|"
+msgid "Components"
+msgstr "مؤلفه‌ها"
+
+msgctxt "bayesianStateSpace|"
+msgid "Add autoregressive component"
+msgstr "افزودن مؤلفه خودبازگشتی"
+
+msgctxt "bayesianStateSpace|"
+msgid "Lag selection method"
+msgstr "روش انتخاب تأخیر"
+
+msgctxt "bayesianStateSpace|"
+msgid "Manually"
+msgstr "دستی"
+
+msgctxt "bayesianStateSpace|"
+msgid "No. of lags"
+msgstr "تعداد تأخیرها"
+
+msgctxt "bayesianStateSpace|"
+msgid "Automatic"
+msgstr "خودکار"
+
+msgctxt "bayesianStateSpace|"
+msgid "Maximal lags"
+msgstr "حداکثر تأخیرها"
+
+msgctxt "bayesianStateSpace|"
+msgid "Add local level component"
+msgstr "افزودن مؤلفه سطح محلی"
+
+msgctxt "bayesianStateSpace|"
+msgid "Add local linear trend component"
+msgstr "افزودن مؤلفه روند خطی محلی"
+
+msgctxt "bayesianStateSpace|"
+msgid "Add semi-local linear trend"
+msgstr "افزودن روند خطی نیمه‌محلی"
+
+msgctxt "bayesianStateSpace|"
+msgid "Add dynamic regression component"
+msgstr "افزودن مؤلفه رگرسیون پویا"
+
+msgctxt "bayesianStateSpace|"
+msgid ""
+"This component allows you to model the effect of covariates or fixed factors "
+"on the dependent variable. The lag of coefficients can be specified to "
+"account for delayed effects. Only available when covariates or fixed factors "
+"are present in the model."
+msgstr ""
+"این مؤلفه به شما امکان می‌دهد تا اثر هم‌متغیرها یا عامل‌های ثابت را بر متغیر "
+"وابسته مدل‌سازی کنید. تأخیر ضریب‌ها را می‌توان برای در نظر گرفتن اثرات تأخیری "
+"مشخص کرد. این گزینه تنها زمانی در دسترس است که هم‌متغیرها یا عامل‌های ثابت در "
+"مدل وجود داشته باشند."
+
+msgctxt "bayesianStateSpace|"
+msgid "Seasonalities"
+msgstr "فصلی‌ها"
+
+msgctxt "bayesianStateSpace|"
+msgid "Name"
+msgstr "نام"
+
+msgctxt "bayesianStateSpace|"
+msgid "Number"
+msgstr "عدد"
+
+msgctxt "bayesianStateSpace|"
+msgid "Duration"
+msgstr "مدت زمان"
+
+msgctxt "bayesianStateSpace|"
+msgid "Inverse gamma prior"
+msgstr "پیشین گامای معکوس"
+
+msgctxt "bayesianStateSpace|"
+msgid "Normal prior initial state"
+msgstr "حالت اولیه پیشین نرمال"
+
+msgctxt "bayesianStateSpace|"
+msgid "Plots"
+msgstr "نمودارها"
+
+msgctxt "bayesianStateSpace|"
+msgid "State Plots"
+msgstr "نمودارهای حالت"
+
+msgctxt "bayesianStateSpace|"
+msgid "Aggregated state contribution"
+msgstr "مشارکت حالت تجمیع‌شده"
+
+msgctxt "bayesianStateSpace|"
+msgid "Show observations"
+msgstr "نمایش مشاهدات"
+
+msgctxt "bayesianStateSpace|"
+msgid "Component state contribution"
+msgstr "مشارکت حالت مؤلفه"
+
+msgctxt "bayesianStateSpace|"
+msgid "Residuals"
+msgstr "باقی‌مانده‌ها"
+
+msgctxt "bayesianStateSpace|"
+msgid "Posterior distribution of residuals"
+msgstr "توزیع پسین باقی‌مانده‌ها"
+
+msgctxt "bayesianStateSpace|"
+msgid "Posterior distribution of one-step-ahead prediction error"
+msgstr "توزیع پسین خطای پیش‌بینی یک گام جلوتر"
+
+msgctxt "bayesianStateSpace|"
+msgid "Prediction"
+msgstr "پیش‌بینی"
+
+msgctxt "bayesianStateSpace|"
+msgid "Horizon"
+msgstr "افق"
+
+msgctxt "bayesianStateSpace|"
+msgid "Control chart"
+msgstr "نمودار کنترل"
+
+msgctxt "bayesianStateSpace|"
+msgid "Show control chart"
+msgstr "نمایش نمودار کنترل"
+
+msgctxt "bayesianStateSpace|"
+msgid "Control period end"
+msgstr "پایان دوره کنترل"
+
+msgctxt "bayesianStateSpace|"
+msgid "σ threshold"
+msgstr "آستانه σ"
+
+msgctxt "bayesianStateSpace|"
+msgid "Show probabilistic control plot"
+msgstr "نمایش نمودار کنترل احتمالاتی"
+
+msgctxt "bayesianStateSpace|"
+msgid "Advanced Options"
+msgstr "گزینه‌های پیشرفته"
+
+msgctxt "bayesianStateSpace|"
+msgid "Desired MCMC draws"
+msgstr "استخراج‌های MCMC مطلوب"
+
+msgctxt "bayesianStateSpace|"
+msgid "Timeout in seconds"
+msgstr "مهلت زمانی به ثانیه"
+
+msgctxt "bayesianStateSpace|"
+msgid "Burn-in Specification"
+msgstr "مشخصات دوره سوختن"
+
+msgctxt "bayesianStateSpace|"
+msgid "Automatic suggestion"
+msgstr "پیشنهاد خودکار"
+
+msgctxt "bayesianStateSpace|"
+msgid "Proportion"
+msgstr "نسبت"
+
+msgctxt "bayesianStateSpace|"
+msgid "Manual"
+msgstr "دستی"
+
+msgctxt "bayesianStateSpace|"
+msgid "Seed"
+msgstr "دانه"

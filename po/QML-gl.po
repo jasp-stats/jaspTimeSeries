@@ -1,3 +1,4 @@
+#
 msgid ""
 msgstr ""
 "MIME-Version: 1.0\n"
@@ -400,9 +401,9 @@ msgstr ""
 "Opcional. Pode ser ben unha variable ordinal que indique a orde das "
 "observacións, ou unha variable de texto que indique unha marca de tempo/data "
 "das observacións. Valores combinados de data e tempo deben estar no formato "
-"estándar 'AAAA-MM-DD HH:MM:SS', no que tamén poden omitirse os segundos (':"
-"SS'). Os valores só de datas deben estar no formato 'AAAA-MM-DD'. Se non se "
-"indica unha variable de tempo, utilízase a ordenación das filas de datos."
+"estándar 'AAAA-MM-DD HH:MM:SS', no que tamén poden omitirse os segundos "
+"(':SS'). Os valores só de datas deben estar no formato 'AAAA-MM-DD'. Se non "
+"se indica unha variable de tempo, utilízase a ordenación das filas de datos."
 
 msgctxt "SpectralTimeSeries|"
 msgid "Spectral density"
@@ -553,9 +554,9 @@ msgstr ""
 "Opcional. Pode ser ben unha variable ordinal que indique a orde das "
 "observacións, ou unha variable de texto que indique unha marca de tempo/data "
 "das observacións. Valores combinados de data e tempo deben estar no formato "
-"estándar 'AAAA-MM-DD HH:MM:SS', no que tamén poden omitirse os segundos (':"
-"SS'). Os valores só de datas deben estar no formato 'AAAA-MM-DD'. Se non se "
-"indica unha variable de tempo, utilízase a ordenación das filas de datos."
+"estándar 'AAAA-MM-DD HH:MM:SS', no que tamén poden omitirse os segundos "
+"(':SS'). Os valores só de datas deben estar no formato 'AAAA-MM-DD'. Se non "
+"se indica unha variable de tempo, utilízase a ordenación das filas de datos."
 
 msgctxt "StationarityTimeSeries|"
 msgid "Stationarity Tests"
@@ -906,3 +907,231 @@ msgstr ""
 msgctxt "Description|"
 msgid "Time Series Descriptives"
 msgstr "Descritivos da Serie Temporal"
+
+msgctxt "Description|"
+msgid "Descriptives"
+msgstr ""
+
+msgctxt "Description|"
+msgid "Classical"
+msgstr ""
+
+msgctxt "Description|"
+msgid "Bayesian"
+msgstr ""
+
+msgctxt "Description|"
+msgid "Gaussian State Space Models"
+msgstr ""
+
+msgctxt "bayesianStateSpace|"
+msgid "Dependent Variable"
+msgstr "Variable Dependente"
+
+msgctxt "bayesianStateSpace|"
+msgid "Covariates"
+msgstr "Covariantes"
+
+msgctxt "bayesianStateSpace|"
+msgid "Fixed Factors"
+msgstr "Factores Fixos"
+
+msgctxt "bayesianStateSpace|"
+msgid "Time"
+msgstr "Tempo"
+
+msgctxt "bayesianStateSpace|"
+msgid "Output"
+msgstr "Saída de resultados"
+
+msgctxt "bayesianStateSpace|"
+msgid "Posterior summary of coefficients"
+msgstr "Resumo posterior dos coeficientes"
+
+msgctxt "bayesianStateSpace|"
+msgid "Show means across draws included"
+msgstr "Amosar as medias das extraccións incluídas"
+
+msgctxt "bayesianStateSpace|"
+msgid "Credible interval"
+msgstr "Intervalo de credibilidade"
+
+msgctxt "bayesianStateSpace|"
+msgid "Expected predictors"
+msgstr "Preditores agardados"
+
+msgctxt "bayesianStateSpace|"
+msgid "Model Components"
+msgstr "Compoñentes do Modelo"
+
+msgctxt "bayesianStateSpace|"
+msgid "Components"
+msgstr "Compoñentes"
+
+msgctxt "bayesianStateSpace|"
+msgid "Add autoregressive component"
+msgstr "Engadir compoñente autorregresiva"
+
+msgctxt "bayesianStateSpace|"
+msgid "Lag selection method"
+msgstr "Método de selección do retardo"
+
+msgctxt "bayesianStateSpace|"
+msgid "Manually"
+msgstr "Manualmente"
+
+msgctxt "bayesianStateSpace|"
+msgid "No. of lags"
+msgstr "Número de retardos"
+
+msgctxt "bayesianStateSpace|"
+msgid "Automatic"
+msgstr "Automático"
+
+msgctxt "bayesianStateSpace|"
+msgid "Maximal lags"
+msgstr "Retardos máximos"
+
+msgctxt "bayesianStateSpace|"
+msgid "Add local level component"
+msgstr "Engadir compoñente de nivel local"
+
+msgctxt "bayesianStateSpace|"
+msgid "Add local linear trend component"
+msgstr "Engadir compoñente de tendencia linear"
+
+msgctxt "bayesianStateSpace|"
+msgid "Add semi-local linear trend"
+msgstr "Engadir tendencia linear semilocal"
+
+msgctxt "bayesianStateSpace|"
+msgid "Add dynamic regression component"
+msgstr "Engadir compoñente de regresión dinámica"
+
+msgctxt "bayesianStateSpace|"
+msgid ""
+"This component allows you to model the effect of covariates or fixed factors "
+"on the dependent variable. The lag of coefficients can be specified to "
+"account for delayed effects. Only available when covariates or fixed factors "
+"are present in the model."
+msgstr ""
+"Esta compoñente te permite modelar o efecto de covariantes ou factores fixos "
+"sobre a variable dependente. O retardo dos coeficientes pode especificarse "
+"para ter en conta efectos retardados. Só dispoñible se están presentes "
+"covariantes ou factores fixos no modelo."
+
+msgctxt "bayesianStateSpace|"
+msgid "Seasonalities"
+msgstr "Estacionalidades"
+
+msgctxt "bayesianStateSpace|"
+msgid "Name"
+msgstr "Nome"
+
+msgctxt "bayesianStateSpace|"
+msgid "Number"
+msgstr "Número"
+
+msgctxt "bayesianStateSpace|"
+msgid "Duration"
+msgstr "Duración"
+
+msgctxt "bayesianStateSpace|"
+msgid "Inverse gamma prior"
+msgstr "Previo de Gamma Inversa"
+
+msgctxt "bayesianStateSpace|"
+msgid "Normal prior initial state"
+msgstr "Estado inicial previo normal"
+
+msgctxt "bayesianStateSpace|"
+msgid "Plots"
+msgstr "Gráficas"
+
+msgctxt "bayesianStateSpace|"
+msgid "State Plots"
+msgstr "Gráficas de Estado"
+
+msgctxt "bayesianStateSpace|"
+msgid "Aggregated state contribution"
+msgstr "Contribución do estado agregado"
+
+msgctxt "bayesianStateSpace|"
+msgid "Show observations"
+msgstr "Amosar as observacións"
+
+msgctxt "bayesianStateSpace|"
+msgid "Component state contribution"
+msgstr "Contribución do estado compoñente"
+
+msgctxt "bayesianStateSpace|"
+msgid "Residuals"
+msgstr "Erros"
+
+msgctxt "bayesianStateSpace|"
+msgid "Posterior distribution of residuals"
+msgstr "Distribución posterior dos erros"
+
+msgctxt "bayesianStateSpace|"
+msgid "Posterior distribution of one-step-ahead prediction error"
+msgstr "Distribución posterior do erro de predición un paso por diante"
+
+msgctxt "bayesianStateSpace|"
+msgid "Prediction"
+msgstr "Predición"
+
+msgctxt "bayesianStateSpace|"
+msgid "Horizon"
+msgstr "Horizonte"
+
+msgctxt "bayesianStateSpace|"
+msgid "Control chart"
+msgstr "Gráfica de control"
+
+msgctxt "bayesianStateSpace|"
+msgid "Show control chart"
+msgstr "Amosar a gráfica de control"
+
+msgctxt "bayesianStateSpace|"
+msgid "Control period end"
+msgstr "Fin do período de control"
+
+msgctxt "bayesianStateSpace|"
+msgid "σ threshold"
+msgstr "Lindeiro de σ"
+
+msgctxt "bayesianStateSpace|"
+msgid "Show probabilistic control plot"
+msgstr "Amosar a gráfica de control probabilístico"
+
+msgctxt "bayesianStateSpace|"
+msgid "Advanced Options"
+msgstr "Opcións Avanzadas"
+
+msgctxt "bayesianStateSpace|"
+msgid "Desired MCMC draws"
+msgstr "Extraccións MCMC desexadas"
+
+msgctxt "bayesianStateSpace|"
+msgid "Timeout in seconds"
+msgstr "Límite de tempo en segundos"
+
+msgctxt "bayesianStateSpace|"
+msgid "Burn-in Specification"
+msgstr "Especificación do quecemento"
+
+msgctxt "bayesianStateSpace|"
+msgid "Automatic suggestion"
+msgstr "Suxestión automática"
+
+msgctxt "bayesianStateSpace|"
+msgid "Proportion"
+msgstr "Proporción"
+
+msgctxt "bayesianStateSpace|"
+msgid "Manual"
+msgstr "Manual"
+
+msgctxt "bayesianStateSpace|"
+msgid "Seed"
+msgstr "Semente"

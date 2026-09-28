@@ -1,3 +1,4 @@
+#
 msgid ""
 msgstr ""
 "MIME-Version: 1.0\n"
@@ -862,3 +863,229 @@ msgstr "将残差追加到数据表中，以便在后续分析中使用。"
 msgctxt "Description|"
 msgid "Time Series Descriptives"
 msgstr "时间序列描述统计"
+
+msgctxt "Description|"
+msgid "Descriptives"
+msgstr ""
+
+msgctxt "Description|"
+msgid "Classical"
+msgstr ""
+
+msgctxt "Description|"
+msgid "Bayesian"
+msgstr ""
+
+msgctxt "Description|"
+msgid "Gaussian State Space Models"
+msgstr ""
+
+msgctxt "bayesianStateSpace|"
+msgid "Dependent Variable"
+msgstr "因变量"
+
+msgctxt "bayesianStateSpace|"
+msgid "Covariates"
+msgstr "协变量"
+
+msgctxt "bayesianStateSpace|"
+msgid "Fixed Factors"
+msgstr "固定因子"
+
+msgctxt "bayesianStateSpace|"
+msgid "Time"
+msgstr "时间"
+
+msgctxt "bayesianStateSpace|"
+msgid "Output"
+msgstr "输出"
+
+msgctxt "bayesianStateSpace|"
+msgid "Posterior summary of coefficients"
+msgstr "系数的后验摘要"
+
+msgctxt "bayesianStateSpace|"
+msgid "Show means across draws included"
+msgstr "显示包含抽样的均值"
+
+msgctxt "bayesianStateSpace|"
+msgid "Credible interval"
+msgstr "可信区间"
+
+msgctxt "bayesianStateSpace|"
+msgid "Expected predictors"
+msgstr "预期预测因子"
+
+msgctxt "bayesianStateSpace|"
+msgid "Model Components"
+msgstr "模型组件"
+
+msgctxt "bayesianStateSpace|"
+msgid "Components"
+msgstr "成分（Components）"
+
+msgctxt "bayesianStateSpace|"
+msgid "Add autoregressive component"
+msgstr "添加自回归成分"
+
+msgctxt "bayesianStateSpace|"
+msgid "Lag selection method"
+msgstr "滞后选择方法"
+
+msgctxt "bayesianStateSpace|"
+msgid "Manually"
+msgstr "手动"
+
+msgctxt "bayesianStateSpace|"
+msgid "No. of lags"
+msgstr "滞后数"
+
+msgctxt "bayesianStateSpace|"
+msgid "Automatic"
+msgstr "自动"
+
+msgctxt "bayesianStateSpace|"
+msgid "Maximal lags"
+msgstr "最大滞后"
+
+msgctxt "bayesianStateSpace|"
+msgid "Add local level component"
+msgstr "添加局部级别组件"
+
+msgctxt "bayesianStateSpace|"
+msgid "Add local linear trend component"
+msgstr "添加局部线性趋势组件"
+
+msgctxt "bayesianStateSpace|"
+msgid "Add semi-local linear trend"
+msgstr "添加半局部线性趋势"
+
+msgctxt "bayesianStateSpace|"
+msgid "Add dynamic regression component"
+msgstr "添加动态回归组件"
+
+msgctxt "bayesianStateSpace|"
+msgid ""
+"This component allows you to model the effect of covariates or fixed factors "
+"on the dependent variable. The lag of coefficients can be specified to "
+"account for delayed effects. Only available when covariates or fixed factors "
+"are present in the model."
+msgstr ""
+"此组件允许您建模协变量或固定因子对因变量的影响。可以指定系数的滞后以考虑延迟"
+"效应。仅当模型中存在协变量或固定因子时可用。"
+
+msgctxt "bayesianStateSpace|"
+msgid "Seasonalities"
+msgstr "季节性"
+
+msgctxt "bayesianStateSpace|"
+msgid "Name"
+msgstr "名称"
+
+msgctxt "bayesianStateSpace|"
+msgid "Number"
+msgstr "数量"
+
+msgctxt "bayesianStateSpace|"
+msgid "Duration"
+msgstr "期间"
+
+msgctxt "bayesianStateSpace|"
+msgid "Inverse gamma prior"
+msgstr "逆伽马先验"
+
+msgctxt "bayesianStateSpace|"
+msgid "Normal prior initial state"
+msgstr "正态先验初始状态"
+
+msgctxt "bayesianStateSpace|"
+msgid "Plots"
+msgstr "绘图"
+
+msgctxt "bayesianStateSpace|"
+msgid "State Plots"
+msgstr "状态图"
+
+msgctxt "bayesianStateSpace|"
+msgid "Aggregated state contribution"
+msgstr "聚合状态分布图"
+
+msgctxt "bayesianStateSpace|"
+msgid "Show observations"
+msgstr "显示观测值"
+
+msgctxt "bayesianStateSpace|"
+msgid "Component state contribution"
+msgstr "组件状态分布图"
+
+msgctxt "bayesianStateSpace|"
+msgid "Residuals"
+msgstr "残差"
+
+msgctxt "bayesianStateSpace|"
+msgid "Posterior distribution of residuals"
+msgstr "残差的后验分布"
+
+msgctxt "bayesianStateSpace|"
+msgid "Posterior distribution of one-step-ahead prediction error"
+msgstr "向前预测一步的误差的后验分布"
+
+msgctxt "bayesianStateSpace|"
+msgid "Prediction"
+msgstr "预测"
+
+msgctxt "bayesianStateSpace|"
+msgid "Horizon"
+msgstr "预测水平(Horizon)"
+
+msgctxt "bayesianStateSpace|"
+msgid "Control chart"
+msgstr "控制图"
+
+msgctxt "bayesianStateSpace|"
+msgid "Show control chart"
+msgstr "显示控制图"
+
+msgctxt "bayesianStateSpace|"
+msgid "Control period end"
+msgstr "控制期结束"
+
+msgctxt "bayesianStateSpace|"
+msgid "σ threshold"
+msgstr "σ 阈值"
+
+msgctxt "bayesianStateSpace|"
+msgid "Show probabilistic control plot"
+msgstr "显示概率控制图"
+
+msgctxt "bayesianStateSpace|"
+msgid "Advanced Options"
+msgstr "高级选项"
+
+msgctxt "bayesianStateSpace|"
+msgid "Desired MCMC draws"
+msgstr "期望的 MCMC 抽样"
+
+msgctxt "bayesianStateSpace|"
+msgid "Timeout in seconds"
+msgstr "超时(以秒计算)"
+
+msgctxt "bayesianStateSpace|"
+msgid "Burn-in Specification"
+msgstr "Burn-in 规则"
+
+msgctxt "bayesianStateSpace|"
+msgid "Automatic suggestion"
+msgstr "自动建议"
+
+msgctxt "bayesianStateSpace|"
+msgid "Proportion"
+msgstr "比例"
+
+msgctxt "bayesianStateSpace|"
+msgid "Manual"
+msgstr "手动设置"
+
+msgctxt "bayesianStateSpace|"
+msgid "Seed"
+msgstr "种子(Seed)"

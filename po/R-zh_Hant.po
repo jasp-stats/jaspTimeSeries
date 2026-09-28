@@ -1,11 +1,11 @@
+#
 msgid ""
 msgstr ""
 "Project-Id-Version: jaspTimeSeries 0.18.0\n"
-"POT-Creation-Date: 2024-04-11 13:27\n"
+"POT-Creation-Date: 2026-09-23 17:06\n"
 "PO-Revision-Date: 2026-05-27 12:18+0000\n"
 "Last-Translator: 陳正昌 <chencc99@gmail.com>\n"
-"Language-Team: Chinese (Traditional Han script) <https://hosted.weblate.org/"
-"projects/jasp/jasptimeseries-r/zh_Hant/>\n"
+"Language-Team: Chinese (Traditional Han script) <https://hosted.weblate.org/projects/jasp/jasptimeseries-r/zh_Hant/>\n"
 "Language: zh_Hant\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -103,9 +103,7 @@ msgstr "p值"
 msgid ""
 "When 'Covariates' are used in the model, predictions cannot be carried out "
 "unless the covariates are also observed for the predicted period."
-msgstr ""
-"當模型中使用了「共變量」時，除非在預測期間亦觀測到這些共變量，否則無法進行預"
-"測。"
+msgstr "當模型中使用了「共變量」時，除非在預測期間亦觀測到這些共變量，否則無法進行預測。"
 
 msgid ""
 "Not enough observations in the covariate%1$s. The maximum number of "
@@ -120,6 +118,114 @@ msgstr "預測時間序列圖"
 
 msgid "Forecasts"
 msgstr "預測"
+
+msgid ""
+"Unknown value provided for modelType, possible values: `alternative`, `null`"
+msgstr "提供的模型類型值無效，可用的值為：`alternative`, `null`"
+
+msgid "Residual SD"
+msgstr "殘差標準差"
+
+msgid "Prediction SD"
+msgstr "預測值標準差"
+
+msgid "R%s"
+msgstr "R%s"
+
+msgid "Harvey's goodness of fit"
+msgstr "Harvey 的適配度"
+
+msgid ""
+"Only %1$s draws were sampled out of the desired %2$s. Additionally, %3$s "
+"MCMC draws out of %1$s are discarded as burn in."
+msgstr "僅從預期的 %2$s 次抽樣中取得 %1$s 次抽樣。此外，在 %1$s 次 MCMC 抽樣中，有 %3$s 次作為燒入期而被捨棄。"
+
+msgid "%1$d MCMC draws out of %2$d are discarded as burn in."
+msgstr "在 %2$d 次 MCMC 抽樣中，有 %1$d 次作為預燃期而被捨棄。"
+
+msgid ""
+"The local level component has been selected (by default). If you wish to "
+"adjust the model, you can do so under 'Model Components'."
+msgstr "已選擇區域水準成分（預設）。若要調整模型，可在「模型成分」中進行設定。"
+
+msgid "Posterior Summary of Coefficients"
+msgstr "係數的後驗摘要"
+
+msgid "%s%% Credible Interval"
+msgstr "%s%% 可信區間"
+
+msgid "P(incl)"
+msgstr "P(包含)"
+
+msgid "P(incl|data)"
+msgstr "P（包含|資料）"
+
+msgid "BF<sub>inclusion</sub>"
+msgstr "BF<sub>納入</sub>"
+
+msgid "Mean"
+msgstr "平均數"
+
+msgid "SD"
+msgstr "標準差"
+
+msgid "Mean<sub>inclusion</sub>"
+msgstr "平均數<sub>納入</sub>"
+
+msgid "SD<sub>inclusion</sub>"
+msgstr "標準差<sub>納入</sub>"
+
+msgid "State Plots"
+msgstr "狀態圖"
+
+msgid "Aggregated State"
+msgstr "整合狀態"
+
+msgid "Time"
+msgstr "時間"
+
+msgid "Distribution"
+msgstr "分配"
+
+msgid "Component States"
+msgstr "成分狀態"
+
+msgid "Prediction plot"
+msgstr "預測圖"
+
+msgid "Control Plots"
+msgstr "控制圖"
+
+msgid "Threshold Plot"
+msgstr "閾值圖"
+
+msgid ""
+"First date where %1$.3f*sigma is exceeded by %2$.1f%% state credible "
+"interval: %3$s"
+msgstr "首次日期，%2$.1f%% 狀態信賴區間超過 %1$.3f 倍 σ：%3$s"
+
+msgid ""
+"First time point where %1$.3f*sigma is exceeded by %2$.1f%% state credible "
+"interval: %3$s"
+msgstr "首次時間點，%2$.1f%% 狀態可信區間超過 %1$.3f 倍 σ：%3$s"
+
+msgid "Threshold never reached"
+msgstr "閾值從未達到"
+
+msgid "Probability Plot"
+msgstr "機率圖"
+
+msgid "Probability"
+msgstr "機率"
+
+msgid "Error Plots"
+msgstr "誤差圖"
+
+msgid "Residual Plot"
+msgstr "殘差圖"
+
+msgid "Forecast Error Plot"
+msgstr "預測誤差圖"
 
 msgid "The spectral analysis failed."
 msgstr "頻譜分析失敗。"
@@ -210,9 +316,6 @@ msgstr "偏自相關函數"
 
 #~ msgid "Valid"
 #~ msgstr "有效"
-
-#~ msgid "Mean"
-#~ msgstr "平均數"
 
 #~ msgid "Std. Deviation"
 #~ msgstr "標準差"

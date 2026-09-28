@@ -1,8 +1,9 @@
+#
 msgid ""
 msgstr ""
 "Project-Id-Version: jaspTimeSeries 0.1\n"
 "Report-Msgid-Bugs-To: github.com/jasp-stats/jasp-issues/issues\n"
-"POT-Creation-Date: 2026-01-01 00:00+0000\n"
+"POT-Creation-Date: 2026-09-23 17:06\n"
 "PO-Revision-Date: 2026-01-01 00:00+0000\n"
 "Last-Translator: JASP translators\n"
 "Language-Team: Chinese (Simplified)\n"
@@ -99,10 +100,14 @@ msgstr "滞后"
 msgid "p-value"
 msgstr "p 值"
 
-msgid "When 'Covariates' are used in the model, predictions cannot be carried out unless the covariates are also observed for the predicted period."
+msgid ""
+"When 'Covariates' are used in the model, predictions cannot be carried out "
+"unless the covariates are also observed for the predicted period."
 msgstr "当模型中使用“协变量”时，除非预测期内也观测到这些协变量，否则无法进行预测。"
 
-msgid "Not enough observations in the covariate%1$s. The maximum number of forecasts is %2$s."
+msgid ""
+"Not enough observations in the covariate%1$s. The maximum number of "
+"forecasts is %2$s."
 msgstr "协变量%1$s中的观测数不足。最大预测数为 %2$s。"
 
 msgid "Forecasting failed."
@@ -113,6 +118,114 @@ msgstr "预测时间序列图"
 
 msgid "Forecasts"
 msgstr "预测值"
+
+msgid ""
+"Unknown value provided for modelType, possible values: `alternative`, `null`"
+msgstr "为 modelType 提供了未知的值，可能的值：`alternative`、`null`"
+
+msgid "Residual SD"
+msgstr "残差 SD"
+
+msgid "Prediction SD"
+msgstr "预测 SD"
+
+msgid "R%s"
+msgstr "R%s"
+
+msgid "Harvey's goodness of fit"
+msgstr "Harvey 拟合优度"
+
+msgid ""
+"Only %1$s draws were sampled out of the desired %2$s. Additionally, %3$s "
+"MCMC draws out of %1$s are discarded as burn in."
+msgstr "在期望的 %2$s 次抽样中仅抽样了 %1$s 次。此外，%1$s 次 MCMC 抽样中的 %3$s 次作为烧入被丢弃。"
+
+msgid "%1$d MCMC draws out of %2$d are discarded as burn in."
+msgstr "%2$d 次 MCMC 抽样中的 %1$d 次作为烧入被丢弃。"
+
+msgid ""
+"The local level component has been selected (by default). If you wish to "
+"adjust the model, you can do so under 'Model Components'."
+msgstr "已（默认）选择局部水平组件。如果您希望调整模型，可以在“模型组件”下进行。"
+
+msgid "Posterior Summary of Coefficients"
+msgstr "系数的后验摘要"
+
+msgid "%s%% Credible Interval"
+msgstr "%s%% 可信区间"
+
+msgid "P(incl)"
+msgstr "P（包含）"
+
+msgid "P(incl|data)"
+msgstr "P（包含|数据）"
+
+msgid "BF<sub>inclusion</sub>"
+msgstr "BF<sub>包含</sub>"
+
+msgid "Mean"
+msgstr "均值"
+
+msgid "SD"
+msgstr "SD"
+
+msgid "Mean<sub>inclusion</sub>"
+msgstr "均值<sub>包含</sub>"
+
+msgid "SD<sub>inclusion</sub>"
+msgstr "SD<sub>包含</sub>"
+
+msgid "State Plots"
+msgstr "状态图"
+
+msgid "Aggregated State"
+msgstr "聚合状态"
+
+msgid "Time"
+msgstr "时间"
+
+msgid "Distribution"
+msgstr "分布"
+
+msgid "Component States"
+msgstr "组件状态"
+
+msgid "Prediction plot"
+msgstr "预测图"
+
+msgid "Control Plots"
+msgstr "控制图"
+
+msgid "Threshold Plot"
+msgstr "阈值图"
+
+msgid ""
+"First date where %1$.3f*sigma is exceeded by %2$.1f%% state credible "
+"interval: %3$s"
+msgstr "状态可信区间 %2$.1f%% 首次超过 %1$.3f*sigma 的日期：%3$s"
+
+msgid ""
+"First time point where %1$.3f*sigma is exceeded by %2$.1f%% state credible "
+"interval: %3$s"
+msgstr "状态可信区间 %2$.1f%% 首次超过 %1$.3f*sigma 的时间点：%3$s"
+
+msgid "Threshold never reached"
+msgstr "从未达到阈值"
+
+msgid "Probability Plot"
+msgstr "概率图"
+
+msgid "Probability"
+msgstr "概率"
+
+msgid "Error Plots"
+msgstr "误差图"
+
+msgid "Residual Plot"
+msgstr "残差图"
+
+msgid "Forecast Error Plot"
+msgstr "预测误差图"
 
 msgid "The spectral analysis failed."
 msgstr "频谱分析失败。"

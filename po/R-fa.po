@@ -1,11 +1,11 @@
+#
 msgid ""
 msgstr ""
 "Project-Id-Version: jaspTimeSeries 0.96.3\n"
-"POT-Creation-Date: 2026-04-25 04:14\n"
+"POT-Creation-Date: 2026-09-23 17:06\n"
 "PO-Revision-Date: 2026-09-14 02:29+0000\n"
 "Last-Translator: Sohrab Delshad <sdel4030@gmail.com>\n"
-"Language-Team: Persian <https://hosted.weblate.org/projects/jasp/"
-"jasptimeseries-r/fa/>\n"
+"Language-Team: Persian <https://hosted.weblate.org/projects/jasp/jasptimeseries-r/fa/>\n"
 "Language: fa\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -100,10 +100,14 @@ msgstr ""
 msgid "p-value"
 msgstr "p-مقدار"
 
-msgid "When 'Covariates' are used in the model, predictions cannot be carried out unless the covariates are also observed for the predicted period."
+msgid ""
+"When 'Covariates' are used in the model, predictions cannot be carried out "
+"unless the covariates are also observed for the predicted period."
 msgstr ""
 
-msgid "Not enough observations in the covariate%1$s. The maximum number of forecasts is %2$s."
+msgid ""
+"Not enough observations in the covariate%1$s. The maximum number of "
+"forecasts is %2$s."
 msgstr ""
 
 msgid "Forecasting failed."
@@ -114,6 +118,124 @@ msgstr ""
 
 msgid "Forecasts"
 msgstr ""
+
+msgid ""
+"Unknown value provided for modelType, possible values: `alternative`, `null`"
+msgstr ""
+"مقدار ناشناخته‌ای برای modelType ارائه شده است، مقادیر ممکن: `alternative`، "
+"`null`"
+
+msgid "Residual SD"
+msgstr "انحراف معیار باقی‌مانده"
+
+msgid "Prediction SD"
+msgstr "انحراف معیار پیش‌بینی"
+
+msgid "R%s"
+msgstr "R%s"
+
+msgid "Harvey's goodness of fit"
+msgstr "نیکویی برازش هاروی"
+
+msgid ""
+"Only %1$s draws were sampled out of the desired %2$s. Additionally, %3$s "
+"MCMC draws out of %1$s are discarded as burn in."
+msgstr ""
+"تنها %1$s استخراج از %2$s مورد نظر نمونه‌گیری شد. علاوه بر این، %3$s استخراج"
+" MCMC از %1$s به عنوان دوره سوختن دور ریخته می‌شوند."
+
+msgid "%1$d MCMC draws out of %2$d are discarded as burn in."
+msgstr "%1$d استخراج MCMC از %2$d به عنوان دوره سوختن دور ریخته می‌شوند."
+
+msgid ""
+"The local level component has been selected (by default). If you wish to "
+"adjust the model, you can do so under 'Model Components'."
+msgstr ""
+"مؤلفه سطح محلی انتخاب شده است (به طور پیش‌فرض). اگر می‌خواهید مدل را تنظیم "
+"کنید، می‌توانید این کار را در بخش «مؤلفه‌های مدل» انجام دهید."
+
+msgid "Posterior Summary of Coefficients"
+msgstr "خلاصه پسین ضریب‌ها"
+
+msgid "%s%% Credible Interval"
+msgstr "بازه باورپذیر %s%%"
+
+msgid "P(incl)"
+msgstr "P(گنجاندن)"
+
+msgid "P(incl|data)"
+msgstr "P(گنجاندن|داده)"
+
+msgid "BF<sub>inclusion</sub>"
+msgstr "BF<sub>گنجاندن</sub>"
+
+msgid "Mean"
+msgstr "میانگین"
+
+msgid "SD"
+msgstr "انحراف معیار"
+
+msgid "Mean<sub>inclusion</sub>"
+msgstr "میانگین<sub>گنجاندن</sub>"
+
+msgid "SD<sub>inclusion</sub>"
+msgstr "انحراف معیار<sub>گنجاندن</sub>"
+
+msgid "State Plots"
+msgstr "نمودارهای حالت"
+
+msgid "Aggregated State"
+msgstr "حالت تجمیع‌شده"
+
+msgid "Time"
+msgstr "زمان"
+
+msgid "Distribution"
+msgstr "توزیع"
+
+msgid "Component States"
+msgstr "حالت‌های مؤلفه"
+
+msgid "Prediction plot"
+msgstr "نمودار پیش‌بینی"
+
+msgid "Control Plots"
+msgstr "نمودارهای کنترل"
+
+msgid "Threshold Plot"
+msgstr "نمودار آستانه"
+
+msgid ""
+"First date where %1$.3f*sigma is exceeded by %2$.1f%% state credible "
+"interval: %3$s"
+msgstr ""
+"اولین تاریخی که در آن بازه باورپذیر حالت %2$.1f%% از %1$.3f*sigma فراتر "
+"می‌رود: %3$s"
+
+msgid ""
+"First time point where %1$.3f*sigma is exceeded by %2$.1f%% state credible "
+"interval: %3$s"
+msgstr ""
+"اولین نقطه زمانی که در آن بازه باورپذیر حالت %2$.1f%% از %1$.3f*sigma فراتر "
+"می‌رود: %3$s"
+
+msgid "Threshold never reached"
+msgstr "آستانه هرگز برآورده نشد"
+
+msgid "Probability Plot"
+msgstr "نمودار احتمال"
+
+msgid "Probability"
+msgstr "احتمال"
+
+msgid "Error Plots"
+msgstr "نمودارهای خطا"
+
+msgid "Residual Plot"
+msgstr "نمودار باقی‌مانده‌ها"
+
+msgid "Forecast Error Plot"
+msgstr "نمودار خطای پیش‌بینی"
 
 msgid "The spectral analysis failed."
 msgstr ""

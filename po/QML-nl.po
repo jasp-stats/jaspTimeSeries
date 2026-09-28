@@ -1,3 +1,4 @@
+#
 msgid ""
 msgstr ""
 "MIME-Version: 1.0\n"
@@ -6,6 +7,10 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Language: nl\n"
 "X-Qt-Contexts: true\n"
+
+msgctxt "Description|"
+msgid "Time Series"
+msgstr "Tijdsreeksen"
 
 msgctxt "Description|"
 msgid "This module offers time series analyses."
@@ -879,10 +884,6 @@ msgid "Plots the partial autocorrelation for a specified number of lags."
 msgstr ""
 "Tekent de partiële autocorrelatie voor een opgegeven aantal vertragingen."
 
-msgctxt "Description|"
-msgid "Time Series"
-msgstr "Tijdsreeksen"
-
 msgctxt "StationarityTimeSeries|"
 msgid ""
 "Computes an ADF test that accounts for a constant (drift) and a linear "
@@ -910,3 +911,232 @@ msgstr ""
 msgctxt "Description|"
 msgid "Time Series Descriptives"
 msgstr "Beschrijvende statistiek voor Tijdreeksen"
+
+msgctxt "Description|"
+msgid "Descriptives"
+msgstr ""
+
+msgctxt "Description|"
+msgid "Classical"
+msgstr ""
+
+msgctxt "Description|"
+msgid "Bayesian"
+msgstr ""
+
+msgctxt "Description|"
+msgid "Gaussian State Space Models"
+msgstr ""
+
+msgctxt "bayesianStateSpace|"
+msgid "Dependent Variable"
+msgstr "Afhankelijke variabele"
+
+msgctxt "bayesianStateSpace|"
+msgid "Covariates"
+msgstr "Covariaten"
+
+msgctxt "bayesianStateSpace|"
+msgid "Fixed Factors"
+msgstr "Gefixeerde factoren"
+
+msgctxt "bayesianStateSpace|"
+msgid "Time"
+msgstr "Tijd"
+
+msgctxt "bayesianStateSpace|"
+msgid "Output"
+msgstr "Uitvoer"
+
+msgctxt "bayesianStateSpace|"
+msgid "Posterior summary of coefficients"
+msgstr "Posterior samenvatting van coëfficiënten"
+
+msgctxt "bayesianStateSpace|"
+msgid "Show means across draws included"
+msgstr "Toon gemiddelden over inbegrepen trekkingen"
+
+msgctxt "bayesianStateSpace|"
+msgid "Credible interval"
+msgstr "Geloofwaardigheidsinterval"
+
+msgctxt "bayesianStateSpace|"
+msgid "Expected predictors"
+msgstr "Verwachte predictoren"
+
+msgctxt "bayesianStateSpace|"
+msgid "Model Components"
+msgstr "Modelonderdelen"
+
+msgctxt "bayesianStateSpace|"
+msgid "Components"
+msgstr "Onderdelen"
+
+msgctxt "bayesianStateSpace|"
+msgid "Add autoregressive component"
+msgstr "Autoregressieve component toevoegen"
+
+msgctxt "bayesianStateSpace|"
+msgid "Lag selection method"
+msgstr "Lag selectie methode"
+
+msgctxt "bayesianStateSpace|"
+msgid "Manually"
+msgstr "Handmatig"
+
+msgctxt "bayesianStateSpace|"
+msgid "No. of lags"
+msgstr "Aantal lags"
+
+msgctxt "bayesianStateSpace|"
+msgid "Automatic"
+msgstr "Automatisch"
+
+msgctxt "bayesianStateSpace|"
+msgid "Maximal lags"
+msgstr "Maximale lags"
+
+msgctxt "bayesianStateSpace|"
+msgid "Add local level component"
+msgstr "Lokaal niveau component toevoegen"
+
+msgctxt "bayesianStateSpace|"
+msgid "Add local linear trend component"
+msgstr "Lokaal lineaire trendcomponent toevoegen"
+
+msgctxt "bayesianStateSpace|"
+msgid "Add semi-local linear trend"
+msgstr "Semi-lokale lineaire trend toevoegen"
+
+msgctxt "bayesianStateSpace|"
+msgid "Add dynamic regression component"
+msgstr "Dynamische regressiecomponent toevoegen"
+
+msgctxt "bayesianStateSpace|"
+msgid ""
+"This component allows you to model the effect of covariates or fixed factors "
+"on the dependent variable. The lag of coefficients can be specified to "
+"account for delayed effects. Only available when covariates or fixed factors "
+"are present in the model."
+msgstr ""
+"Met deze component kunt u het effect van covariaten of gefixeerde factoren "
+"op de afhankelijke variabele modelleren. De vertraging van de coëfficiënten "
+"kan worden gespecificeerd om rekening te houden met vertraagde effecten. "
+"Alleen beschikbaar wanneer covariaten of gefixeerde factoren aanwezig zijn "
+"in het model."
+
+msgctxt "bayesianStateSpace|"
+msgid "Seasonalities"
+msgstr "Seizoensinvloeden"
+
+msgctxt "bayesianStateSpace|"
+msgid "Name"
+msgstr "Naam"
+
+msgctxt "bayesianStateSpace|"
+msgid "Number"
+msgstr "Nummer"
+
+msgctxt "bayesianStateSpace|"
+msgid "Duration"
+msgstr "Duur"
+
+msgctxt "bayesianStateSpace|"
+msgid "Inverse gamma prior"
+msgstr "Inverse gamma prior"
+
+msgctxt "bayesianStateSpace|"
+msgid "Normal prior initial state"
+msgstr "Normale prior begintoestand"
+
+msgctxt "bayesianStateSpace|"
+msgid "Plots"
+msgstr "Grafieken"
+
+msgctxt "bayesianStateSpace|"
+msgid "State Plots"
+msgstr "State Grafieken"
+
+msgctxt "bayesianStateSpace|"
+msgid "Aggregated state contribution"
+msgstr "Geaggregeerde state bijdrage"
+
+msgctxt "bayesianStateSpace|"
+msgid "Show observations"
+msgstr "Toon observaties"
+
+msgctxt "bayesianStateSpace|"
+msgid "Component state contribution"
+msgstr "Component state bijdrage"
+
+msgctxt "bayesianStateSpace|"
+msgid "Residuals"
+msgstr "Residuen"
+
+msgctxt "bayesianStateSpace|"
+msgid "Posterior distribution of residuals"
+msgstr "Posterieure verdeling van residuen"
+
+msgctxt "bayesianStateSpace|"
+msgid "Posterior distribution of one-step-ahead prediction error"
+msgstr "Posterior-verdeling van de voorspellingsfout één stap vooruit"
+
+msgctxt "bayesianStateSpace|"
+msgid "Prediction"
+msgstr "Voorspellen"
+
+msgctxt "bayesianStateSpace|"
+msgid "Horizon"
+msgstr "Horizon"
+
+msgctxt "bayesianStateSpace|"
+msgid "Control chart"
+msgstr "Controlekaart"
+
+msgctxt "bayesianStateSpace|"
+msgid "Show control chart"
+msgstr "Controlediagram tonen"
+
+msgctxt "bayesianStateSpace|"
+msgid "Control period end"
+msgstr "Einde controleperiode"
+
+msgctxt "bayesianStateSpace|"
+msgid "σ threshold"
+msgstr "σ drempel"
+
+msgctxt "bayesianStateSpace|"
+msgid "Show probabilistic control plot"
+msgstr "Toon probalistisch controleplot"
+
+msgctxt "bayesianStateSpace|"
+msgid "Advanced Options"
+msgstr "Geavanceerde opties"
+
+msgctxt "bayesianStateSpace|"
+msgid "Desired MCMC draws"
+msgstr "Gewenste MCMC trekkingen"
+
+msgctxt "bayesianStateSpace|"
+msgid "Timeout in seconds"
+msgstr "Time-out in seconden"
+
+msgctxt "bayesianStateSpace|"
+msgid "Burn-in Specification"
+msgstr "Burn-in Specificatie"
+
+msgctxt "bayesianStateSpace|"
+msgid "Automatic suggestion"
+msgstr "Automatische suggestie"
+
+msgctxt "bayesianStateSpace|"
+msgid "Proportion"
+msgstr "Proportie"
+
+msgctxt "bayesianStateSpace|"
+msgid "Manual"
+msgstr "Handmatig"
+
+msgctxt "bayesianStateSpace|"
+msgid "Seed"
+msgstr "Toevalsgenerator beginwaarde"

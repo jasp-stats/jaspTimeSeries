@@ -1,3 +1,4 @@
+#
 msgid ""
 msgstr ""
 "MIME-Version: 1.0\n"
@@ -6,6 +7,10 @@ msgstr ""
 "Plural-Forms: nplurals=1; plural=0;\n"
 "X-Language: id\n"
 "X-Qt-Contexts: true\n"
+
+msgctxt "Description|"
+msgid "Time Series"
+msgstr "Seri Waktu"
 
 msgctxt "Description|"
 msgid "This module offers time series analyses."
@@ -392,8 +397,8 @@ msgid ""
 msgstr ""
 "Opsional. Dapat baik variabel ordinal mengindikasikan urutan observasi, atau "
 "variabel teks mengindikasikan tanggal/stempel waktu observasi. Nilai tanggal "
-"dan waktu terkombinasi seharusnya dalam format standar 'YYYY-MM-DD HH:MM:"
-"SS', di mana detik (':SS') juga dapat dihilangkan. Nilai hanya tanggal "
+"dan waktu terkombinasi seharusnya dalam format standar 'YYYY-MM-DD "
+"HH:MM:SS', di mana detik (':SS') juga dapat dihilangkan. Nilai hanya tanggal "
 "seharusnya dalam format 'YYYY-MM-DD'. Jika variabel waktu tidak disertakan, "
 "urutan baris data digunakan."
 
@@ -543,8 +548,8 @@ msgid ""
 msgstr ""
 "Opsional. Dapat baik variabel ordinal mengindikasikan urutan observasi, atau "
 "variabel teks mengindikasikan tanggal/stempel waktu observasi. Nilai tanggal "
-"dan waktu terkombinasi seharusnya dalam format standar 'YYYY-MM-DD HH:MM:"
-"SS', di mana detik (':SS') juga dapat dihilangkan. Nilai hanya tanggal "
+"dan waktu terkombinasi seharusnya dalam format standar 'YYYY-MM-DD "
+"HH:MM:SS', di mana detik (':SS') juga dapat dihilangkan. Nilai hanya tanggal "
 "seharusnya dalam format 'YYYY-MM-DD'. Jika variabel waktu tidak disertakan, "
 "urutan baris data digunakan."
 
@@ -866,10 +871,6 @@ msgctxt "StationarityTimeSeries|"
 msgid "Plots the partial autocorrelation for a specified number of lags."
 msgstr "Mendiagram korelasi otomatis parsial untuk jumlah penundaan tertentu."
 
-msgctxt "Description|"
-msgid "Time Series"
-msgstr "Seri Waktu"
-
 msgctxt "StationarityTimeSeries|"
 msgid ""
 "Computes an ADF test that accounts for a constant (drift) and a linear "
@@ -896,3 +897,231 @@ msgstr ""
 msgctxt "Description|"
 msgid "Time Series Descriptives"
 msgstr "Deskriptif Seri Waktu"
+
+msgctxt "Description|"
+msgid "Descriptives"
+msgstr ""
+
+msgctxt "Description|"
+msgid "Classical"
+msgstr ""
+
+msgctxt "Description|"
+msgid "Bayesian"
+msgstr ""
+
+msgctxt "Description|"
+msgid "Gaussian State Space Models"
+msgstr ""
+
+msgctxt "bayesianStateSpace|"
+msgid "Dependent Variable"
+msgstr "Variabel Dependen"
+
+msgctxt "bayesianStateSpace|"
+msgid "Covariates"
+msgstr "Kovariat"
+
+msgctxt "bayesianStateSpace|"
+msgid "Fixed Factors"
+msgstr "Faktor Tetap"
+
+msgctxt "bayesianStateSpace|"
+msgid "Time"
+msgstr "Waktu"
+
+msgctxt "bayesianStateSpace|"
+msgid "Output"
+msgstr "Luaran"
+
+msgctxt "bayesianStateSpace|"
+msgid "Posterior summary of coefficients"
+msgstr "Ringkasan posterior koefisien"
+
+msgctxt "bayesianStateSpace|"
+msgid "Show means across draws included"
+msgstr "Tampilkan rerata melintasi gambaran disertakan"
+
+msgctxt "bayesianStateSpace|"
+msgid "Credible interval"
+msgstr "Interval kredibel"
+
+msgctxt "bayesianStateSpace|"
+msgid "Expected predictors"
+msgstr "Prediktor terharap"
+
+msgctxt "bayesianStateSpace|"
+msgid "Model Components"
+msgstr "Komponen Model"
+
+msgctxt "bayesianStateSpace|"
+msgid "Components"
+msgstr "Komponen"
+
+msgctxt "bayesianStateSpace|"
+msgid "Add autoregressive component"
+msgstr "Tambahkan komponen regresif otomatis"
+
+msgctxt "bayesianStateSpace|"
+msgid "Lag selection method"
+msgstr "Metode pemilihan penundaan"
+
+msgctxt "bayesianStateSpace|"
+msgid "Manually"
+msgstr "Secara manual"
+
+msgctxt "bayesianStateSpace|"
+msgid "No. of lags"
+msgstr "Jum. penundaan"
+
+msgctxt "bayesianStateSpace|"
+msgid "Automatic"
+msgstr "Otomatis"
+
+msgctxt "bayesianStateSpace|"
+msgid "Maximal lags"
+msgstr "Penundaan maksimal"
+
+msgctxt "bayesianStateSpace|"
+msgid "Add local level component"
+msgstr "Tambahkan komponen tingkat lokal"
+
+msgctxt "bayesianStateSpace|"
+msgid "Add local linear trend component"
+msgstr "Tambahkan komponen tren linear lokal"
+
+msgctxt "bayesianStateSpace|"
+msgid "Add semi-local linear trend"
+msgstr "Tambahkan tren linear semi-lokal"
+
+msgctxt "bayesianStateSpace|"
+msgid "Add dynamic regression component"
+msgstr "Tambahkan komponen regresi dinamis"
+
+msgctxt "bayesianStateSpace|"
+msgid ""
+"This component allows you to model the effect of covariates or fixed factors "
+"on the dependent variable. The lag of coefficients can be specified to "
+"account for delayed effects. Only available when covariates or fixed factors "
+"are present in the model."
+msgstr ""
+"Komponen ini mengizinkan Anda untuk memodelkan efek kovariat atau faktor "
+"yang diperbaiki pada variabel dependen. Penundaan koefisien dapat ditentukan "
+"untuk memperhitungkan efek tertunda. Hanya tersedia ketika kovariat atau "
+"faktor yang diperbaiki ditampilkan dalam model."
+
+msgctxt "bayesianStateSpace|"
+msgid "Seasonalities"
+msgstr "Musimanalitas"
+
+msgctxt "bayesianStateSpace|"
+msgid "Name"
+msgstr "Nama"
+
+msgctxt "bayesianStateSpace|"
+msgid "Number"
+msgstr "Angka"
+
+msgctxt "bayesianStateSpace|"
+msgid "Duration"
+msgstr "Durasi"
+
+msgctxt "bayesianStateSpace|"
+msgid "Inverse gamma prior"
+msgstr "Priori gamma terbalik"
+
+msgctxt "bayesianStateSpace|"
+msgid "Normal prior initial state"
+msgstr "Status awal priori normal"
+
+msgctxt "bayesianStateSpace|"
+msgid "Plots"
+msgstr "Diagram"
+
+msgctxt "bayesianStateSpace|"
+msgid "State Plots"
+msgstr "Diagram Status"
+
+msgctxt "bayesianStateSpace|"
+msgid "Aggregated state contribution"
+msgstr "Kontribusi status teragregasi"
+
+msgctxt "bayesianStateSpace|"
+msgid "Show observations"
+msgstr "Tampilkan observasi"
+
+msgctxt "bayesianStateSpace|"
+msgid "Component state contribution"
+msgstr "Kontribusi status komponen"
+
+msgctxt "bayesianStateSpace|"
+msgid "Residuals"
+msgstr "Residu"
+
+msgctxt "bayesianStateSpace|"
+msgid "Posterior distribution of residuals"
+msgstr "Distribusi posterior residu"
+
+msgctxt "bayesianStateSpace|"
+msgid "Posterior distribution of one-step-ahead prediction error"
+msgstr "Distribusi posterior galat prediksi satu langkah di depan"
+
+msgctxt "bayesianStateSpace|"
+msgid "Prediction"
+msgstr "Prediksi"
+
+msgctxt "bayesianStateSpace|"
+msgid "Horizon"
+msgstr "Horizon"
+
+msgctxt "bayesianStateSpace|"
+msgid "Control chart"
+msgstr "Bagan kontrol"
+
+msgctxt "bayesianStateSpace|"
+msgid "Show control chart"
+msgstr "Tampilkan bagan kontrol"
+
+msgctxt "bayesianStateSpace|"
+msgid "Control period end"
+msgstr "Akhir periode kontrol"
+
+msgctxt "bayesianStateSpace|"
+msgid "σ threshold"
+msgstr "Ambang batas σ"
+
+msgctxt "bayesianStateSpace|"
+msgid "Show probabilistic control plot"
+msgstr "Tampilkan diagram kontrol probabilistik"
+
+msgctxt "bayesianStateSpace|"
+msgid "Advanced Options"
+msgstr "Opsi Lanjutan"
+
+msgctxt "bayesianStateSpace|"
+msgid "Desired MCMC draws"
+msgstr "Penggambaran MCMC teringinkan"
+
+msgctxt "bayesianStateSpace|"
+msgid "Timeout in seconds"
+msgstr "Batas waktu dalam detik"
+
+msgctxt "bayesianStateSpace|"
+msgid "Burn-in Specification"
+msgstr "Spesifikasi Burn-in"
+
+msgctxt "bayesianStateSpace|"
+msgid "Automatic suggestion"
+msgstr "Saran otomatis"
+
+msgctxt "bayesianStateSpace|"
+msgid "Proportion"
+msgstr "Proporsi"
+
+msgctxt "bayesianStateSpace|"
+msgid "Manual"
+msgstr "Manual"
+
+msgctxt "bayesianStateSpace|"
+msgid "Seed"
+msgstr "Benih"

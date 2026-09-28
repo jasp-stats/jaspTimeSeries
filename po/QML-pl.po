@@ -1,3 +1,4 @@
+#
 msgid ""
 msgstr ""
 "MIME-Version: 1.0\n"
@@ -7,6 +8,10 @@ msgstr ""
 "|| n%100>=20) ? 1 : 2);\n"
 "X-Language: pl\n"
 "X-Qt-Contexts: true\n"
+
+msgctxt "Description|"
+msgid "Time Series"
+msgstr ""
 
 msgctxt "Description|"
 msgid "This module offers time series analyses."
@@ -792,10 +797,6 @@ msgctxt "StationarityTimeSeries|"
 msgid "Plots the partial autocorrelation for a specified number of lags."
 msgstr ""
 
-msgctxt "Description|"
-msgid "Time Series"
-msgstr ""
-
 msgctxt "StationarityTimeSeries|"
 msgid ""
 "Computes an ADF test that accounts for a constant (drift) and a linear "
@@ -815,3 +816,227 @@ msgstr ""
 msgctxt "Description|"
 msgid "Time Series Descriptives"
 msgstr ""
+
+msgctxt "Description|"
+msgid "Descriptives"
+msgstr ""
+
+msgctxt "Description|"
+msgid "Classical"
+msgstr ""
+
+msgctxt "Description|"
+msgid "Bayesian"
+msgstr ""
+
+msgctxt "Description|"
+msgid "Gaussian State Space Models"
+msgstr ""
+
+msgctxt "bayesianStateSpace|"
+msgid "Dependent Variable"
+msgstr "Zmienna zależna"
+
+msgctxt "bayesianStateSpace|"
+msgid "Covariates"
+msgstr "Współzmienne"
+
+msgctxt "bayesianStateSpace|"
+msgid "Fixed Factors"
+msgstr "Czynniki stałe"
+
+msgctxt "bayesianStateSpace|"
+msgid "Time"
+msgstr "Czas"
+
+msgctxt "bayesianStateSpace|"
+msgid "Output"
+msgstr "Wyniki"
+
+msgctxt "bayesianStateSpace|"
+msgid "Posterior summary of coefficients"
+msgstr "Podsumowanie współczynników a posteriori"
+
+msgctxt "bayesianStateSpace|"
+msgid "Show means across draws included"
+msgstr ""
+
+msgctxt "bayesianStateSpace|"
+msgid "Credible interval"
+msgstr "Przedział wiarygodności"
+
+msgctxt "bayesianStateSpace|"
+msgid "Expected predictors"
+msgstr "Oczekiwane predyktory"
+
+msgctxt "bayesianStateSpace|"
+msgid "Model Components"
+msgstr "Składniki modelu"
+
+msgctxt "bayesianStateSpace|"
+msgid "Components"
+msgstr "Składniki"
+
+msgctxt "bayesianStateSpace|"
+msgid "Add autoregressive component"
+msgstr ""
+
+msgctxt "bayesianStateSpace|"
+msgid "Lag selection method"
+msgstr ""
+
+msgctxt "bayesianStateSpace|"
+msgid "Manually"
+msgstr "Ręcznie"
+
+msgctxt "bayesianStateSpace|"
+msgid "No. of lags"
+msgstr ""
+
+msgctxt "bayesianStateSpace|"
+msgid "Automatic"
+msgstr "Automatycznie"
+
+msgctxt "bayesianStateSpace|"
+msgid "Maximal lags"
+msgstr ""
+
+msgctxt "bayesianStateSpace|"
+msgid "Add local level component"
+msgstr ""
+
+msgctxt "bayesianStateSpace|"
+msgid "Add local linear trend component"
+msgstr ""
+
+msgctxt "bayesianStateSpace|"
+msgid "Add semi-local linear trend"
+msgstr ""
+
+msgctxt "bayesianStateSpace|"
+msgid "Add dynamic regression component"
+msgstr ""
+
+msgctxt "bayesianStateSpace|"
+msgid ""
+"This component allows you to model the effect of covariates or fixed factors "
+"on the dependent variable. The lag of coefficients can be specified to "
+"account for delayed effects. Only available when covariates or fixed factors "
+"are present in the model."
+msgstr ""
+
+msgctxt "bayesianStateSpace|"
+msgid "Seasonalities"
+msgstr ""
+
+msgctxt "bayesianStateSpace|"
+msgid "Name"
+msgstr "Nazwa"
+
+msgctxt "bayesianStateSpace|"
+msgid "Number"
+msgstr "Liczba"
+
+msgctxt "bayesianStateSpace|"
+msgid "Duration"
+msgstr ""
+
+msgctxt "bayesianStateSpace|"
+msgid "Inverse gamma prior"
+msgstr ""
+
+msgctxt "bayesianStateSpace|"
+msgid "Normal prior initial state"
+msgstr ""
+
+msgctxt "bayesianStateSpace|"
+msgid "Plots"
+msgstr "Wykresy"
+
+msgctxt "bayesianStateSpace|"
+msgid "State Plots"
+msgstr ""
+
+msgctxt "bayesianStateSpace|"
+msgid "Aggregated state contribution"
+msgstr ""
+
+msgctxt "bayesianStateSpace|"
+msgid "Show observations"
+msgstr "Pokaż obserwacje"
+
+msgctxt "bayesianStateSpace|"
+msgid "Component state contribution"
+msgstr ""
+
+msgctxt "bayesianStateSpace|"
+msgid "Residuals"
+msgstr "Reszty"
+
+msgctxt "bayesianStateSpace|"
+msgid "Posterior distribution of residuals"
+msgstr "Rozkład a posteriori reszt"
+
+msgctxt "bayesianStateSpace|"
+msgid "Posterior distribution of one-step-ahead prediction error"
+msgstr ""
+
+msgctxt "bayesianStateSpace|"
+msgid "Prediction"
+msgstr ""
+
+msgctxt "bayesianStateSpace|"
+msgid "Horizon"
+msgstr ""
+
+msgctxt "bayesianStateSpace|"
+msgid "Control chart"
+msgstr ""
+
+msgctxt "bayesianStateSpace|"
+msgid "Show control chart"
+msgstr ""
+
+msgctxt "bayesianStateSpace|"
+msgid "Control period end"
+msgstr ""
+
+msgctxt "bayesianStateSpace|"
+msgid "σ threshold"
+msgstr "Próg σ"
+
+msgctxt "bayesianStateSpace|"
+msgid "Show probabilistic control plot"
+msgstr ""
+
+msgctxt "bayesianStateSpace|"
+msgid "Advanced Options"
+msgstr "Opcje zaawansowane"
+
+msgctxt "bayesianStateSpace|"
+msgid "Desired MCMC draws"
+msgstr ""
+
+msgctxt "bayesianStateSpace|"
+msgid "Timeout in seconds"
+msgstr ""
+
+msgctxt "bayesianStateSpace|"
+msgid "Burn-in Specification"
+msgstr "Ustawienia metody burn-in"
+
+msgctxt "bayesianStateSpace|"
+msgid "Automatic suggestion"
+msgstr "Automatycznie"
+
+msgctxt "bayesianStateSpace|"
+msgid "Proportion"
+msgstr "Proporcja"
+
+msgctxt "bayesianStateSpace|"
+msgid "Manual"
+msgstr "Ręcznie"
+
+msgctxt "bayesianStateSpace|"
+msgid "Seed"
+msgstr "Ziarno generatora"

@@ -1,0 +1,325 @@
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: jaspTimeSeries 0.96.3\n"
+"POT-Creation-Date: 2026-09-23 17:06\n"
+"PO-Revision-Date: 2024-05-19 20:45+0000\n"
+"Last-Translator: robachowyk <kaya.robach@gmail.com>\n"
+"Language-Team: French <https://hosted.weblate.org/projects/jasp/jasptimeseries-r/fr/>\n"
+"Language: fr\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n > 1;\n"
+"X-Generator: Weblate 5.6-dev\n"
+
+msgid "Time Series Plot"
+msgstr ""
+
+msgid "The ARIMA model could not be fit."
+msgstr ""
+
+msgid "No parameters are estimated."
+msgstr ""
+
+msgid "Model Summary"
+msgstr "Résumé du modèle"
+
+msgid "Log-Likelihood"
+msgstr ""
+
+msgid "AICc"
+msgstr ""
+
+msgid "AIC"
+msgstr ""
+
+msgid "BIC"
+msgstr ""
+
+msgid "Coefficients"
+msgstr "Coefficients"
+
+msgid "Estimate"
+msgstr ""
+
+msgid "Standard Error"
+msgstr ""
+
+msgid "t"
+msgstr ""
+
+msgid "p"
+msgstr ""
+
+msgid "%s%% CI"
+msgstr ""
+
+msgid "Lower"
+msgstr "Inférieur"
+
+msgid "Upper"
+msgstr "Supérieur"
+
+msgid "Intercept"
+msgstr ""
+
+msgid "AR(%1$i)"
+msgstr ""
+
+msgid "MA(%1$i)"
+msgstr ""
+
+msgid "seasonal AR(%1$i)"
+msgstr ""
+
+msgid "seasonal MA(%1$i)"
+msgstr ""
+
+msgid "An ARIMA(%1$s, %2$s, %3$s)(%4$s, %5$s, %6$s)[%7$s] model was fitted."
+msgstr ""
+
+msgid "An ARIMA(%1$s, %2$s, %3$s) model was fitted."
+msgstr ""
+
+msgid "Residual Diagnostics Plots"
+msgstr ""
+
+msgid "Autocorrelation Function Plot"
+msgstr ""
+
+msgid "Q-Q Plot"
+msgstr ""
+
+msgid "Ljung-Box Plot"
+msgstr ""
+
+msgid "Lag"
+msgstr ""
+
+msgid "p-value"
+msgstr ""
+
+msgid ""
+"When 'Covariates' are used in the model, predictions cannot be carried out "
+"unless the covariates are also observed for the predicted period."
+msgstr ""
+
+msgid ""
+"Not enough observations in the covariate%1$s. The maximum number of "
+"forecasts is %2$s."
+msgstr ""
+
+msgid "Forecasting failed."
+msgstr ""
+
+msgid "Forecast Time Series Plot"
+msgstr ""
+
+msgid "Forecasts"
+msgstr ""
+
+msgid ""
+"Unknown value provided for modelType, possible values: `alternative`, `null`"
+msgstr ""
+"Valeur inconnue fournie pour modelType, valeurs possibles: "
+"`alternative`,`null`"
+
+msgid "Residual SD"
+msgstr "Écart-Type Résiduel"
+
+msgid "Prediction SD"
+msgstr "Écart-Type de la Prédiction"
+
+msgid "R%s"
+msgstr "R%s"
+
+msgid "Harvey's goodness of fit"
+msgstr "Qualité d'ajustement d'Harvey"
+
+msgid ""
+"Only %1$s draws were sampled out of the desired %2$s. Additionally, %3$s "
+"MCMC draws out of %1$s are discarded as burn in."
+msgstr ""
+"Seuls %1$s tirages ont été échantillonnés sur les %2$s souhaités. De plus, "
+"%3$s tirages MCMC sur %1$s sont éliminés comme période de chauffe."
+
+#, fuzzy
+msgid "%1$d MCMC draws out of %2$d are discarded as burn in."
+msgstr "sont supprimés dans la période de chauffe."
+
+msgid ""
+"The local level component has been selected (by default). If you wish to "
+"adjust the model, you can do so under 'Model Components'."
+msgstr ""
+"La composante de niveau local a été sélectionnée (par défaut). Si vous "
+"souhaitez ajuster le modèle, vous pouvez le faire sous « Composants du "
+"modèle »."
+
+msgid "Posterior Summary of Coefficients"
+msgstr "Résumé a posteriori des coefficients"
+
+msgid "%s%% Credible Interval"
+msgstr "Intervalle de crédibilité à %s%%"
+
+msgid "P(incl)"
+msgstr "P(incl)"
+
+msgid "P(incl|data)"
+msgstr "P(incl|donnée)"
+
+msgid "BF<sub>inclusion</sub>"
+msgstr "FB<sub>inclusion</sub>"
+
+msgid "Mean"
+msgstr "Moyenne"
+
+msgid "SD"
+msgstr "Écart-type"
+
+msgid "Mean<sub>inclusion</sub>"
+msgstr "Moyenne<sub>inclusion</sub>"
+
+msgid "SD<sub>inclusion</sub>"
+msgstr "ET<sub>inclusion</sub>"
+
+msgid "State Plots"
+msgstr "Tracé d'Etats"
+
+msgid "Aggregated State"
+msgstr "État agrégé"
+
+msgid "Time"
+msgstr "Temps"
+
+msgid "Distribution"
+msgstr "Distribution"
+
+msgid "Component States"
+msgstr "États des composants"
+
+#, fuzzy
+msgid "Prediction plot"
+msgstr "Écart-Type de la Prédiction"
+
+msgid "Control Plots"
+msgstr "Graphiques de contrôle"
+
+msgid "Threshold Plot"
+msgstr "Graphique de seuil"
+
+msgid ""
+"First date where %1$.3f*sigma is exceeded by %2$.1f%% state credible "
+"interval: %3$s"
+msgstr ""
+"Première date à laquelle l'intervalle de crédibilité de l'état de %2$.1f%% "
+"dépasse %1$.3f*sigma : %3$s"
+
+msgid ""
+"First time point where %1$.3f*sigma is exceeded by %2$.1f%% state credible "
+"interval: %3$s"
+msgstr ""
+"Premier point temporel à lequel l'intervalle de crédibilité de l'état de "
+"%2$.1f%% dépasse %1$.3f*sigma : %3$s"
+
+msgid "Threshold never reached"
+msgstr "Seuil jamais atteint"
+
+msgid "Probability Plot"
+msgstr "Graphique de probabilité"
+
+msgid "Probability"
+msgstr "Probabilité"
+
+msgid "Error Plots"
+msgstr "Graphiques d'Erreur"
+
+msgid "Residual Plot"
+msgstr "Graphique des Résidus"
+
+msgid "Forecast Error Plot"
+msgstr "Tracé de la prédiction d'erreur"
+
+msgid "The spectral analysis failed."
+msgstr ""
+
+msgid "Power Spectral Density Plot"
+msgstr ""
+
+msgid "Spectral Density"
+msgstr ""
+
+msgid "Bandwidth"
+msgstr ""
+
+msgid "Data cannot be zero or negative for log transformation."
+msgstr ""
+
+msgid "Data cannot be negative for root transformation."
+msgstr ""
+
+msgid "Detrend using linear regression"
+msgstr ""
+
+msgid "Degree"
+msgstr ""
+
+msgid "A polynomial regression with a degree of %s was fitted."
+msgstr ""
+
+msgid "Stationarity Tests"
+msgstr ""
+
+msgid "Test"
+msgstr ""
+
+msgid "Statistic"
+msgstr ""
+
+msgid "Truncation lag parameter"
+msgstr ""
+
+msgid "H₀"
+msgstr ""
+
+msgid "Level"
+msgstr ""
+
+msgid "Trend"
+msgstr ""
+
+msgid "Non-stationary"
+msgstr ""
+
+msgid "Level stationary"
+msgstr ""
+
+msgid "Trend stationary"
+msgstr ""
+
+msgid "The ADF test failed."
+msgstr ""
+
+msgid "The PP regression coefficient test failed."
+msgstr ""
+
+msgid "The PP studentized test failed."
+msgstr ""
+
+msgid "The KPSS test for level stationarity failed."
+msgstr ""
+
+msgid "The KPSS test for trend stationarity failed."
+msgstr ""
+
+msgid "The p-value is actually less than p-value shown (see Help file)."
+msgstr ""
+
+msgid "The p-value is actually greater than p-value shown (see Help file)."
+msgstr ""
+
+msgid "Autocorrelation Function"
+msgstr ""
+
+msgid "Partial Autocorrelation Function"
+msgstr ""

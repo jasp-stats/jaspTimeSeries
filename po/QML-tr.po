@@ -1,3 +1,4 @@
+#
 msgid ""
 msgstr ""
 "MIME-Version: 1.0\n"
@@ -6,6 +7,10 @@ msgstr ""
 "Plural-Forms: nplurals=1; plural=0;\n"
 "X-Language: tr\n"
 "X-Qt-Contexts: true\n"
+
+msgctxt "Description|"
+msgid "Time Series"
+msgstr ""
 
 msgctxt "Description|"
 msgid "This module offers time series analyses."
@@ -802,10 +807,6 @@ msgctxt "StationarityTimeSeries|"
 msgid "Plots the partial autocorrelation for a specified number of lags."
 msgstr ""
 
-msgctxt "Description|"
-msgid "Time Series"
-msgstr ""
-
 msgctxt "StationarityTimeSeries|"
 msgid ""
 "Computes an ADF test that accounts for a constant (drift) and a linear "
@@ -825,3 +826,231 @@ msgstr ""
 msgctxt "Description|"
 msgid "Time Series Descriptives"
 msgstr ""
+
+msgctxt "Description|"
+msgid "Descriptives"
+msgstr ""
+
+msgctxt "Description|"
+msgid "Classical"
+msgstr ""
+
+msgctxt "Description|"
+msgid "Bayesian"
+msgstr ""
+
+msgctxt "Description|"
+msgid "Gaussian State Space Models"
+msgstr ""
+
+msgctxt "bayesianStateSpace|"
+msgid "Dependent Variable"
+msgstr "Bağımlı değişken"
+
+msgctxt "bayesianStateSpace|"
+msgid "Covariates"
+msgstr "Ortak Değişkenler"
+
+msgctxt "bayesianStateSpace|"
+msgid "Fixed Factors"
+msgstr "Sabit Faktörler"
+
+msgctxt "bayesianStateSpace|"
+msgid "Time"
+msgstr "Zaman"
+
+msgctxt "bayesianStateSpace|"
+msgid "Output"
+msgstr "Çıktı"
+
+msgctxt "bayesianStateSpace|"
+msgid "Posterior summary of coefficients"
+msgstr "Katsayıların arka özeti"
+
+msgctxt "bayesianStateSpace|"
+msgid "Show means across draws included"
+msgstr "Dahil edilen çekilişler arasında ortalamaları göster"
+
+msgctxt "bayesianStateSpace|"
+msgid "Credible interval"
+msgstr "Güvenilir aralık"
+
+msgctxt "bayesianStateSpace|"
+msgid "Expected predictors"
+msgstr "Beklenen tahminciler"
+
+msgctxt "bayesianStateSpace|"
+msgid "Model Components"
+msgstr "Model Bileşenleri"
+
+msgctxt "bayesianStateSpace|"
+msgid "Components"
+msgstr "Bileşenler"
+
+msgctxt "bayesianStateSpace|"
+msgid "Add autoregressive component"
+msgstr "Otoregresif bileşen ekle"
+
+msgctxt "bayesianStateSpace|"
+msgid "Lag selection method"
+msgstr "Gecikme seçimi yöntemi"
+
+msgctxt "bayesianStateSpace|"
+msgid "Manually"
+msgstr "manuel olarak"
+
+msgctxt "bayesianStateSpace|"
+msgid "No. of lags"
+msgstr "gecikme sayısı"
+
+msgctxt "bayesianStateSpace|"
+msgid "Automatic"
+msgstr "Otomatik"
+
+msgctxt "bayesianStateSpace|"
+msgid "Maximal lags"
+msgstr "Maksimum gecikmeler"
+
+msgctxt "bayesianStateSpace|"
+msgid "Add local level component"
+msgstr "Yerel düzeyde bileşen ekle"
+
+msgctxt "bayesianStateSpace|"
+msgid "Add local linear trend component"
+msgstr "Yerel doğrusal trend bileşenini ekle"
+
+msgctxt "bayesianStateSpace|"
+msgid "Add semi-local linear trend"
+msgstr "Yarı yerel doğrusal trend ekle"
+
+msgctxt "bayesianStateSpace|"
+msgid "Add dynamic regression component"
+msgstr "Dinamik regresyon bileşenini ekle"
+
+msgctxt "bayesianStateSpace|"
+msgid ""
+"This component allows you to model the effect of covariates or fixed factors "
+"on the dependent variable. The lag of coefficients can be specified to "
+"account for delayed effects. Only available when covariates or fixed factors "
+"are present in the model."
+msgstr ""
+"Bu bileşen, ortak değişkenlerin veya sabit faktörlerin bağımlı değişken "
+"üzerindeki etkisini modellemenizi sağlar. Gecikmeli etkileri hesaba katmak "
+"için katsayıların gecikmesi belirtilebilir. Yalnızca modelde ortak "
+"değişkenler veya sabit faktörler mevcut olduğunda kullanılabilir."
+
+msgctxt "bayesianStateSpace|"
+msgid "Seasonalities"
+msgstr "Mevsimsellikler"
+
+msgctxt "bayesianStateSpace|"
+msgid "Name"
+msgstr "İsim"
+
+msgctxt "bayesianStateSpace|"
+msgid "Number"
+msgstr "Numara"
+
+msgctxt "bayesianStateSpace|"
+msgid "Duration"
+msgstr "Süre"
+
+msgctxt "bayesianStateSpace|"
+msgid "Inverse gamma prior"
+msgstr "Ters gama önceliği"
+
+msgctxt "bayesianStateSpace|"
+msgid "Normal prior initial state"
+msgstr "Normal önceki başlangıç durumu"
+
+msgctxt "bayesianStateSpace|"
+msgid "Plots"
+msgstr "Grafikler"
+
+msgctxt "bayesianStateSpace|"
+msgid "State Plots"
+msgstr "Durum Grafikleri"
+
+msgctxt "bayesianStateSpace|"
+msgid "Aggregated state contribution"
+msgstr "Toplu merkezi katkısı"
+
+msgctxt "bayesianStateSpace|"
+msgid "Show observations"
+msgstr "Gözlemleri göster"
+
+msgctxt "bayesianStateSpace|"
+msgid "Component state contribution"
+msgstr "Bileşen durum katkısı"
+
+msgctxt "bayesianStateSpace|"
+msgid "Residuals"
+msgstr "Artanlar"
+
+msgctxt "bayesianStateSpace|"
+msgid "Posterior distribution of residuals"
+msgstr "Kalıntıların arka dağılımı"
+
+msgctxt "bayesianStateSpace|"
+msgid "Posterior distribution of one-step-ahead prediction error"
+msgstr "Bir adım önde tahmin hatasının arka dağılımı"
+
+msgctxt "bayesianStateSpace|"
+msgid "Prediction"
+msgstr "Tahmin"
+
+msgctxt "bayesianStateSpace|"
+msgid "Horizon"
+msgstr "Görüş"
+
+msgctxt "bayesianStateSpace|"
+msgid "Control chart"
+msgstr "Kontrol çizelgesi"
+
+msgctxt "bayesianStateSpace|"
+msgid "Show control chart"
+msgstr "Kontrol çizelgesini göster"
+
+msgctxt "bayesianStateSpace|"
+msgid "Control period end"
+msgstr "Kontrol periyodu sonu"
+
+msgctxt "bayesianStateSpace|"
+msgid "σ threshold"
+msgstr "σ eşiği"
+
+msgctxt "bayesianStateSpace|"
+msgid "Show probabilistic control plot"
+msgstr "Olasılıksal kontrol grafiğini göster"
+
+msgctxt "bayesianStateSpace|"
+msgid "Advanced Options"
+msgstr "Gelişmiş Seçenekler"
+
+msgctxt "bayesianStateSpace|"
+msgid "Desired MCMC draws"
+msgstr "İstenilen MCMC çelişkileri"
+
+msgctxt "bayesianStateSpace|"
+msgid "Timeout in seconds"
+msgstr "Saniye cinsinden zaman aşımı"
+
+msgctxt "bayesianStateSpace|"
+msgid "Burn-in Specification"
+msgstr "Burn-in Sınıflandırması"
+
+msgctxt "bayesianStateSpace|"
+msgid "Automatic suggestion"
+msgstr "Otomatik öneri"
+
+msgctxt "bayesianStateSpace|"
+msgid "Proportion"
+msgstr "Oran"
+
+msgctxt "bayesianStateSpace|"
+msgid "Manual"
+msgstr "Manuel"
+
+msgctxt "bayesianStateSpace|"
+msgid "Seed"
+msgstr "Tohum"

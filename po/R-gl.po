@@ -1,11 +1,11 @@
+#
 msgid ""
 msgstr ""
 "Project-Id-Version: jaspTimeSeries 0.19.2\n"
-"POT-Creation-Date: 2024-10-19 03:27\n"
+"POT-Creation-Date: 2026-09-23 17:06\n"
 "PO-Revision-Date: 2025-07-26 07:51+0000\n"
 "Last-Translator: ecadrian <ecadrian@hotmail.com>\n"
-"Language-Team: Galician <https://hosted.weblate.org/projects/jasp/"
-"jasptimeseries-r/gl/>\n"
+"Language-Team: Galician <https://hosted.weblate.org/projects/jasp/jasptimeseries-r/gl/>\n"
 "Language: gl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -123,6 +123,124 @@ msgstr "Gráfica de predición de serie temporal"
 
 msgid "Forecasts"
 msgstr "Predicións"
+
+msgid ""
+"Unknown value provided for modelType, possible values: `alternative`, `null`"
+msgstr ""
+"Proporcionouse un valor descoñecido para modelType; posibles valores: "
+"`alternativo`, `nulo`"
+
+msgid "Residual SD"
+msgstr "DP dos erros"
+
+msgid "Prediction SD"
+msgstr "DP da predición"
+
+msgid "R%s"
+msgstr "R%s"
+
+msgid "Harvey's goodness of fit"
+msgstr "Bondade de axuste de Harvey"
+
+msgid ""
+"Only %1$s draws were sampled out of the desired %2$s. Additionally, %3$s "
+"MCMC draws out of %1$s are discarded as burn in."
+msgstr ""
+"Só se obtiveron %1$s extraccións das %2$s desexadas. Amais, %3$s extraccións"
+" MCMC de %1$s descártanse polo quecemento."
+
+msgid "%1$d MCMC draws out of %2$d are discarded as burn in."
+msgstr "Descártanse %1$d extraccións de %2$d por quecemento."
+
+msgid ""
+"The local level component has been selected (by default). If you wish to "
+"adjust the model, you can do so under 'Model Components'."
+msgstr ""
+"Seleccionouse a compoñente de nivel local (por defecto). Se queres axustar o"
+" modelo, podes facelo en 'Compoñentes do Modelo'."
+
+msgid "Posterior Summary of Coefficients"
+msgstr "Resumo posterior dos coeficientes"
+
+msgid "%s%% Credible Interval"
+msgstr "Intervalo co %s%% de Credibilidade"
+
+msgid "P(incl)"
+msgstr "P(incl)"
+
+msgid "P(incl|data)"
+msgstr "P(incl|datos)"
+
+msgid "BF<sub>inclusion</sub>"
+msgstr "FB<sub>inclusión</sub>"
+
+msgid "Mean"
+msgstr "Media"
+
+msgid "SD"
+msgstr "DP"
+
+msgid "Mean<sub>inclusion</sub>"
+msgstr "Media<sub>inclusión</sub>"
+
+msgid "SD<sub>inclusion</sub>"
+msgstr "DP<sub>inclusión</sub>"
+
+msgid "State Plots"
+msgstr "Gráficas de Estado"
+
+msgid "Aggregated State"
+msgstr "Estado Agregado"
+
+msgid "Time"
+msgstr "Tempo"
+
+msgid "Distribution"
+msgstr "Distribución"
+
+msgid "Component States"
+msgstr "Estados das Compoñentes"
+
+msgid "Prediction plot"
+msgstr "Gráfica da predición"
+
+msgid "Control Plots"
+msgstr "Gráficas de Control"
+
+msgid "Threshold Plot"
+msgstr "Gráfica de lindeiro"
+
+msgid ""
+"First date where %1$.3f*sigma is exceeded by %2$.1f%% state credible "
+"interval: %3$s"
+msgstr ""
+"Primeira data na que %1$.3f*sigma é superado polo intervalo do %2$.1f%% de "
+"credibilidade do estado: %3$s"
+
+msgid ""
+"First time point where %1$.3f*sigma is exceeded by %2$.1f%% state credible "
+"interval: %3$s"
+msgstr ""
+"Primeiro punto temporal no que %1$.3f*sigma é superado polo intervalo do "
+"%2$.1f%% de credibilidade do estado: %3$s"
+
+msgid "Threshold never reached"
+msgstr "Lindeiro nunca acadado"
+
+msgid "Probability Plot"
+msgstr "Gráfica de probabilidade"
+
+msgid "Probability"
+msgstr "Probabilidade"
+
+msgid "Error Plots"
+msgstr "Gráficas de Erro"
+
+msgid "Residual Plot"
+msgstr "Gráfica do Erro"
+
+msgid "Forecast Error Plot"
+msgstr "Gráfica do Erro de Predicción"
 
 msgid "The spectral analysis failed."
 msgstr "Fallou a análise espectral."

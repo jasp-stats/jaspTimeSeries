@@ -1,0 +1,322 @@
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: jaspTimeSeries 0.96.3\n"
+"POT-Creation-Date: 2026-09-23 17:06\n"
+"PO-Revision-Date: 2026-06-15 11:01+0000\n"
+"Last-Translator: Thành Khôi Lê <lethanhkhoi@gmail.com>\n"
+"Language-Team: Vietnamese <https://hosted.weblate.org/projects/jasp/jasptimeseries-r/vi/>\n"
+"Language: vi\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"X-Generator: Weblate 2026.7.dev0\n"
+
+msgid "Time Series Plot"
+msgstr ""
+
+msgid "The ARIMA model could not be fit."
+msgstr ""
+
+msgid "No parameters are estimated."
+msgstr ""
+
+msgid "Model Summary"
+msgstr "Tóm tắt mô hình"
+
+msgid "Log-Likelihood"
+msgstr ""
+
+msgid "AICc"
+msgstr ""
+
+msgid "AIC"
+msgstr ""
+
+msgid "BIC"
+msgstr ""
+
+msgid "Coefficients"
+msgstr "Hệ số"
+
+msgid "Estimate"
+msgstr ""
+
+msgid "Standard Error"
+msgstr ""
+
+msgid "t"
+msgstr ""
+
+msgid "p"
+msgstr ""
+
+msgid "%s%% CI"
+msgstr ""
+
+msgid "Lower"
+msgstr "Cận dưới"
+
+msgid "Upper"
+msgstr "Cận trên"
+
+msgid "Intercept"
+msgstr ""
+
+msgid "AR(%1$i)"
+msgstr ""
+
+msgid "MA(%1$i)"
+msgstr ""
+
+msgid "seasonal AR(%1$i)"
+msgstr ""
+
+msgid "seasonal MA(%1$i)"
+msgstr ""
+
+msgid "An ARIMA(%1$s, %2$s, %3$s)(%4$s, %5$s, %6$s)[%7$s] model was fitted."
+msgstr ""
+
+msgid "An ARIMA(%1$s, %2$s, %3$s) model was fitted."
+msgstr ""
+
+msgid "Residual Diagnostics Plots"
+msgstr ""
+
+msgid "Autocorrelation Function Plot"
+msgstr ""
+
+msgid "Q-Q Plot"
+msgstr ""
+
+msgid "Ljung-Box Plot"
+msgstr ""
+
+msgid "Lag"
+msgstr ""
+
+msgid "p-value"
+msgstr ""
+
+msgid ""
+"When 'Covariates' are used in the model, predictions cannot be carried out "
+"unless the covariates are also observed for the predicted period."
+msgstr ""
+
+msgid ""
+"Not enough observations in the covariate%1$s. The maximum number of "
+"forecasts is %2$s."
+msgstr ""
+
+msgid "Forecasting failed."
+msgstr ""
+
+msgid "Forecast Time Series Plot"
+msgstr ""
+
+msgid "Forecasts"
+msgstr ""
+
+msgid ""
+"Unknown value provided for modelType, possible values: `alternative`, `null`"
+msgstr ""
+"Giá trị không hợp lệ cho modelType; các giá trị cho phép:`alternative`, "
+"`null`"
+
+msgid "Residual SD"
+msgstr "Độ lệch chuẩn (SD) phần dư"
+
+msgid "Prediction SD"
+msgstr "Độ lệch chuẩn (SD) dự báo"
+
+msgid "R%s"
+msgstr "R%s"
+
+msgid "Harvey's goodness of fit"
+msgstr "Độ phù hợp mô hình theo Harvey"
+
+msgid ""
+"Only %1$s draws were sampled out of the desired %2$s. Additionally, %3$s "
+"MCMC draws out of %1$s are discarded as burn in."
+msgstr ""
+"Chỉ lấy mẫu %1$s lượt rút (draw) trong số %2$s mong muốn. Ngoài ra, %3$s "
+"lượt rút MCMC trong %1$s bị loại bỏ làm burn-in."
+
+msgid "%1$d MCMC draws out of %2$d are discarded as burn in."
+msgstr "%1$d lượt rút MCMC trong %2$d bị loại bỏ làm burn-in."
+
+msgid ""
+"The local level component has been selected (by default). If you wish to "
+"adjust the model, you can do so under 'Model Components'."
+msgstr ""
+"Thành phần mức cục bộ đã được chọn (mặc định). Nếu muốn điều chỉnh mô hình, "
+"bạn có thể thực hiện trong 'Thành phần mô hình'."
+
+msgid "Posterior Summary of Coefficients"
+msgstr "Tóm tắt hậu nghiệm của các hệ số"
+
+msgid "%s%% Credible Interval"
+msgstr "Khoảng tin cậy %s%%"
+
+msgid "P(incl)"
+msgstr "P(gồm)"
+
+msgid "P(incl|data)"
+msgstr "P(gồm|dữ liệu)"
+
+msgid "BF<sub>inclusion</sub>"
+msgstr "BF<sub>bao gồm</sub>"
+
+msgid "Mean"
+msgstr "Trung bình"
+
+msgid "SD"
+msgstr "Độ lệch chuẩn"
+
+msgid "Mean<sub>inclusion</sub>"
+msgstr "Trung bình<sub>bao gồm</sub>"
+
+msgid "SD<sub>inclusion</sub>"
+msgstr "Độ lệch chuẩn<sub>bao gồm</sub>"
+
+msgid "State Plots"
+msgstr "Biểu đồ trạng thái"
+
+msgid "Aggregated State"
+msgstr "Trạng thái gộp"
+
+msgid "Time"
+msgstr "Thời gian"
+
+msgid "Distribution"
+msgstr "Phân phối"
+
+msgid "Component States"
+msgstr "Trạng thái thành phần"
+
+msgid "Prediction plot"
+msgstr "Biểu đồ dự báo"
+
+msgid "Control Plots"
+msgstr "Biểu đồ kiểm soát"
+
+msgid "Threshold Plot"
+msgstr "Biểu đồ ngưỡng"
+
+msgid ""
+"First date where %1$.3f*sigma is exceeded by %2$.1f%% state credible "
+"interval: %3$s"
+msgstr ""
+"Ngày đầu tiên mà %1$.3f*sigma bị vượt bởi khoảng tin cậy trạng thái "
+"%2$.1f%%: %3$s"
+
+msgid ""
+"First time point where %1$.3f*sigma is exceeded by %2$.1f%% state credible "
+"interval: %3$s"
+msgstr ""
+"Thời điểm đầu tiên mà %1$.3f*sigma bị vượt bởi khoảng tin cậy trạng thái "
+"%2$.1f%%: %3$s"
+
+msgid "Threshold never reached"
+msgstr "Không bao giờ đạt ngưỡng"
+
+msgid "Probability Plot"
+msgstr "Biểu đồ xác suất"
+
+msgid "Probability"
+msgstr "Xác suất"
+
+msgid "Error Plots"
+msgstr "Biểu đồ sai số"
+
+msgid "Residual Plot"
+msgstr "Biểu đồ phần dư"
+
+msgid "Forecast Error Plot"
+msgstr "Biểu đồ sai số dự báo"
+
+msgid "The spectral analysis failed."
+msgstr ""
+
+msgid "Power Spectral Density Plot"
+msgstr ""
+
+msgid "Spectral Density"
+msgstr ""
+
+msgid "Bandwidth"
+msgstr ""
+
+msgid "Data cannot be zero or negative for log transformation."
+msgstr ""
+
+msgid "Data cannot be negative for root transformation."
+msgstr ""
+
+msgid "Detrend using linear regression"
+msgstr ""
+
+msgid "Degree"
+msgstr ""
+
+msgid "A polynomial regression with a degree of %s was fitted."
+msgstr ""
+
+msgid "Stationarity Tests"
+msgstr ""
+
+msgid "Test"
+msgstr ""
+
+msgid "Statistic"
+msgstr ""
+
+msgid "Truncation lag parameter"
+msgstr ""
+
+msgid "H₀"
+msgstr ""
+
+msgid "Level"
+msgstr ""
+
+msgid "Trend"
+msgstr ""
+
+msgid "Non-stationary"
+msgstr ""
+
+msgid "Level stationary"
+msgstr ""
+
+msgid "Trend stationary"
+msgstr ""
+
+msgid "The ADF test failed."
+msgstr ""
+
+msgid "The PP regression coefficient test failed."
+msgstr ""
+
+msgid "The PP studentized test failed."
+msgstr ""
+
+msgid "The KPSS test for level stationarity failed."
+msgstr ""
+
+msgid "The KPSS test for trend stationarity failed."
+msgstr ""
+
+msgid "The p-value is actually less than p-value shown (see Help file)."
+msgstr ""
+
+msgid "The p-value is actually greater than p-value shown (see Help file)."
+msgstr ""
+
+msgid "Autocorrelation Function"
+msgstr ""
+
+msgid "Partial Autocorrelation Function"
+msgstr ""

@@ -1,3 +1,4 @@
+#
 msgid ""
 msgstr ""
 "PO-Revision-Date: 2025-09-15 00:02+0000\n"
@@ -19,10 +20,6 @@ msgstr "காலத்தொடர்"
 msgctxt "Description|"
 msgid "This module offers time series analyses."
 msgstr "இந்த தொகுதி நேரத் தொடர் பகுப்பாய்வுகளை வழங்குகிறது."
-
-msgctxt "Description|"
-msgid "Descriptives"
-msgstr "விளக்கமான"
 
 msgctxt "Description|"
 msgid "Stationarity"
@@ -888,3 +885,237 @@ msgstr ""
 "பானர்சி மற்றும் பலவற்றில் முக்கியமான மதிப்புகளின் அட்டவணையில் இருந்து "
 "இடைக்கணிக்கப்படுகின்றன. (1993), புள்ளிவிவரம் முக்கியமான மதிப்புகளின் எல்லைக்கு வெளியே "
 "இருக்கும்போது, ஒரு குறிப்பு அட்டவணையில் சேர்க்கப்படுகிறது."
+
+msgctxt "ARIMATimeSeries|"
+msgid ""
+"Appends the residuals to the spreadsheet, so these can be used in further "
+"analyses."
+msgstr ""
+
+msgctxt "Description|"
+msgid "Time Series Descriptives"
+msgstr ""
+
+msgctxt "Description|"
+msgid "Descriptives"
+msgstr "விளக்கமான"
+
+msgctxt "Description|"
+msgid "Classical"
+msgstr ""
+
+msgctxt "Description|"
+msgid "Bayesian"
+msgstr ""
+
+msgctxt "Description|"
+msgid "Gaussian State Space Models"
+msgstr ""
+
+msgctxt "bayesianStateSpace|"
+msgid "Dependent Variable"
+msgstr "சார்பு மாறி"
+
+msgctxt "bayesianStateSpace|"
+msgid "Covariates"
+msgstr "கோவாரியட்டுகள்"
+
+msgctxt "bayesianStateSpace|"
+msgid "Fixed Factors"
+msgstr "நிலையான காரணிகள்"
+
+msgctxt "bayesianStateSpace|"
+msgid "Time"
+msgstr "நேரம்"
+
+msgctxt "bayesianStateSpace|"
+msgid "Output"
+msgstr "வெளியீடு"
+
+msgctxt "bayesianStateSpace|"
+msgid "Posterior summary of coefficients"
+msgstr "குணகங்களின் பின்புற சுருக்கம்"
+
+msgctxt "bayesianStateSpace|"
+msgid "Show means across draws included"
+msgstr "டிராக்கள் முழுவதும் சேர்க்கப்பட்டுள்ளன"
+
+msgctxt "bayesianStateSpace|"
+msgid "Credible interval"
+msgstr "நம்பகமான இடைவெளி"
+
+msgctxt "bayesianStateSpace|"
+msgid "Expected predictors"
+msgstr "எதிர்பார்க்கப்படும் கணிப்பாளர்கள்"
+
+msgctxt "bayesianStateSpace|"
+msgid "Model Components"
+msgstr "மாதிரி கூறுகள்"
+
+msgctxt "bayesianStateSpace|"
+msgid "Components"
+msgstr "கூறுகள்"
+
+msgctxt "bayesianStateSpace|"
+msgid "Add autoregressive component"
+msgstr "தன்னியக்க முன்னேற்றக் கூறுகளைச் சேர்க்கவும்"
+
+msgctxt "bayesianStateSpace|"
+msgid "Lag selection method"
+msgstr "லேக் தேர்வு முறை"
+
+msgctxt "bayesianStateSpace|"
+msgid "Manually"
+msgstr "கைமுறையாக"
+
+msgctxt "bayesianStateSpace|"
+msgid "No. of lags"
+msgstr "பின்னடைவுகளின் எண்ணிக்கை"
+
+msgctxt "bayesianStateSpace|"
+msgid "Automatic"
+msgstr "தானியங்கி"
+
+msgctxt "bayesianStateSpace|"
+msgid "Maximal lags"
+msgstr "அதிகபட்ச பின்னடைவு"
+
+msgctxt "bayesianStateSpace|"
+msgid "Add local level component"
+msgstr "உள்ளக நிலை கூறுகளைச் சேர்க்கவும்"
+
+msgctxt "bayesianStateSpace|"
+msgid "Add local linear trend component"
+msgstr "உள்ளக நேரியல் போக்கு கூறுகளைச் சேர்க்கவும்"
+
+msgctxt "bayesianStateSpace|"
+msgid "Add semi-local linear trend"
+msgstr "அரை உள்ளக நேரியல் போக்கு சேர்க்கவும்"
+
+msgctxt "bayesianStateSpace|"
+msgid "Add dynamic regression component"
+msgstr "மாறும் பின்னடைவு கூறுகளைச் சேர்க்கவும்"
+
+msgctxt "bayesianStateSpace|"
+msgid ""
+"This component allows you to model the effect of covariates or fixed factors "
+"on the dependent variable. The lag of coefficients can be specified to "
+"account for delayed effects. Only available when covariates or fixed factors "
+"are present in the model."
+msgstr ""
+
+msgctxt "bayesianStateSpace|"
+msgid "Seasonalities"
+msgstr "பருவகாலங்கள்"
+
+msgctxt "bayesianStateSpace|"
+msgid "Name"
+msgstr "பெயர்"
+
+msgctxt "bayesianStateSpace|"
+msgid "Number"
+msgstr "எண்"
+
+msgctxt "bayesianStateSpace|"
+msgid "Duration"
+msgstr "காலம்"
+
+msgctxt "bayesianStateSpace|"
+msgid "Inverse gamma prior"
+msgstr "தலைகீழ் காமா முன்"
+
+msgctxt "bayesianStateSpace|"
+msgid "Normal prior initial state"
+msgstr "இயல்பான முன் ஆரம்ப நிலை"
+
+msgctxt "bayesianStateSpace|"
+msgid "Plots"
+msgstr "நிலத்தொகுதி"
+
+msgctxt "bayesianStateSpace|"
+msgid "State Plots"
+msgstr "மாநில அடுக்குகள்"
+
+msgctxt "bayesianStateSpace|"
+msgid "Aggregated state contribution"
+msgstr "ஒருங்கிணைந்த மாநில பங்களிப்பு"
+
+msgctxt "bayesianStateSpace|"
+msgid "Show observations"
+msgstr "அவதானிப்புகளைக் காட்டு"
+
+msgctxt "bayesianStateSpace|"
+msgid "Component state contribution"
+msgstr "கூறு மாநில பங்களிப்பு"
+
+msgctxt "bayesianStateSpace|"
+msgid "Residuals"
+msgstr "எஞ்சியவர்கள்"
+
+msgctxt "bayesianStateSpace|"
+msgid "Posterior distribution of residuals"
+msgstr "எச்சங்களின் பின்புற வழங்கல்"
+
+msgctxt "bayesianStateSpace|"
+msgid "Posterior distribution of one-step-ahead prediction error"
+msgstr "ஒரு-படி-முன்னோக்கி முன்கணிப்பு பிழையின் பின்புற வழங்கல்"
+
+msgctxt "bayesianStateSpace|"
+msgid "Prediction"
+msgstr "கணிப்பு"
+
+msgctxt "bayesianStateSpace|"
+msgid "Horizon"
+msgstr "அடிவானம்"
+
+msgctxt "bayesianStateSpace|"
+msgid "Control chart"
+msgstr "கட்டுப்பாட்டு விளக்கப்படம்"
+
+msgctxt "bayesianStateSpace|"
+msgid "Show control chart"
+msgstr "கட்டுப்பாட்டு விளக்கப்படத்தைக் காட்டு"
+
+msgctxt "bayesianStateSpace|"
+msgid "Control period end"
+msgstr "கட்டுப்பாட்டு காலம் முடிவு"
+
+msgctxt "bayesianStateSpace|"
+msgid "σ threshold"
+msgstr "σ வாசல்"
+
+msgctxt "bayesianStateSpace|"
+msgid "Show probabilistic control plot"
+msgstr "நிகழ்தகவு கட்டுப்பாட்டு சதித்திட்டத்தைக் காட்டு"
+
+msgctxt "bayesianStateSpace|"
+msgid "Advanced Options"
+msgstr "மேம்பட்ட விருப்பங்கள்"
+
+msgctxt "bayesianStateSpace|"
+msgid "Desired MCMC draws"
+msgstr "விரும்பிய எம்.சி.எம்.சி டிராக்கள்"
+
+msgctxt "bayesianStateSpace|"
+msgid "Timeout in seconds"
+msgstr "விநாடிகளில் நேரம் முடிந்தது"
+
+msgctxt "bayesianStateSpace|"
+msgid "Burn-in Specification"
+msgstr "எரியும் விவரக்குறிப்பு"
+
+msgctxt "bayesianStateSpace|"
+msgid "Automatic suggestion"
+msgstr "தானியங்கி பரிந்துரை"
+
+msgctxt "bayesianStateSpace|"
+msgid "Proportion"
+msgstr "விகிதம்"
+
+msgctxt "bayesianStateSpace|"
+msgid "Manual"
+msgstr "கையேடு"
+
+msgctxt "bayesianStateSpace|"
+msgid "Seed"
+msgstr "விதை"

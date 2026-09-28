@@ -1,17 +1,16 @@
+#
 msgid ""
 msgstr ""
 "Project-Id-Version: jaspTimeSeries 0.95.0\n"
-"POT-Creation-Date: 2025-06-21 03:37\n"
+"POT-Creation-Date: 2026-09-23 17:06\n"
 "PO-Revision-Date: 2025-10-20 06:17+0000\n"
 "Last-Translator: Gabija Vaitkevičiūtė <gabija.vaitkev@gmail.com>\n"
-"Language-Team: Lithuanian <https://hosted.weblate.org/projects/jasp/"
-"jasptimeseries-r/lt/>\n"
+"Language-Team: Lithuanian <https://hosted.weblate.org/projects/jasp/jasptimeseries-r/lt/>\n"
 "Language: lt\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=3; plural="
-"(n%10==1 && n%100!=11 ? 0 : n%10>=2 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
 "X-Generator: Weblate 5.14-dev\n"
 
 msgid "Time Series Plot"
@@ -101,10 +100,14 @@ msgstr ""
 msgid "p-value"
 msgstr ""
 
-msgid "When 'Covariates' are used in the model, predictions cannot be carried out unless the covariates are also observed for the predicted period."
+msgid ""
+"When 'Covariates' are used in the model, predictions cannot be carried out "
+"unless the covariates are also observed for the predicted period."
 msgstr ""
 
-msgid "Not enough observations in the covariate%1$s. The maximum number of forecasts is %2$s."
+msgid ""
+"Not enough observations in the covariate%1$s. The maximum number of "
+"forecasts is %2$s."
 msgstr ""
 
 msgid "Forecasting failed."
@@ -114,6 +117,114 @@ msgid "Forecast Time Series Plot"
 msgstr ""
 
 msgid "Forecasts"
+msgstr ""
+
+msgid ""
+"Unknown value provided for modelType, possible values: `alternative`, `null`"
+msgstr ""
+
+msgid "Residual SD"
+msgstr ""
+
+msgid "Prediction SD"
+msgstr ""
+
+msgid "R%s"
+msgstr ""
+
+msgid "Harvey's goodness of fit"
+msgstr ""
+
+msgid ""
+"Only %1$s draws were sampled out of the desired %2$s. Additionally, %3$s "
+"MCMC draws out of %1$s are discarded as burn in."
+msgstr ""
+
+msgid "%1$d MCMC draws out of %2$d are discarded as burn in."
+msgstr ""
+
+msgid ""
+"The local level component has been selected (by default). If you wish to "
+"adjust the model, you can do so under 'Model Components'."
+msgstr ""
+
+msgid "Posterior Summary of Coefficients"
+msgstr ""
+
+msgid "%s%% Credible Interval"
+msgstr ""
+
+msgid "P(incl)"
+msgstr ""
+
+msgid "P(incl|data)"
+msgstr ""
+
+msgid "BF<sub>inclusion</sub>"
+msgstr ""
+
+msgid "Mean"
+msgstr ""
+
+msgid "SD"
+msgstr ""
+
+msgid "Mean<sub>inclusion</sub>"
+msgstr ""
+
+msgid "SD<sub>inclusion</sub>"
+msgstr ""
+
+msgid "State Plots"
+msgstr ""
+
+msgid "Aggregated State"
+msgstr ""
+
+msgid "Time"
+msgstr ""
+
+msgid "Distribution"
+msgstr ""
+
+msgid "Component States"
+msgstr ""
+
+msgid "Prediction plot"
+msgstr ""
+
+msgid "Control Plots"
+msgstr ""
+
+msgid "Threshold Plot"
+msgstr ""
+
+msgid ""
+"First date where %1$.3f*sigma is exceeded by %2$.1f%% state credible "
+"interval: %3$s"
+msgstr ""
+
+msgid ""
+"First time point where %1$.3f*sigma is exceeded by %2$.1f%% state credible "
+"interval: %3$s"
+msgstr ""
+
+msgid "Threshold never reached"
+msgstr ""
+
+msgid "Probability Plot"
+msgstr ""
+
+msgid "Probability"
+msgstr ""
+
+msgid "Error Plots"
+msgstr ""
+
+msgid "Residual Plot"
+msgstr ""
+
+msgid "Forecast Error Plot"
 msgstr ""
 
 msgid "The spectral analysis failed."

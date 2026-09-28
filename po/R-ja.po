@@ -1,11 +1,11 @@
+#
 msgid ""
 msgstr ""
 "Project-Id-Version: jaspTimeSeries 0.95.0\n"
-"POT-Creation-Date: 2025-06-21 03:37\n"
+"POT-Creation-Date: 2026-09-23 17:06\n"
 "PO-Revision-Date: 2026-08-10 14:04+0000\n"
 "Last-Translator: Koji Kosugi <kosugitti@gmail.com>\n"
-"Language-Team: Japanese <https://hosted.weblate.org/projects/jasp/"
-"jasptimeseries-r/ja/>\n"
+"Language-Team: Japanese <https://hosted.weblate.org/projects/jasp/jasptimeseries-r/ja/>\n"
 "Language: ja\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -100,12 +100,14 @@ msgstr "ラグ"
 msgid "p-value"
 msgstr "p値"
 
-msgid "When 'Covariates' are used in the model, predictions cannot be carried out unless the covariates are also observed for the predicted period."
-msgstr ""
-"モデルに「共変量」を使う場合、予測する期間についても共変量が観測されていなけ"
-"れば予測は行えません。"
+msgid ""
+"When 'Covariates' are used in the model, predictions cannot be carried out "
+"unless the covariates are also observed for the predicted period."
+msgstr "モデルに「共変量」を使う場合、予測する期間についても共変量が観測されていなければ予測は行えません。"
 
-msgid "Not enough observations in the covariate%1$s. The maximum number of forecasts is %2$s."
+msgid ""
+"Not enough observations in the covariate%1$s. The maximum number of "
+"forecasts is %2$s."
 msgstr "共変量 %1$s の観測数が足りません。予測できるのは最大 %2$s 個までです。"
 
 msgid "Forecasting failed."
@@ -116,6 +118,116 @@ msgstr "予測の時系列プロット"
 
 msgid "Forecasts"
 msgstr "予測値"
+
+msgid ""
+"Unknown value provided for modelType, possible values: `alternative`, `null`"
+msgstr "modelType に不明な値が指定されました。指定できる値: `alternative`, `null`"
+
+msgid "Residual SD"
+msgstr "残差SD"
+
+msgid "Prediction SD"
+msgstr "予測SD"
+
+msgid "R%s"
+msgstr "R%s"
+
+msgid "Harvey's goodness of fit"
+msgstr "ハーヴェイの適合度"
+
+msgid ""
+"Only %1$s draws were sampled out of the desired %2$s. Additionally, %3$s "
+"MCMC draws out of %1$s are discarded as burn in."
+msgstr ""
+"希望した %2$s のうち %1$s ドローしか得られませんでした。さらに、%1$s 個のうち %3$s "
+"個のMCMCドローがバーンインとして除外されました。"
+
+msgid "%1$d MCMC draws out of %2$d are discarded as burn in."
+msgstr "%2$d 個のMCMCドローのうち %1$d 個がバーンインとして除外されました。"
+
+msgid ""
+"The local level component has been selected (by default). If you wish to "
+"adjust the model, you can do so under 'Model Components'."
+msgstr "局所水準成分が(既定で)選択されています。変更したい場合は「成分」セクションで調整してください。"
+
+msgid "Posterior Summary of Coefficients"
+msgstr "係数の事後要約"
+
+msgid "%s%% Credible Interval"
+msgstr "%s%% 信用区間"
+
+msgid "P(incl)"
+msgstr "P(効果を含む)"
+
+msgid "P(incl|data)"
+msgstr "P(効果を含む|データ)"
+
+msgid "BF<sub>inclusion</sub>"
+msgstr "BF<sub>inclusion</sub>"
+
+msgid "Mean"
+msgstr "平均値"
+
+msgid "SD"
+msgstr "SD"
+
+msgid "Mean<sub>inclusion</sub>"
+msgstr "Mean<sub>inclusion</sub>"
+
+msgid "SD<sub>inclusion</sub>"
+msgstr "SD<sub>inclusion</sub>"
+
+msgid "State Plots"
+msgstr "状態プロット"
+
+msgid "Aggregated State"
+msgstr "集約された状態"
+
+msgid "Time"
+msgstr "時間"
+
+msgid "Distribution"
+msgstr "分布"
+
+msgid "Component States"
+msgstr "成分ごとの状態"
+
+msgid "Prediction plot"
+msgstr "予測プロット"
+
+msgid "Control Plots"
+msgstr "管理図"
+
+msgid "Threshold Plot"
+msgstr "しきい値プロット"
+
+msgid ""
+"First date where %1$.3f*sigma is exceeded by %2$.1f%% state credible "
+"interval: %3$s"
+msgstr "%2$.1f%% の状態信用区間が %1$.3f*sigma をはじめて超えた日付: %3$s"
+
+msgid ""
+"First time point where %1$.3f*sigma is exceeded by %2$.1f%% state credible "
+"interval: %3$s"
+msgstr "%2$.1f%% の状態信用区間が %1$.3f*sigma をはじめて超えた時点: %3$s"
+
+msgid "Threshold never reached"
+msgstr "しきい値には到達しませんでした"
+
+msgid "Probability Plot"
+msgstr "確率プロット"
+
+msgid "Probability"
+msgstr "確率"
+
+msgid "Error Plots"
+msgstr "誤差プロット"
+
+msgid "Residual Plot"
+msgstr "残差プロット"
+
+msgid "Forecast Error Plot"
+msgstr "予測誤差プロット"
 
 msgid "The spectral analysis failed."
 msgstr "スペクトル分析に失敗しました。"

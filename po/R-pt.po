@@ -1,7 +1,8 @@
+#
 msgid ""
 msgstr ""
 "Project-Id-Version: jaspTimeSeries 0.95.0\n"
-"POT-Creation-Date: 2025-06-21 03:37\n"
+"POT-Creation-Date: 2026-09-23 17:06\n"
 "PO-Revision-Date: 2025-08-26 09:56+0000\n"
 "Last-Translator: Wendel Paulo Silvestre <wpsilvestre@ucs.br>\n"
 "Language-Team: Portuguese <https://hosted.weblate.org/projects/jasp/jasptimeseries-r/pt/>\n"
@@ -100,13 +101,17 @@ msgstr "Atraso"
 msgid "p-value"
 msgstr "valor-p"
 
-msgid "When 'Covariates' are used in the model, predictions cannot be carried out unless the covariates are also observed for the predicted period."
+msgid ""
+"When 'Covariates' are used in the model, predictions cannot be carried out "
+"unless the covariates are also observed for the predicted period."
 msgstr ""
 "Quando 'Covariáveis' são usadas no modelo, as previsões não podem ser "
 "realizadas a menos que as covariáveis também sejam observadas durante o "
 "período previsto."
 
-msgid "Not enough observations in the covariate%1$s. The maximum number of forecasts is %2$s."
+msgid ""
+"Not enough observations in the covariate%1$s. The maximum number of "
+"forecasts is %2$s."
 msgstr ""
 "Não há observações suficientes na covariável %1$s. O número máximo de "
 "previsões é %2$s."
@@ -119,6 +124,124 @@ msgstr "Gráfico de Séries Temporais de Previsão"
 
 msgid "Forecasts"
 msgstr "Previsões"
+
+msgid ""
+"Unknown value provided for modelType, possible values: `alternative`, `null`"
+msgstr ""
+"Valor desconhecido fornecido para ModelType, possíveis valores: "
+"`alternativo`, `nulo`"
+
+msgid "Residual SD"
+msgstr "DP Residual"
+
+msgid "Prediction SD"
+msgstr "DP da Previsão"
+
+msgid "R%s"
+msgstr "R%s"
+
+msgid "Harvey's goodness of fit"
+msgstr "Qualidade do ajuste de Harvey"
+
+msgid ""
+"Only %1$s draws were sampled out of the desired %2$s. Additionally, %3$s "
+"MCMC draws out of %1$s are discarded as burn in."
+msgstr ""
+"Apenas %1$s extrações foram amostradas das %2$s desejadas. Adicionalmente, "
+"%3$s MCMC extrações de %1$s foram descartadas como queimadas."
+
+msgid "%1$d MCMC draws out of %2$d are discarded as burn in."
+msgstr "%1$d MCMC extrações de %2$d foram descartadas como queimadas."
+
+msgid ""
+"The local level component has been selected (by default). If you wish to "
+"adjust the model, you can do so under 'Model Components'."
+msgstr ""
+"O nível local de componente foi selecionado (por padrão). Se você deseja "
+"ajustar o modelo, pode fazê-lo em 'Componentes do Modelo'."
+
+msgid "Posterior Summary of Coefficients"
+msgstr "Resumo Posterior de Coeficientes"
+
+msgid "%s%% Credible Interval"
+msgstr "%s%% Intervalo Credível"
+
+msgid "P(incl)"
+msgstr "P(incl)"
+
+msgid "P(incl|data)"
+msgstr "P(incl|dados)"
+
+msgid "BF<sub>inclusion</sub>"
+msgstr "BF<sub>inclusão</sub>"
+
+msgid "Mean"
+msgstr "Média"
+
+msgid "SD"
+msgstr "DP"
+
+msgid "Mean<sub>inclusion</sub>"
+msgstr "Média<sub>inclusão</sub>"
+
+msgid "SD<sub>inclusion</sub>"
+msgstr "DP<sub>inclusão</sub>"
+
+msgid "State Plots"
+msgstr "Gráficos de Estado"
+
+msgid "Aggregated State"
+msgstr "Estado Agregado"
+
+msgid "Time"
+msgstr "Tempo"
+
+msgid "Distribution"
+msgstr "Distribuição"
+
+msgid "Component States"
+msgstr "Estado dos Componentes"
+
+msgid "Prediction plot"
+msgstr "Gráfico de previsão"
+
+msgid "Control Plots"
+msgstr "Gráficos de Controle"
+
+msgid "Threshold Plot"
+msgstr "Gráfico de Limiar"
+
+msgid ""
+"First date where %1$.3f*sigma is exceeded by %2$.1f%% state credible "
+"interval: %3$s"
+msgstr ""
+"Primeira data onde %1$.3f*sigma é excedido pelo intervalo de credibilidade "
+"%2$.1f%%: %3$s"
+
+msgid ""
+"First time point where %1$.3f*sigma is exceeded by %2$.1f%% state credible "
+"interval: %3$s"
+msgstr ""
+"O primeiro ponto temporal onde %1$.3f*sigma é excedido pelo intervalo "
+"%2$.1f%% do intervalo credível: %3$s"
+
+msgid "Threshold never reached"
+msgstr "Limiar nunca atingido"
+
+msgid "Probability Plot"
+msgstr "Gráfico de Probabilidade"
+
+msgid "Probability"
+msgstr "Probabilidade"
+
+msgid "Error Plots"
+msgstr "Gráficos de Erro"
+
+msgid "Residual Plot"
+msgstr "Gráfico de Resíduos"
+
+msgid "Forecast Error Plot"
+msgstr "Gráfico de Erro de Previsão"
 
 msgid "The spectral analysis failed."
 msgstr "A análise espectral falhou."

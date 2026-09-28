@@ -1,3 +1,4 @@
+#
 msgid ""
 msgstr ""
 "MIME-Version: 1.0\n"
@@ -810,4 +811,228 @@ msgstr ""
 
 msgctxt "Description|"
 msgid "Time Series Descriptives"
+msgstr ""
+
+msgctxt "Description|"
+msgid "Descriptives"
+msgstr ""
+
+msgctxt "Description|"
+msgid "Classical"
+msgstr ""
+
+msgctxt "Description|"
+msgid "Bayesian"
+msgstr ""
+
+msgctxt "Description|"
+msgid "Gaussian State Space Models"
+msgstr ""
+
+msgctxt "bayesianStateSpace|"
+msgid "Dependent Variable"
+msgstr ""
+
+msgctxt "bayesianStateSpace|"
+msgid "Covariates"
+msgstr ""
+
+msgctxt "bayesianStateSpace|"
+msgid "Fixed Factors"
+msgstr ""
+
+msgctxt "bayesianStateSpace|"
+msgid "Time"
+msgstr ""
+
+msgctxt "bayesianStateSpace|"
+msgid "Output"
+msgstr ""
+
+msgctxt "bayesianStateSpace|"
+msgid "Posterior summary of coefficients"
+msgstr ""
+
+msgctxt "bayesianStateSpace|"
+msgid "Show means across draws included"
+msgstr ""
+
+msgctxt "bayesianStateSpace|"
+msgid "Credible interval"
+msgstr ""
+
+msgctxt "bayesianStateSpace|"
+msgid "Expected predictors"
+msgstr ""
+
+msgctxt "bayesianStateSpace|"
+msgid "Model Components"
+msgstr ""
+
+msgctxt "bayesianStateSpace|"
+msgid "Components"
+msgstr ""
+
+msgctxt "bayesianStateSpace|"
+msgid "Add autoregressive component"
+msgstr ""
+
+msgctxt "bayesianStateSpace|"
+msgid "Lag selection method"
+msgstr ""
+
+msgctxt "bayesianStateSpace|"
+msgid "Manually"
+msgstr ""
+
+msgctxt "bayesianStateSpace|"
+msgid "No. of lags"
+msgstr ""
+
+msgctxt "bayesianStateSpace|"
+msgid "Automatic"
+msgstr ""
+
+msgctxt "bayesianStateSpace|"
+msgid "Maximal lags"
+msgstr ""
+
+msgctxt "bayesianStateSpace|"
+msgid "Add local level component"
+msgstr ""
+
+msgctxt "bayesianStateSpace|"
+msgid "Add local linear trend component"
+msgstr ""
+
+msgctxt "bayesianStateSpace|"
+msgid "Add semi-local linear trend"
+msgstr ""
+
+msgctxt "bayesianStateSpace|"
+msgid "Add dynamic regression component"
+msgstr ""
+
+msgctxt "bayesianStateSpace|"
+msgid ""
+"This component allows you to model the effect of covariates or fixed factors "
+"on the dependent variable. The lag of coefficients can be specified to "
+"account for delayed effects. Only available when covariates or fixed factors "
+"are present in the model."
+msgstr ""
+
+msgctxt "bayesianStateSpace|"
+msgid "Seasonalities"
+msgstr ""
+
+msgctxt "bayesianStateSpace|"
+msgid "Name"
+msgstr ""
+
+msgctxt "bayesianStateSpace|"
+msgid "Number"
+msgstr ""
+
+msgctxt "bayesianStateSpace|"
+msgid "Duration"
+msgstr ""
+
+msgctxt "bayesianStateSpace|"
+msgid "Inverse gamma prior"
+msgstr ""
+
+msgctxt "bayesianStateSpace|"
+msgid "Normal prior initial state"
+msgstr ""
+
+msgctxt "bayesianStateSpace|"
+msgid "Plots"
+msgstr ""
+
+msgctxt "bayesianStateSpace|"
+msgid "State Plots"
+msgstr ""
+
+msgctxt "bayesianStateSpace|"
+msgid "Aggregated state contribution"
+msgstr ""
+
+msgctxt "bayesianStateSpace|"
+msgid "Show observations"
+msgstr ""
+
+msgctxt "bayesianStateSpace|"
+msgid "Component state contribution"
+msgstr ""
+
+msgctxt "bayesianStateSpace|"
+msgid "Residuals"
+msgstr ""
+
+msgctxt "bayesianStateSpace|"
+msgid "Posterior distribution of residuals"
+msgstr ""
+
+msgctxt "bayesianStateSpace|"
+msgid "Posterior distribution of one-step-ahead prediction error"
+msgstr ""
+
+msgctxt "bayesianStateSpace|"
+msgid "Prediction"
+msgstr ""
+
+msgctxt "bayesianStateSpace|"
+msgid "Horizon"
+msgstr ""
+
+msgctxt "bayesianStateSpace|"
+msgid "Control chart"
+msgstr ""
+
+msgctxt "bayesianStateSpace|"
+msgid "Show control chart"
+msgstr ""
+
+msgctxt "bayesianStateSpace|"
+msgid "Control period end"
+msgstr ""
+
+msgctxt "bayesianStateSpace|"
+msgid "σ threshold"
+msgstr ""
+
+msgctxt "bayesianStateSpace|"
+msgid "Show probabilistic control plot"
+msgstr ""
+
+msgctxt "bayesianStateSpace|"
+msgid "Advanced Options"
+msgstr ""
+
+msgctxt "bayesianStateSpace|"
+msgid "Desired MCMC draws"
+msgstr ""
+
+msgctxt "bayesianStateSpace|"
+msgid "Timeout in seconds"
+msgstr ""
+
+msgctxt "bayesianStateSpace|"
+msgid "Burn-in Specification"
+msgstr ""
+
+msgctxt "bayesianStateSpace|"
+msgid "Automatic suggestion"
+msgstr ""
+
+msgctxt "bayesianStateSpace|"
+msgid "Proportion"
+msgstr ""
+
+msgctxt "bayesianStateSpace|"
+msgid "Manual"
+msgstr ""
+
+msgctxt "bayesianStateSpace|"
+msgid "Seed"
 msgstr ""

@@ -6,19 +6,31 @@ Description
 	name		: "jaspTimeSeries"
 	title		: qsTr("Time Series")
 	description	: qsTr("This module offers time series analyses.")
-	version			: "0.95.0"
-	author		: "Sophie Berkhout"
+	version			: "0.96.3"
+	author		: "Sophie Berkhout, Fridtjof Petersen, Henrik Godmann"
 	maintainer	: "Henrik Godmann"
-	website		: "https://sophieberkhout.github.io/"
+	website		: "https://jasp-stats.org"
 	license		: "GPL (>= 2)"
 	icon		: "analysis-time-series.svg"
 	preloadData: true
+
+	GroupTitle
+	{
+		title:		qsTr("Descriptives")
+		icon:		"analysis-time-series.svg"
+	}
 
 	Analysis
 	{
 		title:		qsTr("Time Series Descriptives")
 		func:		"DescriptivesTimeSeries"
 		hasWrapper:	true
+	}
+
+	GroupTitle
+	{
+		title:		qsTr("Classical")
+		icon:		"analysis-time-series.svg"
 	}
 
 	Analysis
@@ -37,6 +49,21 @@ Description
 	{
 		title:	qsTr("Spectral Analysis")
 		func:		"SpectralTimeSeries"
+	}
+
+	GroupTitle
+	{
+		title:		qsTr("Bayesian")
+		icon:		"bsts.svg"
+	}
+
+	Analysis
+	{
+		title:		qsTr("Gaussian State Space Models")
+		func:		"bayesianStateSpace"
+		qml:		"bayesianStateSpace.qml"
+		hasWrapper:	true
+		preloadData:	false
 	}
 
 }

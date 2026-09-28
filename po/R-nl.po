@@ -1,11 +1,11 @@
+#
 msgid ""
 msgstr ""
 "Project-Id-Version: jaspTimeSeries 0.19.0\n"
-"POT-Creation-Date: 2024-05-04 03:24\n"
+"POT-Creation-Date: 2026-09-23 17:06\n"
 "PO-Revision-Date: 2024-05-23 21:09+0000\n"
 "Last-Translator: Koen Derks <koen-derks@hotmail.com>\n"
-"Language-Team: Dutch <https://hosted.weblate.org/projects/jasp/"
-"jasptimeseries-r/nl/>\n"
+"Language-Team: Dutch <https://hosted.weblate.org/projects/jasp/jasptimeseries-r/nl/>\n"
 "Language: nl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -124,6 +124,127 @@ msgstr "Tijdreeksprognose Figuur"
 
 msgid "Forecasts"
 msgstr "Prognoses"
+
+msgid ""
+"Unknown value provided for modelType, possible values: `alternative`, `null`"
+msgstr ""
+"Onbekende waarde opgegeven voor modelType, mogelijke waarden: `alternatief`,"
+" `null`"
+
+msgid "Residual SD"
+msgstr "Residuele SD"
+
+msgid "Prediction SD"
+msgstr "Voorspelling SD"
+
+msgid "R%s"
+msgstr "R%s"
+
+msgid "Harvey's goodness of fit"
+msgstr "Harvey's goodness of fit"
+
+msgid ""
+"Only %1$s draws were sampled out of the desired %2$s. Additionally, %3$s "
+"MCMC draws out of %1$s are discarded as burn in."
+msgstr ""
+"Test: Slechts %1$s trekkingen werden getrokken in plaats van de gewenste "
+"%2$s. Bovendien worden %3$s MCMC-trekkingen van de %1$s weggegooid als burn "
+"in."
+
+#, fuzzy
+msgid "%1$d MCMC draws out of %2$d are discarded as burn in."
+msgstr ""
+
+msgid ""
+"The local level component has been selected (by default). If you wish to "
+"adjust the model, you can do so under 'Model Components'."
+msgstr ""
+"De component voor het lokale niveau is geselecteerd (standaard). Als u het "
+"model wilt aanpassen, kunt u dit doen onder 'Model Componenten'."
+
+msgid "Posterior Summary of Coefficients"
+msgstr "Posterior Samenvatting van Coëfficiënten"
+
+msgid "%s%% Credible Interval"
+msgstr "%s%% Geloofwaardigheidsinterval"
+
+msgid "P(incl)"
+msgstr "P(incl)"
+
+msgid "P(incl|data)"
+msgstr "P(incl|data)"
+
+msgid "BF<sub>inclusion</sub>"
+msgstr "BF<sub>inclusie</sub>"
+
+msgid "Mean"
+msgstr "Gemiddelde"
+
+msgid "SD"
+msgstr "SD"
+
+msgid "Mean<sub>inclusion</sub>"
+msgstr "Gemiddelde<sub>inclusie</sub>"
+
+msgid "SD<sub>inclusion</sub>"
+msgstr "SD<sub>inclusie</sub>"
+
+msgid "State Plots"
+msgstr "Staatfiguren"
+
+msgid "Aggregated State"
+msgstr "Geaggregeerde Staat"
+
+msgid "Time"
+msgstr "Tijd"
+
+msgid "Distribution"
+msgstr "Verdeling"
+
+msgid "Component States"
+msgstr "Component Staten"
+
+#, fuzzy
+msgid "Prediction plot"
+msgstr "Voorspelling SD"
+
+msgid "Control Plots"
+msgstr "Controleplots"
+
+msgid "Threshold Plot"
+msgstr "Drempelgrafiek"
+
+msgid ""
+"First date where %1$.3f*sigma is exceeded by %2$.1f%% state credible "
+"interval: %3$s"
+msgstr ""
+"Eerste datum waarop %1$.3f*sigma wordt overschreden door het "
+"%2$.1f%%-credibele interval van de staat: %3$s"
+
+msgid ""
+"First time point where %1$.3f*sigma is exceeded by %2$.1f%% state credible "
+"interval: %3$s"
+msgstr ""
+"Eerste tijdstip waarop %1$.3f*sigma wordt overschreden door het "
+"%2$.1f%%-credibele interval van de staat: %3$s"
+
+msgid "Threshold never reached"
+msgstr "Drempel nooit bereikt"
+
+msgid "Probability Plot"
+msgstr "Kansgrafiek"
+
+msgid "Probability"
+msgstr "Kans"
+
+msgid "Error Plots"
+msgstr "Foutfiguren"
+
+msgid "Residual Plot"
+msgstr "Residufiguur"
+
+msgid "Forecast Error Plot"
+msgstr "Prognosefoutfiguur"
 
 msgid "The spectral analysis failed."
 msgstr "The spectrale analyse is mislukt."

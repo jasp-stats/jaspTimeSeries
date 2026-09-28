@@ -10,7 +10,12 @@
 # Time Series
 
 This module offers time series analyses for JASP, including:
-- Time Series Descriptives
-- Stationarity tests
-- ARIMA modeling
-- Spectral Analysis
+
+- **Descriptives**
+  - Time Series Descriptives
+- **Classical**
+  - Stationarity
+  - ARIMA
+  - Spectral Analysis
+- **Bayesian**
+  - Gaussian State Space Models

@@ -1,17 +1,16 @@
+#
 msgid ""
 msgstr ""
 "Project-Id-Version: jaspTimeSeries 0.19.2\n"
-"POT-Creation-Date: 2024-10-19 03:27\n"
+"POT-Creation-Date: 2026-09-23 17:06\n"
 "PO-Revision-Date: 2025-12-09 00:00+0000\n"
 "Last-Translator: Marko Bojović <bojovicmarko@outlook.com>\n"
-"Language-Team: Serbian <https://hosted.weblate.org/projects/jasp/"
-"jasptimeseries-r/sr/>\n"
+"Language-Team: Serbian <https://hosted.weblate.org/projects/jasp/jasptimeseries-r/sr/>\n"
 "Language: sr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
-"n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
 "X-Generator: Weblate 5.15-dev\n"
 
 msgid "Time Series Plot"
@@ -101,12 +100,16 @@ msgstr "Кашњење"
 msgid "p-value"
 msgstr "p-вредност"
 
-msgid "When 'Covariates' are used in the model, predictions cannot be carried out unless the covariates are also observed for the predicted period."
+msgid ""
+"When 'Covariates' are used in the model, predictions cannot be carried out "
+"unless the covariates are also observed for the predicted period."
 msgstr ""
 "Када се „Коваријате“ користе у моделу, предвиђања се не могу извршити осим "
 "ако су коваријате такође посматране за период предвиђања."
 
-msgid "Not enough observations in the covariate%1$s. The maximum number of forecasts is %2$s."
+msgid ""
+"Not enough observations in the covariate%1$s. The maximum number of "
+"forecasts is %2$s."
 msgstr ""
 "Недовољно опажања у коваријати %1$s. Максималан број предвиђаја је %2$s."
 
@@ -118,6 +121,126 @@ msgstr "Графикон предвиђања временске серије"
 
 msgid "Forecasts"
 msgstr "Прогнозе"
+
+msgid ""
+"Unknown value provided for modelType, possible values: `alternative`, `null`"
+msgstr ""
+"Непозната вредност је унета за modelType, могуће вредности су: "
+"`alternative`, `null`"
+
+msgid "Residual SD"
+msgstr "Резидуална SD"
+
+msgid "Prediction SD"
+msgstr "SD предвишања"
+
+msgid "R%s"
+msgstr "R%s"
+
+msgid "Harvey's goodness of fit"
+msgstr "Харвијева мера прилагођености"
+
+msgid ""
+"Only %1$s draws were sampled out of the desired %2$s. Additionally, %3$s "
+"MCMC draws out of %1$s are discarded as burn in."
+msgstr ""
+"Само је %1$s узорака генерисано од жељених %2$s. Додатно, %3$s MCMC узорака "
+"од %1$s је одбачено као почетна фаза прилагођавања (burn-in)."
+
+msgid "%1$d MCMC draws out of %2$d are discarded as burn in."
+msgstr ""
+"%1$d MCMC узорака од укупно %2$d е одбачено током почетне фазе прилагођавања"
+" (burn-in)."
+
+msgid ""
+"The local level component has been selected (by default). If you wish to "
+"adjust the model, you can do so under 'Model Components'."
+msgstr ""
+"Локална компонента нивоа је одабрана (по дифолту). Ако желите да прилагодите"
+" модел, то можете урадити у одељку ‘Компоненте модела’."
+
+msgid "Posterior Summary of Coefficients"
+msgstr "Постериорни резиме коефицијената"
+
+msgid "%s%% Credible Interval"
+msgstr "%s%% веродостојан интервал"
+
+msgid "P(incl)"
+msgstr "P(incl)"
+
+msgid "P(incl|data)"
+msgstr "P(incl|data)"
+
+msgid "BF<sub>inclusion</sub>"
+msgstr "BF<sub>укључује</sub>"
+
+msgid "Mean"
+msgstr "Аритметичка средина"
+
+msgid "SD"
+msgstr "SD"
+
+msgid "Mean<sub>inclusion</sub>"
+msgstr "Аритметичка средина<sub>укључује</sub>"
+
+msgid "SD<sub>inclusion</sub>"
+msgstr "SD<sub>укључује</sub>"
+
+msgid "State Plots"
+msgstr "Графикон државе"
+
+msgid "Aggregated State"
+msgstr "Агрегатно стање"
+
+msgid "Time"
+msgstr "Време"
+
+msgid "Distribution"
+msgstr "Дистрибуција"
+
+msgid "Component States"
+msgstr "Компоненте државе"
+
+msgid "Prediction plot"
+msgstr "Графикон предвиђања"
+
+msgid "Control Plots"
+msgstr "Контролни графикони"
+
+msgid "Threshold Plot"
+msgstr "Графикон прага"
+
+msgid ""
+"First date where %1$.3f*sigma is exceeded by %2$.1f%% state credible "
+"interval: %3$s"
+msgstr ""
+"Први датум када је %1$.3f*sigma премашен у %2$.1f%% интервалу поверења за "
+"државу: %3$s"
+
+msgid ""
+"First time point where %1$.3f*sigma is exceeded by %2$.1f%% state credible "
+"interval: %3$s"
+msgstr ""
+"Прва временска тачка када је %1$.3f*sigma премашена у %2$.1f%% интервалу "
+"поверења за државу: %3$s"
+
+msgid "Threshold never reached"
+msgstr "Праг никада није достигнут"
+
+msgid "Probability Plot"
+msgstr "Графикон вероватноће"
+
+msgid "Probability"
+msgstr "Вероватноћа"
+
+msgid "Error Plots"
+msgstr "Графикони грешке"
+
+msgid "Residual Plot"
+msgstr "Графикон остатка"
+
+msgid "Forecast Error Plot"
+msgstr "Графикон грешке прогнозе"
 
 msgid "The spectral analysis failed."
 msgstr "Спектрална анализа није успела."
@@ -132,7 +255,8 @@ msgid "Bandwidth"
 msgstr "Ширина пропустног опсега"
 
 msgid "Data cannot be zero or negative for log transformation."
-msgstr "Подаци не могу бити нула или негативни за логаритамску трансформацију."
+msgstr ""
+"Подаци не могу бити нула или негативни за логаритамску трансформацију."
 
 msgid "Data cannot be negative for root transformation."
 msgstr "Подаци не могу бити негативни за корен трансформацију."

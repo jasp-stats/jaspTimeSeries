@@ -1,3 +1,4 @@
+#
 msgid ""
 msgstr ""
 "MIME-Version: 1.0\n"
@@ -6,6 +7,10 @@ msgstr ""
 "Plural-Forms: nplurals=1; plural=0;\n"
 "X-Language: ja\n"
 "X-Qt-Contexts: true\n"
+
+msgctxt "Description|"
+msgid "Time Series"
+msgstr "時系列"
 
 msgctxt "Description|"
 msgid "This module offers time series analyses."
@@ -839,10 +844,6 @@ msgctxt "StationarityTimeSeries|"
 msgid "Plots the partial autocorrelation for a specified number of lags."
 msgstr "指定したラグ数までの偏自己相関をプロットします。"
 
-msgctxt "Description|"
-msgid "Time Series"
-msgstr "時系列"
-
 msgctxt "StationarityTimeSeries|"
 msgid ""
 "Computes an ADF test that accounts for a constant (drift) and a linear "
@@ -866,3 +867,228 @@ msgstr "残差をスプレッドシートに追加し、以降の分析で使え
 msgctxt "Description|"
 msgid "Time Series Descriptives"
 msgstr "時系列の記述統計"
+
+msgctxt "Description|"
+msgid "Descriptives"
+msgstr ""
+
+msgctxt "Description|"
+msgid "Classical"
+msgstr ""
+
+msgctxt "Description|"
+msgid "Bayesian"
+msgstr ""
+
+msgctxt "Description|"
+msgid "Gaussian State Space Models"
+msgstr ""
+
+msgctxt "bayesianStateSpace|"
+msgid "Dependent Variable"
+msgstr "従属変数"
+
+msgctxt "bayesianStateSpace|"
+msgid "Covariates"
+msgstr "共変量"
+
+msgctxt "bayesianStateSpace|"
+msgid "Fixed Factors"
+msgstr "固定因子"
+
+msgctxt "bayesianStateSpace|"
+msgid "Time"
+msgstr "時間"
+
+msgctxt "bayesianStateSpace|"
+msgid "Output"
+msgstr "出力"
+
+msgctxt "bayesianStateSpace|"
+msgid "Posterior summary of coefficients"
+msgstr "係数の事後要約"
+
+msgctxt "bayesianStateSpace|"
+msgid "Show means across draws included"
+msgstr "含まれたドロー全体の平均を表示"
+
+msgctxt "bayesianStateSpace|"
+msgid "Credible interval"
+msgstr "信用区間"
+
+msgctxt "bayesianStateSpace|"
+msgid "Expected predictors"
+msgstr "期待される予測変数の数"
+
+msgctxt "bayesianStateSpace|"
+msgid "Model Components"
+msgstr "モデルの成分"
+
+msgctxt "bayesianStateSpace|"
+msgid "Components"
+msgstr "成分"
+
+msgctxt "bayesianStateSpace|"
+msgid "Add autoregressive component"
+msgstr "自己回帰成分を追加"
+
+msgctxt "bayesianStateSpace|"
+msgid "Lag selection method"
+msgstr "ラグの選択方法"
+
+msgctxt "bayesianStateSpace|"
+msgid "Manually"
+msgstr "手動"
+
+msgctxt "bayesianStateSpace|"
+msgid "No. of lags"
+msgstr "ラグの数"
+
+msgctxt "bayesianStateSpace|"
+msgid "Automatic"
+msgstr "自動"
+
+msgctxt "bayesianStateSpace|"
+msgid "Maximal lags"
+msgstr "最大ラグ数"
+
+msgctxt "bayesianStateSpace|"
+msgid "Add local level component"
+msgstr "局所水準成分を追加"
+
+msgctxt "bayesianStateSpace|"
+msgid "Add local linear trend component"
+msgstr "局所線形トレンド成分を追加"
+
+msgctxt "bayesianStateSpace|"
+msgid "Add semi-local linear trend"
+msgstr "準局所線形トレンドを追加"
+
+msgctxt "bayesianStateSpace|"
+msgid "Add dynamic regression component"
+msgstr "動的回帰成分を追加"
+
+msgctxt "bayesianStateSpace|"
+msgid ""
+"This component allows you to model the effect of covariates or fixed factors "
+"on the dependent variable. The lag of coefficients can be specified to "
+"account for delayed effects. Only available when covariates or fixed factors "
+"are present in the model."
+msgstr ""
+"この成分では、共変量や固定因子が従属変数に与える効果をモデル化できます。"
+
+msgctxt "bayesianStateSpace|"
+msgid "Seasonalities"
+msgstr "季節性"
+
+msgctxt "bayesianStateSpace|"
+msgid "Name"
+msgstr "名前"
+
+msgctxt "bayesianStateSpace|"
+msgid "Number"
+msgstr "個数"
+
+msgctxt "bayesianStateSpace|"
+msgid "Duration"
+msgstr "期間"
+
+msgctxt "bayesianStateSpace|"
+msgid "Inverse gamma prior"
+msgstr "逆ガンマ事前分布"
+
+msgctxt "bayesianStateSpace|"
+msgid "Normal prior initial state"
+msgstr "初期状態の正規事前分布"
+
+msgctxt "bayesianStateSpace|"
+msgid "Plots"
+msgstr "プロット"
+
+msgctxt "bayesianStateSpace|"
+msgid "State Plots"
+msgstr "状態プロット"
+
+msgctxt "bayesianStateSpace|"
+msgid "Aggregated state contribution"
+msgstr "集約された状態の寄与"
+
+msgctxt "bayesianStateSpace|"
+msgid "Show observations"
+msgstr "観測値を表示"
+
+msgctxt "bayesianStateSpace|"
+msgid "Component state contribution"
+msgstr "成分ごとの状態の寄与"
+
+msgctxt "bayesianStateSpace|"
+msgid "Residuals"
+msgstr "残差"
+
+msgctxt "bayesianStateSpace|"
+msgid "Posterior distribution of residuals"
+msgstr "残差の事後分布"
+
+msgctxt "bayesianStateSpace|"
+msgid "Posterior distribution of one-step-ahead prediction error"
+msgstr "1期先予測誤差の事後分布"
+
+msgctxt "bayesianStateSpace|"
+msgid "Prediction"
+msgstr "予測"
+
+msgctxt "bayesianStateSpace|"
+msgid "Horizon"
+msgstr "予測期間"
+
+msgctxt "bayesianStateSpace|"
+msgid "Control chart"
+msgstr "管理図"
+
+msgctxt "bayesianStateSpace|"
+msgid "Show control chart"
+msgstr "管理図を表示"
+
+msgctxt "bayesianStateSpace|"
+msgid "Control period end"
+msgstr "管理期間の終わり"
+
+msgctxt "bayesianStateSpace|"
+msgid "σ threshold"
+msgstr "σ しきい値"
+
+msgctxt "bayesianStateSpace|"
+msgid "Show probabilistic control plot"
+msgstr "確率的な管理図を表示"
+
+msgctxt "bayesianStateSpace|"
+msgid "Advanced Options"
+msgstr "詳細オプション"
+
+msgctxt "bayesianStateSpace|"
+msgid "Desired MCMC draws"
+msgstr "希望するMCMCドロー数"
+
+msgctxt "bayesianStateSpace|"
+msgid "Timeout in seconds"
+msgstr "タイムアウト(秒)"
+
+msgctxt "bayesianStateSpace|"
+msgid "Burn-in Specification"
+msgstr "バーンインの指定"
+
+msgctxt "bayesianStateSpace|"
+msgid "Automatic suggestion"
+msgstr "自動で提案"
+
+msgctxt "bayesianStateSpace|"
+msgid "Proportion"
+msgstr "割合"
+
+msgctxt "bayesianStateSpace|"
+msgid "Manual"
+msgstr "手動"
+
+msgctxt "bayesianStateSpace|"
+msgid "Seed"
+msgstr "シード"

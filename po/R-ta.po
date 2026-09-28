@@ -1,11 +1,11 @@
+#
 msgid ""
 msgstr ""
 "Project-Id-Version: jaspTimeSeries 0.19.2\n"
-"POT-Creation-Date: 2024-10-19 03:27\n"
+"POT-Creation-Date: 2026-09-23 17:06\n"
 "PO-Revision-Date: 2026-01-01 03:01+0000\n"
 "Last-Translator: தமிழ்நேரம் <tamilneram247@gmail.com>\n"
-"Language-Team: Tamil <https://hosted.weblate.org/projects/jasp/"
-"jasptimeseries-r/ta/>\n"
+"Language-Team: Tamil <https://hosted.weblate.org/projects/jasp/jasptimeseries-r/ta/>\n"
 "Language: ta\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -112,8 +112,8 @@ msgid ""
 "Not enough observations in the covariate%1$s. The maximum number of "
 "forecasts is %2$s."
 msgstr ""
-"கோவாரியேட்%1$s இல் போதுமான அவதானிப்புகள் இல்லை. முன்னறிவிப்புகளின் அதிகபட்ச எண்ணிக்கை "
-"%2$s ஆகும்."
+"கோவாரியேட்%1$s இல் போதுமான அவதானிப்புகள் இல்லை. முன்னறிவிப்புகளின் அதிகபட்ச "
+"எண்ணிக்கை %2$s ஆகும்."
 
 msgid "Forecasting failed."
 msgstr "முன்னறிவிப்பு தோல்வியடைந்தது."
@@ -123,6 +123,123 @@ msgstr "முன்னறிவிப்பு நேரத் தொடர் 
 
 msgid "Forecasts"
 msgstr "கணிப்புகள்"
+
+msgid ""
+"Unknown value provided for modelType, possible values: `alternative`, `null`"
+msgstr ""
+"மாதிரி டைப், சாத்தியமான மதிப்புகளுக்கு அறியப்படாத மதிப்பு வழங்கப்பட்டது: "
+"`மாற்று`,` பூச்யம்`"
+
+msgid "Residual SD"
+msgstr "எஞ்சிய எச்டி"
+
+msgid "Prediction SD"
+msgstr "கணிப்பு எச்டி"
+
+msgid "R%s"
+msgstr "R%s"
+
+msgid "Harvey's goodness of fit"
+msgstr "ஆர்வியின் பொருத்தத்தின் நன்மை"
+
+msgid ""
+"Only %1$s draws were sampled out of the desired %2$s. Additionally, %3$s "
+"MCMC draws out of %1$s are discarded as burn in."
+msgstr ""
+"விரும்பிய %2$s இல் %1$s டிராக்கள் மட்டுமே மாதிரி செய்யப்பட்டன. கூடுதலாக, "
+"%3$s MCMC %1$s இல் வெளியேற்றங்கள் எரியும் என நிராகரிக்கப்படுகின்றன."
+
+msgid "%1$d MCMC draws out of %2$d are discarded as burn in."
+msgstr "%1$d MCMC %2$d இல் வெளியேறுவது எரியும் என நிராகரிக்கப்படுகிறது."
+
+msgid ""
+"The local level component has been selected (by default). If you wish to "
+"adjust the model, you can do so under 'Model Components'."
+msgstr ""
+"உள்ளக நிலை கூறு தேர்ந்தெடுக்கப்பட்டுள்ளது (இயல்பாக). நீங்கள் மாதிரியை "
+"சரிசெய்ய விரும்பினால், 'மாதிரி கூறுகள்' கீழ் அவ்வாறு செய்யலாம்."
+
+msgid "Posterior Summary of Coefficients"
+msgstr "குணகங்களின் பின்புற சுருக்கம்"
+
+msgid "%s%% Credible Interval"
+msgstr "%s %% நம்பகமான இடைவெளி"
+
+msgid "P(incl)"
+msgstr "பி (உள்ளடக்கியது)"
+
+msgid "P(incl|data)"
+msgstr "பி (உள்ளிட்ட | தரவு)"
+
+msgid "BF<sub>inclusion</sub>"
+msgstr "பி.எஃப் <sub>சேர்த்தல்</sub>"
+
+msgid "Mean"
+msgstr "இடை, சராசரி"
+
+msgid "SD"
+msgstr "எச்டி"
+
+msgid "Mean<sub>inclusion</sub>"
+msgstr "சராசரி <sub>உள்ள சேர்த்தல்</sub>"
+
+msgid "SD<sub>inclusion</sub>"
+msgstr "எச்டி<sub>சேர்த்தல்</sub>"
+
+msgid "State Plots"
+msgstr "மாநில அடுக்குகள்"
+
+msgid "Aggregated State"
+msgstr "ஒருங்கிணைந்த நிலை"
+
+msgid "Time"
+msgstr "நேரம்"
+
+msgid "Distribution"
+msgstr "பரவல்"
+
+msgid "Component States"
+msgstr "கூறு நிலைகள்"
+
+msgid "Prediction plot"
+msgstr "கணிப்பு சூழ்ச்சி"
+
+msgid "Control Plots"
+msgstr "கட்டுப்பாட்டு அடுக்குகள்"
+
+msgid "Threshold Plot"
+msgstr "வாசல் சூழ்ச்சி"
+
+msgid ""
+"First date where %1$.3f*sigma is exceeded by %2$.1f%% state credible "
+"interval: %3$s"
+msgstr ""
+"முதல் தேதி %1$.3f*சிக்மா %2$.1f%% மாநில நம்பகமான இடைவெளி: %3$s ஐ மீறுகிறது"
+
+msgid ""
+"First time point where %1$.3f*sigma is exceeded by %2$.1f%% state credible "
+"interval: %3$s"
+msgstr ""
+"%1$.3f* சிக்மா %2$.1f%% மாநில நம்பகமான இடைவெளி: %3$s ஐ விட அதிகமாக இருக்கும்"
+" முதல் முறையாகும்"
+
+msgid "Threshold never reached"
+msgstr "வாசல் ஒருபோதும் எட்டவில்லை"
+
+msgid "Probability Plot"
+msgstr "நிகழ்தகவு சூழ்ச்சி"
+
+msgid "Probability"
+msgstr "நிகழ்தகவு"
+
+msgid "Error Plots"
+msgstr "பிழை அடுக்கு"
+
+msgid "Residual Plot"
+msgstr "மீதமுள்ள சூழ்ச்சி"
+
+msgid "Forecast Error Plot"
+msgstr "முன்னறிவிப்பு பிழை சூழ்ச்சி"
 
 msgid "The spectral analysis failed."
 msgstr "ச்பெக்ட்ரல் பகுப்பாய்வு தோல்வியடைந்தது."
@@ -137,7 +254,8 @@ msgid "Bandwidth"
 msgstr "பட்டை அகலம்"
 
 msgid "Data cannot be zero or negative for log transformation."
-msgstr "பதிவு மாற்றத்திற்கு தரவு பூச்சியமாகவோ அல்லது எதிர்மறையாகவோ இருக்க முடியாது."
+msgstr ""
+"பதிவு மாற்றத்திற்கு தரவு பூச்சியமாகவோ அல்லது எதிர்மறையாகவோ இருக்க முடியாது."
 
 msgid "Data cannot be negative for root transformation."
 msgstr "ரூட் மாற்றத்திற்கு தரவு எதிர்மறையாக இருக்க முடியாது."
@@ -198,13 +316,13 @@ msgstr "போக்கு நிலைத்தன்மைக்கான க�
 
 msgid "The p-value is actually less than p-value shown (see Help file)."
 msgstr ""
-"பி-மதிப்பு உண்மையில் காட்டப்பட்டுள்ள பி-மதிப்பை விட குறைவாக உள்ளது (உதவி கோப்பைப் "
-"பார்க்கவும்)."
+"பி-மதிப்பு உண்மையில் காட்டப்பட்டுள்ள பி-மதிப்பை விட குறைவாக உள்ளது (உதவி "
+"கோப்பைப் பார்க்கவும்)."
 
 msgid "The p-value is actually greater than p-value shown (see Help file)."
 msgstr ""
-"பி-மதிப்பு உண்மையில் காட்டப்பட்டுள்ள பி-மதிப்பை விட அதிகமாக உள்ளது (உதவி கோப்பைப் "
-"பார்க்கவும்)."
+"பி-மதிப்பு உண்மையில் காட்டப்பட்டுள்ள பி-மதிப்பை விட அதிகமாக உள்ளது (உதவி "
+"கோப்பைப் பார்க்கவும்)."
 
 msgid "Autocorrelation Function"
 msgstr "தன்னியக்க தொடர்பு செயல்பாடு"
