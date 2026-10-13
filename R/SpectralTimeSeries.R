@@ -19,13 +19,8 @@
 SpectralTimeSeries <- function(jaspResults, dataset, options) {
   ready <- options[["dependent"]] != ""
 
-  datasetRaw <- .tsReadData(jaspResults, dataset, options, ready)
-
-  datasetFiltered <- .tsDataFilterHandler(datasetRaw, options, ready)
-
-  dataset <- .tsDataWithMissingRowsHandler(datasetFiltered, options, ready)
-
-  .tsErrorHandler(dataset, ready)
+  dataset <- .tsPrepareData(jaspResults, dataset, options, ready)$data
+  ready <- ready && nrow(dataset) > 0L
 
   .tsPowerSpectralDensity(jaspResults, dataset, options, ready, position = 2, dependencies = .tsSpectralDependencies())
   .tsCreateTableBandWith(jaspResults, dataset, options, ready, position = 1, dependencies = .tsSpectralDependencies())

@@ -1,3 +1,4 @@
+#
 msgid ""
 msgstr ""
 "MIME-Version: 1.0\n"
@@ -43,22 +44,7 @@ msgid "Time"
 msgstr ""
 
 msgctxt "ARIMATimeSeries|"
-msgid ""
-"Optional. Can either be an ordinal variable indicating the time index/order "
-"of the observations, or a text variable indicating the date/time stamp of "
-"the observations. Combined date and time values should be in the standard "
-"format 'YYYY-MM-DD HH:MM:SS', where seconds (':SS') can also be omitted. "
-"Date-only values should be in the format 'YYYY-MM-DD'. If a time variable is "
-"not supplied, the row order of the data is used."
-msgstr ""
-
-msgctxt "ARIMATimeSeries|"
 msgid "Covariates"
-msgstr ""
-
-msgctxt "ARIMATimeSeries|"
-msgid ""
-"Optional. A numerical variable to include in the model as external regressor."
 msgstr ""
 
 msgctxt "ARIMATimeSeries|"
@@ -99,14 +85,6 @@ msgstr ""
 
 msgctxt "ARIMATimeSeries|"
 msgid "Filter by"
-msgstr ""
-
-msgctxt "ARIMATimeSeries|"
-msgid ""
-"Filters the time series so only a specific range will be used for further "
-"analyses. Row number refers to the row number in the spreadsheet. If a "
-"'Time' variable is supplied it is also possible to filter by time index or "
-"date, depending on the format of the 'Time' variable."
 msgstr ""
 
 msgctxt "ARIMATimeSeries|"
@@ -238,6 +216,10 @@ msgid "Plots"
 msgstr ""
 
 msgctxt "ARIMATimeSeries|"
+msgid "Observed time series"
+msgstr ""
+
+msgctxt "ARIMATimeSeries|"
 msgid "Plots the residuals (y-axis) over time (x-axis)."
 msgstr ""
 
@@ -311,23 +293,11 @@ msgid "Number of forecasts"
 msgstr ""
 
 msgctxt "ARIMATimeSeries|"
-msgid "Determines the number forecasts to make."
-msgstr ""
-
-msgctxt "ARIMATimeSeries|"
 msgid "Save forecasts as"
 msgstr ""
 
 msgctxt "ARIMATimeSeries|"
 msgid "e.g. forecasts.csv"
-msgstr ""
-
-msgctxt "ARIMATimeSeries|"
-msgid "Saves the forecasts in a seperate .csv file."
-msgstr ""
-
-msgctxt "ARIMATimeSeries|"
-msgid "Plots the forecasts (and observed values) (y-axis) over time (x-axis)"
 msgstr ""
 
 msgctxt "ARIMATimeSeries|"
@@ -354,16 +324,6 @@ msgstr ""
 
 msgctxt "SpectralTimeSeries|"
 msgid "Time"
-msgstr ""
-
-msgctxt "SpectralTimeSeries|"
-msgid ""
-"Optional. Can either be an ordinal variable indicating the order of the "
-"observations, or a text variable indicating the date/time stamp of the "
-"observations. Combined date and time values should be in the standard format "
-"'YYYY-MM-DD HH:MM:SS', where seconds (':SS') can also be omitted. Date-only "
-"values should be in the format 'YYYY-MM-DD'. If a time variable is not "
-"supplied, the row order of the data is used."
 msgstr ""
 
 msgctxt "SpectralTimeSeries|"
@@ -404,14 +364,6 @@ msgstr ""
 
 msgctxt "SpectralTimeSeries|"
 msgid "Filter by"
-msgstr ""
-
-msgctxt "SpectralTimeSeries|"
-msgid ""
-"Filters the time series so only a specific range will be used for further "
-"analyses. Row number refers to the row number in the spreadsheet. If a "
-"'Time' variable is supplied it is also possible to filter by time index or "
-"date, depending on the format of the 'Time' variable."
 msgstr ""
 
 msgctxt "SpectralTimeSeries|"
@@ -491,16 +443,6 @@ msgid "Time"
 msgstr ""
 
 msgctxt "StationarityTimeSeries|"
-msgid ""
-"Optional. Can either be an ordinal variable indicating the order of the "
-"observations, or a text variable indicating the date/time stamp of the "
-"observations. Combined date and time values should be in the standard format "
-"'YYYY-MM-DD HH:MM:SS', where seconds (':SS') can also be omitted. Date-only "
-"values should be in the format 'YYYY-MM-DD'. If a time variable is not "
-"supplied, the row order of the data is used."
-msgstr ""
-
-msgctxt "StationarityTimeSeries|"
 msgid "Stationarity Tests"
 msgstr ""
 
@@ -550,14 +492,6 @@ msgstr ""
 
 msgctxt "StationarityTimeSeries|"
 msgid "Filter by"
-msgstr ""
-
-msgctxt "StationarityTimeSeries|"
-msgid ""
-"Filters the time series so only a specific range will be used for further "
-"analyses. Row number refers to the row number in the spreadsheet. If a "
-"'Time' variable is supplied it is also possible to filter by time index or "
-"date, depending on the format of the 'Time' variable."
 msgstr ""
 
 msgctxt "StationarityTimeSeries|"
@@ -645,13 +579,6 @@ msgid "Detrend using linear regression"
 msgstr ""
 
 msgctxt "StationarityTimeSeries|"
-msgid ""
-"Fits a polynomial regression to the dependent variable with time as "
-"predictor, and keeps only the residuals. If best fitting is selected, the "
-"polynomial regression is chosen based on the information criterion."
-msgstr ""
-
-msgctxt "StationarityTimeSeries|"
 msgid "Polynomial"
 msgstr ""
 
@@ -713,6 +640,10 @@ msgstr ""
 
 msgctxt "StationarityTimeSeries|"
 msgid "Plots"
+msgstr ""
+
+msgctxt "StationarityTimeSeries|"
+msgid "Plots reflect the transformations selected above."
 msgstr ""
 
 msgctxt "StationarityTimeSeries|"
@@ -808,4 +739,362 @@ msgstr ""
 
 msgctxt "Description|"
 msgid "Time Series Descriptives"
+msgstr ""
+
+msgctxt "Description|"
+msgid "Descriptives"
+msgstr ""
+
+msgctxt "Description|"
+msgid "Classical"
+msgstr ""
+
+msgctxt "Description|"
+msgid "Bayesian"
+msgstr ""
+
+msgctxt "Description|"
+msgid "Gaussian State Space Models"
+msgstr ""
+
+msgctxt "bayesianStateSpace|"
+msgid "Dependent Variable"
+msgstr "متغیر وابسته"
+
+msgctxt "bayesianStateSpace|"
+msgid "Covariates"
+msgstr "هم‌متغیرها"
+
+msgctxt "bayesianStateSpace|"
+msgid "Fixed Factors"
+msgstr "عامل‌های ثابت"
+
+msgctxt "bayesianStateSpace|"
+msgid "Time"
+msgstr "زمان"
+
+msgctxt "bayesianStateSpace|"
+msgid "Output"
+msgstr "خروجی"
+
+msgctxt "bayesianStateSpace|"
+msgid "Posterior summary of coefficients"
+msgstr "خلاصه پسین ضریب‌ها"
+
+msgctxt "bayesianStateSpace|"
+msgid "Show means across draws included"
+msgstr "نمایش میانگین‌ها در بین استخراج‌های گنجانده‌شده"
+
+msgctxt "bayesianStateSpace|"
+msgid "Credible interval"
+msgstr "بازه باورپذیر"
+
+msgctxt "bayesianStateSpace|"
+msgid "Expected predictors"
+msgstr "پیش‌بین‌های مورد انتظار"
+
+msgctxt "bayesianStateSpace|"
+msgid "Model Components"
+msgstr "مؤلفه‌های مدل"
+
+msgctxt "bayesianStateSpace|"
+msgid "Components"
+msgstr "مؤلفه‌ها"
+
+msgctxt "bayesianStateSpace|"
+msgid "Add autoregressive component"
+msgstr "افزودن مؤلفه خودبازگشتی"
+
+msgctxt "bayesianStateSpace|"
+msgid "Lag selection method"
+msgstr "روش انتخاب تأخیر"
+
+msgctxt "bayesianStateSpace|"
+msgid "Manually"
+msgstr "دستی"
+
+msgctxt "bayesianStateSpace|"
+msgid "No. of lags"
+msgstr "تعداد تأخیرها"
+
+msgctxt "bayesianStateSpace|"
+msgid "Automatic"
+msgstr "خودکار"
+
+msgctxt "bayesianStateSpace|"
+msgid "Maximal lags"
+msgstr "حداکثر تأخیرها"
+
+msgctxt "bayesianStateSpace|"
+msgid "Add local level component"
+msgstr "افزودن مؤلفه سطح محلی"
+
+msgctxt "bayesianStateSpace|"
+msgid "Add local linear trend component"
+msgstr "افزودن مؤلفه روند خطی محلی"
+
+msgctxt "bayesianStateSpace|"
+msgid "Add semi-local linear trend"
+msgstr "افزودن روند خطی نیمه‌محلی"
+
+msgctxt "bayesianStateSpace|"
+msgid "Add dynamic regression component"
+msgstr "افزودن مؤلفه رگرسیون پویا"
+
+msgctxt "bayesianStateSpace|"
+msgid ""
+"This component allows you to model the effect of covariates or fixed factors "
+"on the dependent variable. Only available when covariates or fixed factors "
+"are present in the model."
+msgstr ""
+
+msgctxt "bayesianStateSpace|"
+msgid "Seasonalities"
+msgstr "فصلی‌ها"
+
+msgctxt "bayesianStateSpace|"
+msgid "Name"
+msgstr "نام"
+
+msgctxt "bayesianStateSpace|"
+msgid "Number"
+msgstr "عدد"
+
+msgctxt "bayesianStateSpace|"
+msgid "Duration"
+msgstr "مدت زمان"
+
+msgctxt "bayesianStateSpace|"
+msgid "Inverse gamma prior"
+msgstr "پیشین گامای معکوس"
+
+msgctxt "bayesianStateSpace|"
+msgid "Normal prior initial state"
+msgstr "حالت اولیه پیشین نرمال"
+
+msgctxt "bayesianStateSpace|"
+msgid "Plots"
+msgstr "نمودارها"
+
+msgctxt "bayesianStateSpace|"
+msgid "State Plots"
+msgstr "نمودارهای حالت"
+
+msgctxt "bayesianStateSpace|"
+msgid "Aggregated state contribution"
+msgstr "مشارکت حالت تجمیع‌شده"
+
+msgctxt "bayesianStateSpace|"
+msgid "Show observations"
+msgstr "نمایش مشاهدات"
+
+msgctxt "bayesianStateSpace|"
+msgid "Component state contribution"
+msgstr "مشارکت حالت مؤلفه"
+
+msgctxt "bayesianStateSpace|"
+msgid "Residuals"
+msgstr "باقی‌مانده‌ها"
+
+msgctxt "bayesianStateSpace|"
+msgid "Posterior distribution of residuals"
+msgstr "توزیع پسین باقی‌مانده‌ها"
+
+msgctxt "bayesianStateSpace|"
+msgid "Posterior distribution of one-step-ahead prediction error"
+msgstr "توزیع پسین خطای پیش‌بینی یک گام جلوتر"
+
+msgctxt "bayesianStateSpace|"
+msgid "Prediction"
+msgstr "پیش‌بینی"
+
+msgctxt "bayesianStateSpace|"
+msgid "Horizon"
+msgstr "افق"
+
+msgctxt "bayesianStateSpace|"
+msgid "Control chart"
+msgstr "نمودار کنترل"
+
+msgctxt "bayesianStateSpace|"
+msgid "Show control chart"
+msgstr "نمایش نمودار کنترل"
+
+msgctxt "bayesianStateSpace|"
+msgid "Control period end"
+msgstr "پایان دوره کنترل"
+
+msgctxt "bayesianStateSpace|"
+msgid "σ threshold"
+msgstr "آستانه σ"
+
+msgctxt "bayesianStateSpace|"
+msgid "Show probabilistic control plot"
+msgstr "نمایش نمودار کنترل احتمالاتی"
+
+msgctxt "bayesianStateSpace|"
+msgid "Advanced Options"
+msgstr "گزینه‌های پیشرفته"
+
+msgctxt "bayesianStateSpace|"
+msgid "Desired MCMC draws"
+msgstr "استخراج‌های MCMC مطلوب"
+
+msgctxt "bayesianStateSpace|"
+msgid "Timeout in seconds"
+msgstr "مهلت زمانی به ثانیه"
+
+msgctxt "bayesianStateSpace|"
+msgid "Burn-in Specification"
+msgstr "مشخصات دوره سوختن"
+
+msgctxt "bayesianStateSpace|"
+msgid "Automatic suggestion"
+msgstr "پیشنهاد خودکار"
+
+msgctxt "bayesianStateSpace|"
+msgid "Proportion"
+msgstr "نسبت"
+
+msgctxt "bayesianStateSpace|"
+msgid "Manual"
+msgstr "دستی"
+
+msgctxt "bayesianStateSpace|"
+msgid "Seed"
+msgstr "دانه"
+
+#~ msgctxt "bayesianStateSpace|"
+#~ msgid ""
+#~ "This component allows you to model the effect of covariates or fixed factors "
+#~ "on the dependent variable. The lag of coefficients can be specified to "
+#~ "account for delayed effects. Only available when covariates or fixed factors "
+#~ "are present in the model."
+#~ msgstr ""
+#~ "این مؤلفه به شما امکان می‌دهد تا اثر هم‌متغیرها یا عامل‌های ثابت را بر متغیر "
+#~ "وابسته مدل‌سازی کنید. تأخیر ضریب‌ها را می‌توان برای در نظر گرفتن اثرات تأخیری "
+#~ "مشخص کرد. این گزینه تنها زمانی در دسترس است که هم‌متغیرها یا عامل‌های ثابت در "
+#~ "مدل وجود داشته باشند."
+
+msgctxt "ARIMATimeSeries|"
+msgid ""
+"Optional. Complete numeric values order observations from smallest to "
+"largest, regardless of gaps. Complete, unambiguous dates and times order "
+"observations chronologically. Use 'YYYY-MM-DD' for dates or 'YYYY-MM-DD "
+"HH:MM:SS' for dates with times; seconds can be omitted. All variables stay "
+"aligned, and spreadsheet row order is unchanged. Tied values retain "
+"spreadsheet row order. If any value is missing or cannot be interpreted, or "
+"dates are ambiguous, Time is ignored for the entire analysis and a warning "
+"is shown. Leave Time empty to use spreadsheet row order. Successive "
+"observations are modeled as equally spaced steps; no rows are added for gaps "
+"in Time."
+msgstr ""
+
+msgctxt "ARIMATimeSeries|"
+msgid ""
+"Optional numeric variables to include as external regressors. Forecasting "
+"requires covariate values in the next rows of the ordered dataset after the "
+"final row used for fitting. Use a filter to end the fitted series before "
+"those rows; missing dependent values alone do not exclude a row from fitting."
+msgstr ""
+
+msgctxt "ARIMATimeSeries|"
+msgid ""
+"Number of observation steps to forecast after the final row included in the "
+"model, including rows with missing dependent values. A value of 0 produces "
+"no forecasts. When Time is assigned, the table reports steps ahead; future "
+"Time values or dates are not inferred."
+msgstr ""
+
+msgctxt "ARIMATimeSeries|"
+msgid ""
+"Saves the forecasts in a separate .csv file. When Time is assigned, the "
+"first column, stepAhead, counts steps after the final modeled row. When Time "
+"is empty, the first column, t, continues the row index."
+msgstr ""
+
+#: /private/tmp/jasp-time-controls-step4-20261009-f33g81ee/jaspTimeSeries/inst/qml/ARIMATimeSeries.qml:372
+msgctxt "ARIMATimeSeries|"
+msgid ""
+"Plots forecasts and optionally observed values. With Time assigned, the "
+"x-axis counts observation steps in model order and continues beyond the "
+"final modeled row; future Time values or dates are not inferred. With Time "
+"empty, t retains and continues the row index."
+msgstr ""
+
+msgctxt "ARIMATimeSeries|"
+msgid ""
+"Reports forecast means and intervals. With Time assigned, Steps ahead counts "
+"from 1 after the final modeled row. With Time empty, t continues the row "
+"index."
+msgstr ""
+
+msgctxt "SpectralTimeSeries|"
+msgid ""
+"Optional. Complete numeric values order observations from smallest to "
+"largest, regardless of gaps. Complete, unambiguous dates and times order "
+"observations chronologically. Use 'YYYY-MM-DD' for dates or 'YYYY-MM-DD "
+"HH:MM:SS' for dates with times; seconds can be omitted. All variables stay "
+"aligned, and spreadsheet row order is unchanged. Tied values retain "
+"spreadsheet row order. If any value is missing or cannot be interpreted, or "
+"dates are ambiguous, Time is ignored for the entire analysis and a warning "
+"is shown. Leave Time empty to use spreadsheet row order. Successive "
+"observations are modeled as equally spaced steps; no rows are added for gaps "
+"in Time."
+msgstr ""
+
+msgctxt "StationarityTimeSeries|"
+msgid ""
+"Optional. Complete numeric values order observations from smallest to "
+"largest, regardless of gaps. Complete, unambiguous dates and times order "
+"observations chronologically. Use 'YYYY-MM-DD' for dates or 'YYYY-MM-DD "
+"HH:MM:SS' for dates with times; seconds can be omitted. All variables stay "
+"aligned, and spreadsheet row order is unchanged. Tied values retain "
+"spreadsheet row order. If any value is missing or cannot be interpreted, or "
+"dates are ambiguous, Time is ignored for the entire analysis and a warning "
+"is shown. Leave Time empty to use spreadsheet row order. Successive "
+"observations are modeled as equally spaced steps; no rows are added for gaps "
+"in Time."
+msgstr ""
+
+msgctxt "StationarityTimeSeries|"
+msgid ""
+"Fits a polynomial regression to the dependent variable using observation "
+"step as predictor, and keeps only the residuals. Differences between Time "
+"values do not affect detrending; rows with missing dependent values retain "
+"their step positions. If best fitting is selected, the polynomial regression "
+"is chosen based on the information criterion."
+msgstr ""
+
+msgctxt "ARIMATimeSeries|"
+msgid ""
+"Selects an inclusive range of observations for analysis. Row number refers "
+"to original spreadsheet rows, even when Time changes the analysis order. "
+"Time index filters numeric Time values, including negative values and "
+"decimals. Date filters interpreted dates and times. Date filters use UTC. A "
+"date-only End includes the entire day; an End with a time uses that exact "
+"cutoff. Time or date filtering requires a usable Time variable; otherwise, "
+"select Row number or disable filtering."
+msgstr ""
+
+msgctxt "SpectralTimeSeries|"
+msgid ""
+"Selects an inclusive range of observations for analysis. Row number refers "
+"to original spreadsheet rows, even when Time changes the analysis order. "
+"Time index filters numeric Time values, including negative values and "
+"decimals. Date filters interpreted dates and times. Date filters use UTC. A "
+"date-only End includes the entire day; an End with a time uses that exact "
+"cutoff. Time or date filtering requires a usable Time variable; otherwise, "
+"select Row number or disable filtering."
+msgstr ""
+
+msgctxt "StationarityTimeSeries|"
+msgid ""
+"Selects an inclusive range of observations for analysis. Row number refers "
+"to original spreadsheet rows, even when Time changes the analysis order. "
+"Time index filters numeric Time values, including negative values and "
+"decimals. Date filters interpreted dates and times. Date filters use UTC. A "
+"date-only End includes the entire day; an End with a time uses that exact "
+"cutoff. Time or date filtering requires a usable Time variable; otherwise, "
+"select Row number or disable filtering."
 msgstr ""
