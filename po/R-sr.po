@@ -2,7 +2,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: jaspTimeSeries 0.19.2\n"
-"POT-Creation-Date: 2026-09-23 17:06\n"
+"POT-Creation-Date: 2026-10-07 21:21\n"
 "PO-Revision-Date: 2025-12-09 00:00+0000\n"
 "Last-Translator: Marko Bojović <bojovicmarko@outlook.com>\n"
 "Language-Team: Serbian <https://hosted.weblate.org/projects/jasp/jasptimeseries-r/sr/>\n"
@@ -13,14 +13,11 @@ msgstr ""
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
 "X-Generator: Weblate 5.15-dev\n"
 
-msgid "Time Series Plot"
-msgstr "Графикон временске серије"
+msgid "Observed Time Series Plot"
+msgstr ""
 
 msgid "The ARIMA model could not be fit."
 msgstr "ARIMA модел није могао бити прилагођен."
-
-msgid "No parameters are estimated."
-msgstr "Нема процењених параметара."
 
 msgid "Model Summary"
 msgstr "Резиме модела"
@@ -61,6 +58,17 @@ msgstr "Нижи"
 msgid "Upper"
 msgstr "Виши"
 
+msgid "An ARIMA(%1$s, %2$s, %3$s)(%4$s, %5$s, %6$s)[%7$s] model was fitted."
+msgstr "ARIMA(%1$s, %2$s, %3$s)(%4$s, %5$s, %6$s)[%7$s] модел је прилагођен."
+
+msgid "An ARIMA(%1$s, %2$s, %3$s) model was fitted."
+msgstr "ARIMA(%1$s, %2$s, %3$s) модел је прилагођен."
+
+msgid ""
+"The selected model has no coefficients to report. Only the residual variance "
+"is estimated; it is shown in the model summary."
+msgstr ""
+
 msgid "Intercept"
 msgstr "Пресек"
 
@@ -76,14 +84,16 @@ msgstr "сезонски AR(%1$i)"
 msgid "seasonal MA(%1$i)"
 msgstr "сезонски MA(%1$i)"
 
-msgid "An ARIMA(%1$s, %2$s, %3$s)(%4$s, %5$s, %6$s)[%7$s] model was fitted."
-msgstr "ARIMA(%1$s, %2$s, %3$s)(%4$s, %5$s, %6$s)[%7$s] модел је прилагођен."
-
-msgid "An ARIMA(%1$s, %2$s, %3$s) model was fitted."
-msgstr "ARIMA(%1$s, %2$s, %3$s) модел је прилагођен."
-
 msgid "Residual Diagnostics Plots"
 msgstr "Графикони дијагностике остатака"
+
+msgid "Time Series Plot"
+msgstr "Графикон временске серије"
+
+msgid ""
+"Missing residuals appear as gaps in the time-series plot and are excluded "
+"from the distribution."
+msgstr ""
 
 msgid "Autocorrelation Function Plot"
 msgstr "Графикон функције ауто-корелације"
@@ -123,6 +133,49 @@ msgid "Forecasts"
 msgstr "Прогнозе"
 
 msgid ""
+"The following covariates contain missing values or values that cannot be "
+"interpreted as numbers: %1$s. Covariates must be numeric. For categorical "
+"predictors, use Fixed Factors."
+msgstr ""
+
+msgid ""
+"Model estimation failed because of a numerical problem during sampling. "
+"Check the dependent variable for extreme values and consider rescaling it to "
+"more moderate units. If the autoregressive component is enabled, temporarily "
+"disabling it can help identify the source of the problem.\n"
+"\n"
+"Technical details:\n"
+"%1$s"
+msgstr ""
+
+msgid ""
+"Model estimation failed.\n"
+"\n"
+"%1$s"
+msgstr ""
+
+msgid "No completed MCMC draws are available for burn-in selection."
+msgstr ""
+
+msgid ""
+"The automatic burn-in proportion must be greater than 0 and at most 1. To "
+"discard no draws, select manual burn-in and enter 0."
+msgstr ""
+
+msgid ""
+"Automatic burn-in needs a larger tail proportion or more completed MCMC "
+"draws. Alternatively, select manual burn-in."
+msgstr ""
+
+msgid "Select automatic or manual burn-in."
+msgstr ""
+
+msgid ""
+"Burn-in must be a whole number between 0 and %1$d, leaving at least one of "
+"the %2$d completed MCMC draws."
+msgstr ""
+
+msgid ""
 "Unknown value provided for modelType, possible values: `alternative`, `null`"
 msgstr ""
 "Непозната вредност је унета за modelType, могуће вредности су: "
@@ -158,6 +211,14 @@ msgid ""
 msgstr ""
 "Локална компонента нивоа је одабрана (по дифолту). Ако желите да прилагодите"
 " модел, то можете урадити у одељку ‘Компоненте модела’."
+
+msgid ""
+"Harvey's goodness of fit is unavailable because the dependent variable "
+"contains missing observations."
+msgstr ""
+
+msgid "Harvey's goodness of fit could not be computed."
+msgstr ""
 
 msgid "Posterior Summary of Coefficients"
 msgstr "Постериорни резиме коефицијената"
@@ -207,8 +268,16 @@ msgstr "Графикон предвиђања"
 msgid "Control Plots"
 msgstr "Контролни графикони"
 
+msgid ""
+"Control period end must be a whole number of at least 2 and cannot exceed "
+"the number of time points (%1$d)."
+msgstr ""
+
 msgid "Threshold Plot"
 msgstr "Графикон прага"
+
+msgid "Probability Plot"
+msgstr "Графикон вероватноће"
 
 msgid ""
 "First date where %1$.3f*sigma is exceeded by %2$.1f%% state credible "
@@ -226,9 +295,6 @@ msgstr ""
 
 msgid "Threshold never reached"
 msgstr "Праг никада није достигнут"
-
-msgid "Probability Plot"
-msgstr "Графикон вероватноће"
 
 msgid "Probability"
 msgstr "Вероватноћа"
@@ -257,6 +323,12 @@ msgstr "Ширина пропустног опсега"
 msgid "Data cannot be zero or negative for log transformation."
 msgstr ""
 "Подаци не могу бити нула или негативни за логаритамску трансформацију."
+
+msgid ""
+"The log transformation produced negative values, so the root transformation "
+"cannot be applied. Values between 0 and 1 have negative logarithms. Disable "
+"either Log or Root."
+msgstr ""
 
 msgid "Data cannot be negative for root transformation."
 msgstr "Подаци не могу бити негативни за корен трансформацију."
@@ -330,3 +402,12 @@ msgstr "Функција аутокорелације"
 
 msgid "Partial Autocorrelation Function"
 msgstr "Функција парцијалне аутокорелације"
+
+#~ msgid "No parameters are estimated."
+#~ msgstr "Нема процењених параметара."
+
+msgid "Observation step"
+msgstr ""
+
+msgid "Steps ahead"
+msgstr ""

@@ -19,7 +19,7 @@
 
 #' Gaussian State Space Models
 #'
-#' @param dynamicRegregressionComponent, This component allows you to model the effect of covariates or fixed factors on the dependent variable. The lag of coefficients can be specified to account for delayed effects. Only available when covariates or fixed factors are present in the model.
+#' @param dynamicRegregressionComponent, This component allows you to model the effect of covariates or fixed factors on the dependent variable. Only available when covariates or fixed factors are present in the model.
 #'    Defaults to \code{FALSE}.
 bayesianStateSpace <- function(
           data = NULL,

@@ -179,7 +179,7 @@ Form
 			// The double field should probably be an integerfield, but it's unused in the R code at the moment
 			// DoubleField { name:"dynamicRegregressionLags";		label: qsTr("Lag of coefficients");	fieldWidth: 40;}
 			enabled: covariates.count > 0 || fixedFactors.count > 0
-			info: qsTr("This component allows you to model the effect of covariates or fixed factors on the dependent variable. The lag of coefficients can be specified to account for delayed effects. Only available when covariates or fixed factors are present in the model.")
+			info: qsTr("This component allows you to model the effect of covariates or fixed factors on the dependent variable. Only available when covariates or fixed factors are present in the model.")
 		}
 
 

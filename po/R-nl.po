@@ -2,7 +2,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: jaspTimeSeries 0.19.0\n"
-"POT-Creation-Date: 2026-09-23 17:06\n"
+"POT-Creation-Date: 2026-10-07 21:21\n"
 "PO-Revision-Date: 2024-05-23 21:09+0000\n"
 "Last-Translator: Koen Derks <koen-derks@hotmail.com>\n"
 "Language-Team: Dutch <https://hosted.weblate.org/projects/jasp/jasptimeseries-r/nl/>\n"
@@ -13,14 +13,11 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 "X-Generator: Weblate 5.6-dev\n"
 
-msgid "Time Series Plot"
-msgstr "Tijdreeksfiguur"
+msgid "Observed Time Series Plot"
+msgstr ""
 
 msgid "The ARIMA model could not be fit."
 msgstr "Het ARIMA-model kon niet worden gefit."
-
-msgid "No parameters are estimated."
-msgstr "Er worden geen parameters geschat."
 
 msgid "Model Summary"
 msgstr "Model Samenvatting"
@@ -61,6 +58,18 @@ msgstr "Onder"
 msgid "Upper"
 msgstr "Boven"
 
+msgid "An ARIMA(%1$s, %2$s, %3$s)(%4$s, %5$s, %6$s)[%7$s] model was fitted."
+msgstr ""
+"Er werd een ARIMA(%1$s, %2$s, %3$s)(%4$s, %5$s, %6$s)[%7$s] model toegepast."
+
+msgid "An ARIMA(%1$s, %2$s, %3$s) model was fitted."
+msgstr "Er werd een ARIMA(%1$s, %2$s, %3$s) model toegepast."
+
+msgid ""
+"The selected model has no coefficients to report. Only the residual variance "
+"is estimated; it is shown in the model summary."
+msgstr ""
+
 msgid "Intercept"
 msgstr "Intercept"
 
@@ -76,15 +85,16 @@ msgstr "seizoensgebonden AR(%1$i)"
 msgid "seasonal MA(%1$i)"
 msgstr "seizoensgebonden MA(%1$i)"
 
-msgid "An ARIMA(%1$s, %2$s, %3$s)(%4$s, %5$s, %6$s)[%7$s] model was fitted."
-msgstr ""
-"Er werd een ARIMA(%1$s, %2$s, %3$s)(%4$s, %5$s, %6$s)[%7$s] model toegepast."
-
-msgid "An ARIMA(%1$s, %2$s, %3$s) model was fitted."
-msgstr "Er werd een ARIMA(%1$s, %2$s, %3$s) model toegepast."
-
 msgid "Residual Diagnostics Plots"
 msgstr "Residuele Diagnostische Figuren"
+
+msgid "Time Series Plot"
+msgstr "Tijdreeksfiguur"
+
+msgid ""
+"Missing residuals appear as gaps in the time-series plot and are excluded "
+"from the distribution."
+msgstr ""
 
 msgid "Autocorrelation Function Plot"
 msgstr "Autocorrelatiefunctie figuur"
@@ -126,9 +136,52 @@ msgid "Forecasts"
 msgstr "Prognoses"
 
 msgid ""
+"The following covariates contain missing values or values that cannot be "
+"interpreted as numbers: %1$s. Covariates must be numeric. For categorical "
+"predictors, use Fixed Factors."
+msgstr ""
+
+msgid ""
+"Model estimation failed because of a numerical problem during sampling. "
+"Check the dependent variable for extreme values and consider rescaling it to "
+"more moderate units. If the autoregressive component is enabled, temporarily "
+"disabling it can help identify the source of the problem.\n"
+"\n"
+"Technical details:\n"
+"%1$s"
+msgstr ""
+
+msgid ""
+"Model estimation failed.\n"
+"\n"
+"%1$s"
+msgstr ""
+
+msgid "No completed MCMC draws are available for burn-in selection."
+msgstr ""
+
+msgid ""
+"The automatic burn-in proportion must be greater than 0 and at most 1. To "
+"discard no draws, select manual burn-in and enter 0."
+msgstr ""
+
+msgid ""
+"Automatic burn-in needs a larger tail proportion or more completed MCMC "
+"draws. Alternatively, select manual burn-in."
+msgstr ""
+
+msgid "Select automatic or manual burn-in."
+msgstr ""
+
+msgid ""
+"Burn-in must be a whole number between 0 and %1$d, leaving at least one of "
+"the %2$d completed MCMC draws."
+msgstr ""
+
+msgid ""
 "Unknown value provided for modelType, possible values: `alternative`, `null`"
 msgstr ""
-"Onbekende waarde opgegeven voor modelType, mogelijke waarden: `alternatief`,"
+"Onbekende waarde opgegeven voor modelType, mogelijke waarden: `alternative`,"
 " `null`"
 
 msgid "Residual SD"
@@ -147,7 +200,7 @@ msgid ""
 "Only %1$s draws were sampled out of the desired %2$s. Additionally, %3$s "
 "MCMC draws out of %1$s are discarded as burn in."
 msgstr ""
-"Test: Slechts %1$s trekkingen werden getrokken in plaats van de gewenste "
+"Slechts %1$s trekkingen werden getrokken in plaats van de gewenste "
 "%2$s. Bovendien worden %3$s MCMC-trekkingen van de %1$s weggegooid als burn "
 "in."
 
@@ -161,6 +214,14 @@ msgid ""
 msgstr ""
 "De component voor het lokale niveau is geselecteerd (standaard). Als u het "
 "model wilt aanpassen, kunt u dit doen onder 'Model Componenten'."
+
+msgid ""
+"Harvey's goodness of fit is unavailable because the dependent variable "
+"contains missing observations."
+msgstr ""
+
+msgid "Harvey's goodness of fit could not be computed."
+msgstr ""
 
 msgid "Posterior Summary of Coefficients"
 msgstr "Posterior Samenvatting van Coëfficiënten"
@@ -211,8 +272,16 @@ msgstr "Voorspelling SD"
 msgid "Control Plots"
 msgstr "Controleplots"
 
+msgid ""
+"Control period end must be a whole number of at least 2 and cannot exceed "
+"the number of time points (%1$d)."
+msgstr ""
+
 msgid "Threshold Plot"
 msgstr "Drempelgrafiek"
+
+msgid "Probability Plot"
+msgstr "Kansgrafiek"
 
 msgid ""
 "First date where %1$.3f*sigma is exceeded by %2$.1f%% state credible "
@@ -230,9 +299,6 @@ msgstr ""
 
 msgid "Threshold never reached"
 msgstr "Drempel nooit bereikt"
-
-msgid "Probability Plot"
-msgstr "Kansgrafiek"
 
 msgid "Probability"
 msgstr "Kans"
@@ -260,6 +326,12 @@ msgstr "Bandbreedte"
 
 msgid "Data cannot be zero or negative for log transformation."
 msgstr "Gegevens kunnen niet nul of negatief zijn voor logtransformatie."
+
+msgid ""
+"The log transformation produced negative values, so the root transformation "
+"cannot be applied. Values between 0 and 1 have negative logarithms. Disable "
+"either Log or Root."
+msgstr ""
 
 msgid "Data cannot be negative for root transformation."
 msgstr "Gegevens kunnen niet negatief zijn voor worteltransformatie."
@@ -331,3 +403,12 @@ msgstr "Autocorrelatiefunctie"
 
 msgid "Partial Autocorrelation Function"
 msgstr "Gedeeltelijke Autocorrelatiefunctie"
+
+#~ msgid "No parameters are estimated."
+#~ msgstr "Er worden geen parameters geschat."
+
+msgid "Observation step"
+msgstr ""
+
+msgid "Steps ahead"
+msgstr ""

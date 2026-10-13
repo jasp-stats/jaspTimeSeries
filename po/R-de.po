@@ -2,7 +2,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: jaspTimeSeries 0.17.3\n"
-"POT-Creation-Date: 2026-09-23 17:06\n"
+"POT-Creation-Date: 2026-10-07 21:21\n"
 "PO-Revision-Date: 2026-08-30 05:51+0000\n"
 "Last-Translator: Johannes Keyser <joke@fsfe.org>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/jasp/jasptimeseries-r/de/>\n"
@@ -13,14 +13,11 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 "X-Generator: Weblate 2026.9.dev0\n"
 
-msgid "Time Series Plot"
-msgstr "Zeitreihendiagramm"
+msgid "Observed Time Series Plot"
+msgstr ""
 
 msgid "The ARIMA model could not be fit."
 msgstr "Das ARIMA-Modell konnte nicht angepasst werden."
-
-msgid "No parameters are estimated."
-msgstr "Es werden keine Parameter geschätzt."
 
 msgid "Model Summary"
 msgstr "Modellzusammenfassung"
@@ -61,6 +58,18 @@ msgstr "Untere"
 msgid "Upper"
 msgstr "Obergrenze"
 
+msgid "An ARIMA(%1$s, %2$s, %3$s)(%4$s, %5$s, %6$s)[%7$s] model was fitted."
+msgstr ""
+"Ein ARIMA(%1$s, %2$s, %3$s)(%4$s, %5$s, %6$s)[%7$s]-Modell wurde angepasst."
+
+msgid "An ARIMA(%1$s, %2$s, %3$s) model was fitted."
+msgstr "Ein ARIMA(%1$s, %2$s, %3$s)-Modell wurde angepasst."
+
+msgid ""
+"The selected model has no coefficients to report. Only the residual variance "
+"is estimated; it is shown in the model summary."
+msgstr ""
+
 msgid "Intercept"
 msgstr "Konstante"
 
@@ -76,15 +85,16 @@ msgstr "saisonale AR(%1$i)"
 msgid "seasonal MA(%1$i)"
 msgstr "saisonaler MA(%1$i)"
 
-msgid "An ARIMA(%1$s, %2$s, %3$s)(%4$s, %5$s, %6$s)[%7$s] model was fitted."
-msgstr ""
-"Ein ARIMA(%1$s, %2$s, %3$s)(%4$s, %5$s, %6$s)[%7$s]-Modell wurde angepasst."
-
-msgid "An ARIMA(%1$s, %2$s, %3$s) model was fitted."
-msgstr "Ein ARIMA(%1$s, %2$s, %3$s)-Modell wurde angepasst."
-
 msgid "Residual Diagnostics Plots"
 msgstr "Diagramme Residuendiagnose"
+
+msgid "Time Series Plot"
+msgstr "Zeitreihendiagramm"
+
+msgid ""
+"Missing residuals appear as gaps in the time-series plot and are excluded "
+"from the distribution."
+msgstr ""
 
 msgid "Autocorrelation Function Plot"
 msgstr "Diagramm Autokorrelationsfunktion"
@@ -126,9 +136,52 @@ msgid "Forecasts"
 msgstr "Prognosen"
 
 msgid ""
+"The following covariates contain missing values or values that cannot be "
+"interpreted as numbers: %1$s. Covariates must be numeric. For categorical "
+"predictors, use Fixed Factors."
+msgstr ""
+
+msgid ""
+"Model estimation failed because of a numerical problem during sampling. "
+"Check the dependent variable for extreme values and consider rescaling it to "
+"more moderate units. If the autoregressive component is enabled, temporarily "
+"disabling it can help identify the source of the problem.\n"
+"\n"
+"Technical details:\n"
+"%1$s"
+msgstr ""
+
+msgid ""
+"Model estimation failed.\n"
+"\n"
+"%1$s"
+msgstr ""
+
+msgid "No completed MCMC draws are available for burn-in selection."
+msgstr ""
+
+msgid ""
+"The automatic burn-in proportion must be greater than 0 and at most 1. To "
+"discard no draws, select manual burn-in and enter 0."
+msgstr ""
+
+msgid ""
+"Automatic burn-in needs a larger tail proportion or more completed MCMC "
+"draws. Alternatively, select manual burn-in."
+msgstr ""
+
+msgid "Select automatic or manual burn-in."
+msgstr ""
+
+msgid ""
+"Burn-in must be a whole number between 0 and %1$d, leaving at least one of "
+"the %2$d completed MCMC draws."
+msgstr ""
+
+msgid ""
 "Unknown value provided for modelType, possible values: `alternative`, `null`"
 msgstr ""
-"Unbekannter Wert für modelType gegeben, mögliche Werte: `alternativ`, `null`"
+"Unbekannter Wert für modelType gegeben, mögliche Werte: `alternative`, `null`"
 
 msgid "Residual SD"
 msgstr "Residuelle SD"
@@ -158,6 +211,14 @@ msgid ""
 msgstr ""
 "Die Komponente lokale Ebene wurde ausgewählt (standardmäßig). Wenn Sie das "
 "Modell anpassen möchten, können Sie dies unter 'Modellkomponenten' tun."
+
+msgid ""
+"Harvey's goodness of fit is unavailable because the dependent variable "
+"contains missing observations."
+msgstr ""
+
+msgid "Harvey's goodness of fit could not be computed."
+msgstr ""
 
 msgid "Posterior Summary of Coefficients"
 msgstr "Posterior-Zusammenfassung der Koeffizienten"
@@ -207,8 +268,16 @@ msgstr "Vorhersage-Diagramm"
 msgid "Control Plots"
 msgstr "Kontrolldiagramme"
 
+msgid ""
+"Control period end must be a whole number of at least 2 and cannot exceed "
+"the number of time points (%1$d)."
+msgstr ""
+
 msgid "Threshold Plot"
 msgstr "Schwellwert-Diagramm"
+
+msgid "Probability Plot"
+msgstr "Wahrscheinlichkeitsdiagramm"
 
 msgid ""
 "First date where %1$.3f*sigma is exceeded by %2$.1f%% state credible "
@@ -226,9 +295,6 @@ msgstr ""
 
 msgid "Threshold never reached"
 msgstr "Schwellwert nie erreicht"
-
-msgid "Probability Plot"
-msgstr "Wahrscheinlichkeitsdiagramm"
 
 msgid "Probability"
 msgstr "Wahrscheinlichkeit"
@@ -256,6 +322,12 @@ msgstr "Bandbreite"
 
 msgid "Data cannot be zero or negative for log transformation."
 msgstr "Für Log-Transformation dürfen die Daten nicht null oder negativ sein."
+
+msgid ""
+"The log transformation produced negative values, so the root transformation "
+"cannot be applied. Values between 0 and 1 have negative logarithms. Disable "
+"either Log or Root."
+msgstr ""
 
 msgid "Data cannot be negative for root transformation."
 msgstr "Die Daten dürfen für die Wurzeltransformation nicht negativ sein."
@@ -403,3 +475,12 @@ msgstr "Partielle Autokorrelationsfunktion"
 #~ "The 'End' value of the filter should be larger/later than the 'Start' value."
 #~ msgstr ""
 #~ "Der 'Ende'-Wert des Filters sollte größer/später sein als der 'Start'-Wert."
+
+#~ msgid "No parameters are estimated."
+#~ msgstr "Es werden keine Parameter geschätzt."
+
+msgid "Observation step"
+msgstr ""
+
+msgid "Steps ahead"
+msgstr ""

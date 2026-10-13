@@ -2,7 +2,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: jaspTimeSeries 0.18.0\n"
-"POT-Creation-Date: 2026-09-23 17:06\n"
+"POT-Creation-Date: 2026-10-07 21:21\n"
 "PO-Revision-Date: 2026-05-27 12:18+0000\n"
 "Last-Translator: 陳正昌 <chencc99@gmail.com>\n"
 "Language-Team: Chinese (Traditional Han script) <https://hosted.weblate.org/projects/jasp/jasptimeseries-r/zh_Hant/>\n"
@@ -13,14 +13,11 @@ msgstr ""
 "Plural-Forms: nplurals=1; plural=0;\n"
 "X-Generator: Weblate 2026.6.dev0\n"
 
-msgid "Time Series Plot"
-msgstr "時間序列圖"
+msgid "Observed Time Series Plot"
+msgstr ""
 
 msgid "The ARIMA model could not be fit."
 msgstr "無法擬合 ARIMA 模型。"
-
-msgid "No parameters are estimated."
-msgstr "未估計任何參數。"
 
 msgid "Model Summary"
 msgstr "模型摘要"
@@ -61,6 +58,17 @@ msgstr "下界"
 msgid "Upper"
 msgstr "上界"
 
+msgid "An ARIMA(%1$s, %2$s, %3$s)(%4$s, %5$s, %6$s)[%7$s] model was fitted."
+msgstr "使用 ARIMA(%1$s, %2$s, %3$s)(%4$s, %5$s, %6$s)[%7$s] 模型擬合。"
+
+msgid "An ARIMA(%1$s, %2$s, %3$s) model was fitted."
+msgstr "使用 ARIMA(%1$s, %2$s, %3$s) 模型擬合。"
+
+msgid ""
+"The selected model has no coefficients to report. Only the residual variance "
+"is estimated; it is shown in the model summary."
+msgstr ""
+
 msgid "Intercept"
 msgstr "截距"
 
@@ -76,14 +84,16 @@ msgstr "季節性 AR(%1$i)"
 msgid "seasonal MA(%1$i)"
 msgstr "季節性 MA(%1$i)"
 
-msgid "An ARIMA(%1$s, %2$s, %3$s)(%4$s, %5$s, %6$s)[%7$s] model was fitted."
-msgstr "使用 ARIMA(%1$s, %2$s, %3$s)(%4$s, %5$s, %6$s)[%7$s] 模型擬合。"
-
-msgid "An ARIMA(%1$s, %2$s, %3$s) model was fitted."
-msgstr "使用 ARIMA(%1$s, %2$s, %3$s) 模型擬合。"
-
 msgid "Residual Diagnostics Plots"
 msgstr "殘差診斷圖"
+
+msgid "Time Series Plot"
+msgstr "時間序列圖"
+
+msgid ""
+"Missing residuals appear as gaps in the time-series plot and are excluded "
+"from the distribution."
+msgstr ""
 
 msgid "Autocorrelation Function Plot"
 msgstr "自相關函數圖"
@@ -120,6 +130,49 @@ msgid "Forecasts"
 msgstr "預測"
 
 msgid ""
+"The following covariates contain missing values or values that cannot be "
+"interpreted as numbers: %1$s. Covariates must be numeric. For categorical "
+"predictors, use Fixed Factors."
+msgstr ""
+
+msgid ""
+"Model estimation failed because of a numerical problem during sampling. "
+"Check the dependent variable for extreme values and consider rescaling it to "
+"more moderate units. If the autoregressive component is enabled, temporarily "
+"disabling it can help identify the source of the problem.\n"
+"\n"
+"Technical details:\n"
+"%1$s"
+msgstr ""
+
+msgid ""
+"Model estimation failed.\n"
+"\n"
+"%1$s"
+msgstr ""
+
+msgid "No completed MCMC draws are available for burn-in selection."
+msgstr ""
+
+msgid ""
+"The automatic burn-in proportion must be greater than 0 and at most 1. To "
+"discard no draws, select manual burn-in and enter 0."
+msgstr ""
+
+msgid ""
+"Automatic burn-in needs a larger tail proportion or more completed MCMC "
+"draws. Alternatively, select manual burn-in."
+msgstr ""
+
+msgid "Select automatic or manual burn-in."
+msgstr ""
+
+msgid ""
+"Burn-in must be a whole number between 0 and %1$d, leaving at least one of "
+"the %2$d completed MCMC draws."
+msgstr ""
+
+msgid ""
 "Unknown value provided for modelType, possible values: `alternative`, `null`"
 msgstr "提供的模型類型值無效，可用的值為：`alternative`, `null`"
 
@@ -147,6 +200,14 @@ msgid ""
 "The local level component has been selected (by default). If you wish to "
 "adjust the model, you can do so under 'Model Components'."
 msgstr "已選擇區域水準成分（預設）。若要調整模型，可在「模型成分」中進行設定。"
+
+msgid ""
+"Harvey's goodness of fit is unavailable because the dependent variable "
+"contains missing observations."
+msgstr ""
+
+msgid "Harvey's goodness of fit could not be computed."
+msgstr ""
 
 msgid "Posterior Summary of Coefficients"
 msgstr "係數的後驗摘要"
@@ -196,8 +257,16 @@ msgstr "預測圖"
 msgid "Control Plots"
 msgstr "控制圖"
 
+msgid ""
+"Control period end must be a whole number of at least 2 and cannot exceed "
+"the number of time points (%1$d)."
+msgstr ""
+
 msgid "Threshold Plot"
 msgstr "閾值圖"
+
+msgid "Probability Plot"
+msgstr "機率圖"
 
 msgid ""
 "First date where %1$.3f*sigma is exceeded by %2$.1f%% state credible "
@@ -211,9 +280,6 @@ msgstr "首次時間點，%2$.1f%% 狀態可信區間超過 %1$.3f 倍 σ：%3$s
 
 msgid "Threshold never reached"
 msgstr "閾值從未達到"
-
-msgid "Probability Plot"
-msgstr "機率圖"
 
 msgid "Probability"
 msgstr "機率"
@@ -241,6 +307,12 @@ msgstr "帶寬"
 
 msgid "Data cannot be zero or negative for log transformation."
 msgstr "對數轉換要求資料不得為零或負數。"
+
+msgid ""
+"The log transformation produced negative values, so the root transformation "
+"cannot be applied. Values between 0 and 1 have negative logarithms. Disable "
+"either Log or Root."
+msgstr ""
 
 msgid "Data cannot be negative for root transformation."
 msgstr "開根號轉換要求資料不得為負數。"
@@ -328,3 +400,12 @@ msgstr "偏自相關函數"
 
 #~ msgid "Maximum"
 #~ msgstr "最大值"
+
+#~ msgid "No parameters are estimated."
+#~ msgstr "未估計任何參數。"
+
+msgid "Observation step"
+msgstr ""
+
+msgid "Steps ahead"
+msgstr ""

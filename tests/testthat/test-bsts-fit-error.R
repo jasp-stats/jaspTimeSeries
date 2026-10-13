@@ -7,14 +7,34 @@ test_that("BSTS fitting errors gain context without changing successful fits", {
                   dynamicRegregressionComponent = FALSE, seasonalities = NULL,
                   samples = 10, seed = 1, expectedPredictors = 1, timeout = 120)
 
-  for (detail in c("Bmath domain error\nMCMC iteration 1271", "A different error with 95% in its message")) {
+  numericalErrorPrefix <- paste0(
+    "Model estimation failed because of a numerical problem during sampling. ",
+    "Check the dependent variable for extreme values and consider rescaling it to more moderate units. ",
+    "If the autoregressive component is enabled, temporarily disabling it can help identify the source of the problem.",
+    "\n\nTechnical details:\n"
+  )
+  savedFailure <- paste0(
+    "Caught an exception with the following error message in MCMC iteration 17946.  Aborting.\n",
+    "rtrun_norm_2_mt caught an exception when called with arguments\n",
+    "    mu = 0\n sigma = 1\n    lo = 1.4487e+52\n    hi = 5.11559e+55\n",
+    "The error message of the captured exception is \nBmath domain error\n\n"
+  )
+  for (detail in c("Bmath domain error\nMCMC iteration 1271", savedFailure)) {
     local({
       local_mocked_bindings(bsts = function(...) stop(detail, call. = FALSE), .package = "bsts")
       error <- tryCatch(fit(data, options), error = identity)
       expect_s3_class(error, "validationError")
-      expect_identical(conditionMessage(error), paste0("Model estimation failed.\n\n", detail))
+      expect_identical(conditionMessage(error), paste0(numericalErrorPrefix, detail))
     })
   }
+
+  local({
+    detail <- "A different error with 95% in its message"
+    local_mocked_bindings(bsts = function(...) stop(detail, call. = FALSE), .package = "bsts")
+    error <- tryCatch(fit(data, options), error = identity)
+    expect_s3_class(error, "validationError")
+    expect_identical(conditionMessage(error), paste0("Model estimation failed.\n\n", detail))
+  })
 
   local({
     result <- list(niter = 10L, value = pi)

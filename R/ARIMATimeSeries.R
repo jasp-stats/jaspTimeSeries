@@ -19,16 +19,13 @@
 ARIMATimeSeries <- function(jaspResults, dataset, options) {
   ready <- options[["dependent"]] != ""
 
-  datasetRaw <- .tsReadData(jaspResults, dataset, options, ready, covariates = TRUE)
-
-  datasetFiltered <- .tsDataFilterHandler(datasetRaw, options, ready)
-
-  dataset <- .tsDataWithMissingRowsHandler(datasetFiltered, options, ready)
+  prepared <- .tsPrepareData(jaspResults, dataset, options, ready, covariates = TRUE)
+  datasetRaw <- prepared$raw
+  dataset <- prepared$data
+  ready <- ready && nrow(dataset) > 0L
 
   .tsArimaResults(jaspResults, dataset, options, ready, dependencies = c(.tsArimaDependencies(), .tsDataDependencies()))
   fit <- jaspResults[["arimaResult"]]$object
-
-  .tsErrorHandler(dataset, ready)
 
   .tsTimeSeriesPlot(jaspResults, dataset, options, ready, position = 1, dependencies = c(.tsDataDependencies(), "timeSeriesPlot", "timeSeriesPlotType", "timeSeriesPlotDistribution"))
 
@@ -69,7 +66,7 @@ ARIMATimeSeries <- function(jaspResults, dataset, options) {
   }
 
   if (is.null(jaspResults[["timeSeriesPlot"]])) {
-    plot <- createJaspPlot(title = gettext("Time Series Plot"), width = 660)
+    plot <- createJaspPlot(title = gettext("Observed Time Series Plot"), width = 660)
     plot$dependOn(dependencies)
     plot$position <- position
 
@@ -104,7 +101,7 @@ ARIMATimeSeries <- function(jaspResults, dataset, options) {
 
     xreg <- NULL
     if (length(options[["covariates"]]) > 0) {
-      covariates <- dataset[, grepl("xreg", names(dataset))]
+      covariates <- dataset[, grepl("xreg", names(dataset)), drop = FALSE]
       xreg <- as.matrix(covariates)
     }
 
@@ -130,9 +127,6 @@ ARIMATimeSeries <- function(jaspResults, dataset, options) {
     }
 
     if (jaspBase::isTryError(fit)) .quitAnalysis(gettext("The ARIMA model could not be fit."))
-    if (length(fit$coef) == 0) {
-      .quitAnalysis(gettext("No parameters are estimated."))
-    }
 
     jaspResults[["arimaResult"]] <- createJaspState(fit)
     jaspResults[["arimaResult"]]$dependOn(dependencies)
@@ -204,6 +198,17 @@ ARIMATimeSeries <- function(jaspResults, dataset, options) {
     D <- fit$arma[7]
     Q <- fit$arma[4]
     m <- fit$arma[5]
+
+    if (P >= 1 | D >= 1 | Q >= 1) {
+      coefTable$addFootnote(gettextf("An ARIMA(%1$s, %2$s, %3$s)(%4$s, %5$s, %6$s)[%7$s] model was fitted.", p, d, q, P, D, Q, m))
+    } else {
+      coefTable$addFootnote(gettextf("An ARIMA(%1$s, %2$s, %3$s) model was fitted.", p, d, q))
+    }
+
+    if (length(fit$coef) == 0L) {
+      coefTable$addFootnote(gettext("The selected model has no coefficients to report. Only the residual variance is estimated; it is shown in the model summary."))
+      return()
+    }
 
     estimate <- fit$coef
     SE <- sqrt(diag(fit$var.coef))
@@ -295,12 +300,6 @@ ARIMATimeSeries <- function(jaspResults, dataset, options) {
     )
     row.names(rows) <- paste0("row", 1:length(coefficients))
     coefTable$addRows(rows)
-
-    if (P >= 1 | D >= 1 | Q >= 1) {
-      coefTable$addFootnote(gettextf("An ARIMA(%1$s, %2$s, %3$s)(%4$s, %5$s, %6$s)[%7$s] model was fitted.", p, d, q, P, D, Q, m))
-    } else {
-      coefTable$addFootnote(gettextf("An ARIMA(%1$s, %2$s, %3$s) model was fitted.", p, d, q))
-    }
   }
 }
 
@@ -314,7 +313,7 @@ ARIMATimeSeries <- function(jaspResults, dataset, options) {
     return()
   }
 
-  dataset$y <- residuals(fit)
+  dataset$y <- as.numeric(residuals(fit))
 
   if (is.null(residContainer[["residualTimeSeriesPlot"]]) && options[["residualTimeSeries"]]) {
     residualTimeSeriesPlot <- createJaspPlot(title = gettext("Time Series Plot"), width = 660)
@@ -327,6 +326,12 @@ ARIMATimeSeries <- function(jaspResults, dataset, options) {
     }
 
     .tsFillTimeSeriesPlot(residualTimeSeriesPlot, dataset, options, type = options[["residualTimeSeriesType"]], distribution = options[["residualTimeSeriesDistribution"]], yName = "Standardized Residuals")
+
+    if (anyNA(dataset$y) && options[["residualTimeSeriesDistribution"]] %in% c("density", "histogram")) {
+      residContainer[["residualTimeSeriesMissingNote"]] <- createJaspHtml(
+        text = gettext("Missing residuals appear as gaps in the time-series plot and are excluded from the distribution."),
+        dependencies = c("residualTimeSeries", "residualTimeSeriesType", "residualTimeSeriesDistribution"), position = 1)
+    }
   }
 
   if (is.null(residContainer[["residualACFPlot"]]) && options[["residualAcf"]]) {
@@ -357,7 +362,7 @@ ARIMATimeSeries <- function(jaspResults, dataset, options) {
       return()
     }
 
-    residualQQPlot$plotObject <- jaspGraphs::plotQQnorm(dataset$y, ablineColor = "darkred")
+    residualQQPlot$plotObject <- jaspGraphs::plotQQnorm(stats::na.omit(as.numeric(dataset$y)), ablineColor = "darkred")
   }
 
   if (is.null(residContainer[["ljungPlot"]]) && options[["residualLjungBox"]]) {
@@ -378,8 +383,8 @@ ARIMATimeSeries <- function(jaspResults, dataset, options) {
   # append residuals to spreadsheet
   if (options[["residualSavedToData"]] && is.null(jaspResults[["residualColumn"]]) && options[["residualColumn"]] != "" && ready) {
     residualColumn <- rep(NA, max(as.numeric(rownames(datasetRaw))))
-    matchT <- match(datasetRaw$t, dataset$t)
-    residualColumn[as.numeric(rownames(datasetRaw))] <- fit$residuals[matchT]
+    matchRows <- match(rownames(datasetRaw), rownames(dataset))
+    residualColumn[as.numeric(rownames(datasetRaw))] <- fit$residuals[matchRows]
     jaspResults[["residualColumn"]] <- createJaspColumn(columnName = options[["residualColumn"]])
     jaspResults[["residualColumn"]]$dependOn(options = dependencies)
     jaspResults[["residualColumn"]]$setScale(residualColumn)
@@ -417,42 +422,30 @@ ARIMATimeSeries <- function(jaspResults, dataset, options) {
   }
 
   if (ready && options[["forecastLength"]] > 0) {
-    # test if time is a date or a numeric variable
-    isDate <- lubridate::is.POSIXct(dataset$t)
-
-    # get the last non-NA observation
-    lastObsY <- max(which(!is.na(dataset$y)))
-    lastT <- dataset$t[lastObsY]
-    if (!isDate) {
-      tPred <- data.frame(t = (lastObsY + 1):(lastObsY + options[["forecastLength"]]))
-    } else {
-      increment <- .tsGuessInterval(dataset)
-      # get future dates for forecasts
-      tPred <- seq.POSIXt(lastT, by = increment, length.out = (options[["forecastLength"]] + 1))
-      tPred <- tPred[-1] # remove last value
-    }
+    # Every supplied row is a modeled step, including a missing dependent value.
+    # Time orders observations; it does not specify future numeric/date spacing.
+    modelEnd <- nrow(dataset)
+    stepsAhead <- seq_len(options[["forecastLength"]])
+    tPred <- if (options[["time"]] == "") dataset$t[modelEnd] + stepsAhead else stepsAhead
 
     xreg <- NULL
     if (length(options[["covariates"]]) > 0) {
-      nDependent <- fit$nobs
-      covariates <- datasetRaw[, grepl("xreg", names(datasetRaw))]
-      # get idx last observation in raw dataset
-      # if a filter is used, there may be covariates outside of the filter
-      # to use for forecasting
-      lastRaw <- match(lastT, datasetRaw$t)
-      firstForecast <- lastRaw + 1
-      lastForecast <- lastRaw + options[["forecastLength"]]
-      rangeForecast <- firstForecast:lastForecast
-      if (firstForecast > nrow(datasetRaw)) .quitAnalysis(gettext("When 'Covariates' are used in the model, predictions cannot be carried out unless the covariates are also observed for the predicted period."))
-      if (length(rangeForecast) > length(firstForecast:nrow(datasetRaw))) {
+      covariates <- datasetRaw[, grepl("xreg", names(datasetRaw)), drop = FALSE]
+      # Future covariates follow the final modeled row in the ordered raw data.
+      # Original row identities also distinguish observations with tied Time.
+      lastRaw <- match(rownames(dataset)[modelEnd], rownames(datasetRaw))
+      availableForecasts <- nrow(datasetRaw) - lastRaw
+      if (availableForecasts == 0L) .quitAnalysis(gettext("When 'Covariates' are used in the model, predictions cannot be carried out unless the covariates are also observed for the predicted period."))
+      if (options[["forecastLength"]] > availableForecasts) {
         .quitAnalysis(
           gettextf(
             "Not enough observations in the covariate%1$s. The maximum number of forecasts is %2$s.",
-            ifelse(is.vector(covariates), "", "s"), length(firstForecast:nrow(dataset))
+            ifelse(ncol(covariates) == 1L, "", "s"), availableForecasts
           )
         )
       }
-      covariatesForecast <- covariates[rangeForecast, ]
+      rangeForecast <- lastRaw + stepsAhead
+      covariatesForecast <- covariates[rangeForecast, , drop = FALSE]
       xreg <- as.matrix(covariatesForecast)
     }
 
@@ -461,7 +454,6 @@ ARIMATimeSeries <- function(jaspResults, dataset, options) {
     if (jaspBase::isTryError(pred)) .quitAnalysis(gettext("Forecasting failed."))
     pred <- cbind(tPred, pred)
 
-    yName <- options[["dependent"]][1]
     names(pred) <- c("t", "y", "lower80", "upper80", "lower95", "upper95")
 
     jaspResults[["forecastResult"]] <- createJaspState(pred)
@@ -495,12 +487,16 @@ ARIMATimeSeries <- function(jaspResults, dataset, options) {
   .tsForecasts(fit, dataset, datasetRaw, options, jaspResults, ready)
   pred <- jaspResults[["forecastResult"]]$object
 
-  # get the last non-NA observation
-  lastObsY <- max(which(!is.na(dataset$y)))
-
-  # get the observations and the forecasts
-  obs <- data.frame(t = dataset$t, y = dataset$y)
-  obs <- obs[1:lastObsY, ]
+  if (options[["time"]] == "") {
+    # Keep the same row indices as the forecast table and CSV after filtering.
+    obs <- data.frame(t = dataset$t, y = dataset$y)
+    xTitle <- "t"
+  } else {
+    # Assigned Time gives order, without extrapolating numeric values or dates.
+    obs <- data.frame(t = seq_len(nrow(dataset)), y = dataset$y)
+    pred$t <- nrow(dataset) + seq_len(nrow(pred))
+    xTitle <- gettext("Observation step")
+  }
   fcs <- data.frame(t = pred$t, y = pred$y)
   df <- rbind(obs, fcs)
   cols <- rep(c("black", "blue"), c(nrow(obs), nrow(fcs)))
@@ -513,17 +509,8 @@ ARIMATimeSeries <- function(jaspResults, dataset, options) {
   cols <- cols[idx]
   df <- df[idx, ]
   yBreaks <- jaspGraphs::getPrettyAxisBreaks(c(df$y, pred$lower95, pred$upper95))
-  isDate <- lubridate::is.POSIXct(df$t)
-
-  if (!isDate) {
-    df$t <- as.numeric(df$t)
-    xBreaks <- jaspGraphs::getPrettyAxisBreaks(df$t)
-    xScale <- ggplot2::scale_x_continuous("t", breaks = xBreaks, limits = range(xBreaks))
-  } else {
-    xBreaks <- pretty(df$t)
-    xLabels <- attr(xBreaks, "labels")
-    xScale <- ggplot2::scale_x_datetime("t", breaks = xBreaks, labels = xLabels, limits = range(xBreaks))
-  }
+  xBreaks <- jaspGraphs::getPrettyAxisBreaks(df$t)
+  xScale <- ggplot2::scale_x_continuous(xTitle, breaks = xBreaks, limits = range(xBreaks))
 
   geomPoint <- if (options[["forecastTimeSeriesType"]] == "points" || options[["forecastTimeSeriesType"]] == "both") {
     jaspGraphs::geom_point(color = cols)
@@ -560,7 +547,8 @@ ARIMATimeSeries <- function(jaspResults, dataset, options) {
     pred <- jaspResults[["forecastResult"]]$object
 
     if (!is.null(pred)) {
-      names(pred) <- c("t", yName, "lower80", "upper80", "lower95", "upper95")
+      timeName <- if (options[["time"]] == "") "t" else "stepAhead"
+      names(pred) <- c(timeName, yName, "lower80", "upper80", "lower95", "upper95")
       utils::write.csv(pred, file = options[["forecastSave"]], row.names = FALSE)
     }
   }
@@ -577,7 +565,8 @@ ARIMATimeSeries <- function(jaspResults, dataset, options) {
   table$position <- position
 
   yName <- options[["dependent"]][1]
-  table$addColumnInfo(name = "t", title = "t", type = "string")
+  timeTitle <- if (options[["time"]] == "") "t" else gettext("Steps ahead")
+  table$addColumnInfo(name = "t", title = timeTitle, type = "string")
   table$addColumnInfo(name = "y", title = yName, type = "number")
   overtitle80 <- gettextf("%s%% CI", 100 * .80)
   table$addColumnInfo(name = "lower80", title = gettext("Lower"), type = "number", overtitle = overtitle80)

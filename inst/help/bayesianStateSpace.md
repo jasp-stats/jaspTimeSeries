@@ -19,7 +19,7 @@ The Gaussian State Space Model decomposes the hidden state of a time series into
 
 #### Output
 - Posterior summary of coefficients: Output table containing the marginal posterior summary of coefficients
-  - Show means across draws included: Option that additionally shows the mean of the coefficients only if they were above 0/included in the model
+  - Show means across draws included: Additionally shows each coefficient's mean across draws in which the corresponding predictor was included in the model.
   - Credible Interval: Determines the credible interval shown for the coefficients, given they are included in the model
 - Expected predictors: Number of predictors that are expected, affects prior inclusion probability
 
@@ -38,7 +38,6 @@ The Gaussian State Space Model decomposes the hidden state of a time series into
 - Add local linear trend component: Adds a trend components consisting of a mean(mu[t] = mu[t-1] + delta[t-1] + error) and a slope (delta[t] = delta[t-1]+error) which both follow a random walk.
 
 - Add dynamic regression component: When variables were added to the `Model Terms` box this option can be used to make the regression coefficients dynamic/change over time where they follow a random walk.
-  - Lag of coefficient: If the dynamic coefficient should follow an autoregressive process instead of a random walk, this option determines the order of the AR(p) process
 
 #### Seasonalities
 - This box can be used to add one or more seasonality components to the model
@@ -100,11 +99,11 @@ This table summarises the overall fit of the model:
 This table summarises the prior and posterior information of the predictor variables and their coefficients:
 - Coefficients: Names of the predictor variables
 - P(incl): The posterior probability that a variable is included
-- P(incl|data): The posterior probability that a coefficient is positive and thus included in the model
+- P(incl|data): The posterior probability that a predictor is included in the model, meaning its coefficient is nonzero, regardless of sign.
 - BF_inclusion: Quantifies how strongly our beliefs about the inclusion probability of each predictor changes.
 - Mean: The mean of each coefficient across all MCMC draws where (regardless of whether variable was included as predictor)
 - SD: Standard deviation of each coefficient across all MCMC draws
-- Mean_inclusion: Mean of each coefficient across the MCMC draws where they were included in the model/positive
+- Mean_inclusion: Mean of each coefficient across draws in which it was nonzero.
 - SD_inclusion: Standard deviation of each coefficient given they were included
 - Credible Interval: Credible Interval of the mean of each coefficient given they were included in the model
 

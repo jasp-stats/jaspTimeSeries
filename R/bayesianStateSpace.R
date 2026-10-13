@@ -228,7 +228,14 @@ bayesianStateSpaceInternal <- function(jaspResults, dataset, options) {
                       seed = options$seed,
                       expected.model.size = options$expectedPredictors,
                       model.options = bsts::BstsOptions(timeout.seconds = options$timeout )
-  ), error = function(e) .quitAnalysis(gettextf("Model estimation failed.\n\n%1$s", conditionMessage(e)))
+  ), error = function(e) {
+    detail <- conditionMessage(e)
+    message <- if (grepl("Bmath domain error", detail, fixed = TRUE))
+      gettextf("Model estimation failed because of a numerical problem during sampling. Check the dependent variable for extreme values and consider rescaling it to more moderate units. If the autoregressive component is enabled, temporarily disabling it can help identify the source of the problem.\n\nTechnical details:\n%1$s", detail)
+    else
+      gettextf("Model estimation failed.\n\n%1$s", detail)
+    .quitAnalysis(message)
+  }
   )
 
   return(model)

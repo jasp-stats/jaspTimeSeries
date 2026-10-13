@@ -2,7 +2,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: jaspTimeSeries 0.95.0\n"
-"POT-Creation-Date: 2026-09-23 17:06\n"
+"POT-Creation-Date: 2026-10-07 21:21\n"
 "PO-Revision-Date: 2026-06-13 06:27+0000\n"
 "Last-Translator: Zahid Rizky Fakhri <zahidrizkyfakhri@gmail.com>\n"
 "Language-Team: Indonesian <https://hosted.weblate.org/projects/jasp/jasptimeseries-r/id/>\n"
@@ -13,14 +13,11 @@ msgstr ""
 "Plural-Forms: nplurals=1; plural=0;\n"
 "X-Generator: Weblate 2026.7.dev0\n"
 
-msgid "Time Series Plot"
-msgstr "Plot Deret Waktu"
+msgid "Observed Time Series Plot"
+msgstr ""
 
 msgid "The ARIMA model could not be fit."
 msgstr "Model ARIMA tidak dapat disesuaikan."
-
-msgid "No parameters are estimated."
-msgstr "Tidak ada parameter diestimasi."
 
 msgid "Model Summary"
 msgstr "Ringkasan Model"
@@ -61,6 +58,17 @@ msgstr "Batas Bawah"
 msgid "Upper"
 msgstr "Batas Atas"
 
+msgid "An ARIMA(%1$s, %2$s, %3$s)(%4$s, %5$s, %6$s)[%7$s] model was fitted."
+msgstr "Model ARIMA(%1$s, %2$s, %3$s)(%4$s, %5$s, %6$s)[%7$s] disesuaikan."
+
+msgid "An ARIMA(%1$s, %2$s, %3$s) model was fitted."
+msgstr "Model ARIMA(%1$s, %2$s, %3$s) disesuaikan."
+
+msgid ""
+"The selected model has no coefficients to report. Only the residual variance "
+"is estimated; it is shown in the model summary."
+msgstr ""
+
 msgid "Intercept"
 msgstr "Intersep"
 
@@ -76,14 +84,16 @@ msgstr "AR musiman(%1$i)"
 msgid "seasonal MA(%1$i)"
 msgstr "MA musiman(%1$i)"
 
-msgid "An ARIMA(%1$s, %2$s, %3$s)(%4$s, %5$s, %6$s)[%7$s] model was fitted."
-msgstr "Model ARIMA(%1$s, %2$s, %3$s)(%4$s, %5$s, %6$s)[%7$s] disesuaikan."
-
-msgid "An ARIMA(%1$s, %2$s, %3$s) model was fitted."
-msgstr "Model ARIMA(%1$s, %2$s, %3$s) disesuaikan."
-
 msgid "Residual Diagnostics Plots"
 msgstr "Diagram Diagnostik Residu"
+
+msgid "Time Series Plot"
+msgstr "Plot Deret Waktu"
+
+msgid ""
+"Missing residuals appear as gaps in the time-series plot and are excluded "
+"from the distribution."
+msgstr ""
 
 msgid "Autocorrelation Function Plot"
 msgstr "Diagram Fungsi Korelasi Otomatis"
@@ -124,6 +134,49 @@ msgid "Forecasts"
 msgstr "Perkiraan"
 
 msgid ""
+"The following covariates contain missing values or values that cannot be "
+"interpreted as numbers: %1$s. Covariates must be numeric. For categorical "
+"predictors, use Fixed Factors."
+msgstr ""
+
+msgid ""
+"Model estimation failed because of a numerical problem during sampling. "
+"Check the dependent variable for extreme values and consider rescaling it to "
+"more moderate units. If the autoregressive component is enabled, temporarily "
+"disabling it can help identify the source of the problem.\n"
+"\n"
+"Technical details:\n"
+"%1$s"
+msgstr ""
+
+msgid ""
+"Model estimation failed.\n"
+"\n"
+"%1$s"
+msgstr ""
+
+msgid "No completed MCMC draws are available for burn-in selection."
+msgstr ""
+
+msgid ""
+"The automatic burn-in proportion must be greater than 0 and at most 1. To "
+"discard no draws, select manual burn-in and enter 0."
+msgstr ""
+
+msgid ""
+"Automatic burn-in needs a larger tail proportion or more completed MCMC "
+"draws. Alternatively, select manual burn-in."
+msgstr ""
+
+msgid "Select automatic or manual burn-in."
+msgstr ""
+
+msgid ""
+"Burn-in must be a whole number between 0 and %1$d, leaving at least one of "
+"the %2$d completed MCMC draws."
+msgstr ""
+
+msgid ""
 "Unknown value provided for modelType, possible values: `alternative`, `null`"
 msgstr ""
 "Nilai tidak diketahui diberikan untuk modelType, nilai memungkinkan: "
@@ -157,6 +210,14 @@ msgid ""
 msgstr ""
 "Komponen tingkat lokasl telah dipilih (secara bawaan). Jika Anda ingin "
 "menyesuaikan model, Anda dapat melakukannya di 'Komponen Model'."
+
+msgid ""
+"Harvey's goodness of fit is unavailable because the dependent variable "
+"contains missing observations."
+msgstr ""
+
+msgid "Harvey's goodness of fit could not be computed."
+msgstr ""
 
 msgid "Posterior Summary of Coefficients"
 msgstr "Ringkasan Posterior Koefisien"
@@ -206,8 +267,16 @@ msgstr "Diagram prediksi"
 msgid "Control Plots"
 msgstr "Diagram Kontrol"
 
+msgid ""
+"Control period end must be a whole number of at least 2 and cannot exceed "
+"the number of time points (%1$d)."
+msgstr ""
+
 msgid "Threshold Plot"
 msgstr "Diagram Ambang Batas"
+
+msgid "Probability Plot"
+msgstr "Diagram Probabilitas"
 
 msgid ""
 "First date where %1$.3f*sigma is exceeded by %2$.1f%% state credible "
@@ -225,9 +294,6 @@ msgstr ""
 
 msgid "Threshold never reached"
 msgstr "Ambang batas tidak pernah dicapai"
-
-msgid "Probability Plot"
-msgstr "Diagram Probabilitas"
 
 msgid "Probability"
 msgstr "Probabilitas"
@@ -255,6 +321,12 @@ msgstr "Kemampuan"
 
 msgid "Data cannot be zero or negative for log transformation."
 msgstr "Data tidak dapat nol atau negatif untuk transformasi log."
+
+msgid ""
+"The log transformation produced negative values, so the root transformation "
+"cannot be applied. Values between 0 and 1 have negative logarithms. Disable "
+"either Log or Root."
+msgstr ""
 
 msgid "Data cannot be negative for root transformation."
 msgstr "Data tidak dapat negatif untuk transformasi akar."
@@ -326,3 +398,12 @@ msgstr "Fungsi Autokorelasi"
 
 msgid "Partial Autocorrelation Function"
 msgstr "Fungsi Autokorelasi Parsial"
+
+#~ msgid "No parameters are estimated."
+#~ msgstr "Tidak ada parameter diestimasi."
+
+msgid "Observation step"
+msgstr ""
+
+msgid "Steps ahead"
+msgstr ""
