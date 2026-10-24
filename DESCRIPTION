@@ -15,7 +15,7 @@ Imports:
   forecast,
   ggplot2,
   jaspBase,
-  jaspDescriptives (>= 0.95.6),
+  jaspDescriptives (>= 0.98.1),
   jaspGraphs,
   lubridate,
   matrixStats,
