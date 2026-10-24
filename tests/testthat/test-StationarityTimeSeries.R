@@ -1,6 +1,8 @@
 context("Stationarity Time Series")
 
 options <- jaspTools::analysisOptions("StationarityTimeSeries")
+# Explicit native default: readQML can misparse the following Label as checked.
+options$transformationSavedToData <- FALSE
 options$dependent <- "visits"
 options$time <- "date"
 options$adfTest <- TRUE

@@ -1,11 +1,11 @@
+#
 msgid ""
 msgstr ""
 "Project-Id-Version: jaspTimeSeries 0.19.0\n"
-"POT-Creation-Date: 2024-06-10 08:31\n"
+"POT-Creation-Date: 2026-10-07 21:21\n"
 "PO-Revision-Date: 2025-10-07 22:02+0000\n"
 "Last-Translator: Hamza Yalçin <h.yalcin08@gmail.com>\n"
-"Language-Team: Turkish <https://hosted.weblate.org/projects/jasp/"
-"jasptimeseries-r/tr/>\n"
+"Language-Team: Turkish <https://hosted.weblate.org/projects/jasp/jasptimeseries-r/tr/>\n"
 "Language: tr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -13,14 +13,11 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 "X-Generator: Weblate 5.14-dev\n"
 
-msgid "Time Series Plot"
-msgstr "Zaman Serisi Grafiği"
+msgid "Observed Time Series Plot"
+msgstr ""
 
 msgid "The ARIMA model could not be fit."
 msgstr "ARIMA modeli uygulanamadı."
-
-msgid "No parameters are estimated."
-msgstr "Hiçbir parametre tahmin edilmemiştir."
 
 msgid "Model Summary"
 msgstr "Model Özeti"
@@ -61,6 +58,17 @@ msgstr "Alt"
 msgid "Upper"
 msgstr "Üst"
 
+msgid "An ARIMA(%1$s, %2$s, %3$s)(%4$s, %5$s, %6$s)[%7$s] model was fitted."
+msgstr "ARIMA(%1$s, %2$s, %3$s)(%4$s, %5$s, %6$s)[%7$s] modeli uygulandı."
+
+msgid "An ARIMA(%1$s, %2$s, %3$s) model was fitted."
+msgstr "Bir ARIMA(%1$s, %2$s, %3$s) modeli uygulandı."
+
+msgid ""
+"The selected model has no coefficients to report. Only the residual variance "
+"is estimated; it is shown in the model summary."
+msgstr ""
+
 msgid "Intercept"
 msgstr "Kesme Noktası"
 
@@ -76,14 +84,16 @@ msgstr "dönemsel AR(%1$i)"
 msgid "seasonal MA(%1$i)"
 msgstr "dönemsel MA(%1$i)"
 
-msgid "An ARIMA(%1$s, %2$s, %3$s)(%4$s, %5$s, %6$s)[%7$s] model was fitted."
-msgstr "ARIMA(%1$s, %2$s, %3$s)(%4$s, %5$s, %6$s)[%7$s] modeli uygulandı."
-
-msgid "An ARIMA(%1$s, %2$s, %3$s) model was fitted."
-msgstr "Bir ARIMA(%1$s, %2$s, %3$s) modeli uygulandı."
-
 msgid "Residual Diagnostics Plots"
 msgstr "Artık(artan) Tespit Grafikleri"
+
+msgid "Time Series Plot"
+msgstr "Zaman Serisi Grafiği"
+
+msgid ""
+"Missing residuals appear as gaps in the time-series plot and are excluded "
+"from the distribution."
+msgstr ""
 
 msgid "Autocorrelation Function Plot"
 msgstr "Otokorelasyon Fonksiyonu Grafiği"
@@ -100,13 +110,18 @@ msgstr "Gecikme"
 msgid "p-value"
 msgstr "p-değeri"
 
-msgid "When 'Covariates' are used in the model, predictions cannot be carried out unless the covariates are also observed for the predicted period."
+msgid ""
+"When 'Covariates' are used in the model, predictions cannot be carried out "
+"unless the covariates are also observed for the predicted period."
 msgstr ""
-"Modelde 'Ortak değişkenler' kullanıldığında, ortak değişkenler tahmin edilen "
-"dönem için de gözlenmediği sürece tahminler yapılamaz."
+"Modelde 'Ortak değişkenler' kullanıldığında, ortak değişkenler tahmin edilen"
+" dönem için de gözlenmediği sürece tahminler yapılamaz."
 
-msgid "Not enough observations in the covariate%1$s. The maximum number of forecasts is %2$s."
-msgstr "Ortak değişken %1$s'de yeterli gözlem yok. Maksimum tahmin sayısı %2$s."
+msgid ""
+"Not enough observations in the covariate%1$s. The maximum number of "
+"forecasts is %2$s."
+msgstr ""
+"Ortak değişken %1$s'de yeterli gözlem yok. Maksimum tahmin sayısı %2$s."
 
 msgid "Forecasting failed."
 msgstr "Tahmin başarısız oldu."
@@ -116,6 +131,180 @@ msgstr "Tahmin Zaman Serisi Grafiği"
 
 msgid "Forecasts"
 msgstr "Tahminler"
+
+msgid ""
+"The following covariates contain missing values or values that cannot be "
+"interpreted as numbers: %1$s. Covariates must be numeric. For categorical "
+"predictors, use Fixed Factors."
+msgstr ""
+
+msgid ""
+"Model estimation failed because of a numerical problem during sampling. "
+"Check the dependent variable for extreme values and consider rescaling it to "
+"more moderate units. If the autoregressive component is enabled, temporarily "
+"disabling it can help identify the source of the problem.\n"
+"\n"
+"Technical details:\n"
+"%1$s"
+msgstr ""
+
+msgid ""
+"Model estimation failed.\n"
+"\n"
+"%1$s"
+msgstr ""
+
+msgid "No completed MCMC draws are available for burn-in selection."
+msgstr ""
+
+msgid ""
+"The automatic burn-in proportion must be greater than 0 and at most 1. To "
+"discard no draws, select manual burn-in and enter 0."
+msgstr ""
+
+msgid ""
+"Automatic burn-in needs a larger tail proportion or more completed MCMC "
+"draws. Alternatively, select manual burn-in."
+msgstr ""
+
+msgid "Select automatic or manual burn-in."
+msgstr ""
+
+msgid ""
+"Burn-in must be a whole number between 0 and %1$d, leaving at least one of "
+"the %2$d completed MCMC draws."
+msgstr ""
+
+msgid ""
+"Unknown value provided for modelType, possible values: `alternative`, `null`"
+msgstr ""
+"modelType için bilinmeyen bir değer girildi, olası değerler: `alternative`, "
+"`null`"
+
+msgid "Residual SD"
+msgstr "Artıkların Standart Sapması"
+
+msgid "Prediction SD"
+msgstr "Tahmini SS"
+
+msgid "R%s"
+msgstr "R%s"
+
+msgid "Harvey's goodness of fit"
+msgstr "Harvey'in uyum özü"
+
+msgid ""
+"Only %1$s draws were sampled out of the desired %2$s. Additionally, %3$s "
+"MCMC draws out of %1$s are discarded as burn in."
+msgstr ""
+"İstenen %2$s'den yalnızca %1$s çekim örneklendi. Ek olarak, %1$s'den %3$s "
+"MCMC çekimi yanma olarak atıldı."
+
+msgid "%1$d MCMC draws out of %2$d are discarded as burn in."
+msgstr "%2$d'den %1$d MCMC çekimi yanma olarak atılır."
+
+msgid ""
+"The local level component has been selected (by default). If you wish to "
+"adjust the model, you can do so under 'Model Components'."
+msgstr ""
+"Yerel düzey bileşeni seçildi (varsayılan olarak). Modeli ayarlamak "
+"isterseniz, bunu 'Model Bileşenleri' altında yapabilirsiniz."
+
+msgid ""
+"Harvey's goodness of fit is unavailable because the dependent variable "
+"contains missing observations."
+msgstr ""
+
+msgid "Harvey's goodness of fit could not be computed."
+msgstr ""
+
+msgid "Posterior Summary of Coefficients"
+msgstr "Katsayıların Sonraki Özeti"
+
+msgid "%s%% Credible Interval"
+msgstr "%s%% Güvenilir Aralık"
+
+msgid "P(incl)"
+msgstr "P(dahil)"
+
+msgid "P(incl|data)"
+msgstr "P(dahil|veri)"
+
+msgid "BF<sub>inclusion</sub>"
+msgstr "BF<sub>dahil_etme</sub>"
+
+msgid "Mean"
+msgstr "Ortalama"
+
+msgid "SD"
+msgstr "SS"
+
+msgid "Mean<sub>inclusion</sub>"
+msgstr "Ortalama<sub>içerik</sub>"
+
+msgid "SD<sub>inclusion</sub>"
+msgstr "SS<sub>dahil etme</sub>"
+
+msgid "State Plots"
+msgstr "Durum Grafikleri"
+
+msgid "Aggregated State"
+msgstr "Birleştirilmiş Durum"
+
+msgid "Time"
+msgstr "Zaman"
+
+msgid "Distribution"
+msgstr "Dağıtım"
+
+msgid "Component States"
+msgstr "Bileşen Durumları"
+
+msgid "Prediction plot"
+msgstr "Tahmini grafik"
+
+msgid "Control Plots"
+msgstr "Kontrol Grafikleri"
+
+msgid ""
+"Control period end must be a whole number of at least 2 and cannot exceed "
+"the number of time points (%1$d)."
+msgstr ""
+
+msgid "Threshold Plot"
+msgstr "Eşik Grafiği"
+
+msgid "Probability Plot"
+msgstr "Olasılık Grafiği"
+
+msgid ""
+"First date where %1$.3f*sigma is exceeded by %2$.1f%% state credible "
+"interval: %3$s"
+msgstr ""
+"%1$.3f*sigma'nın %2$.1f%% tarafından aşıldığı ilk tarih, güvenilir aralık "
+"durumu: %3$s"
+
+msgid ""
+"First time point where %1$.3f*sigma is exceeded by %2$.1f%% state credible "
+"interval: %3$s"
+msgstr ""
+"%1$.3f*sigma'nın %2$.1f%% durum güvenilir aralığı tarafından aşıldığı ilk "
+"zaman noktası: %3$s"
+
+msgid "Threshold never reached"
+msgstr "Eşiğe asla ulaşılamadı"
+
+msgid "Probability"
+msgstr "Olasılık"
+
+msgid "Error Plots"
+msgstr "Hata Grafikleri"
+
+msgid "Residual Plot"
+msgstr "Ardıl Grafiği"
+
+msgid "Forecast Error Plot"
+msgstr "Tahmini Hata Grafiği"
 
 msgid "The spectral analysis failed."
 msgstr "Spektral analiz başarısız oldu."
@@ -131,6 +320,12 @@ msgstr "Bant genişliği"
 
 msgid "Data cannot be zero or negative for log transformation."
 msgstr "Log dönüşümü için veri sıfır veya negatif olamaz."
+
+msgid ""
+"The log transformation produced negative values, so the root transformation "
+"cannot be applied. Values between 0 and 1 have negative logarithms. Disable "
+"either Log or Root."
+msgstr ""
 
 msgid "Data cannot be negative for root transformation."
 msgstr "Kök dönüşümü için veri negatif olamaz."
@@ -204,3 +399,12 @@ msgstr "Otokorelasyon Fonksiyonu"
 
 msgid "Partial Autocorrelation Function"
 msgstr "Kısmi Otokorelasyon Fonksiyonu"
+
+#~ msgid "No parameters are estimated."
+#~ msgstr "Hiçbir parametre tahmin edilmemiştir."
+
+msgid "Observation step"
+msgstr ""
+
+msgid "Steps ahead"
+msgstr ""

@@ -19,15 +19,12 @@
 StationarityTimeSeries <- function(jaspResults, dataset, options) {
   ready <- options[["dependent"]] != ""
 
-  datasetRaw <- .tsReadData(jaspResults, dataset, options, ready)
-
-  datasetFiltered <- .tsDataFilterHandler(datasetRaw, options, ready)
-
-  dataset <- .tsDataWithMissingRowsHandler(datasetFiltered, options, ready)
+  prepared <- .tsPrepareData(jaspResults, dataset, options, ready)
+  datasetRaw <- prepared$raw
+  dataset <- prepared$data
+  ready <- ready && nrow(dataset) > 0L
 
   transformedDataset <- .tsTransformData(jaspResults, dataset, options, ready)
-
-  .tsErrorHandler(dataset, ready)
 
   .tsCreateTableStationarityTests(jaspResults, transformedDataset, options, ready, position = 2, dependencies = c(.tsTransformationDependencies(), "adfTest", "ppTestRegressionCoefficient", "ppTestStudentized", "kpssLevel", "kpssTrend"))
 
@@ -72,6 +69,8 @@ StationarityTimeSeries <- function(jaspResults, dataset, options) {
   # apply root
   if (options[["root"]]) {
     if (any(transformedDataset$y < 0)) {
+      if (options[["log"]])
+        .quitAnalysis(gettext("The log transformation produced negative values, so the root transformation cannot be applied. Values between 0 and 1 have negative logarithms. Disable either Log or Root."))
       .quitAnalysis(gettext("Data cannot be negative for root transformation."))
     }
 
@@ -91,7 +90,8 @@ StationarityTimeSeries <- function(jaspResults, dataset, options) {
   if (options[["detrend"]]) {
     if (options[["polynomialSpecification"]] == "custom") {
       completeRows <- complete.cases(transformedDataset[, c("y", "t")])
-      fit <- lm(y ~ poly(as.integer(t), options[["detrendPoly"]]), data = transformedDataset[completeRows, ])
+      detrendData <- data.frame(y = transformedDataset$y, step = seq_len(nrow(transformedDataset)))
+      fit <- lm(y ~ poly(step, options[["detrendPoly"]]), data = detrendData[completeRows, ])
       residualsVec <- residuals(fit)
       transformedDataset$y[completeRows] <- residualsVec
     }
@@ -173,7 +173,7 @@ StationarityTimeSeries <- function(jaspResults, dataset, options) {
   }
 
   if (ready) {
-    res <- sapply(0:(options[["polynomialSpecificationAutoMax"]]), .tsFitPoly, x = dataset$y, t = as.integer(dataset$t))
+    res <- sapply(0:(options[["polynomialSpecificationAutoMax"]]), .tsFitPoly, x = dataset$y, t = seq_len(nrow(dataset)))
 
     jaspResults[["polyResult"]] <- createJaspState(res)
     jaspResults[["polyResult"]]$dependOn(.tsTransformationDependencies())
@@ -184,8 +184,8 @@ StationarityTimeSeries <- function(jaspResults, dataset, options) {
   # append transformed variable to spreadsheet
   if (options[["transformationSavedToData"]] && is.null(jaspResults[["transformationColumn"]]) && options[["transformationColumn"]] != "" && ready) {
     transformationColumn <- rep(NA, max(as.numeric(rownames(datasetRaw))))
-    matchT <- match(as.POSIXct(datasetRaw$t, tz = "UTC"), dataset$t)
-    transformationColumn[as.numeric(rownames(datasetRaw))] <- dataset$y[matchT]
+    matchRows <- match(rownames(datasetRaw), rownames(dataset))
+    transformationColumn[as.numeric(rownames(datasetRaw))] <- dataset$y[matchRows]
     jaspResults[["transformationColumn"]] <- createJaspColumn(columnName = options[["transformationColumn"]])
     jaspResults[["transformationColumn"]]$dependOn(dependencies)
     jaspResults[["transformationColumn"]]$setScale(transformationColumn)

@@ -1,0 +1,24 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<svg xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' class='svglite' width='401.25pt' height='304.50pt' viewBox='0 0 401.25 304.50'>
+<defs>
+  <style type='text/css'><![CDATA[
+    .svglite line, .svglite polyline, .svglite polygon, .svglite path, .svglite rect, .svglite circle {
+      fill: none;
+      stroke: #000000;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      stroke-miterlimit: 10.00;
+    }
+  ]]></style>
+</defs>
+<rect width='100%' height='100%' style='stroke: none; fill: none;'/>
+<defs>
+  <clipPath id='cpMC4wMHw0MDEuMjV8MC4wMHwzMDQuNTA='>
+    <rect x='0.00' y='0.00' width='401.25' height='304.50' />
+  </clipPath>
+</defs>
+<g clip-path='url(#cpMC4wMHw0MDEuMjV8MC4wMHwzMDQuNTA=)'>
+<rect x='0.00' y='-0.000000000000057' width='401.25' height='304.50' style='stroke-width: 0.75; stroke: none;' />
+<polyline points='18.24,278.77 37.44,290.66 56.64,210.18 75.83,206.54 95.03,199.86 114.23,111.31 133.43,87.51 152.63,152.83 171.83,188.29 191.03,211.30 210.22,148.10 229.42,129.52 248.62,108.83 267.82,103.11 287.02,131.81 306.22,39.55 325.42,13.84 344.61,115.38 363.81,79.17 383.01,103.58 ' style='stroke-width: 6.40; stroke: #FB7A00; stroke-linecap: butt;' />
+</g>
+</svg>

@@ -21,9 +21,9 @@ Form
             name: "time"
             id: time
             label: qsTr("Time")
-            allowedColumns: ["ordinal", "nominal"]
+            allowedColumns: ["scale", "ordinal", "nominal"]
             singleVariable: true
-            info: qsTr("Optional. Can either be an ordinal variable indicating the time index/order of the observations, or a text variable indicating the date/time stamp of the observations. Combined date and time values should be in the standard format 'YYYY-MM-DD HH:MM:SS', where seconds (':SS') can also be omitted. Date-only values should be in the format 'YYYY-MM-DD'. If a time variable is not supplied, the row order of the data is used.")
+            info: qsTr("Optional. Complete numeric values order observations from smallest to largest, regardless of gaps. Complete, unambiguous dates and times order observations chronologically. Use 'YYYY-MM-DD' for dates or 'YYYY-MM-DD HH:MM:SS' for dates with times; seconds can be omitted. All variables stay aligned, and spreadsheet row order is unchanged. Tied values retain spreadsheet row order. If any value is missing or cannot be interpreted, or dates are ambiguous, Time is ignored for the entire analysis and a warning is shown. Leave Time empty to use spreadsheet row order. Successive observations are modeled as equally spaced steps; no rows are added for gaps in Time.")
         }
         AssignedVariablesList
         {
@@ -31,7 +31,7 @@ Form
             label: qsTr("Covariates")
             allowedColumns: ["scale"]
             height: 120
-            info: qsTr("Optional. A numerical variable to include in the model as external regressor.")
+            info: qsTr("Optional numeric variables to include as external regressors. Forecasting requires covariate values in the next rows of the ordered dataset after the final row used for fitting. Use a filter to end the fitted series before those rows; missing dependent values alone do not exclude a row from fitting.")
         }
     }
     
@@ -39,37 +39,10 @@ Form
     {
         CheckBox
         {
-            name: "timeSeriesPlot"
-            id:    tsPlot
-            label: qsTr("Time series plot")
-            checked: true
-            info: qsTr("Plots the dependent variable (y-axis) over time (x-axis).")
-            RadioButtonGroup
-            {
-                name:	"timeSeriesPlotType"
-                radioButtonsOnSameRow: true
-                RadioButton { value: "points";	label: qsTr("Points") }
-                RadioButton { value: "line";	label: qsTr("Line") }
-                RadioButton { value: "both";	label: qsTr("Both");	checked: true }
-            }
-            RadioButtonGroup
-            {
-                name:	"timeSeriesPlotDistribution"
-                title: qsTr("Distribution")
-                RadioButton { value: "density";	label: qsTr("Density") }
-                RadioButton { value: "histogram";	label: qsTr("Histogram") }
-                RadioButton { value: "none";	label: qsTr("None");	checked: true }
-            }
-        }
-    }
-    Group
-    {
-        CheckBox
-        {
             name: "filter"
             id: filter
             label: qsTr("Filter by")
-            info: qsTr("Filters the time series so only a specific range will be used for further analyses. Row number refers to the row number in the spreadsheet. If a 'Time' variable is supplied it is also possible to filter by time index or date, depending on the format of the 'Time' variable.")
+            info: qsTr("Selects an inclusive range of observations for analysis. Row number refers to original spreadsheet rows, even when Time changes the analysis order. Time index filters numeric Time values, including negative values and decimals. Date filters interpreted dates and times. Date filters use UTC. A date-only End includes the entire day; an End with a time uses that exact cutoff. Time or date filtering requires a usable Time variable; otherwise, select Row number or disable filtering.")
             RadioButtonGroup
             {
                 name: "filterBy"
@@ -95,8 +68,8 @@ Form
                     Group
                     {
                         columns: 2
-                        IntegerField { name: "timeStart"; label: qsTr("Start"); defaultValue: 1 }
-                        IntegerField { name: "timeEnd"; label: qsTr("End"); defaultValue: 100 }
+                        DoubleField { name: "timeStart"; label: qsTr("Start"); defaultValue: 1; negativeValues: true; decimals: 10 }
+                        DoubleField { name: "timeEnd"; label: qsTr("End"); defaultValue: 100; negativeValues: true; decimals: 10 }
                     }
                 }
                 RadioButton
@@ -246,6 +219,38 @@ Form
 
     Section
     {
+        title: qsTr("Plots")
+        Group
+        {
+            CheckBox
+            {
+                name: "timeSeriesPlot"
+                id:    tsPlot
+                label: qsTr("Observed time series")
+                checked: true
+                info: qsTr("Plots the dependent variable (y-axis) over time (x-axis).")
+                RadioButtonGroup
+                {
+                    name:	"timeSeriesPlotType"
+                    radioButtonsOnSameRow: true
+                    RadioButton { value: "points";	label: qsTr("Points") }
+                    RadioButton { value: "line";	label: qsTr("Line") }
+                    RadioButton { value: "both";	label: qsTr("Both");	checked: true }
+                }
+                RadioButtonGroup
+                {
+                    name:	"timeSeriesPlotDistribution"
+                    title: qsTr("Distribution")
+                    RadioButton { value: "density";	label: qsTr("Density") }
+                    RadioButton { value: "histogram";	label: qsTr("Histogram") }
+                    RadioButton { value: "none";	label: qsTr("None");	checked: true }
+                }
+            }
+        }
+    }
+
+    Section
+    {
         title: qsTr("Residual Diagnostics")
         Group
         {
@@ -346,7 +351,7 @@ Form
             min: 0
             max: 1e6
             defaultValue: 0
-            info: qsTr("Determines the number forecasts to make.")
+            info: qsTr("Number of observation steps to forecast after the final row included in the model, including rows with missing dependent values. A value of 0 produces no forecasts. When Time is assigned, the table reports steps ahead; future Time values or dates are not inferred.")
         }
         FileSelector
         {
@@ -357,14 +362,14 @@ Form
             save:	              true
             enabled:            forecastLength.value > 0
             fieldWidth:         180 * preferencesModel.uiScale
-            info:               qsTr("Saves the forecasts in a seperate .csv file.")
+            info:               qsTr("Saves the forecasts in a separate .csv file. When Time is assigned, the first column, stepAhead, counts steps after the final modeled row. When Time is empty, the first column, t, continues the row index.")
         }
         CheckBox
         {
             name:     "forecastTimeSeries"
             id:       forecastTimeSeries
             label:    qsTr("Time series plot")
-            info:     qsTr("Plots the forecasts (and observed values) (y-axis) over time (x-axis)")
+            info:     qsTr("Plots forecasts and optionally observed values. With Time assigned, the x-axis counts observation steps in model order and continues beyond the final modeled row; future Time values or dates are not inferred. With Time empty, t retains and continues the row index.")
             RadioButtonGroup
             {
                 name:	"forecastTimeSeriesType"
@@ -386,6 +391,7 @@ Form
             name:   "forecastTable"
             id:     forecastTable
             label:  qsTr("Forecasts table")
+            info:   qsTr("Reports forecast means and intervals. With Time assigned, Steps ahead counts from 1 after the final modeled row. With Time empty, t continues the row index.")
         }
     }
 }

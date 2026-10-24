@@ -1,7 +1,8 @@
+#
 msgid ""
 msgstr ""
 "Project-Id-Version: jaspTimeSeries 0.95.0\n"
-"POT-Creation-Date: 2025-06-21 03:37\n"
+"POT-Creation-Date: 2026-10-07 21:21\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: Automatically generated\n"
 "Language-Team: none\n"
@@ -11,13 +12,10 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 
-msgid "Time Series Plot"
+msgid "Observed Time Series Plot"
 msgstr ""
 
 msgid "The ARIMA model could not be fit."
-msgstr ""
-
-msgid "No parameters are estimated."
 msgstr ""
 
 msgid "Model Summary"
@@ -59,6 +57,17 @@ msgstr ""
 msgid "Upper"
 msgstr ""
 
+msgid "An ARIMA(%1$s, %2$s, %3$s)(%4$s, %5$s, %6$s)[%7$s] model was fitted."
+msgstr ""
+
+msgid "An ARIMA(%1$s, %2$s, %3$s) model was fitted."
+msgstr ""
+
+msgid ""
+"The selected model has no coefficients to report. Only the residual variance "
+"is estimated; it is shown in the model summary."
+msgstr ""
+
 msgid "Intercept"
 msgstr ""
 
@@ -74,13 +83,15 @@ msgstr ""
 msgid "seasonal MA(%1$i)"
 msgstr ""
 
-msgid "An ARIMA(%1$s, %2$s, %3$s)(%4$s, %5$s, %6$s)[%7$s] model was fitted."
-msgstr ""
-
-msgid "An ARIMA(%1$s, %2$s, %3$s) model was fitted."
-msgstr ""
-
 msgid "Residual Diagnostics Plots"
+msgstr ""
+
+msgid "Time Series Plot"
+msgstr ""
+
+msgid ""
+"Missing residuals appear as gaps in the time-series plot and are excluded "
+"from the distribution."
 msgstr ""
 
 msgid "Autocorrelation Function Plot"
@@ -98,10 +109,14 @@ msgstr ""
 msgid "p-value"
 msgstr ""
 
-msgid "When 'Covariates' are used in the model, predictions cannot be carried out unless the covariates are also observed for the predicted period."
+msgid ""
+"When 'Covariates' are used in the model, predictions cannot be carried out "
+"unless the covariates are also observed for the predicted period."
 msgstr ""
 
-msgid "Not enough observations in the covariate%1$s. The maximum number of forecasts is %2$s."
+msgid ""
+"Not enough observations in the covariate%1$s. The maximum number of "
+"forecasts is %2$s."
 msgstr ""
 
 msgid "Forecasting failed."
@@ -111,6 +126,170 @@ msgid "Forecast Time Series Plot"
 msgstr ""
 
 msgid "Forecasts"
+msgstr ""
+
+msgid ""
+"The following covariates contain missing values or values that cannot be "
+"interpreted as numbers: %1$s. Covariates must be numeric. For categorical "
+"predictors, use Fixed Factors."
+msgstr ""
+
+msgid ""
+"Model estimation failed because of a numerical problem during sampling. "
+"Check the dependent variable for extreme values and consider rescaling it to "
+"more moderate units. If the autoregressive component is enabled, temporarily "
+"disabling it can help identify the source of the problem.\n"
+"\n"
+"Technical details:\n"
+"%1$s"
+msgstr ""
+
+msgid ""
+"Model estimation failed.\n"
+"\n"
+"%1$s"
+msgstr ""
+
+msgid "No completed MCMC draws are available for burn-in selection."
+msgstr ""
+
+msgid ""
+"The automatic burn-in proportion must be greater than 0 and at most 1. To "
+"discard no draws, select manual burn-in and enter 0."
+msgstr ""
+
+msgid ""
+"Automatic burn-in needs a larger tail proportion or more completed MCMC "
+"draws. Alternatively, select manual burn-in."
+msgstr ""
+
+msgid "Select automatic or manual burn-in."
+msgstr ""
+
+msgid ""
+"Burn-in must be a whole number between 0 and %1$d, leaving at least one of "
+"the %2$d completed MCMC draws."
+msgstr ""
+
+msgid ""
+"Unknown value provided for modelType, possible values: `alternative`, `null`"
+msgstr ""
+
+msgid "Residual SD"
+msgstr ""
+
+msgid "Prediction SD"
+msgstr ""
+
+msgid "R%s"
+msgstr ""
+
+msgid "Harvey's goodness of fit"
+msgstr ""
+
+msgid ""
+"Only %1$s draws were sampled out of the desired %2$s. Additionally, %3$s "
+"MCMC draws out of %1$s are discarded as burn in."
+msgstr ""
+
+msgid "%1$d MCMC draws out of %2$d are discarded as burn in."
+msgstr ""
+
+msgid ""
+"The local level component has been selected (by default). If you wish to "
+"adjust the model, you can do so under 'Model Components'."
+msgstr ""
+
+msgid ""
+"Harvey's goodness of fit is unavailable because the dependent variable "
+"contains missing observations."
+msgstr ""
+
+msgid "Harvey's goodness of fit could not be computed."
+msgstr ""
+
+msgid "Posterior Summary of Coefficients"
+msgstr ""
+
+msgid "%s%% Credible Interval"
+msgstr ""
+
+msgid "P(incl)"
+msgstr ""
+
+msgid "P(incl|data)"
+msgstr ""
+
+msgid "BF<sub>inclusion</sub>"
+msgstr ""
+
+msgid "Mean"
+msgstr ""
+
+msgid "SD"
+msgstr ""
+
+msgid "Mean<sub>inclusion</sub>"
+msgstr ""
+
+msgid "SD<sub>inclusion</sub>"
+msgstr ""
+
+msgid "State Plots"
+msgstr ""
+
+msgid "Aggregated State"
+msgstr ""
+
+msgid "Time"
+msgstr ""
+
+msgid "Distribution"
+msgstr ""
+
+msgid "Component States"
+msgstr ""
+
+msgid "Prediction plot"
+msgstr ""
+
+msgid "Control Plots"
+msgstr ""
+
+msgid ""
+"Control period end must be a whole number of at least 2 and cannot exceed "
+"the number of time points (%1$d)."
+msgstr ""
+
+msgid "Threshold Plot"
+msgstr ""
+
+msgid "Probability Plot"
+msgstr ""
+
+msgid ""
+"First date where %1$.3f*sigma is exceeded by %2$.1f%% state credible "
+"interval: %3$s"
+msgstr ""
+
+msgid ""
+"First time point where %1$.3f*sigma is exceeded by %2$.1f%% state credible "
+"interval: %3$s"
+msgstr ""
+
+msgid "Threshold never reached"
+msgstr ""
+
+msgid "Probability"
+msgstr ""
+
+msgid "Error Plots"
+msgstr ""
+
+msgid "Residual Plot"
+msgstr ""
+
+msgid "Forecast Error Plot"
 msgstr ""
 
 msgid "The spectral analysis failed."
@@ -126,6 +305,12 @@ msgid "Bandwidth"
 msgstr ""
 
 msgid "Data cannot be zero or negative for log transformation."
+msgstr ""
+
+msgid ""
+"The log transformation produced negative values, so the root transformation "
+"cannot be applied. Values between 0 and 1 have negative logarithms. Disable "
+"either Log or Root."
 msgstr ""
 
 msgid "Data cannot be negative for root transformation."
@@ -195,4 +380,10 @@ msgid "Autocorrelation Function"
 msgstr ""
 
 msgid "Partial Autocorrelation Function"
+msgstr ""
+
+msgid "Observation step"
+msgstr ""
+
+msgid "Steps ahead"
 msgstr ""
