@@ -6,6 +6,12 @@ msgstr ""
 "Plural-Forms: nplurals=1; plural=0;\n"
 "X-Language: zh_Hans\n"
 "X-Qt-Contexts: true\n"
+"PO-Revision-Date: 2026-10-25 11:51+0000\n"
+"Last-Translator: Shun Wang <shuonwang@gmail.com>\n"
+"Language-Team: Chinese (Simplified Han script) <https://hosted.weblate.org/"
+"projects/jasp/jasptimeseries-qml/zh_Hans/>\n"
+"Language: zh_Hans\n"
+"X-Generator: Weblate 2026.11.dev0\n"
 
 msgctxt "Description|"
 msgid "Time Series"
@@ -366,7 +372,6 @@ msgctxt "SpectralTimeSeries|"
 msgid "Time"
 msgstr "时间"
 
-#, fuzzy
 msgctxt "SpectralTimeSeries|"
 msgid ""
 "Optional. Can either be an ordinal variable indicating the order of the "
@@ -376,10 +381,8 @@ msgid ""
 "values should be in the format 'YYYY-MM-DD'. If a time variable is not "
 "supplied, the row order of the data is used."
 msgstr ""
-"可选。 可以是指代观察的时间索引/顺序的序数变量，也可以是指代观察的日期/时间戳"
-"的文本变量。 如有日期和时间组合值应采用“年-月-日 时:分:秒”这样的标准格式，其"
-"中秒 (':SS') 也可以省略。 如仅有日期值应采用“年-月-日”格式。 如果未提供时间变"
-"量，则使用数据的行顺序作为序列。"
+"可选。可以是表示观测顺序的有序变量，也可以是表示观测日期/时间戳的文本变量。日"
+"期和时间组合值应采用“年-月-日 时:分:秒”的标准格式。"
 
 msgctxt "SpectralTimeSeries|"
 msgid "Spectral density"
@@ -423,7 +426,6 @@ msgctxt "SpectralTimeSeries|"
 msgid "Filter by"
 msgstr "筛选规则"
 
-#, fuzzy
 msgctxt "SpectralTimeSeries|"
 msgid ""
 "Filters the time series so only a specific range will be used for further "
@@ -431,8 +433,8 @@ msgid ""
 "'Time' variable is supplied it is also possible to filter by time index or "
 "date, depending on the format of the 'Time' variable."
 msgstr ""
-"过滤时间序列，以便仅在特定范围进行分析。 行号是指表格中的行数。 如果提供“时"
-"间”变量，则还可以按时间索引或日期进行过滤，具体取决于“时间”变量的格式。"
+"筛选时间序列，以便仅对特定范围进行后续分析。行号指表格中的行号。如果提供“时间"
+"”变量，还可以按时间索引或日期进行筛选，具体取决于“时间”变量的格式。"
 
 msgctxt "SpectralTimeSeries|"
 msgid "Row number"
@@ -511,7 +513,6 @@ msgctxt "StationarityTimeSeries|"
 msgid "Time"
 msgstr "时间"
 
-#, fuzzy
 msgctxt "StationarityTimeSeries|"
 msgid ""
 "Optional. Can either be an ordinal variable indicating the order of the "
@@ -521,10 +522,8 @@ msgid ""
 "values should be in the format 'YYYY-MM-DD'. If a time variable is not "
 "supplied, the row order of the data is used."
 msgstr ""
-"可选。 可以是指代观察的时间索引/顺序的序数变量，也可以是指代观察的日期/时间戳"
-"的文本变量。 如有日期和时间组合值应采用“年-月-日 时:分:秒”这样的标准格式，其"
-"中秒 (':SS') 也可以省略。 如仅有日期值应采用“年-月-日”格式。 如果未提供时间变"
-"量，则使用数据的行顺序作为序列。"
+"可选。可以是表示观测顺序的有序变量，也可以是表示观测日期/时间戳的文本变量。日"
+"期和时间组合值应采用“年-月-日 时:分:秒”的标准格式。"
 
 msgctxt "StationarityTimeSeries|"
 msgid "Stationarity Tests"
@@ -579,12 +578,10 @@ msgctxt "StationarityTimeSeries|"
 msgid "Trend stationary"
 msgstr "趋势平稳"
 
-#, fuzzy
 msgctxt "StationarityTimeSeries|"
 msgid "Filter by"
-msgstr "筛选规则"
+msgstr "筛选依据"
 
-#, fuzzy
 msgctxt "StationarityTimeSeries|"
 msgid ""
 "Filters the time series so only a specific range will be used for further "
@@ -592,20 +589,17 @@ msgid ""
 "'Time' variable is supplied it is also possible to filter by time index or "
 "date, depending on the format of the 'Time' variable."
 msgstr ""
-"过滤时间序列，以便仅在特定范围进行分析。 行号是指表格中的行数。 如果提供“时"
-"间”变量，则还可以按时间索引或日期进行过滤，具体取决于“时间”变量的格式。"
+"筛选时间序列，以便仅对特定范围进行后续分析。行号指表格中的行号。如果提供“时间"
+"”变量，还可以按时间索引或日期进行筛选，具体取决于“时间”变量的格式。"
 
-#, fuzzy
 msgctxt "StationarityTimeSeries|"
 msgid "Row number"
-msgstr "行数"
+msgstr "行号"
 
-#, fuzzy
 msgctxt "StationarityTimeSeries|"
 msgid "Start"
 msgstr "起始"
 
-#, fuzzy
 msgctxt "StationarityTimeSeries|"
 msgid "End"
 msgstr "终止"
@@ -705,7 +699,6 @@ msgctxt "StationarityTimeSeries|"
 msgid "Maximum"
 msgstr "最大值"
 
-#, fuzzy
 msgctxt "StationarityTimeSeries|"
 msgid "Information criterion"
 msgstr "信息准则"
@@ -759,25 +752,22 @@ msgctxt "StationarityTimeSeries|"
 msgid "Plots"
 msgstr "绘图"
 
-#, fuzzy
 msgctxt "StationarityTimeSeries|"
 msgid "Time series plot"
-msgstr "绘制时间序列图"
+msgstr "时间序列图"
 
 msgctxt "StationarityTimeSeries|"
 msgid "Plots the (transformed) dependent variable (y-axis) over time (x-axis)."
 msgstr "绘制（变换后的）因变量（y 轴）随时间（x 轴）变化的图。"
 
-#, fuzzy
 msgctxt "StationarityTimeSeries|"
 msgid "Points"
-msgstr "时间点"
+msgstr "点"
 
 msgctxt "StationarityTimeSeries|"
 msgid "Line"
 msgstr "线"
 
-#, fuzzy
 msgctxt "StationarityTimeSeries|"
 msgid "Both"
 msgstr "两者"
@@ -794,7 +784,6 @@ msgctxt "StationarityTimeSeries|"
 msgid "Histogram"
 msgstr "直方图"
 
-#, fuzzy
 msgctxt "StationarityTimeSeries|"
 msgid "None"
 msgstr "无"
