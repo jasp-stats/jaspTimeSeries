@@ -303,6 +303,15 @@ ARIMATimeSeries <- function(jaspResults, dataset, options) {
   }
 }
 
+.tsResiduals <- function(fit) {
+  # auto.arima trims leading missing observations from its residual series.
+  res <- stats::residuals(fit)
+  out <- rep(NA_real_, length(fit$x))
+  first <- round((stats::tsp(res)[1L] - stats::tsp(fit$x)[1L]) * stats::frequency(fit$x)) + 1L
+  out[first - 1L + seq_along(res)] <- as.numeric(res)
+  out
+}
+
 .tsResidualDiagnostics <- function(jaspResults, fit, dataset, options, ready, position, dependencies) {
   residContainer <- createJaspContainer(title = gettext("Residual Diagnostics Plots"))
   residContainer$dependOn(dependencies)
@@ -313,7 +322,7 @@ ARIMATimeSeries <- function(jaspResults, dataset, options) {
     return()
   }
 
-  dataset$y <- as.numeric(residuals(fit))
+  dataset$y <- .tsResiduals(fit)
 
   if (is.null(residContainer[["residualTimeSeriesPlot"]]) && options[["residualTimeSeries"]]) {
     residualTimeSeriesPlot <- createJaspPlot(title = gettext("Time Series Plot"), width = 660)
@@ -336,7 +345,8 @@ ARIMATimeSeries <- function(jaspResults, dataset, options) {
 
   if (is.null(residContainer[["residualACFPlot"]]) && options[["residualAcf"]]) {
     residualACFPlot <- createJaspPlot(title = gettext("Autocorrelation Function Plot"))
-    residualACFPlot$dependOn(c("residualAcf", "residualAcfCi", "residualAcfCiLevel", "residualAcfZeroLag", "residualMaxLag"))
+    acfDependencies <- c("residualAcf", "residualAcfCi", "residualAcfCiLevel", "residualAcfZeroLag", "residualMaxLag", "residualAcfMissingValues")
+    residualACFPlot$dependOn(acfDependencies)
     residualACFPlot$position <- 2
     residContainer[["residualACFPlot"]] <- residualACFPlot
 
@@ -344,12 +354,14 @@ ARIMATimeSeries <- function(jaspResults, dataset, options) {
       return()
     }
 
-    .tsFillACF(residualACFPlot,
+    note <- .tsFillACF(residualACFPlot,
       type = "ACF", dataset, options,
       zeroLag = options[["residualAcfZeroLag"]], maxLag = options[["residualMaxLag"]],
       ci = options[["residualAcfCi"]], ciValue = options[["residualAcfCiLevel"]],
-      ciType = "whiteNoise"
+      ciType = "whiteNoise", missingValues = options[["residualAcfMissingValues"]]
     )
+    if (!is.null(note))
+      residContainer[["residualAcfMissingNote"]] <- createJaspHtml(text = note, dependencies = acfDependencies, position = 2.1)
   }
 
   if (is.null(residContainer[["residualQQPlot"]]) && options[["residualQQ"]]) {
@@ -367,7 +379,8 @@ ARIMATimeSeries <- function(jaspResults, dataset, options) {
 
   if (is.null(residContainer[["ljungPlot"]]) && options[["residualLjungBox"]]) {
     ljungPlot <- createJaspPlot(title = gettext("Ljung-Box Plot"))
-    ljungPlot$dependOn(c("residualLjungBox", "residualMaxLag", "ljungBoxSignificanceLevel"))
+    ljungDependencies <- c("residualLjungBox", "residualMaxLag", "ljungBoxSignificanceLevel", "residualLjungBoxMissingValues")
+    ljungPlot$dependOn(ljungDependencies)
     ljungPlot$position <- 3
     residContainer[["ljungPlot"]] <- ljungPlot
 
@@ -375,7 +388,9 @@ ARIMATimeSeries <- function(jaspResults, dataset, options) {
       return()
     }
 
-    .tsFillLjungBoxPlot(ljungPlot, dataset, options)
+    note <- .tsFillLjungBoxPlot(ljungPlot, dataset, options)
+    if (!is.null(note))
+      residContainer[["residualLjungBoxMissingNote"]] <- createJaspHtml(text = note, dependencies = ljungDependencies, position = 3.1)
   }
 }
 
@@ -384,7 +399,7 @@ ARIMATimeSeries <- function(jaspResults, dataset, options) {
   if (options[["residualSavedToData"]] && is.null(jaspResults[["residualColumn"]]) && options[["residualColumn"]] != "" && ready) {
     residualColumn <- rep(NA, max(as.numeric(rownames(datasetRaw))))
     matchRows <- match(rownames(datasetRaw), rownames(dataset))
-    residualColumn[as.numeric(rownames(datasetRaw))] <- fit$residuals[matchRows]
+    residualColumn[as.numeric(rownames(datasetRaw))] <- .tsResiduals(fit)[matchRows]
     jaspResults[["residualColumn"]] <- createJaspColumn(columnName = options[["residualColumn"]])
     jaspResults[["residualColumn"]]$dependOn(options = dependencies)
     jaspResults[["residualColumn"]]$setScale(residualColumn)
@@ -392,10 +407,21 @@ ARIMATimeSeries <- function(jaspResults, dataset, options) {
 }
 
 .tsFillLjungBoxPlot <- function(ljungPlot, dataset, options) {
-  pValues <- numeric(options[["residualMaxLag"]])
-  nLags <- 1:options[["residualMaxLag"]]
-  for (i in nLags) {
-    pValues[i] <- stats::Box.test(dataset$y, i, type = "Ljung-Box")$p.value
+  prepared <- .tsCompleteSeries(dataset$y, options[["residualLjungBoxMissingValues"]])
+  if (!is.null(prepared$error)) {
+    ljungPlot$setError(prepared$error)
+    return(invisible(NULL))
+  }
+  maxLag <- options[["residualMaxLag"]]
+  if (length(maxLag) != 1L || !is.finite(maxLag) || maxLag < 1L || maxLag >= length(prepared$y)) {
+    ljungPlot$setError(gettextf("The maximum lag must be positive and smaller than the number of selected observations (%s).", length(prepared$y)))
+    return(invisible(NULL))
+  }
+  nLags <- seq_len(maxLag)
+  pValues <- try(vapply(nLags, function(i) stats::Box.test(prepared$y, i, type = "Ljung-Box")$p.value, numeric(1L)), silent = TRUE)
+  if (inherits(pValues, "try-error") || any(!is.finite(pValues))) {
+    ljungPlot$setError(gettext("The Ljung-Box test failed for the selected observations."))
+    return(invisible(NULL))
   }
 
   df <- data.frame(x = nLags, y = pValues)
@@ -414,6 +440,7 @@ ARIMATimeSeries <- function(jaspResults, dataset, options) {
     jaspGraphs::themeJaspRaw()
 
   ljungPlot$plotObject <- p
+  invisible(prepared$note)
 }
 
 .tsForecasts <- function(fit, dataset, datasetRaw, options, jaspResults, ready) {

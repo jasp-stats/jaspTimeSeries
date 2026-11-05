@@ -134,12 +134,11 @@ test_that("BSTS coefficient statistics and intervals use the same retained draws
     expect_length(table$rows, ncol(fit$coefficients))
     for (row in table$rows) {
       beta <- fit$coefficients[seq_len(fit$niter) > burn, row$coef]
-      included <- beta[beta != 0]
       expect_equal(row$mean, mean(beta))
       expect_equal(row$sd, sd(beta))
       expect_equal(row$postIncP, mean(beta != 0))
-      expect_equal(row$meanInc, if (length(included)) mean(included) else 0)
-      expect_equal(row$sdInc, if (length(included) > 1L) sd(included) else 0)
+      expect_null(row$meanInc)
+      expect_null(row$sdInc)
       # Preserve existing marginal intervals: excluded (zero) draws still count.
       expect_equal(unname(row$lowerCri), unname(quantile(beta, 0.025)))
       expect_equal(unname(row$upperCri), unname(quantile(beta, 0.975)))

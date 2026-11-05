@@ -97,10 +97,10 @@ expectArimaPreparedLike <- function(actual, reference, expectedY) {
   expect_identical(actual$result$results$forecastTable$schema$fields[[1L]]$title, "Steps ahead")
 }
 
-arimaPreparationFixture <- function() {
-  k <- 1:48
+arimaPreparationFixture <- function(n = 48L) {
+  k <- seq_len(n)
   data.frame(y = 10 + .6 * sin(k / 5) - .3 * cos(k / 9) + sin(k / 3) + ((k * 7) %% 11) / 20,
-             Time = -3 + cumsum(rep(c(.1, .3, .2), 16)),
+             Time = -3 + cumsum(rep(c(.1, .3, .2), length.out = n)),
              x1 = sin(k / 5), x2 = cos(k / 9))
 }
 
@@ -270,4 +270,115 @@ test_that("ARIMA omits the missing-residual note when it does not apply", {
   noPlot <- arimaPreparationRun(data, residualTimeSeries = FALSE,
                                 residualTimeSeriesDistribution = "density")
   expect_null(noPlot$result$results$residContainer$collection$residContainer_residualTimeSeriesMissingNote)
+})
+
+test_that("automatic ARIMA completes with leading missing responses and no residual plots", {
+  data <- arimaPreparationFixture(80L)
+  data$y[1:2] <- NA_real_
+  actual <- arimaPreparationRun(data, time = FALSE, modelSpecification = "auto")
+  fit <- arimaPreparationFit(actual)
+  expect_equal(as.numeric(fit$x), data$y)
+  expect_length(stats::residuals(fit), 78L)
+  expect_null(actual$result$results$residContainer$collection$residContainer_residualTimeSeriesPlot)
+  expected <- forecast::forecast(fit, h = 3L)
+  forecasts <- arimaPreparationForecast(actual)
+  expect_equal(forecasts$y, as.numeric(expected$mean), tolerance = 1e-10)
+  expect_equal(forecasts$lower95, as.numeric(expected$lower[, "95%"]), tolerance = 1e-10)
+  expect_equal(forecasts$upper95, as.numeric(expected$upper[, "95%"]), tolerance = 1e-10)
+  plot <- arimaPreparationForecastPlot(actual)
+  expect_equal(plot$data$y[1:80], data$y)
+  expect_equal(plot$data$t, 1:83)
+})
+
+test_that("automatic ARIMA aligns residual plots and saved rows after ordering and filtering", {
+  data <- arimaPreparationFixture(88L)
+  # The selected 80 rows have 40 leading NAs: recycling a shortened vector
+  # would silently succeed, so checking only analysis completion is insufficient.
+  selected <- 5:84
+  data$y[c(5:44, 64, 83:84)] <- NA_real_
+  permutation <- c(seq(2, 88, 2), seq(1, 87, 2))
+  input <- data[permutation, ]
+  rownames(input) <- as.character(seq(2, 176, 2))
+  actual <- arimaPreparationRun(input, modelSpecification = "auto", filter = TRUE,
+    filterBy = "time", timeStart = data$Time[5], timeEnd = data$Time[84],
+    residualTimeSeries = TRUE, residualTimeSeriesType = "both",
+    residualTimeSeriesDistribution = "histogram")
+  fit <- arimaPreparationFit(actual)
+  before <- serialize(fit, NULL)
+  expect_equal(as.numeric(fit$x), data$y[selected])
+  expect_length(stats::residuals(fit), 40L)
+  aligned <- stats::ts.union(observed = fit$x, fitted = stats::fitted(fit))
+  expectedResiduals <- as.numeric(aligned[, "observed"] - aligned[, "fitted"])
+  expect_length(expectedResiduals, length(selected))
+  expect_identical(which(is.na(expectedResiduals)), which(is.na(data$y[selected])))
+
+  plots <- actual$result$results$residContainer$collection
+  plot <- actual$result$state$figures[[plots$residContainer_residualTimeSeriesPlot$data]]$obj
+  if (jaspGraphs::isJaspPlotRecipe(plot))
+    plot <- jaspGraphs::materializeJaspPlotRecipe(plot)
+  expect_s3_class(plot, "jaspMatrixPlot")
+  main <- plot$subplots$mainPlot
+  expect_equal(as.numeric(main$data$y), expectedResiduals, tolerance = 1e-10)
+  expect_equal(as.numeric(main$data$x), data$Time[selected])
+  line <- which(vapply(main$layers, function(layer) inherits(layer$geom, "GeomLine"), logical(1L)))
+  expect_length(line, 1L)
+  lineData <- ggplot2::ggplot_build(main)$data[[line]]
+  expect_identical(which(is.na(lineData$y)), which(is.na(expectedResiduals)))
+  expect_match(paste(unlist(plots$residContainer_residualTimeSeriesMissingNote), collapse = " "),
+               "Missing residuals appear as gaps", fixed = TRUE)
+
+  prepared <- jaspDescriptives::.tsPrepareData(NULL, actual$dataset, actual$options, TRUE, covariates = TRUE)
+  expectedRows <- 2L * match(selected, permutation)
+  expect_identical(rownames(prepared$data), as.character(expectedRows))
+  written <- NULL
+  scope <- new.env(parent = asNamespace("jaspTimeSeries"))
+  scope$createJaspColumn <- function(columnName, ...) {
+    expect_identical(columnName, "savedResiduals")
+    column <- new.env(parent = emptyenv())
+    column$dependOn <- function(...) invisible(NULL)
+    column$setScale <- function(value) { written <<- value; invisible(NULL) }
+    column
+  }
+  saveResiduals <- getFromNamespace(".tsSaveResiduals", "jaspTimeSeries")
+  environment(saveResiduals) <- scope
+  options <- actual$options
+  options$residualSavedToData <- TRUE
+  options$residualColumn <- "savedResiduals"
+  saveResiduals(prepared$data, prepared$raw, fit, options, new.env(parent = emptyenv()), TRUE, character())
+  expectedColumn <- rep(NA_real_, 176L)
+  expectedColumn[expectedRows] <- expectedResiduals
+  expect_equal(written, expectedColumn, tolerance = 1e-10)
+  expect_true(all(is.na(written[setdiff(seq_along(written), expectedRows)])))
+
+  expectedForecast <- forecast::forecast(fit, h = 3L)
+  forecasts <- arimaPreparationForecast(actual)
+  expect_equal(forecasts$y, as.numeric(expectedForecast$mean), tolerance = 1e-10)
+  expect_equal(forecasts$upper95, as.numeric(expectedForecast$upper[, "95%"]), tolerance = 1e-10)
+  forecastPlot <- arimaPreparationForecastPlot(actual)
+  expect_equal(forecastPlot$data$t, 1:83)
+  expect_equal(forecastPlot$data$y[1:80], data$y[selected])
+  expect_identical(serialize(fit, NULL), before)
+})
+
+test_that("ARIMA residual policies are local and preserve model forecasts", {
+  data <- arimaPreparationFixture()
+  data$y[c(1L, 2L, 25L, 48L)] <- NA_real_
+  reference <- arimaPreparationRun(data, time = FALSE)
+  for (policy in c("error", "longest")) {
+    actual <- arimaPreparationRun(data, residualAcf = TRUE, residualLjungBox = TRUE,
+      residualMaxLag = 3L, residualAcfMissingValues = policy, residualLjungBoxMissingValues = policy)
+    expectArimaPreparedLike(actual, reference, data$y)
+    plots <- actual$result$results$residContainer$collection
+    if (policy == "error") {
+      expect_match(paste(unlist(plots$residContainer_residualACFPlot), collapse = " "), "missing observations", fixed = TRUE)
+      expect_match(paste(unlist(plots$residContainer_ljungPlot), collapse = " "), "missing observations", fixed = TRUE)
+      expect_null(plots$residContainer_residualAcfMissingNote)
+      expect_null(plots$residContainer_residualLjungBoxMissingNote)
+    } else {
+      expect_identical(plots$residContainer_residualACFPlot$status, "complete")
+      expect_identical(plots$residContainer_ljungPlot$status, "complete")
+      expect_match(paste(unlist(plots$residContainer_residualAcfMissingNote), collapse = " "), "steps 3 to 24", fixed = TRUE)
+      expect_match(paste(unlist(plots$residContainer_residualLjungBoxMissingNote), collapse = " "), "steps 3 to 24", fixed = TRUE)
+    }
+  }
 })

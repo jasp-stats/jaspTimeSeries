@@ -77,7 +77,8 @@ test_that("saved columns distinguish tied timestamps by original row identity", 
   options <- optionsFor(transformationSavedToData = TRUE, transformationColumn = "transformed",
                         residualSavedToData = TRUE, residualColumn = "residual")
   scope$.tsSaveTransformation(data, raw, options, new.env(parent = emptyenv()), TRUE, character())
-  scope$.tsSaveResiduals(data, raw, list(residuals = c(11, 12, 13)), options,
+  fit <- list(x = ts(data$y), residuals = ts(c(11, 12, 13)))
+  scope$.tsSaveResiduals(data, raw, fit, options,
                         new.env(parent = emptyenv()), TRUE, character())
   transformed <- residual <- rep(NA_real_, 12)
   transformed[c(2, 9, 5)] <- c(101, 102, NA_real_)
@@ -243,5 +244,60 @@ test_that("residual Q-Q plots omit missing residuals without changing the fitted
     expect_identical(fit, originalFit)
     expect_identical(length(fit$x), nrow(data))
     expect_identical(which(is.na(fit$x)), as.integer(missing))
+  }
+})
+
+test_that("log and root transformations preserve missing positions and complete-data values", {
+  transform <- getFromNamespace(".tsTransformData", "jaspTimeSeries")
+  defaults <- list(log = FALSE, root = FALSE, boxCox = FALSE, detrend = FALSE, difference = FALSE)
+  cases <- list(
+    list(options = list(log = TRUE, logBase = "e"), expected = log),
+    list(options = list(log = TRUE, logBase = "10"), expected = log10),
+    list(options = list(root = TRUE, rootIndex = "square"), expected = sqrt),
+    list(options = list(root = TRUE, rootIndex = "cube"), expected = function(y) y^(1 / 3)),
+    list(options = list(log = TRUE, logBase = "e", root = TRUE, rootIndex = "square"),
+         expected = function(y) sqrt(log(y))),
+    list(options = list(log = TRUE, logBase = "10", root = TRUE, rootIndex = "cube"),
+         expected = function(y) log10(y)^(1 / 3))
+  )
+  for (case in cases) for (missing in list(integer(), c(1L, 3L, 6L))) {
+    data <- data.frame(y = c(1, 2.25, 4, 16, 64, 256), t = c(1, 2, 5, 5, 8, 13),
+                       row.names = c("8", "1", "9", "3", "13", "5"))
+    data$y[missing] <- NA_real_
+    before <- serialize(data, NULL)
+    actual <- transform(NULL, data, utils::modifyList(defaults, case$options), TRUE)
+    expect_equal(actual$y, case$expected(data$y), tolerance = 1e-12)
+    expect_identical(which(is.na(actual$y)), missing)
+    expect_identical(actual$t, data$t)
+    expect_identical(rownames(actual), rownames(data))
+    expect_identical(nrow(actual), nrow(data))
+    expect_identical(serialize(data, NULL), before)
+  }
+  for (index in c("square", "cube")) {
+    options <- utils::modifyList(defaults, list(root = TRUE, rootIndex = index))
+    actual <- transform(NULL, data.frame(y = c(NA_real_, 0, 1), t = 1:3), options, TRUE)
+    expect_identical(actual$y, c(NA_real_, 0, 1))
+  }
+})
+
+test_that("log and root range checks still reject invalid observed values alongside missing data", {
+  transform <- getFromNamespace(".tsTransformData", "jaspTimeSeries")
+  defaults <- list(log = FALSE, root = FALSE, boxCox = FALSE, detrend = FALSE, difference = FALSE)
+  for (base in c("e", "10")) for (invalid in c(0, -1)) {
+    options <- utils::modifyList(defaults, list(log = TRUE, logBase = base))
+    expect_error(transform(NULL, data.frame(y = c(NA_real_, invalid, 4), t = 1:3), options, TRUE),
+                 "Data cannot be zero or negative for log transformation.", fixed = TRUE, class = "validationError")
+  }
+  for (index in c("square", "cube")) {
+    options <- utils::modifyList(defaults, list(root = TRUE, rootIndex = index))
+    expect_error(transform(NULL, data.frame(y = c(NA_real_, -1, 4), t = 1:3), options, TRUE),
+                 "Data cannot be negative for root transformation.", fixed = TRUE, class = "validationError")
+    for (base in c("e", "10")) {
+      options <- utils::modifyList(options, list(log = TRUE, logBase = base))
+      expect_error(transform(NULL, data.frame(y = c(NA_real_, 0.5, 4), t = 1:3), options, TRUE),
+                   "The log transformation produced negative values", fixed = TRUE, class = "validationError")
+      expect_error(transform(NULL, data.frame(y = c(NA_real_, 0, 4), t = 1:3), options, TRUE),
+                   "Data cannot be zero or negative for log transformation.", fixed = TRUE, class = "validationError")
+    }
   }
 })

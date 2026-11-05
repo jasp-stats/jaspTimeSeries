@@ -51,7 +51,7 @@ test_that("BSTS explains unavailable Harvey statistics for missing responses", {
   expect_identical(table$rows, list(list(resSd = expected$residual.sd,
     predSd = expected$prediction.sd, R2 = expected$rsquare, relGof = ".")))
   expect_identical(table$footnotes, list(list(
-    message = "Harvey's goodness of fit is unavailable because the dependent variable contains missing observations.",
+    message = "Harvey's goodness of fit is unavailable when the dependent variable contains missing observations.",
     colNames = "relGof")))
   expect_identical(serialize(fit, NULL), before)
 })

@@ -19,6 +19,8 @@
 
 #' Gaussian State Space Models
 #'
+#' @param aggregatedStatesPlotCiLevel, Sets the credible interval for the aggregated state, residual, and one-step-ahead prediction error plots.
+#'    Defaults to \code{0.95}.
 #' @param dynamicRegregressionComponent, This component allows you to model the effect of covariates or fixed factors on the dependent variable. Only available when covariates or fixed factors are present in the model.
 #'    Defaults to \code{FALSE}.
 bayesianStateSpace <- function(

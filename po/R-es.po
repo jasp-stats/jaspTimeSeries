@@ -2,7 +2,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: jaspTimeSeries 0.17.3\n"
-"POT-Creation-Date: 2026-10-07 21:21\n"
+"POT-Creation-Date: 2026-11-05 04:36\n"
 "PO-Revision-Date: 2025-07-26 07:51+0000\n"
 "Last-Translator: ecadrian <ecadrian@hotmail.com>\n"
 "Language-Team: Spanish <https://hosted.weblate.org/projects/jasp/jasptimeseries-r/es/>\n"
@@ -135,9 +135,14 @@ msgid "Forecasts"
 msgstr "Predicciones"
 
 msgid ""
-"The following covariates contain missing values or values that cannot be "
-"interpreted as numbers: %1$s. Covariates must be numeric. For categorical "
-"predictors, use Fixed Factors."
+"The following covariates contain missing values: %1$s. Resolve the missing "
+"values before fitting the model."
+msgstr ""
+
+msgid ""
+"The following covariates contain values that cannot be interpreted as "
+"numbers: %1$s. Covariates must be numeric. For categorical predictors, use "
+"Fixed Factors."
 msgstr ""
 
 msgid ""
@@ -213,15 +218,15 @@ msgstr ""
 "el modelo, puede hacerlo en 'Componentes del Modelo'."
 
 msgid ""
-"Harvey's goodness of fit is unavailable because the dependent variable "
+"Harvey's goodness of fit is unavailable when the dependent variable "
 "contains missing observations."
 msgstr ""
 
 msgid "Harvey's goodness of fit could not be computed."
 msgstr ""
 
-msgid "Posterior Summary of Coefficients"
-msgstr "Resumen posterior de Coeficientes"
+msgid "Model-Averaged Coefficient Estimates"
+msgstr ""
 
 msgid "%s%% Credible Interval"
 msgstr "Intervalo con el %s%% de Credibilidad"
@@ -241,11 +246,37 @@ msgstr "Media"
 msgid "SD"
 msgstr "DT"
 
-msgid "Mean<sub>inclusion</sub>"
-msgstr "Media<sub>inclusión</sub>"
+msgid ""
+"Estimates include all retained draws, including zeros when a predictor was "
+"excluded."
+msgstr ""
 
-msgid "SD<sub>inclusion</sub>"
-msgstr "DT<sub>inclusión</sub>"
+msgid "Coefficient Estimates Conditional on Inclusion"
+msgstr ""
+
+msgid "Included draws"
+msgstr ""
+
+msgid ""
+"Estimates use only retained draws in which the predictor was included (its "
+"coefficient was nonzero). These intervals describe coefficient uncertainty "
+"conditional on inclusion; they do not measure evidence for inclusion."
+msgstr ""
+
+msgid ""
+"Conditional estimates may be unreliable when based on few included draws. "
+"Included draws are MCMC draws, not independent observations."
+msgstr ""
+
+msgid ""
+"No retained draws included this predictor; conditional estimates are "
+"unavailable."
+msgstr ""
+
+msgid ""
+"Only one retained draw included this predictor; its conditional SD and "
+"credible interval are unavailable."
+msgstr ""
 
 msgid "State Plots"
 msgstr "Gráficos de Estado"
@@ -486,4 +517,33 @@ msgid "Observation step"
 msgstr ""
 
 msgid "Steps ahead"
+msgstr ""
+
+
+#~ msgid "Mean<sub>inclusion</sub>"
+#~ msgstr "Media<sub>inclusión</sub>"
+
+#~ msgid "Posterior Summary of Coefficients"
+#~ msgstr "Resumen posterior de Coeficientes"
+
+#~ msgid "SD<sub>inclusion</sub>"
+#~ msgstr "DT<sub>inclusión</sub>"
+
+msgid ""
+"The maximum lag must be positive and smaller than the number of selected "
+"observations (%s)."
+msgstr ""
+
+msgid "The Ljung-Box test failed for the selected observations."
+msgstr ""
+
+msgid ""
+"The selected spectrum contains zero or invalid values and cannot be plotted "
+"on a logarithmic scale."
+msgstr ""
+
+msgid "Desired MCMC draws must be a positive whole number."
+msgstr ""
+
+msgid "At least two observed values of the dependent variable are required to initialize a local level or semilocal trend component."
 msgstr ""

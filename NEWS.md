@@ -16,6 +16,7 @@
 # jaspTimeSeries (development version)
 
 ## Added
+* Added explicit missing-observation choices for autocorrelation plots, stationarity tests, spectral analysis, and ARIMA's Ljung-Box diagnostics: report an error (default), omit missing values only at the ends, or use the longest complete segment. Selected ranges are reported without changing model inputs or saved-row alignment.
 * Integrated the Bayesian State Space Models analysis from the standalone `jaspBsts` module, originally developed by Fridtjof Petersen.
 
 ## Changed
@@ -25,6 +26,13 @@
 * Updated module metadata to use the project website and a consistent package title.
 
 ## Fixed
+* Initialize Bayesian local-level and semilocal-trend priors from the first observed response when the series starts with missing values, preserving every time step for estimation and residual plots.
+* Load the Bayesian state space summary methods with the module so restored models can regenerate their tables in a fresh R session.
+* Made the shared credible-interval setting accessible independently of the aggregated state plot and clarified that it also controls the residual and one-step-ahead prediction error plots.
+* Corrected the seasonal prior labels to show standard deviations in the dependent variable's original units, without changing the priors or their defaults.
+* Ignore the Bayesian state space dynamic regression option when no predictors remain in the model, preventing a crash after removing predictors or model terms.
+* Allow any positive whole-number count of desired Bayesian state space MCMC draws, including counts not divisible by ten, and report invalid counts clearly.
+* Preserve gaps in the Bayesian state space residual plot when responses are missing, instead of terminating the analysis while calculating the residual interval.
 * Accept unambiguous dates with one- or two-digit days and months. Date-only End filters include the full UTC day; timestamp End filters retain the exact cutoff.
 * Warn when a row filter skips observations between retained observations in Time order, while allowing the analysis to continue.
 * Warn and use spreadsheet row order when decimal and year.month interpretations of text Time disagree; numeric Scale values keep decimal ordering.

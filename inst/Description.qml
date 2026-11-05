@@ -59,7 +59,8 @@ Description
 
 	Analysis
 	{
-		title:		qsTr("Gaussian State Space Models")
+		menu:		qsTr("Gaussian State Space Models")
+		title:		qsTr("Bayesian Gaussian State Space Models")
 		func:		"bayesianStateSpace"
 		qml:		"bayesianStateSpace.qml"
 		hasWrapper:	true

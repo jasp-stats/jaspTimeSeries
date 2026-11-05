@@ -1,5 +1,5 @@
-# Real analysis-runtime checks of the shared ordering contract. The main time
-# series plot is disabled; ACF and spectral plot data are inspected directly.
+# Real analysis-runtime checks of the shared ordering contract. Plot data and
+# transformed values are inspected directly.
 ssPreparationOptions <- function(analysis, ...) {
   options <- jaspTools::analysisOptions(analysis)
   options[["dependent"]] <- "y"
@@ -91,7 +91,8 @@ test_that("Stationarity prepares numeric and date Time before detrending and dif
   data$y[c(8L, 27L)] <- NA_real_
   options <- ssPreparationOptions("StationarityTimeSeries", detrend = TRUE,
     polynomialSpecification = "custom", detrendPoly = 2L,
-    difference = TRUE, differenceLag = 1L, differenceOrder = 1L)
+    difference = TRUE, differenceLag = 1L, differenceOrder = 1L,
+    testMissingValues = "longest", acfMissingValues = "longest")
   reference <- ssPreparationRun("StationarityTimeSeries", data,
     utils::modifyList(options, list(time = "")))
   shuffle <- c(seq(2L, 48L, 2L), seq(1L, 48L, 2L))
@@ -104,6 +105,62 @@ test_that("Stationarity prepares numeric and date Time before detrending and dif
                  ssPreparationTable(reference, "stationaryTable"), tolerance = 1e-10)
     expect_equal(ssPreparationAcf(actual), ssPreparationAcf(reference), tolerance = 1e-10)
     expect_true(!is.null(actual$results$timeSortingNote))
+  }
+})
+
+test_that("Stationarity log and root analyses retain gaps in plots and saved values", {
+  data <- ssPreparationFixture()
+  data$y[c(1L, 17L, 48L)] <- NA_real_
+  permutation <- c(seq(2L, 48L, 2L), seq(1L, 47L, 2L))
+  input <- data[permutation, ]
+  rownames(input) <- as.character(seq(2L, 96L, 2L))
+  cases <- list(
+    list(options = list(log = TRUE, logBase = "e"), expected = log),
+    list(options = list(root = TRUE, rootIndex = "square"), expected = sqrt),
+    list(options = list(log = TRUE, logBase = "10", root = TRUE, rootIndex = "cube"),
+         expected = function(y) log10(y)^(1 / 3))
+  )
+  for (case in cases) {
+    options <- utils::modifyList(ssPreparationOptions("StationarityTimeSeries",
+      acf = FALSE, timeSeriesPlot = TRUE, timeSeriesPlotType = "both",
+      timeSeriesPlotDistribution = "none"), case$options)
+    result <- ssPreparationRun("StationarityTimeSeries", input, options)
+    expect_identical(result$results$timeSeriesPlot$status, "complete")
+    plot <- result$state$figures[[result$results$timeSeriesPlot$data]]$obj
+    if (jaspGraphs::isJaspPlotRecipe(plot))
+      plot <- jaspGraphs::materializeJaspPlotRecipe(plot)
+    main <- if (inherits(plot, "jaspMatrixPlot")) plot$subplots$mainPlot else plot
+    expect_s3_class(main, "ggplot")
+    expected <- case$expected(data$y)
+    expect_equal(as.numeric(main$data$y), expected, tolerance = 1e-12)
+    expect_equal(as.numeric(main$data$x), data$Time)
+    expect_identical(which(is.na(main$data$y)), c(1L, 17L, 48L))
+    line <- which(vapply(main$layers, function(layer) inherits(layer$geom, "GeomLine"), logical(1L)))
+    expect_length(line, 1L)
+    expect_identical(which(is.na(ggplot2::ggplot_build(main)$data[[line]]$y)), c(1L, 17L, 48L))
+
+    # Exercise real preparation/transformation with only the native column sink
+    # collected. This does not certify Desktop spreadsheet writes or test policy.
+    prepared <- jaspDescriptives::.tsPrepareData(NULL, input, options, TRUE)
+    transformed <- getFromNamespace(".tsTransformData", "jaspTimeSeries")(NULL, prepared$data, options, TRUE)
+    written <- NULL
+    scope <- new.env(parent = asNamespace("jaspTimeSeries"))
+    scope$createJaspColumn <- function(columnName, ...) {
+      expect_identical(columnName, "preparedTransformation")
+      column <- new.env(parent = emptyenv())
+      column$dependOn <- function(...) invisible(NULL)
+      column$setScale <- function(value) { written <<- value; invisible(NULL) }
+      column
+    }
+    save <- getFromNamespace(".tsSaveTransformation", "jaspTimeSeries")
+    environment(save) <- scope
+    options$transformationSavedToData <- TRUE
+    options$transformationColumn <- "preparedTransformation"
+    save(transformed, prepared$raw, options, new.env(parent = emptyenv()), TRUE, character())
+    expectedColumn <- rep(NA_real_, 96L)
+    expectedColumn[2L * match(seq_len(48L), permutation)] <- expected
+    expect_equal(written, expectedColumn, tolerance = 1e-12)
+    expect_identical(which(is.na(written)), which(is.na(expectedColumn)))
   }
 })
 
@@ -236,4 +293,46 @@ test_that("saved Stationarity transformations retain original row identity after
     expect_true(!is.null(result$timeTiesNote))
     expect_identical(which(!is.na(writes$preparedTransformation)), which(!is.na(expected)))
   }
+})
+
+test_that("Stationarity missing policies fail locally and permit explicit end trimming after differencing", {
+  data <- ssPreparationFixture()
+  options <- ssPreparationOptions("StationarityTimeSeries", difference = TRUE,
+    differenceLag = 1L, differenceOrder = 1L, timeSeriesPlot = TRUE,
+    timeSeriesPlotType = "both", timeSeriesPlotDistribution = "none",
+    testMissingValues = "error", acfMissingValues = "error")
+  strict <- ssPreparationRun("StationarityTimeSeries", data, options)
+  expect_match(paste(unlist(strict$results$stationaryTable), collapse = " "), "missing observations", fixed = TRUE)
+  expect_match(paste(unlist(strict$results$acfPlot), collapse = " "), "missing observations", fixed = TRUE)
+  expect_identical(strict$results$timeSeriesPlot$status, "complete")
+  expect_null(strict$results$acfMissingNote)
+
+  trimmed <- ssPreparationRun("StationarityTimeSeries", data,
+    utils::modifyList(options, list(testMissingValues = "trim", acfMissingValues = "trim")))
+  expect_true(length(ssPreparationTable(trimmed, "stationaryTable")) > 0L)
+  expected <- as.numeric(stats::acf(diff(data$y), plot = FALSE, lag.max = 8L)$acf)[-1L]
+  expect_equal(ssPreparationAcf(trimmed)$acf, expected, tolerance = 1e-10)
+  expect_match(paste(unlist(trimmed$results$acfMissingNote), collapse = " "), "47 of 48", fixed = TRUE)
+  expect_match(paste(unlist(trimmed$results$stationaryTable$footnotes), collapse = " "), "steps 2 to 48", fixed = TRUE)
+})
+
+test_that("Spectral policy selects a complete segment after ordering and filtering", {
+  data <- ssPreparationFixture()
+  data$y[c(1L, 12L, 48L)] <- NA_real_
+  input <- data[c(25:48, 1:24), ]
+  options <- ssPreparationOptions("SpectralTimeSeries", filter = TRUE, filterBy = "time",
+    timeStart = data$Time[5], timeEnd = data$Time[43], missingValues = "error")
+  strict <- ssPreparationRun("SpectralTimeSeries", input, options)
+  expect_match(paste(unlist(strict$results$bandWidthTable), collapse = " "), "missing observations", fixed = TRUE)
+  expect_match(paste(unlist(strict$results$powerSpectralDensity), collapse = " "), "missing observations", fixed = TRUE)
+  expect_null(strict$results$spectralMissingNote)
+
+  longest <- ssPreparationRun("SpectralTimeSeries", input, utils::modifyList(options, list(missingValues = "longest")))
+  reference <- ssPreparationRun("SpectralTimeSeries", data[13:43, ],
+    ssPreparationOptions("SpectralTimeSeries", time = "", missingValues = "error"))
+  expect_equal(ssPreparationTable(longest, "bandWidthTable"), ssPreparationTable(reference, "bandWidthTable"), tolerance = 1e-10)
+  expect_equal(ssPreparationPlot(longest, "powerSpectralDensity")$data,
+               ssPreparationPlot(reference, "powerSpectralDensity")$data, tolerance = 1e-10)
+  expect_match(paste(unlist(longest$results$spectralMissingNote), collapse = " "), "31 of 39", fixed = TRUE)
+  expect_match(paste(unlist(longest$results$bandWidthTable$footnotes), collapse = " "), "steps 9 to 39", fixed = TRUE)
 })

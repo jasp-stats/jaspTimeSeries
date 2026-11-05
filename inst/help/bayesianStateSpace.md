@@ -18,9 +18,9 @@ The Gaussian State Space Model decomposes the hidden state of a time series into
 - Fixed Factors: Categorical predictor variables that will be recoded internally to dummy variables (optional)
 
 #### Output
-- Posterior summary of coefficients: Output table containing the marginal posterior summary of coefficients
-  - Show means across draws included: Additionally shows each coefficient's mean across draws in which the corresponding predictor was included in the model.
-  - Credible Interval: Determines the credible interval shown for the coefficients, given they are included in the model
+- Posterior summary of coefficients: Shows model-averaged coefficient estimates, using all retained MCMC draws, including zeros when a predictor was excluded.
+  - Show estimates conditional on inclusion: Adds a separate table of coefficient estimates using only retained draws in which the predictor was included. This table includes conditional means, standard deviations and credible intervals, together with posterior inclusion probabilities and the number of included draws.
+  - Credible Interval: Sets the credible interval level for both coefficient tables. The model-averaged intervals include zero-valued excluded draws; the conditional intervals use only included draws.
 - Expected predictors: Number of predictors that are expected, affects prior inclusion probability
 
 ### Model Components
@@ -45,17 +45,18 @@ The Gaussian State Space Model decomposes the hidden state of a time series into
   - Number: The total number of seasons to be included after which cycle starts again (e.g. 12 for monthly seasonality or 52 for weekly). Each season gets a dummy variable with dynamic coefficients following a random walk
   - Duration: The number of data points each season contains. For example if we have a weekly time series (i.e. 54 data points for 54 weeks) but want to model a monthly seasonality we would set the `Number` to 12 and the `Duration` to 4 as each season lasts/contains 4 time points.
   - Inverse gamma prior for σ: This prior determines the expectations regarding the σ of the random walk. Parameterised as a scaled inverse Chi-Squared distribution:
-    - σ: Prior guess for the standard deviation
+    - σ: Prior guess for the standard deviation, in the dependent variable's original units.
     - n: Prior observation count/degrees of freedom that weight the σ guess
   - Normal Prior initial state: This normal distribution determines our expectation regarding the first value of our seasonality which is then used by the Kalman filter:
     - μ: Mean of prior distribution
-    - σ: Standard deviation of prior distribution
+    - σ: Standard deviation of the prior distribution, in the dependent variable's original units.
 
 ### Plots
 ---
+- Credible interval (aggregated state and errors): Sets the percentage of the posterior distribution shown in the central credible bands for the aggregated state, residual, and one-step-ahead prediction error plots. This setting is available independently of which plots are selected. Component-state, prediction, and control-chart intervals remain at 95%.
+
 #### State Plots
 - Aggregated state contribution: Plots the aggregated state where all state components (such as local level or regression components) are added together
-  - Credible Interval: Changes the percentile of MCMC draws that is used to plot the credible interval
   - Show observation: Adds the actual observations on top of the plot.
 - Component state contribution: Plots the individual state contributions of each component
 
@@ -95,17 +96,28 @@ This table summarises the overall fit of the model:
 - R²: Proportion of the variance of the original series that is explained by the state space model
 - Harvey's goodness of fit:  Proportion of variance explained when estimations are not compared with sample mean to compute variance but rather a random walk. More appropriate for time series data.
 
-#### Posterior Summary of Coefficients
-This table summarises the prior and posterior information of the predictor variables and their coefficients:
+#### Model-Averaged Coefficient Estimates
+This table summarises the prior and posterior information of the predictor variables and their coefficients. Coefficient estimates use all retained MCMC draws, including zeros when a predictor was excluded, and therefore account for uncertainty about inclusion:
 - Coefficients: Names of the predictor variables
-- P(incl): The posterior probability that a variable is included
+- P(incl): The prior probability that a predictor is included in the model.
 - P(incl|data): The posterior probability that a predictor is included in the model, meaning its coefficient is nonzero, regardless of sign.
 - BF_inclusion: Quantifies how strongly our beliefs about the inclusion probability of each predictor changes.
-- Mean: The mean of each coefficient across all MCMC draws where (regardless of whether variable was included as predictor)
-- SD: Standard deviation of each coefficient across all MCMC draws
-- Mean_inclusion: Mean of each coefficient across draws in which it was nonzero.
-- SD_inclusion: Standard deviation of each coefficient given they were included
-- Credible Interval: Credible Interval of the mean of each coefficient given they were included in the model
+- Mean: Mean of each coefficient across all retained MCMC draws.
+- SD: Standard deviation of each coefficient across all retained MCMC draws.
+- Credible Interval: Posterior credible interval for each coefficient across all retained MCMC draws, including zeros when the predictor was excluded.
+
+A model-averaged interval can have both bounds at zero when sufficient posterior probability is concentrated at zero. This does not mean that the coefficient is certainly zero.
+
+#### Coefficient Estimates Conditional on Inclusion
+This optional table summarises each coefficient using only retained draws in which its predictor was included (the coefficient was nonzero, regardless of sign). Predictors appear in the same order as in the model-averaged table:
+- Coefficients: Names of the predictor variables.
+- P(incl|data): Posterior inclusion probability, calculated using all retained draws. This is repeated to keep the probability of inclusion visible alongside the conditional estimates.
+- Included draws: Number of retained draws in which the predictor was included. Conditional estimates may be unreliable when based on few included draws.
+- Mean: Mean of the coefficient across included draws.
+- SD: Standard deviation of the coefficient across included draws.
+- Credible Interval: Posterior credible interval for the coefficient conditional on inclusion, calculated from included draws only.
+
+If no retained draws include a predictor, its conditional mean, SD and interval are unavailable. With only one included draw, the mean is shown, but the SD and interval are unavailable. Conditional intervals describe coefficient uncertainty assuming inclusion; they do not measure evidence for including the predictor.
 
 #### State Plots:
 - Aggregated State: Time stamps are on the x-axis and the actual distribution of the estimated states on the y-axis. If the option `Actual observations` is selected, the real dependent variable values will be shown as points.

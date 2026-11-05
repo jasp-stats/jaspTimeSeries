@@ -29,6 +29,16 @@ Form
     Group
     {
         title: qsTr("Spectral density")
+
+        RadioButtonGroup
+        {
+            name: "missingValues"
+            title: qsTr("Missing observations")
+            info: qsTr("Applies only to this calculation. Report an error stops this output if any observations are missing. Omit missing observations at the ends removes only leading and trailing missing values; internal missing values still cause an error. Use the longest complete segment selects the longest consecutive run without missing values, using the earliest run when tied. When observations are omitted, the retained range and observation count are reported. The original data are unchanged.")
+            RadioButton { value: "error"; label: qsTr("Report an error"); checked: true }
+            RadioButton { value: "trim"; label: qsTr("Omit missing observations at the ends") }
+            RadioButton { value: "longest"; label: qsTr("Use the longest complete segment") }
+        }
         CheckBox
         {
             name: "kernel"

@@ -775,6 +775,10 @@ msgid "Bayesian"
 msgstr ""
 
 msgctxt "Description|"
+msgid "Bayesian Gaussian State Space Models"
+msgstr ""
+
+msgctxt "Description|"
 msgid "Gaussian State Space Models"
 msgstr ""
 
@@ -803,8 +807,8 @@ msgid "Posterior summary of coefficients"
 msgstr "係數的後驗摘要"
 
 msgctxt "bayesianStateSpace|"
-msgid "Show means across draws included"
-msgstr "顯示納入抽樣的平均值"
+msgid "Show estimates conditional on inclusion"
+msgstr ""
 
 msgctxt "bayesianStateSpace|"
 msgid "Credible interval"
@@ -1214,4 +1218,100 @@ msgid ""
 "date-only End includes the entire day; an End with a time uses that exact "
 "cutoff. Time or date filtering requires a usable Time variable; otherwise, "
 "select Row number or disable filtering."
+msgstr ""
+
+
+#~ msgctxt "bayesianStateSpace|"
+#~ msgid "Show means across draws included"
+#~ msgstr "顯示納入抽樣的平均值"
+
+msgctxt "ARIMATimeSeries|"
+msgid ""
+"Applies only to this calculation. Report an error stops this output if any "
+"observations are missing. Omit missing observations at the ends removes only "
+"leading and trailing missing values; internal missing values still cause an "
+"error. Use the longest complete segment selects the longest consecutive run "
+"without missing values, using the earliest run when tied. When observations "
+"are omitted, the retained range and observation count are reported. The "
+"original data are unchanged."
+msgstr ""
+
+msgctxt "ARIMATimeSeries|"
+msgid "Missing observations"
+msgstr ""
+
+msgctxt "ARIMATimeSeries|"
+msgid "Omit missing observations at the ends"
+msgstr ""
+
+msgctxt "ARIMATimeSeries|"
+msgid "Report an error"
+msgstr ""
+
+msgctxt "ARIMATimeSeries|"
+msgid "Use the longest complete segment"
+msgstr ""
+
+msgctxt "SpectralTimeSeries|"
+msgid ""
+"Applies only to this calculation. Report an error stops this output if any "
+"observations are missing. Omit missing observations at the ends removes only "
+"leading and trailing missing values; internal missing values still cause an "
+"error. Use the longest complete segment selects the longest consecutive run "
+"without missing values, using the earliest run when tied. When observations "
+"are omitted, the retained range and observation count are reported. The "
+"original data are unchanged."
+msgstr ""
+
+msgctxt "SpectralTimeSeries|"
+msgid "Missing observations"
+msgstr ""
+
+msgctxt "SpectralTimeSeries|"
+msgid "Omit missing observations at the ends"
+msgstr ""
+
+msgctxt "SpectralTimeSeries|"
+msgid "Report an error"
+msgstr ""
+
+msgctxt "SpectralTimeSeries|"
+msgid "Use the longest complete segment"
+msgstr ""
+
+msgctxt "StationarityTimeSeries|"
+msgid ""
+"Applies only to this calculation. Report an error stops this output if any "
+"observations are missing. Omit missing observations at the ends removes only "
+"leading and trailing missing values; internal missing values still cause an "
+"error. Use the longest complete segment selects the longest consecutive run "
+"without missing values, using the earliest run when tied. When observations "
+"are omitted, the retained range and observation count are reported. The "
+"original data are unchanged."
+msgstr ""
+
+msgctxt "StationarityTimeSeries|"
+msgid "Missing observations"
+msgstr ""
+
+msgctxt "StationarityTimeSeries|"
+msgid "Omit missing observations at the ends"
+msgstr ""
+
+msgctxt "StationarityTimeSeries|"
+msgid "Report an error"
+msgstr ""
+
+msgctxt "StationarityTimeSeries|"
+msgid "Use the longest complete segment"
+msgstr ""
+
+msgctxt "bayesianStateSpace|"
+msgid "Credible interval (aggregated state and errors)"
+msgstr ""
+
+msgctxt "bayesianStateSpace|"
+msgid ""
+"Sets the credible interval for the aggregated state, residual, and one-step-"
+"ahead prediction error plots."
 msgstr ""

@@ -46,6 +46,7 @@ bayesianStateSpaceInternal <- function(jaspResults, dataset, options) {
   # Output containers, tables, and plots based on the results. These functions should not return anything!
   .bstsCreateModelSummaryTable(jaspResults,options,ready)
   .bstsCreateCoefficientTable(jaspResults,options,ready)
+  .bstsCreateConditionalCoefficientTable(jaspResults,options,ready)
   .bstsCreateStatePlots(jaspResults,dataset,options,ready)
   .bstsCreatePredictionPlot(jaspResults,options,ready)
   .bstsCreateControlPlots(jaspResults,options,ready)
@@ -80,23 +81,42 @@ bayesianStateSpaceInternal <- function(jaspResults, dataset, options) {
 }
 
 .bstsErrorHandling <- function(dataset, options) {
-  # Numeric conversion can introduce missing values for text covariates.
   errors <- .hasErrors(dataset = dataset,
                        type = "missingValues",
                        missingValues.target = options$covariates,
                        exitAnalysisIfErrors = FALSE)
-  if (!identical(errors, FALSE))
-    .quitAnalysis(gettextf("The following covariates contain missing values or values that cannot be interpreted as numbers: %1$s. Covariates must be numeric. For categorical predictors, use Fixed Factors.",
-                          paste(errors$missingValues, collapse = ", ")))
-  return(FALSE)
+  if (identical(errors, FALSE)) return(FALSE)
+
+  # A numeric read turns both missing entries and nonnumeric values into NA.
+  # Read only the affected columns as factors to distinguish these cases using
+  # JASP's missing-value handling, without changing the numeric analysis data.
+  # Both reads use the same spreadsheet filter and preserve row order.
+  affected <- errors$missingValues
+  original <- .readDataSetToEnd(columns.as.factor = affected)
+  missing <- nonNumeric <- character()
+  for (variable in affected) {
+    numericMissing <- is.na(dataset[[variable]])
+    originalMissing <- is.na(original[[variable]])
+    if (any(numericMissing & originalMissing))
+      missing <- c(missing, variable)
+    if (any(numericMissing & !originalMissing))
+      nonNumeric <- c(nonNumeric, variable)
+  }
+
+  messages <- character()
+  if (length(missing))
+    messages <- c(messages, gettextf("The following covariates contain missing values: %1$s. Resolve the missing values before fitting the model.",
+                                   paste(missing, collapse = ", ")))
+  if (length(nonNumeric))
+    messages <- c(messages, gettextf("The following covariates contain values that cannot be interpreted as numbers: %1$s. Covariates must be numeric. For categorical predictors, use Fixed Factors.",
+                                   paste(nonNumeric, collapse = ", ")))
+  .quitAnalysis(paste(messages, collapse = "\n\n"))
 }
 
 .bstsModelDependencies <- function() {
   return(c("dependent",
            "covariates",
-           "posteriorSummaryTable",
            "expectedPredictors",
-           "posteriorSummaryCiLevel",
            "distFam",
            "samples",
            "seed",
@@ -165,10 +185,23 @@ bayesianStateSpaceInternal <- function(jaspResults, dataset, options) {
 
 .bstsResultsHelper <- function(dataset,options) {
 
+  samples <- options$samples
+  if (!is.numeric(samples) || is.complex(samples) || length(samples) != 1L ||
+      !is.finite(samples) || samples < 1 || samples != floor(samples))
+    .quitAnalysis(gettext("Desired MCMC draws must be a positive whole number."))
+
+  response <- dataset[, options[["dependent"]]]
+  # These two state constructors use y only for default prior scales and the
+  # initial level. Use its first observed value, retaining every row for fitting.
+  observedResponse <- response[!is.na(response)]
+  if ((options$localLevelComponent || options$semiLocalLinearTrendComponent) &&
+      length(observedResponse) < 2L)
+    .quitAnalysis(gettext("At least two observed values of the dependent variable are required to initialize a local level or semilocal trend component."))
+
   predictors = NULL
   if (length(options$covariates)>0|length(options$fixedFactors) >0)
     predictors <- .bstsGetPredictors(options$modelTerms)
-  formula = .bstsGetFormula(dependent=dataset[,options[["dependent"]]],predictors = predictors,options)
+  formula = .bstsGetFormula(dependent=response,predictors = predictors,options)
 
   ss   <- list()
   #AddAr
@@ -183,7 +216,7 @@ bayesianStateSpaceInternal <- function(jaspResults, dataset, options) {
   #Add local level Component
 
   if(options$localLevelComponent)
-    ss <- bsts::AddLocalLevel(ss,y=dataset[,options[["dependent"]]])
+    ss <- bsts::AddLocalLevel(ss,y=observedResponse)
 
   # Add Local Linear trend component
 
@@ -193,10 +226,10 @@ bayesianStateSpaceInternal <- function(jaspResults, dataset, options) {
   # Add semi-local linear trend
 
   if(options$semiLocalLinearTrendComponent)
-    ss <- bsts::AddSemilocalLinearTrend(ss,y=dataset[,options[["dependent"]]])
+    ss <- bsts::AddSemilocalLinearTrend(ss,y=observedResponse)
 
 
-  if(options$dynamicRegregressionComponent)# & options$dynamicRegregressionLags==0)
+  if (options$dynamicRegregressionComponent && !is.null(predictors))
     ss <- bsts::AddDynamicRegression(ss,formula=formula,data=dataset)
 
 
@@ -224,6 +257,7 @@ bayesianStateSpaceInternal <- function(jaspResults, dataset, options) {
                       data=dataset,
                       state.specification = ss,
                       niter = options$samples,
+                      ping = 0,
                       timestamps=NULL,
                       seed = options$seed,
                       expected.model.size = options$expectedPredictors,
@@ -425,7 +459,7 @@ quantInv <- function(distr, value){
   if (is.na(res$relative.gof)) {
     res$relative.gof <- "."
     message <- if (anyNA(bstsResults$original.series))
-      gettext("Harvey's goodness of fit is unavailable because the dependent variable contains missing observations.")
+      gettext("Harvey's goodness of fit is unavailable when the dependent variable contains missing observations.")
     else
       gettext("Harvey's goodness of fit could not be computed.")
     bstsTable$addFootnote(message, colNames = "relGof")
@@ -443,12 +477,13 @@ quantInv <- function(distr, value){
 
 # table for regression coefficients"
 .bstsCreateCoefficientTable <- function(jaspResults,options,ready){
-  if(!is.null(jaspResults[["bstsMainContainer"]][["bstsCoefficientSummaryTable"]]) | !length(options$modelTerms) >0 | !ready | !options$posteriorSummaryTable) return()
+  if (!ready || !length(options$modelTerms) || !options$posteriorSummaryTable ||
+      !is.null(jaspResults[["bstsMainContainer"]][["bstsCoefficientSummaryTable"]])) return()
 
 
   bstsResults <- jaspResults[["bstsMainContainer"]][["bstsModelResults"]]$object
-  bstsCoefficientTable <- createJaspTable(title = gettext("Posterior Summary of Coefficients"))
-  bstsCoefficientTable$dependOn(c("posteriorSummaryTable","showCoefMeanInc","posteriorSummaryCiLevel",
+  bstsCoefficientTable <- createJaspTable(title = gettext("Model-Averaged Coefficient Estimates"))
+  bstsCoefficientTable$dependOn(c("posteriorSummaryTable","posteriorSummaryCiLevel",
                                  .bstsBurnDependencies()))
   bstsCoefficientTable$position <- 2
 
@@ -459,12 +494,9 @@ quantInv <- function(distr, value){
   bstsCoefficientTable$addColumnInfo(name = "BFinc",      title = gettext("BF<sub>inclusion</sub>"), type = "number")
   bstsCoefficientTable$addColumnInfo(name = 'mean',       title = gettext("Mean"),                   type = "number")
   bstsCoefficientTable$addColumnInfo(name = "sd",         title = gettext("SD"),                     type = "number")
-  if (options$showCoefMeanInc){
-    bstsCoefficientTable$addColumnInfo(name = 'meanInc',  title = gettext("Mean<sub>inclusion</sub>"), type = "number")
-    bstsCoefficientTable$addColumnInfo(name = "sdInc",    title = gettext("SD<sub>inclusion</sub>"), type = "number")
-  }
   bstsCoefficientTable$addColumnInfo(name = "lowerCri",   title = gettext("Lower"),         type = "number", overtitle = overtitle)
   bstsCoefficientTable$addColumnInfo(name = "upperCri",   title = gettext("Upper"),         type = "number", overtitle = overtitle)
+  bstsCoefficientTable$addFootnote(gettext("Estimates include all retained draws, including zeros when a predictor was excluded."))
 
   .bstsFillCoefficientTable(bstsResults,bstsCoefficientTable,options,ready)
 
@@ -473,21 +505,17 @@ quantInv <- function(distr, value){
 }
 
 .bstsFillCoefficientTable <- function(bstsResults,bstsCoefficientTable,options,ready) {
+  if (!ready) return()
   res <- as.data.frame(summary(bstsResults, burn = options$burn, order = FALSE)$coefficients)
   res$priorInc <- bstsResults$prior$prior.inclusion.probabilities
   res$BFinc <- res$inc.prob/(1-res$inc.prob)
 
 
 
-  condQuantile <- function(beta,ci){
-    if (length(beta)>0)
-      return(quantile(beta,ci))
-    return(0)
-  }
   ci <- options$posteriorSummaryCiLevel
   coefficients <- bstsResults$coefficients[.bstsRetainedDraws(bstsResults, options$burn), , drop = FALSE]
-  res$lo_ci <- apply(coefficients, 2,condQuantile,((1- ci)/2))
-  res$hi_ci <- apply(coefficients, 2,condQuantile,1-((1- ci)/2))
+  res$lo_ci <- apply(coefficients, 2, stats::quantile, (1 - ci) / 2)
+  res$hi_ci <- apply(coefficients, 2, stats::quantile, 1 - (1 - ci) / 2)
   res <- res[order(res$inc.prob,decreasing = TRUE),]
 
 
@@ -503,16 +531,67 @@ quantInv <- function(distr, value){
       upperCri = res$hi_ci[i]
     )
 
-    if(options$showCoefMeanInc){
-      row <- append(row,c(meanInc = res$mean.inc[i],
-                          sdInc = res$sd.inc[i]) )
-    }
-
     bstsCoefficientTable$addRows(row)
 
   }
 
 
+}
+
+
+.bstsCreateConditionalCoefficientTable <- function(jaspResults, options, ready) {
+  if (!ready || !length(options$modelTerms) || !options$posteriorSummaryTable || !options$showCoefMeanInc ||
+      !is.null(jaspResults[["bstsMainContainer"]][["bstsConditionalCoefficientSummaryTable"]])) return()
+
+  bstsResults <- jaspResults[["bstsMainContainer"]][["bstsModelResults"]]$object
+  table <- createJaspTable(title = gettext("Coefficient Estimates Conditional on Inclusion"))
+  table$dependOn(c("posteriorSummaryTable", "showCoefMeanInc", "posteriorSummaryCiLevel",
+                   .bstsBurnDependencies()))
+  table$position <- 3
+  overtitle <- gettextf("%s%% Credible Interval", format(100 * options$posteriorSummaryCiLevel, digits = 3))
+  table$addColumnInfo(name = "coef",          title = gettext("Coefficients"),    type = "string")
+  table$addColumnInfo(name = "postIncP",      title = gettext("P(incl|data)"),    type = "number")
+  table$addColumnInfo(name = "includedDraws", title = gettext("Included draws"), type = "integer")
+  table$addColumnInfo(name = "mean",          title = gettext("Mean"),            type = "number")
+  table$addColumnInfo(name = "sd",            title = gettext("SD"),              type = "number")
+  table$addColumnInfo(name = "lowerCri",      title = gettext("Lower"), type = "number", overtitle = overtitle)
+  table$addColumnInfo(name = "upperCri",      title = gettext("Upper"), type = "number", overtitle = overtitle)
+  table$addFootnote(gettext("Estimates use only retained draws in which the predictor was included (its coefficient was nonzero). These intervals describe coefficient uncertainty conditional on inclusion; they do not measure evidence for inclusion."))
+  table$addFootnote(gettext("Conditional estimates may be unreliable when based on few included draws. Included draws are MCMC draws, not independent observations."))
+
+  .bstsFillConditionalCoefficientTable(bstsResults, table, options, ready)
+  jaspResults[["bstsMainContainer"]][["bstsConditionalCoefficientSummaryTable"]] <- table
+}
+
+.bstsFillConditionalCoefficientTable <- function(bstsResults, table, options, ready) {
+  if (!ready) return()
+  coefficients <- bstsResults$coefficients[.bstsRetainedDraws(bstsResults, options$burn), , drop = FALSE]
+  inclusionProbability <- colMeans(coefficients != 0)
+  probabilities <- c((1 - options$posteriorSummaryCiLevel) / 2,
+                     1 - (1 - options$posteriorSummaryCiLevel) / 2)
+
+  # Match the model-averaged table's order, including ties. Negative draws count
+  # as inclusion too; zero draws belong only in the model-averaged summaries.
+  for (j in order(inclusionProbability, decreasing = TRUE)) {
+    included <- coefficients[coefficients[, j] != 0, j]
+    nIncluded <- length(included)
+    interval <- if (nIncluded > 1L) stats::quantile(included, probabilities, names = FALSE) else c(NA_real_, NA_real_)
+    coefficient <- colnames(coefficients)[j]
+    table$addRows(list(coef = coefficient,
+                       postIncP = inclusionProbability[j],
+                       includedDraws = nIncluded,
+                       mean = if (nIncluded > 0L) mean(included) else NA_real_,
+                       sd = if (nIncluded > 1L) stats::sd(included) else NA_real_,
+                       lowerCri = interval[1L],
+                       upperCri = interval[2L]), rowNames = coefficient)
+
+    if (nIncluded == 0L)
+      table$addFootnote(gettext("No retained draws included this predictor; conditional estimates are unavailable."),
+                        rowNames = coefficient, colNames = c("mean", "sd", "lowerCri", "upperCri"))
+    else if (nIncluded == 1L)
+      table$addFootnote(gettext("Only one retained draw included this predictor; its conditional SD and credible interval are unavailable."),
+                        rowNames = coefficient, colNames = c("sd", "lowerCri", "upperCri"))
+  }
 }
 
 
@@ -852,8 +931,8 @@ quantInv <- function(distr, value){
   residuals <- bsts::residuals.bsts(bstsResults,options$burn)
 
   mean <- colMeans(residuals)
-  ymin <- apply(residuals,2,quantile,probs= ((1- options$aggregatedStatesPlotCiLevel)/2))
-  ymax <- apply(residuals,2,quantile,probs= 1-((1- options$aggregatedStatesPlotCiLevel)/2))
+  ymin <- apply(residuals,2,quantile,probs= ((1- options$aggregatedStatesPlotCiLevel)/2),na.rm=TRUE)
+  ymax <- apply(residuals,2,quantile,probs= 1-((1- options$aggregatedStatesPlotCiLevel)/2),na.rm=TRUE)
 
   time <- options$time
 

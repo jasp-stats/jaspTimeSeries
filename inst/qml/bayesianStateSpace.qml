@@ -31,7 +31,7 @@ Form
 		CheckBox
 		{
 			name: "posteriorSummaryTable"; label: qsTr("Posterior summary of coefficients"); id: posteriorSummaryTable
-			CheckBox { name: "showCoefMeanInc"; label: qsTr("Show means across draws included") }
+			CheckBox { name: "showCoefMeanInc"; label: qsTr("Show estimates conditional on inclusion") }
 		}
 		CIField
 		{
@@ -223,7 +223,6 @@ Form
 					defaultValue: 0.01
 					min: 0
 					inclusive: JASP.MaxOnly
-					afterLabel: "× sdy"
 				}
 
 				DoubleField
@@ -246,7 +245,7 @@ Form
 				DoubleField
 				{
 					name: "normalPriorSd"
-					label:"σ²"
+					label: "σ"
 					fieldWidth: 40 * preferencesModel.uiScale
 					defaultValue: 0.01
 					min: 0
@@ -263,6 +262,13 @@ Form
 
 		title: qsTr("Plots")
 
+		CIField
+		{
+			name: "aggregatedStatesPlotCiLevel"
+			label: qsTr("Credible interval (aggregated state and errors)")
+			info: qsTr("Sets the credible interval for the aggregated state, residual, and one-step-ahead prediction error plots.")
+			Layout.columnSpan: 2
+		}
 
 		Group
 		{
@@ -280,11 +286,6 @@ Form
 				//	values: [ "linear", "mean"]
 				//}
 
-				CIField
-				{
-					name: "aggregatedStatesPlotCiLevel"
-					label: qsTr("Credible interval")
-				}
 				CheckBox
 				{
 					name: "aggregatedStatesPlotObservationsShown"
@@ -380,7 +381,7 @@ Form
 		//	values: [ "Gaussian", "Logit","Poisson","Student"]
 		//}
 
-		DoubleField { name:"samples";		label: qsTr("Desired MCMC draws");	fieldWidth: 60; defaultValue: 2000}
+		IntegerField { name:"samples";		label: qsTr("Desired MCMC draws");	fieldWidth: 60; defaultValue: 2000; min: 1}
 
 		DoubleField { name:"timeout";		label: qsTr("Timeout in seconds");	fieldWidth: 60; defaultValue: 120}
 
