@@ -92,7 +92,7 @@ test_that("Stationarity prepares numeric and date Time before detrending and dif
   options <- ssPreparationOptions("StationarityTimeSeries", detrend = TRUE,
     polynomialSpecification = "custom", detrendPoly = 2L,
     difference = TRUE, differenceLag = 1L, differenceOrder = 1L,
-    testMissingValues = "longest", acfMissingValues = "longest")
+    testNaAction = "longest", acfNaAction = "longest")
   reference <- ssPreparationRun("StationarityTimeSeries", data,
     utils::modifyList(options, list(time = "")))
   shuffle <- c(seq(2L, 48L, 2L), seq(1L, 48L, 2L))
@@ -295,25 +295,44 @@ test_that("saved Stationarity transformations retain original row identity after
   }
 })
 
-test_that("Stationarity missing policies fail locally and permit explicit end trimming after differencing", {
+test_that("Stationarity policies select differenced values without changing plotted gaps", {
   data <- ssPreparationFixture()
   options <- ssPreparationOptions("StationarityTimeSeries", difference = TRUE,
     differenceLag = 1L, differenceOrder = 1L, timeSeriesPlot = TRUE,
-    timeSeriesPlotType = "both", timeSeriesPlotDistribution = "none",
-    testMissingValues = "error", acfMissingValues = "error")
-  strict <- ssPreparationRun("StationarityTimeSeries", data, options)
-  expect_match(paste(unlist(strict$results$stationaryTable), collapse = " "), "missing observations", fixed = TRUE)
-  expect_match(paste(unlist(strict$results$acfPlot), collapse = " "), "missing observations", fixed = TRUE)
-  expect_identical(strict$results$timeSeriesPlot$status, "complete")
-  expect_null(strict$results$acfMissingNote)
-
-  trimmed <- ssPreparationRun("StationarityTimeSeries", data,
-    utils::modifyList(options, list(testMissingValues = "trim", acfMissingValues = "trim")))
-  expect_true(length(ssPreparationTable(trimmed, "stationaryTable")) > 0L)
+    timeSeriesPlotType = "both", timeSeriesPlotDistribution = "none")
   expected <- as.numeric(stats::acf(diff(data$y), plot = FALSE, lag.max = 8L)$acf)[-1L]
-  expect_equal(ssPreparationAcf(trimmed)$acf, expected, tolerance = 1e-10)
-  expect_match(paste(unlist(trimmed$results$acfMissingNote), collapse = " "), "47 of 48", fixed = TRUE)
-  expect_match(paste(unlist(trimmed$results$stationaryTable$footnotes), collapse = " "), "steps 2 to 48", fixed = TRUE)
+  for (policy in c("listwise", "longest")) {
+    actual <- ssPreparationRun("StationarityTimeSeries", data,
+      utils::modifyList(options, list(testNaAction = policy, acfNaAction = policy)))
+    expect_true(length(ssPreparationTable(actual, "stationaryTable")) > 0L)
+    expect_equal(ssPreparationAcf(actual)$acf, expected, tolerance = 1e-10)
+    expect_match(paste(unlist(actual$results$acfMissingNote), collapse = " "), "47 of 48", fixed = TRUE)
+    note <- paste(unlist(actual$results$stationaryTable$footnotes), collapse = " ")
+    expect_match(note, if (policy == "listwise") "consecutive time steps" else "steps 2 to 48", fixed = TRUE)
+    expect_identical(actual$results$timeSeriesPlot$status, "complete")
+    plot <- actual$state$figures[[actual$results$timeSeriesPlot$data]]$obj
+    if (jaspGraphs::isJaspPlotRecipe(plot))
+      plot <- jaspGraphs::materializeJaspPlotRecipe(plot)
+    main <- if (inherits(plot, "jaspMatrixPlot")) plot$subplots$mainPlot else plot
+    expect_equal(as.numeric(main$data$y), c(NA_real_, diff(data$y)), tolerance = 1e-10)
+    expect_equal(as.numeric(main$data$x), data$Time)
+  }
+})
+
+test_that("Stationarity unusable segments fail locally while listwise diagnostics complete", {
+  data <- ssPreparationFixture()
+  data$y[seq(2L, 48L, 2L)] <- NA_real_
+  options <- ssPreparationOptions("StationarityTimeSeries", testNaAction = "longest",
+    acfNaAction = "listwise", pacf = TRUE, pacfNaAction = "longest",
+    timeSeriesPlot = TRUE, timeSeriesPlotType = "both", timeSeriesPlotDistribution = "none")
+  actual <- ssPreparationRun("StationarityTimeSeries", data, options)
+  for (output in c("stationaryTable", "pacfPlot"))
+    expect_match(paste(unlist(actual$results[[output]]), collapse = " "), "fewer than two values", fixed = TRUE)
+  expect_null(actual$results$pacfMissingNote)
+  expect_identical(actual$results$timeSeriesPlot$status, "complete")
+  expect_equal(ssPreparationAcf(actual)$acf,
+    as.numeric(stats::acf(data$y[!is.na(data$y)], plot = FALSE, lag.max = 8L)$acf)[-1L], tolerance = 1e-10)
+  expect_match(paste(unlist(actual$results$acfMissingNote), collapse = " "), "24 of 48", fixed = TRUE)
 })
 
 test_that("Spectral policy selects a complete segment after ordering and filtering", {
@@ -321,20 +340,35 @@ test_that("Spectral policy selects a complete segment after ordering and filteri
   data$y[c(1L, 12L, 48L)] <- NA_real_
   input <- data[c(25:48, 1:24), ]
   options <- ssPreparationOptions("SpectralTimeSeries", filter = TRUE, filterBy = "time",
-    timeStart = data$Time[5], timeEnd = data$Time[43], missingValues = "error")
-  strict <- ssPreparationRun("SpectralTimeSeries", input, options)
-  expect_match(paste(unlist(strict$results$bandWidthTable), collapse = " "), "missing observations", fixed = TRUE)
-  expect_match(paste(unlist(strict$results$powerSpectralDensity), collapse = " "), "missing observations", fixed = TRUE)
-  expect_null(strict$results$spectralMissingNote)
+    timeStart = data$Time[5], timeEnd = data$Time[43])
+  for (policy in c("listwise", "longest")) {
+    actual <- ssPreparationRun("SpectralTimeSeries", input, utils::modifyList(options, list(naAction = policy)))
+    selected <- if (policy == "listwise") c(5:11, 13:43) else 13:43
+    reference <- ssPreparationRun("SpectralTimeSeries", data[selected, ],
+      ssPreparationOptions("SpectralTimeSeries", time = ""))
+    expect_equal(ssPreparationTable(actual, "bandWidthTable"), ssPreparationTable(reference, "bandWidthTable"), tolerance = 1e-10)
+    expect_equal(ssPreparationPlot(actual, "powerSpectralDensity")$data,
+                 ssPreparationPlot(reference, "powerSpectralDensity")$data, tolerance = 1e-10)
+    ssPreparationSpectrum(actual, data$y[selected], options)
+    expect_match(paste(unlist(actual$results$spectralMissingNote), collapse = " "),
+      paste(length(selected), "of 39"), fixed = TRUE)
+    expect_match(paste(unlist(actual$results$bandWidthTable$footnotes), collapse = " "),
+      if (policy == "listwise") "internal gaps are ignored" else "steps 9 to 39", fixed = TRUE)
+  }
+})
 
-  longest <- ssPreparationRun("SpectralTimeSeries", input, utils::modifyList(options, list(missingValues = "longest")))
-  reference <- ssPreparationRun("SpectralTimeSeries", data[13:43, ],
-    ssPreparationOptions("SpectralTimeSeries", time = "", missingValues = "error"))
-  expect_equal(ssPreparationTable(longest, "bandWidthTable"), ssPreparationTable(reference, "bandWidthTable"), tolerance = 1e-10)
-  expect_equal(ssPreparationPlot(longest, "powerSpectralDensity")$data,
-               ssPreparationPlot(reference, "powerSpectralDensity")$data, tolerance = 1e-10)
-  expect_match(paste(unlist(longest$results$spectralMissingNote), collapse = " "), "31 of 39", fixed = TRUE)
-  expect_match(paste(unlist(longest$results$bandWidthTable$footnotes), collapse = " "), "steps 9 to 39", fixed = TRUE)
+test_that("Spectral outputs report unusable filtered data locally for both policies", {
+  data <- ssPreparationFixture()
+  data$y[5:43] <- NA_real_
+  input <- data[c(25:48, 1:24), ]
+  for (policy in c("listwise", "longest")) {
+    options <- ssPreparationOptions("SpectralTimeSeries", filter = TRUE, filterBy = "time",
+      timeStart = data$Time[5], timeEnd = data$Time[43], naAction = policy)
+    actual <- ssPreparationRun("SpectralTimeSeries", input, options)
+    for (output in c("bandWidthTable", "powerSpectralDensity"))
+      expect_match(paste(unlist(actual$results[[output]]), collapse = " "), "no observed values", fixed = TRUE)
+    expect_null(actual$results$spectralMissingNote)
+  }
 })
 
 test_that("Stationarity defaults omit all missing observations with local explanatory notes", {
@@ -343,8 +377,8 @@ test_that("Stationarity defaults omit all missing observations with local explan
   input <- data[c(25:48, 1:24), ]
   before <- serialize(input, NULL)
   options <- ssPreparationOptions("StationarityTimeSeries", pacf = TRUE, pacfMaxLag = 8L)
-  for (name in c("testMissingValues", "acfMissingValues", "pacfMissingValues"))
-    expect_identical(options[[name]], "omit")
+  for (name in c("testNaAction", "acfNaAction", "pacfNaAction"))
+    expect_identical(options[[name]], "listwise")
   actual <- ssPreparationRun("StationarityTimeSeries", input, options)
   observed <- data[!is.na(data$y), ]
   reference <- ssPreparationRun("StationarityTimeSeries", observed,
@@ -380,7 +414,7 @@ test_that("Spectral default omission compresses only the calculation and explain
   input <- data[c(25:48, 1:24), ]
   before <- serialize(input, NULL)
   options <- ssPreparationOptions("SpectralTimeSeries")
-  expect_identical(options$missingValues, "omit")
+  expect_identical(options$naAction, "listwise")
   actual <- ssPreparationRun("SpectralTimeSeries", input, options)
   ssPreparationSpectrum(actual, data$y[!is.na(data$y)], options)
   for (note in list(actual$results$bandWidthTable$footnotes, actual$results$spectralMissingNote)) {

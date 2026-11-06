@@ -57,16 +57,12 @@ Form
         }
         RadioButtonGroup
         {
-            name: "testMissingValues"
-            id: testMissingValuesChoice
-            title: qsTr("Missing observations")
+            name: "testNaAction"
+            title: qsTr("Missing values")
             enabled: adfTest.checked || ppRegression.checked || ppStudentized.checked || kpssLevel.checked || kpssTrend.checked
-            info: qsTr("Applies only to this calculation. Omit all missing observations removes missing values and treats the remaining observations as consecutive time steps, ignoring any internal gaps. Use the longest complete segment selects the longest consecutive run without missing values, using the earliest run when tied. When observations are omitted, a note reports the observations used and any effect on time spacing. The original data and saved values are unchanged.")
-            RadioButton { value: "omit"; label: qsTr("Omit all missing observations"); checked: true }
+            info: qsTr("Applies only to this calculation. Listwise exclusion removes missing observations and treats the remaining observations as consecutive time steps, ignoring any internal gaps. Use the longest complete segment selects the longest consecutive run without missing values, using the earliest run when tied. When observations are omitted, a note reports the observations used and any effect on time spacing. The original data and saved values are unchanged.")
+            RadioButton { value: "listwise"; label: qsTr("Exclude cases listwise"); checked: true }
             RadioButton { value: "longest"; label: qsTr("Use the longest complete segment") }
-            // Retain an explicitly selected setting from older development files.
-            RadioButton { value: "trim"; label: qsTr("Omit missing observations at the ends"); visible: testMissingValuesChoice.value === "trim" }
-            RadioButton { value: "error"; label: qsTr("Report an error"); visible: testMissingValuesChoice.value === "error" }
         }
     }
     Group
@@ -245,7 +241,7 @@ Form
                 id: difference
                 label: qsTr("Difference")
                 childrenOnSameRow: true
-                info: qsTr("Differences the dependent variable at the selected lag, repeated according to Order. The first Lag × Order positions are retained as missing values (up to the series length). Existing missing values also propagate into differences that use them. Time series plots and saved transformations retain these positions; stationarity tests and autocorrelation plots handle them according to their own Missing observations setting.")
+                info: qsTr("Differences the dependent variable at the selected lag, repeated according to Order. The first Lag × Order positions are retained as missing values (up to the series length). Existing missing values also propagate into differences that use them. Time series plots and saved transformations retain these positions; stationarity tests and autocorrelation plots handle them according to their own Missing values setting.")
                 IntegerField { name: "differenceLag"; label: qsTr("Lag"); defaultValue: 1; min: 1; }
                 IntegerField { name: "differenceOrder"; label: qsTr("Order"); defaultValue: 1; min: 1; }
             }
@@ -315,15 +311,11 @@ Form
                 info: qsTr("Plots the autocorrelation for a specified number of lags. The confidence interval may be given assuming either a white noise process, or assuming for a lag q a moving average process of order q - 1")
                 RadioButtonGroup
                 {
-                    name: "acfMissingValues"
-                    id: acfMissingValuesChoice
-                    title: qsTr("Missing observations")
-                    info: qsTr("Applies only to this calculation. Omit all missing observations removes missing values and treats the remaining observations as consecutive time steps, ignoring any internal gaps. Use the longest complete segment selects the longest consecutive run without missing values, using the earliest run when tied. When observations are omitted, a note reports the observations used and any effect on time spacing. The original data and saved values are unchanged.")
-                    RadioButton { value: "omit"; label: qsTr("Omit all missing observations"); checked: true }
+                    name: "acfNaAction"
+                    title: qsTr("Missing values")
+                    info: qsTr("Applies only to this calculation. Listwise exclusion removes missing observations and treats the remaining observations as consecutive time steps, ignoring any internal gaps. Use the longest complete segment selects the longest consecutive run without missing values, using the earliest run when tied. When observations are omitted, a note reports the observations used and any effect on time spacing. The original data and saved values are unchanged.")
+                    RadioButton { value: "listwise"; label: qsTr("Exclude cases listwise"); checked: true }
                     RadioButton { value: "longest"; label: qsTr("Use the longest complete segment") }
-                    // Retain an explicitly selected setting from older development files.
-                    RadioButton { value: "trim"; label: qsTr("Omit missing observations at the ends"); visible: acfMissingValuesChoice.value === "trim" }
-                    RadioButton { value: "error"; label: qsTr("Report an error"); visible: acfMissingValuesChoice.value === "error" }
                 }
                 IntegerField { name: "acfMaxLag"; label: qsTr("Maximum lag"); min: 1; defaultValue: 10 }
                 CheckBox { name: "acfZeroLag"; label: qsTr("Zero lag") }
@@ -353,15 +345,11 @@ Form
                 info: qsTr("Plots the partial autocorrelation for a specified number of lags.")
                 RadioButtonGroup
                 {
-                    name: "pacfMissingValues"
-                    id: pacfMissingValuesChoice
-                    title: qsTr("Missing observations")
-                    info: qsTr("Applies only to this calculation. Omit all missing observations removes missing values and treats the remaining observations as consecutive time steps, ignoring any internal gaps. Use the longest complete segment selects the longest consecutive run without missing values, using the earliest run when tied. When observations are omitted, a note reports the observations used and any effect on time spacing. The original data and saved values are unchanged.")
-                    RadioButton { value: "omit"; label: qsTr("Omit all missing observations"); checked: true }
+                    name: "pacfNaAction"
+                    title: qsTr("Missing values")
+                    info: qsTr("Applies only to this calculation. Listwise exclusion removes missing observations and treats the remaining observations as consecutive time steps, ignoring any internal gaps. Use the longest complete segment selects the longest consecutive run without missing values, using the earliest run when tied. When observations are omitted, a note reports the observations used and any effect on time spacing. The original data and saved values are unchanged.")
+                    RadioButton { value: "listwise"; label: qsTr("Exclude cases listwise"); checked: true }
                     RadioButton { value: "longest"; label: qsTr("Use the longest complete segment") }
-                    // Retain an explicitly selected setting from older development files.
-                    RadioButton { value: "trim"; label: qsTr("Omit missing observations at the ends"); visible: pacfMissingValuesChoice.value === "trim" }
-                    RadioButton { value: "error"; label: qsTr("Report an error"); visible: pacfMissingValuesChoice.value === "error" }
                 }
                 IntegerField { name: "pacfMaxLag"; label: qsTr("Maximum lag"); min: 1; defaultValue: 10 }
                 CheckBox

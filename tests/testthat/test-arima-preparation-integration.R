@@ -1,11 +1,13 @@
 # Supported analysis integration: expected orders are specified independently,
 # and reference analyses leave Time unassigned. No loaded namespace is changed.
 arimaPreparationRun <- function(input, time = TRUE, covariates = character(), ...) {
-  options <- jaspTools:::readQML(system.file("qml", "ARIMATimeSeries.qml", package = "jaspTimeSeries"))
-  options$dependent <- list(types = "scale", value = "y")
-  options$time <- if (time) list(types = if (is.numeric(input$Time)) "scale" else "nominal", value = "Time") else
-    list(types = list(), value = "")
-  options$covariates <- list(types = rep("scale", length(covariates)), value = covariates)
+  options <- jaspTools::analysisOptions("ARIMATimeSeries")
+  options$dependent <- "y"
+  options$dependent.types <- "scale"
+  options$time <- if (time) "Time" else ""
+  options$time.types <- if (!time) character() else if (is.numeric(input$Time)) "scale" else "nominal"
+  options$covariates <- covariates
+  options$covariates.types <- rep("scale", length(covariates))
   options$modelSpecification <- "custom"
   options$p <- 1L
   options$d <- options$q <- 0L
@@ -360,27 +362,47 @@ test_that("automatic ARIMA aligns residual plots and saved rows after ordering a
   expect_identical(serialize(fit, NULL), before)
 })
 
-test_that("ARIMA residual policies are local and preserve model forecasts", {
+test_that("ARIMA residual policies are independent and preserve model forecasts", {
   data <- arimaPreparationFixture()
   data$y[c(1L, 2L, 25L, 48L)] <- NA_real_
   reference <- arimaPreparationRun(data, time = FALSE)
-  for (policy in c("error", "longest")) {
+  residuals <- getFromNamespace(".tsResiduals", "jaspTimeSeries")(arimaPreparationFit(reference))
+  selected <- list(listwise = residuals[!is.na(residuals)], longest = residuals[3:24])
+  for (acfPolicy in c("listwise", "longest")) {
+    ljungPolicy <- if (acfPolicy == "listwise") "longest" else "listwise"
     actual <- arimaPreparationRun(data, residualAcf = TRUE, residualLjungBox = TRUE,
-      residualMaxLag = 3L, residualAcfMissingValues = policy, residualLjungBoxMissingValues = policy)
+      residualMaxLag = 3L, residualAcfNaAction = acfPolicy, residualLjungBoxNaAction = ljungPolicy)
     expectArimaPreparedLike(actual, reference, data$y)
     plots <- actual$result$results$residContainer$collection
-    if (policy == "error") {
-      expect_match(paste(unlist(plots$residContainer_residualACFPlot), collapse = " "), "missing observations", fixed = TRUE)
-      expect_match(paste(unlist(plots$residContainer_ljungPlot), collapse = " "), "missing observations", fixed = TRUE)
-      expect_null(plots$residContainer_residualAcfMissingNote)
-      expect_null(plots$residContainer_residualLjungBoxMissingNote)
-    } else {
-      expect_identical(plots$residContainer_residualACFPlot$status, "complete")
-      expect_identical(plots$residContainer_ljungPlot$status, "complete")
-      expect_match(paste(unlist(plots$residContainer_residualAcfMissingNote), collapse = " "), "steps 3 to 24", fixed = TRUE)
-      expect_match(paste(unlist(plots$residContainer_residualLjungBoxMissingNote), collapse = " "), "steps 3 to 24", fixed = TRUE)
-    }
+    expect_identical(plots$residContainer_residualACFPlot$status, "complete")
+    expect_identical(plots$residContainer_ljungPlot$status, "complete")
+    acf <- actual$result$state$figures[[plots$residContainer_residualACFPlot$data]]$obj
+    layer <- Filter(function(layer) inherits(layer$geom, "GeomLinerange"), acf$layers)[[1L]]
+    expect_equal(layer$data$acf,
+      as.numeric(stats::acf(selected[[acfPolicy]], plot = FALSE, lag.max = 3L)$acf)[-1L], tolerance = 1e-10)
+    ljung <- actual$result$state$figures[[plots$residContainer_ljungPlot$data]]$obj
+    expected <- vapply(1:3, function(lag) stats::Box.test(selected[[ljungPolicy]], lag, type = "Ljung-Box")$p.value, numeric(1L))
+    expect_equal(ggplot2::ggplot_build(ljung)$data[[2L]]$y, expected, tolerance = 1e-10)
+    expect_match(paste(unlist(plots$residContainer_residualAcfMissingNote), collapse = " "),
+      if (acfPolicy == "listwise") "44 of 48" else "steps 3 to 24", fixed = TRUE)
+    expect_match(paste(unlist(plots$residContainer_residualLjungBoxMissingNote), collapse = " "),
+      if (ljungPolicy == "listwise") "44 of 48" else "steps 3 to 24", fixed = TRUE)
   }
+})
+
+test_that("ARIMA unusable Ljung-Box lags fail locally without changing model forecasts", {
+  data <- arimaPreparationFixture()
+  data$y[c(1L, 2L, 25L, 48L)] <- NA_real_
+  reference <- arimaPreparationRun(data, time = FALSE)
+  actual <- arimaPreparationRun(data, residualAcf = TRUE, residualLjungBox = TRUE,
+    residualMaxLag = 22L, residualAcfNaAction = "listwise", residualLjungBoxNaAction = "longest")
+  expectArimaPreparedLike(actual, reference, data$y)
+  plots <- actual$result$results$residContainer$collection
+  expect_identical(plots$residContainer_residualACFPlot$status, "complete")
+  expect_match(paste(unlist(plots$residContainer_residualAcfMissingNote), collapse = " "), "44 of 48", fixed = TRUE)
+  expect_match(paste(unlist(plots$residContainer_ljungPlot), collapse = " "),
+    "maximum lag must be positive and smaller than the number of selected observations (22)", fixed = TRUE)
+  expect_null(plots$residContainer_residualLjungBoxMissingNote)
 })
 
 test_that("ARIMA defaults omit missing residuals only for diagnostics and report the gaps", {
@@ -391,8 +413,8 @@ test_that("ARIMA defaults omit missing residuals only for diagnostics and report
   before <- serialize(input, NULL)
   reference <- arimaPreparationRun(data, time = FALSE)
   actual <- arimaPreparationRun(input, residualAcf = TRUE, residualLjungBox = TRUE, residualMaxLag = 3L)
-  expect_identical(actual$options$residualAcfMissingValues, "omit")
-  expect_identical(actual$options$residualLjungBoxMissingValues, "omit")
+  expect_identical(actual$options$residualAcfNaAction, "listwise")
+  expect_identical(actual$options$residualLjungBoxNaAction, "listwise")
   expectArimaPreparedLike(actual, reference, data$y)
   fit <- arimaPreparationFit(actual)
   residuals <- getFromNamespace(".tsResiduals", "jaspTimeSeries")(fit)

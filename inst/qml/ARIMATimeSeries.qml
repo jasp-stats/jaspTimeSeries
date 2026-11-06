@@ -296,15 +296,11 @@ Form
                     info:   qsTr("Plots the autocorrelation for a specified number of lags. The confidence interval may be given assuming a white noise process.")
                     RadioButtonGroup
                     {
-                        name: "residualAcfMissingValues"
-                        id: residualAcfMissingValuesChoice
-                        title: qsTr("Missing observations")
-                        info: qsTr("Applies only to this calculation. Omit all missing observations removes missing values and treats the remaining observations as consecutive time steps, ignoring any internal gaps. Use the longest complete segment selects the longest consecutive run without missing values, using the earliest run when tied. When observations are omitted, a note reports the observations used and any effect on time spacing. The original data and saved values are unchanged.")
-                        RadioButton { value: "omit"; label: qsTr("Omit all missing observations"); checked: true }
+                        name: "residualAcfNaAction"
+                        title: qsTr("Missing values")
+                        info: qsTr("Applies only to this calculation. Listwise exclusion removes missing observations and treats the remaining observations as consecutive time steps, ignoring any internal gaps. Use the longest complete segment selects the longest consecutive run without missing values, using the earliest run when tied. When observations are omitted, a note reports the observations used and any effect on time spacing. The original data and saved values are unchanged.")
+                        RadioButton { value: "listwise"; label: qsTr("Exclude cases listwise"); checked: true }
                         RadioButton { value: "longest"; label: qsTr("Use the longest complete segment") }
-                        // Retain an explicitly selected setting from older development files.
-                        RadioButton { value: "trim"; label: qsTr("Omit missing observations at the ends"); visible: residualAcfMissingValuesChoice.value === "trim" }
-                        RadioButton { value: "error"; label: qsTr("Report an error"); visible: residualAcfMissingValuesChoice.value === "error" }
                     }
                     CheckBox { name: "residualAcfZeroLag"; label: qsTr("Zero lag") }
                     CheckBox
@@ -324,15 +320,11 @@ Form
                     info:   qsTr("Plots the p-values of the Ljung-Box test for a number of lags of which the null hypothesis assumes that the data independently distributed and therefore have no autocorrelation.")
                     RadioButtonGroup
                     {
-                        name: "residualLjungBoxMissingValues"
-                        id: residualLjungBoxMissingValuesChoice
-                        title: qsTr("Missing observations")
-                        info: qsTr("Applies only to this calculation. Omit all missing observations removes missing values and treats the remaining observations as consecutive time steps, ignoring any internal gaps. Use the longest complete segment selects the longest consecutive run without missing values, using the earliest run when tied. When observations are omitted, a note reports the observations used and any effect on time spacing. The original data and saved values are unchanged.")
-                        RadioButton { value: "omit"; label: qsTr("Omit all missing observations"); checked: true }
+                        name: "residualLjungBoxNaAction"
+                        title: qsTr("Missing values")
+                        info: qsTr("Applies only to this calculation. Listwise exclusion removes missing observations and treats the remaining observations as consecutive time steps, ignoring any internal gaps. Use the longest complete segment selects the longest consecutive run without missing values, using the earliest run when tied. When observations are omitted, a note reports the observations used and any effect on time spacing. The original data and saved values are unchanged.")
+                        RadioButton { value: "listwise"; label: qsTr("Exclude cases listwise"); checked: true }
                         RadioButton { value: "longest"; label: qsTr("Use the longest complete segment") }
-                        // Retain an explicitly selected setting from older development files.
-                        RadioButton { value: "trim"; label: qsTr("Omit missing observations at the ends"); visible: residualLjungBoxMissingValuesChoice.value === "trim" }
-                        RadioButton { value: "error"; label: qsTr("Report an error"); visible: residualLjungBoxMissingValuesChoice.value === "error" }
                     }
                     CIField { name: "ljungBoxSignificanceLevel"; label: qsTr("Significance level"); defaultValue: 5 }
                 }

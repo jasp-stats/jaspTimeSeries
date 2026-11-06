@@ -28,7 +28,7 @@ SpectralTimeSeries <- function(jaspResults, dataset, options) {
 
 .tsSpectralDependencies <- function() {
   return(c(
-    "dependent", "time", "missingValues",
+    "dependent", "time", "naAction",
     "kernel", "kernelMethod", "kernelTerm", "kernelDimension",
     "taper", "log", "detrend", "demean",
     "filter", "filterBy", "rowStart", "rowEnd", "timeStart", "timeEnd", "dateStart", "dateEnd"
@@ -41,7 +41,7 @@ SpectralTimeSeries <- function(jaspResults, dataset, options) {
   }
 
   if (ready) {
-    prepared <- .tsCompleteSeries(dataset$y, options[["missingValues"]])
+    prepared <- .tsCompleteSeries(dataset$y, options[["naAction"]])
     result <- list(spectrum = NULL, error = prepared$error, note = prepared$note)
     if (is.null(result$error)) {
       res <- try({

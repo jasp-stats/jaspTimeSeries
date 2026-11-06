@@ -197,7 +197,7 @@ StationarityTimeSeries <- function(jaspResults, dataset, options) {
   }
 
   stationaryTable <- createJaspTable(gettext("Stationarity Tests"))
-  stationaryTable$dependOn(c(dependencies, "testMissingValues"))
+  stationaryTable$dependOn(c(dependencies, "testNaAction"))
   stationaryTable$position <- position
   stationaryTable$showSpecifiedColumnsOnly <- TRUE
 
@@ -245,7 +245,7 @@ StationarityTimeSeries <- function(jaspResults, dataset, options) {
     return()
   }
 
-  prepared <- .tsCompleteSeries(dataset$y, options[["testMissingValues"]])
+  prepared <- .tsCompleteSeries(dataset$y, options[["testNaAction"]])
   if (!is.null(prepared$error)) {
     stationaryTable$setError(prepared$error)
     return()
@@ -361,7 +361,7 @@ StationarityTimeSeries <- function(jaspResults, dataset, options) {
 }
 
 .tsACFTransformation <- function(jaspResults, dataset, options, ready, position, dependencies) {
-  dependencies <- c(dependencies, "acfMissingValues")
+  dependencies <- c(dependencies, "acfNaAction")
   if (!options[["acf"]]) {
     return()
   }
@@ -383,7 +383,7 @@ StationarityTimeSeries <- function(jaspResults, dataset, options) {
       maxLag = options[["acfMaxLag"]],
       ci = options[["acfCi"]],
       ciValue = options[["acfCiLevel"]],
-      ciType = options[["acfCiType"]], missingValues = options[["acfMissingValues"]]
+      ciType = options[["acfCiType"]], missingValues = options[["acfNaAction"]]
     )
     if (!is.null(note))
       jaspResults[["acfMissingNote"]] <- createJaspHtml(text = note, dependencies = dependencies, position = position + 0.1)
@@ -391,7 +391,7 @@ StationarityTimeSeries <- function(jaspResults, dataset, options) {
 }
 
 .tsPACFTransformation <- function(jaspResults, dataset, options, ready, position, dependencies) {
-  dependencies <- c(dependencies, "pacfMissingValues")
+  dependencies <- c(dependencies, "pacfNaAction")
   if (!options[["pacf"]]) {
     return()
   }
@@ -412,7 +412,7 @@ StationarityTimeSeries <- function(jaspResults, dataset, options) {
       maxLag = options[["pacfMaxLag"]],
       ci = options[["pacfCi"]],
       ciValue = options[["pacfCiLevel"]],
-      ciType = options[["pacfCiType"]], missingValues = options[["pacfMissingValues"]]
+      ciType = options[["pacfCiType"]], missingValues = options[["pacfNaAction"]]
     )
     if (!is.null(note))
       jaspResults[["pacfMissingNote"]] <- createJaspHtml(text = note, dependencies = dependencies, position = position + 0.1)

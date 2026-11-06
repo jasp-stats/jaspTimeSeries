@@ -345,7 +345,7 @@ ARIMATimeSeries <- function(jaspResults, dataset, options) {
 
   if (is.null(residContainer[["residualACFPlot"]]) && options[["residualAcf"]]) {
     residualACFPlot <- createJaspPlot(title = gettext("Autocorrelation Function Plot"))
-    acfDependencies <- c("residualAcf", "residualAcfCi", "residualAcfCiLevel", "residualAcfZeroLag", "residualMaxLag", "residualAcfMissingValues")
+    acfDependencies <- c("residualAcf", "residualAcfCi", "residualAcfCiLevel", "residualAcfZeroLag", "residualMaxLag", "residualAcfNaAction")
     residualACFPlot$dependOn(acfDependencies)
     residualACFPlot$position <- 2
     residContainer[["residualACFPlot"]] <- residualACFPlot
@@ -358,7 +358,7 @@ ARIMATimeSeries <- function(jaspResults, dataset, options) {
       type = "ACF", dataset, options,
       zeroLag = options[["residualAcfZeroLag"]], maxLag = options[["residualMaxLag"]],
       ci = options[["residualAcfCi"]], ciValue = options[["residualAcfCiLevel"]],
-      ciType = "whiteNoise", missingValues = options[["residualAcfMissingValues"]]
+      ciType = "whiteNoise", missingValues = options[["residualAcfNaAction"]]
     )
     if (!is.null(note))
       residContainer[["residualAcfMissingNote"]] <- createJaspHtml(text = note, dependencies = acfDependencies, position = 2.1)
@@ -379,7 +379,7 @@ ARIMATimeSeries <- function(jaspResults, dataset, options) {
 
   if (is.null(residContainer[["ljungPlot"]]) && options[["residualLjungBox"]]) {
     ljungPlot <- createJaspPlot(title = gettext("Ljung-Box Plot"))
-    ljungDependencies <- c("residualLjungBox", "residualMaxLag", "ljungBoxSignificanceLevel", "residualLjungBoxMissingValues")
+    ljungDependencies <- c("residualLjungBox", "residualMaxLag", "ljungBoxSignificanceLevel", "residualLjungBoxNaAction")
     ljungPlot$dependOn(ljungDependencies)
     ljungPlot$position <- 3
     residContainer[["ljungPlot"]] <- ljungPlot
@@ -407,7 +407,7 @@ ARIMATimeSeries <- function(jaspResults, dataset, options) {
 }
 
 .tsFillLjungBoxPlot <- function(ljungPlot, dataset, options) {
-  prepared <- .tsCompleteSeries(dataset$y, options[["residualLjungBoxMissingValues"]])
+  prepared <- .tsCompleteSeries(dataset$y, options[["residualLjungBoxNaAction"]])
   if (!is.null(prepared$error)) {
     ljungPlot$setError(prepared$error)
     return(invisible(NULL))
