@@ -112,11 +112,10 @@ StationarityTimeSeries <- function(jaspResults, dataset, options) {
     differencedY <- diff(
       transformedDataset$y,
       lag = options[["differenceLag"]],
-      order = options[["differenceOrder"]]
+      differences = options[["differenceOrder"]]
     )
 
-    # add NA's to start of the transformed dependent variable
-    # because differencing makes the variable shorter (n - lag)
+    # Retain the original row positions, including the initial lag * order gaps.
     transformedDataset$y <- c(
       rep(NA, nrow(transformedDataset) - length(differencedY)),
       differencedY

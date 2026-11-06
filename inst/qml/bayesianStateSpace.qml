@@ -19,7 +19,14 @@ Form
 		AssignedVariablesList	{ name: "dependent";		title: qsTr("Dependent Variable");	allowedColumns: 	["scale"];	singleVariable: true}
 		AssignedVariablesList	{ name: "covariates";		title: qsTr("Covariates");			allowedColumns: 	["scale"];	id: covariates		}
 		AssignedVariablesList 	{ name: "fixedFactors";		title: qsTr("Fixed Factors");		allowedColumns: 	["ordinal", "nominal"];		id: fixedFactors	}
-		AssignedVariablesList	{ name: "time";				title: qsTr("Time");				allowedColumns: 	["nominal"];	singleVariable: true		}
+		AssignedVariablesList
+		{
+			name: "time"
+			title: qsTr("Time")
+			allowedColumns: ["scale", "ordinal", "nominal"]
+			singleVariable: true
+			info: qsTr("Optional. Complete numeric values order observations from smallest to largest, regardless of gaps. Complete, unambiguous dates and times order observations chronologically. Use 'YYYY-MM-DD' for dates or 'YYYY-MM-DD HH:MM:SS' for dates with times; seconds can be omitted. All variables stay aligned, and spreadsheet row order is unchanged. Tied values retain spreadsheet row order. If any value is missing or cannot be interpreted, or dates are ambiguous, Time is ignored for the entire analysis and a warning is shown. Leave Time empty to use spreadsheet row order. Successive observations are modeled as equally spaced steps; no rows are added for gaps in Time.")
+		}
 	}
 
 	columns: 2
@@ -31,7 +38,7 @@ Form
 		CheckBox
 		{
 			name: "posteriorSummaryTable"; label: qsTr("Posterior summary of coefficients"); id: posteriorSummaryTable
-			CheckBox { name: "showCoefMeanInc"; label: qsTr("Show estimates conditional on inclusion") }
+			CheckBox { name: "posteriorSummaryConditionalEstimates"; label: qsTr("Show estimates conditional on inclusion") }
 		}
 		CIField
 		{
@@ -82,7 +89,7 @@ Form
 			{
 				columns: 1
 				enabled: checkAr.checked
-				name: "lagSelectionMethod"
+				name: "autoregressiveLagSelectionMethod"
 				title: qsTr("Lag selection method")
 				radioButtonsOnSameRow: true
 				RadioButton
@@ -91,7 +98,7 @@ Form
 					//columns: 1
 					IntegerField
 					{
-						name: "lags"
+						name: "autoregressiveLags"
 						label: qsTr("No. of lags")
 						fieldWidth: 40
 						min: 1
@@ -102,7 +109,7 @@ Form
 				{
 					value: "auto"; label: qsTr("Automatic")
 					columns: 1
-					DoubleField { name: "maxLags";	label: qsTr("Maximal lags");	fieldWidth: 40; 	defaultValue: 1; min:1}
+					DoubleField { name: "autoregressiveMaxLags";	label: qsTr("Maximal lags");	fieldWidth: 40; 	defaultValue: 1; min:1}
 				}
 			}
 
@@ -172,7 +179,7 @@ Form
 		//Dynamic Regression Component
 		CheckBox
 		{
-			name: "dynamicRegregressionComponent"
+			name: "dynamicRegressionComponent"
 			label: qsTr("Add dynamic regression component")
 			checked: false
 			id: checkDynReg
@@ -264,7 +271,7 @@ Form
 
 		CIField
 		{
-			name: "aggregatedStatesPlotCiLevel"
+			name: "aggregatedStateAndErrorPlotsCiLevel"
 			label: qsTr("Credible interval (aggregated state and errors)")
 			info: qsTr("Sets the credible interval for the aggregated state, residual, and one-step-ahead prediction error plots.")
 			Layout.columnSpan: 2
@@ -346,9 +353,9 @@ Form
 			{
 				name:"controlChartPlot"; label: qsTr("Show control chart")
 
-				IntegerField {name: "controlPeriod"; label:qsTr("Control period end"); defaultValue: 100; min: 2}
-				DoubleField {name: "controlSigma"; label:qsTr("σ threshold"); defaultValue: 2}
-				CheckBox{name: "probalisticControlPlot";label: qsTr("Show probabilistic control plot")}
+				IntegerField {name: "controlChartPeriodEnd"; label:qsTr("Control period end"); defaultValue: 100; min: 2}
+				DoubleField {name: "controlChartSigmaThreshold"; label:qsTr("σ threshold"); defaultValue: 2}
+				CheckBox{name: "controlChartProbabilisticPlot";label: qsTr("Show probabilistic control plot")}
 
 			}
 
@@ -381,9 +388,9 @@ Form
 		//	values: [ "Gaussian", "Logit","Poisson","Student"]
 		//}
 
-		IntegerField { name:"samples";		label: qsTr("Desired MCMC draws");	fieldWidth: 60; defaultValue: 2000; min: 1}
+		IntegerField { name:"mcmcDraws";		label: qsTr("Desired MCMC draws");	fieldWidth: 60; defaultValue: 2000; min: 1}
 
-		DoubleField { name:"timeout";		label: qsTr("Timeout in seconds");	fieldWidth: 60; defaultValue: 120}
+		DoubleField { name:"mcmcTimeoutSeconds";		label: qsTr("Timeout in seconds");	fieldWidth: 60; defaultValue: 120}
 
 		RadioButtonGroup
 		{
@@ -393,7 +400,7 @@ Form
 			RadioButton
 			{
 				value: "auto"; label: qsTr("Automatic suggestion"); checked: true
-				DoubleField { name:"automaticBurninProportion"
+				DoubleField { name:"burninAutomaticProportion"
 											label: qsTr("Proportion")
 											fieldWidth: 60
 											defaultValue: 0.1
@@ -404,7 +411,7 @@ Form
 			RadioButton
 			{
 				value: "manual"; label: qsTr("Manual")
-				DoubleField { name:"manualBurninAmount"
+				DoubleField { name:"burninManualDraws"
 											label: qsTr("Number")
 											fieldWidth: 60
 											defaultValue: 0

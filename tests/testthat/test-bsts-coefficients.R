@@ -29,7 +29,7 @@
 .bstsCoefficientTestOptions <- function() {
   list(burn = 2, posteriorSummaryCiLevel = 0.95,
        modelTerms = list(list(components = "predictor")),
-       posteriorSummaryTable = TRUE, showCoefMeanInc = TRUE)
+       posteriorSummaryTable = TRUE, posteriorSummaryConditionalEstimates = TRUE)
 }
 
 # Plain R collectors keep native result construction out of these unit tests.
@@ -206,7 +206,7 @@ test_that("BSTS coefficient output respects visibility, readiness and existing t
     ready <- case != "not ready"
     if (case == "no predictors") options$modelTerms <- list()
     if (case == "summary disabled") options$posteriorSummaryTable <- FALSE
-    if (case == "conditional disabled") options$showCoefMeanInc <- FALSE
+    if (case == "conditional disabled") options$posteriorSummaryConditionalEstimates <- FALSE
     result <- .bstsCoefficientTestResult(fit)
     mainBuilder(result, options, ready)
     conditionalBuilder(result, options, ready)
@@ -240,8 +240,8 @@ test_that("BSTS coefficient output dependencies refresh summaries without refitt
   environment(compute) <- scope
   mainBuilder <- .bstsCoefficientTestBuilder(".bstsCreateCoefficientTable")
   conditionalBuilder <- .bstsCoefficientTestBuilder(".bstsCreateConditionalCoefficientTable")
-  burnOptions <- c("burninMethod", "automaticBurninProportion", "manualBurninAmount")
-  displayOptions <- c("posteriorSummaryTable", "showCoefMeanInc", "posteriorSummaryCiLevel")
+  burnOptions <- c("burninMethod", "burninAutomaticProportion", "burninManualDraws")
+  displayOptions <- c("posteriorSummaryTable", "posteriorSummaryConditionalEstimates", "posteriorSummaryCiLevel")
   expect_false(any(c(burnOptions, displayOptions) %in% .bstsCoefficientTestFunction(".bstsModelDependencies")()))
   for (ci in c(0.95, 0.8)) {
     for (burn in c(0, 2)) {

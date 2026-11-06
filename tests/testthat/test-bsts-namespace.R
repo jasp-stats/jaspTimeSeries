@@ -32,7 +32,7 @@ test_that("cached BSTS summaries work in a fresh R process", {
     # Reuse the saved fit with manual burn-in and no predictions or refit.
     cached <- list(bstsMainContainer = list(bstsModelResults = list(object = saved$fit)))
     options <- getFromNamespace(".bstsBurnHelper", "jaspTimeSeries")(cached,
-      list(burninMethod = "manual", manualBurninAmount = 2, posteriorSummaryCiLevel = 0.95))
+      list(burninMethod = "manual", burninManualDraws = 2, posteriorSummaryCiLevel = 0.95))
     collector <- function() {
       table <- new.env(parent = emptyenv())
       table$rows <- list()

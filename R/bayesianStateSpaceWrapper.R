@@ -19,54 +19,55 @@
 
 #' Gaussian State Space Models
 #'
-#' @param aggregatedStatesPlotCiLevel, Sets the credible interval for the aggregated state, residual, and one-step-ahead prediction error plots.
+#' @param aggregatedStateAndErrorPlotsCiLevel, Sets the credible interval for the aggregated state, residual, and one-step-ahead prediction error plots.
 #'    Defaults to \code{0.95}.
-#' @param dynamicRegregressionComponent, This component allows you to model the effect of covariates or fixed factors on the dependent variable. Only available when covariates or fixed factors are present in the model.
+#' @param dynamicRegressionComponent, This component allows you to model the effect of covariates or fixed factors on the dependent variable. Only available when covariates or fixed factors are present in the model.
 #'    Defaults to \code{FALSE}.
+#' @param time, Optional. Complete numeric values order observations from smallest to largest, regardless of gaps. Complete, unambiguous dates and times order observations chronologically. Use 'YYYY-MM-DD' for dates or 'YYYY-MM-DD HH:MM:SS' for dates with times; seconds can be omitted. All variables stay aligned, and spreadsheet row order is unchanged. Tied values retain spreadsheet row order. If any value is missing or cannot be interpreted, or dates are ambiguous, Time is ignored for the entire analysis and a warning is shown. Leave Time empty to use spreadsheet row order. Successive observations are modeled as equally spaced steps; no rows are added for gaps in Time.
 bayesianStateSpace <- function(
           data = NULL,
           version = "0.96.3",
           formula = NULL,
           isNuisance = NULL,
           aggregatedStatesPlot = FALSE,
-          aggregatedStatesPlotCiLevel = 0.95,
+          aggregatedStateAndErrorPlotsCiLevel = 0.95,
           aggregatedStatesPlotObservationsShown = FALSE,
-          automaticBurninProportion = 0.1,
+          burninAutomaticProportion = 0.1,
           autoregressiveComponent = FALSE,
           burninMethod = "auto",
           componentStatesPlot = FALSE,
           controlChartPlot = FALSE,
-          controlPeriod = 100,
-          controlSigma = 2,
+          controlChartPeriodEnd = 100,
+          controlChartSigmaThreshold = 2,
           covariates = list(types = list(), value = list()),
           dependent = list(types = list(), value = ""),
-          dynamicRegregressionComponent = FALSE,
+          dynamicRegressionComponent = FALSE,
           # Ignored legacy argument; retain for syntax compatibility when regenerating.
           dynamicRegregressionLags = 0,
           expectedPredictors = 1,
           fixedFactors = list(types = list(), value = list()),
           forecastErrorPlot = FALSE,
-          lagSelectionMethod = "manual",
-          lags = 1,
+          autoregressiveLagSelectionMethod = "manual",
+          autoregressiveLags = 1,
           localLevelComponent = TRUE,
           localLinearTrendComponent = FALSE,
-          manualBurninAmount = 0,
-          maxLags = 1,
+          burninManualDraws = 0,
+          autoregressiveMaxLags = 1,
           modelTerms = list(),
           plotHeight = 320,
           plotWidth = 480,
           posteriorSummaryCiLevel = 0.95,
           posteriorSummaryTable = FALSE,
           predictionHorizon = 0,
-          probalisticControlPlot = FALSE,
+          controlChartProbabilisticPlot = FALSE,
           residualPlot = FALSE,
-          samples = 2000,
+          mcmcDraws = 2000,
           seasonalities = list(),
           seed = 1,
           semiLocalLinearTrendComponent = FALSE,
-          showCoefMeanInc = FALSE,
+          posteriorSummaryConditionalEstimates = FALSE,
           time = list(types = list(), value = ""),
-          timeout = 120) {
+          mcmcTimeoutSeconds = 120) {
 
    defaultArgCalls <- formals(jaspTimeSeries::bayesianStateSpace)
    defaultArgs <- lapply(defaultArgCalls, eval)

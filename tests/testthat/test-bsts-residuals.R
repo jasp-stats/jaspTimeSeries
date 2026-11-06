@@ -25,7 +25,7 @@
   plots <- new.env(parent = emptyenv())
   time <- seq(2001, by = .25, length.out = length(fit$original.series))
   builder(plots, fit, list(residualPlot = TRUE, burn = burn, time = time,
-                          aggregatedStatesPlotCiLevel = ci), ready = TRUE)
+                          aggregatedStateAndErrorPlotsCiLevel = ci), ready = TRUE)
   list(plot = plots$bstsResidualPlot$plotObject, time = time)
 }
 

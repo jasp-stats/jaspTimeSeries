@@ -2,8 +2,8 @@
   list(dependent = "response", covariates = character(), fixedFactors = character(),
        autoregressiveComponent = FALSE, localLevelComponent = TRUE,
        localLinearTrendComponent = FALSE, semiLocalLinearTrendComponent = FALSE,
-       dynamicRegregressionComponent = FALSE, seasonalities = NULL,
-       samples = samples, seed = 123, expectedPredictors = 1, timeout = 120)
+       dynamicRegressionComponent = FALSE, seasonalities = NULL,
+       mcmcDraws = samples, seed = 123, expectedPredictors = 1, mcmcTimeoutSeconds = 120)
 }
 
 test_that("BSTS rejects invalid draw counts before constructing or sampling a model", {
@@ -52,13 +52,13 @@ test_that("BSTS disabling console progress preserves posterior draws and burn-in
   invisible(capture.output(expected <- bsts::bsts(
     formula = data$response, data = data,
     state.specification = bsts::AddLocalLevel(list(), data$response),
-    niter = options$samples, timestamps = NULL, seed = options$seed,
+    niter = options$mcmcDraws, timestamps = NULL, seed = options$seed,
     expected.model.size = options$expectedPredictors,
-    model.options = bsts::BstsOptions(timeout.seconds = options$timeout))))
+    model.options = bsts::BstsOptions(timeout.seconds = options$mcmcTimeoutSeconds))))
   for (name in c("sigma.obs", "state.contributions", "one.step.prediction.errors",
                  "log.likelihood", "final.state"))
     expect_identical(actual[[name]], expected[[name]])
-  expect_equal(resolveBurn(actual, list(burninMethod = "manual", manualBurninAmount = 0)), 0)
-  expect_error(resolveBurn(actual, list(burninMethod = "manual", manualBurninAmount = 40)),
+  expect_equal(resolveBurn(actual, list(burninMethod = "manual", burninManualDraws = 0)), 0)
+  expect_error(resolveBurn(actual, list(burninMethod = "manual", burninManualDraws = 40)),
                "leaving at least one", fixed = TRUE)
 })

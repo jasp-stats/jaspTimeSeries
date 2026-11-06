@@ -13,6 +13,7 @@ Upgrades
 		ChangeRename	{ from: "dates";										to: "time"								}
 		ChangeRename	{ from: "postSummaryTable";								to: "posteriorSummaryTable"				}
 		ChangeRename	{ from: "posteriorSummaryCoefCredibleIntervalValue";	to: "posteriorSummaryCiLevel"			}
+		ChangeRename	{ from: "showCoefMeanInc";								to: "posteriorSummaryConditionalEstimates"	}
 		ChangeRename	{ from: "expectedModelSize";							to: "expectedPredictors"				}
 
 		ChangeRename	{ from: "checkboxAr";									to: "autoregressiveComponent"			}
@@ -30,14 +31,16 @@ Upgrades
 			}
 		}
 
-		ChangeRename	{ from: "noLags";										to: "lags"								}
-		ChangeRename	{ from: "maxNoLags";									to: "maxLags"							}
+		ChangeRename	{ from: "lagSelectionMethod";							to: "autoregressiveLagSelectionMethod"	}
+
+		ChangeRename	{ from: "noLags";										to: "autoregressiveLags"								}
+		ChangeRename	{ from: "maxNoLags";									to: "autoregressiveMaxLags"							}
 
 		ChangeRename	{ from: "checkboxLocalLevel";							to: "localLevelComponent"				}
 		ChangeRename	{ from: "checkboxLocalLinearTrend";						to: "localLinearTrendComponent"			}
 		ChangeRename	{ from: "checkboxSemiLocalLinearTrend";					to: "semiLocalLinearTrendComponent"		}
 
-		ChangeRename	{ from: "checkboxDynReg";								to: "dynamicRegregressionComponent"		}
+		ChangeRename	{ from: "checkboxDynReg";								to: "dynamicRegressionComponent"		}
 
 		ChangeRename	{ from: "DynRegLags";									to: "dynamicRegregressionLags"			}
 
@@ -63,7 +66,7 @@ Upgrades
 
 
 		ChangeRename	{ from: "checkboxPlotAggregatedStates";					to: "aggregatedStatesPlot"				}
-		ChangeRename	{ from: "ciAggregatedStates";							to: "aggregatedStatesPlotCiLevel"		}
+		ChangeRename	{ from: "ciAggregatedStates";							to: "aggregatedStateAndErrorPlotsCiLevel"		}
 
 		ChangeRename	{ from: "actualValuesAggregatedStates";					to: "aggregatedStatesPlotObservationsShown"		}
 
@@ -73,12 +76,14 @@ Upgrades
 		ChangeRename	{ from: "checkBoxResidual";								to: "residualPlot"						}
 		ChangeRename	{ from: "checkBoxForecastError";						to: "forecastErrorPlot"					}
 		ChangeRename	{ from: "checkControlChart";							to: "controlChartPlot"					}
-		ChangeRename	{ from: "checkControlProbPlot";							to: "probalisticControlPlot"			}
+		ChangeRename	{ from: "controlPeriod";								to: "controlChartPeriodEnd"			}
+		ChangeRename	{ from: "controlSigma";								to: "controlChartSigmaThreshold"		}
+		ChangeRename	{ from: "checkControlProbPlot";							to: "controlChartProbabilisticPlot"			}
 
-		ChangeRename	{ from: "mcmcDraws";									to: "samples"							}
+		ChangeRename	{ from: "timeout";										to: "mcmcTimeoutSeconds"				}
 		ChangeRename	{ from: "burnSpecification";							to: "burninMethod"						}
-		ChangeRename	{ from: "propBurnSuggested";							to: "automaticBurninProportion"			}
-		ChangeRename	{ from: "numberBurnManual";								to: "manualBurninAmount"				}
+		ChangeRename	{ from: "propBurnSuggested";							to: "burninAutomaticProportion"			}
+		ChangeRename	{ from: "numberBurnManual";								to: "burninManualDraws"				}
 
 		ChangeJS
 		{

@@ -242,7 +242,7 @@ Form
                 id: difference
                 label: qsTr("Difference")
                 childrenOnSameRow: true
-                info: qsTr("Differences the dependent variable. Note that differencing leads to a shorter time-series (n - lag) as a lag is used.")
+                info: qsTr("Differences the dependent variable at the selected lag, repeated according to Order. The first Lag × Order positions are retained as missing values (up to the series length). Existing missing values also propagate into differences that use them. Time series plots and saved transformations retain these positions; stationarity tests and autocorrelation plots handle them according to their own Missing observations setting.")
                 IntegerField { name: "differenceLag"; label: qsTr("Lag"); defaultValue: 1; min: 1; }
                 IntegerField { name: "differenceOrder"; label: qsTr("Order"); defaultValue: 1; min: 1; }
             }

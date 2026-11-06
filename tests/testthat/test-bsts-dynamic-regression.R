@@ -9,9 +9,9 @@
   list(dependent = "y", covariates = character(), fixedFactors = character(),
        modelTerms = list(), autoregressiveComponent = FALSE,
        localLevelComponent = TRUE, localLinearTrendComponent = FALSE,
-       semiLocalLinearTrendComponent = FALSE, dynamicRegregressionComponent = TRUE,
-       seasonalities = NULL, samples = 60L, seed = 123,
-       expectedPredictors = 1, timeout = 120)
+       semiLocalLinearTrendComponent = FALSE, dynamicRegressionComponent = TRUE,
+       seasonalities = NULL, mcmcDraws = 60L, seed = 123,
+       expectedPredictors = 1, mcmcTimeoutSeconds = 120)
 }
 
 test_that("BSTS ignores a retained dynamic regression setting without predictors", {
@@ -32,7 +32,7 @@ test_that("BSTS ignores a retained dynamic regression setting without predictors
     set.seed(123)
     actual <- fit(data, options)
     off <- options
-    off$dynamicRegregressionComponent <- FALSE
+    off$dynamicRegressionComponent <- FALSE
     set.seed(123)
     expected <- fit(data, off)
 
@@ -69,9 +69,9 @@ test_that("BSTS still fits dynamic regression for covariates and fixed factors",
     states <- bsts::AddDynamicRegression(states, formula = formula, data = data)
     expected <- bsts::bsts(
       formula = formula, data = data, state.specification = states,
-      niter = options$samples, ping = 0, timestamps = NULL, seed = options$seed,
+      niter = options$mcmcDraws, ping = 0, timestamps = NULL, seed = options$seed,
       expected.model.size = options$expectedPredictors,
-      model.options = bsts::BstsOptions(timeout.seconds = options$timeout))
+      model.options = bsts::BstsOptions(timeout.seconds = options$mcmcTimeoutSeconds))
 
     expect_length(actual$state.specification, 2L)
     expect_s3_class(actual$state.specification[[2L]], "DynamicRegression")
@@ -82,7 +82,7 @@ test_that("BSTS still fits dynamic regression for covariates and fixed factors",
     expect_identical(serialize(data, NULL), dataBefore)
 
     off <- options
-    off$dynamicRegregressionComponent <- FALSE
+    off$dynamicRegressionComponent <- FALSE
     static <- fit(data, off)
     expect_length(static$state.specification, 1L)
     expect_s3_class(static$state.specification[[1L]], "LocalLevel")

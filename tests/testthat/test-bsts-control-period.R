@@ -20,8 +20,8 @@ test_that("BSTS validates only requested control plots and keeps model output", 
     main$bstsModelResults <- list(object = fit)
     main$bstsModelSummaryTable <- "existing model summary"
     builder(list(bstsMainContainer = main),
-            list(controlPeriod = period, controlChartPlot = threshold,
-                 probalisticControlPlot = probability), TRUE)
+            list(controlChartPeriodEnd = period, controlChartPlot = threshold,
+                 controlChartProbabilisticPlot = probability), TRUE)
     expect_identical(main$bstsModelResults$object, fit)
     expect_identical(main$bstsModelSummaryTable, "existing model summary")
     list(plots = main$bstsControlPlots, called = called)

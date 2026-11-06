@@ -20,12 +20,14 @@
 * Integrated the Bayesian State Space Models analysis from the standalone `jaspBsts` module, originally developed by Fridtjof Petersen.
 
 ## Changed
-* Classical time series analyses use Time to order whole observations, treating successive observations as equal steps without filling gaps. Unusable or ambiguous Time falls back to row order with a warning; ties retain spreadsheet order.
+* Time series analyses, including Bayesian state space models, use Time to order whole observations, treating successive observations as equal steps without filling gaps. Unusable or ambiguous Time falls back to row order with a warning; ties retain spreadsheet order. Bayesian models retain missing-response steps and keep covariates and fixed factors aligned.
 * With Time supplied, ARIMA forecasts use steps ahead in tables and CSV exports, and observation steps in plots. With Time empty, plots, tables, and CSV exports use the same continuing row index. Stationarity detrending uses observation steps.
+* Bayesian state space forecast plots with Time supplied label their axis as observation steps; future dates or numeric Time values are not inferred.
 * Renamed the Bayesian State Space Models analysis to Gaussian State Space Models; the R function and saved-analysis identifiers remain unchanged.
 * Updated module metadata to use the project website and a consistent package title.
 
 ## Fixed
+* Respect the selected differencing order in Stationarity while retaining missing positions and the original spreadsheet alignment of saved transformations.
 * Initialize Bayesian local-level and semilocal-trend priors from the first observed response when the series starts with missing values, preserving every time step for estimation and residual plots.
 * Load the Bayesian state space summary methods with the module so restored models can regenerate their tables in a fresh R session.
 * Made the shared credible-interval setting accessible independently of the aggregated state plot and clarified that it also controls the residual and one-step-ahead prediction error plots.

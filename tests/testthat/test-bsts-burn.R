@@ -57,18 +57,18 @@ test_that("BSTS manual burn-in uses completed iterations and permits zero", {
   resolve <- .bstsBurnTestFunction(".bstsResolveBurn")
   retained <- .bstsBurnTestFunction(".bstsRetainedDraws")
   for (burn in c(0, 1, 4, 19)) {
-    options <- list(burninMethod = "manual", manualBurninAmount = burn, samples = 1000)
+    options <- list(burninMethod = "manual", burninManualDraws = burn, mcmcDraws = 1000)
     expect_equal(resolve(fit, options), burn)
     expect_identical(retained(fit, burn), seq_len(fit$niter)[seq_len(fit$niter) > burn])
   }
   for (burn in list(-1, 0.5, 1.5, 20, 21, 1000, Inf, NA_real_, NaN,
                    numeric(), c(0, 1), "4")) {
-    expect_error(resolve(fit, list(burninMethod = "manual", manualBurninAmount = burn)))
+    expect_error(resolve(fit, list(burninMethod = "manual", burninManualDraws = burn)))
   }
   expect_error(resolve(fit, list(burninMethod = "unknown")))
   for (niter in list(0, -1, 1.5, NA_real_, Inf, NULL)) {
     fit$niter <- niter
-    expect_error(resolve(fit, list(burninMethod = "manual", manualBurninAmount = 0)))
+    expect_error(resolve(fit, list(burninMethod = "manual", burninManualDraws = 0)))
   }
 })
 
@@ -76,24 +76,24 @@ test_that("BSTS automatic burn-in preserves the likelihood-based suggestion", {
   fit <- .bstsBurnTestFit()
   resolve <- .bstsBurnTestFunction(".bstsResolveBurn")
   for (proportion in c(0.1, 0.5, 1)) {
-    options <- list(burninMethod = "auto", automaticBurninProportion = proportion)
+    options <- list(burninMethod = "auto", burninAutomaticProportion = proportion)
     expect_equal(resolve(fit, options), bsts::SuggestBurn(proportion, fit))
   }
   # For these likelihoods the suggestion is 12, not 10% of the 20 draws.
-  expect_equal(resolve(fit, list(burninMethod = "auto", automaticBurninProportion = 0.1)), 12)
+  expect_equal(resolve(fit, list(burninMethod = "auto", burninAutomaticProportion = 0.1)), 12)
   for (proportion in list(0, -0.1, 0.001, 1.1, Inf, NA_real_, NaN,
                          numeric(), c(0.1, 0.2), "0.1")) {
-    expect_error(resolve(fit, list(burninMethod = "auto", automaticBurninProportion = proportion)))
+    expect_error(resolve(fit, list(burninMethod = "auto", burninAutomaticProportion = proportion)))
   }
   fit$log.likelihood <- NULL
-  expect_equal(resolve(fit, list(burninMethod = "auto", automaticBurninProportion = 0.5)),
+  expect_equal(resolve(fit, list(burninMethod = "auto", burninAutomaticProportion = 0.5)),
                bsts::SuggestBurn(0.5, fit))
   # A timeout can leave fewer iterations than requested. The default automatic
   # fraction cannot define a likelihood tail for this very short completed fit.
   fit$niter <- 4L
   fit$log.likelihood <- c(-10, -5, -3, -1)
-  expect_error(resolve(fit, list(burninMethod = "auto", automaticBurninProportion = 0.1,
-                                samples = 1000)))
+  expect_error(resolve(fit, list(burninMethod = "auto", burninAutomaticProportion = 0.1,
+                                mcmcDraws = 1000)))
 })
 
 test_that("BSTS burn helper preserves the cached fit and handles not-ready output", {
@@ -101,7 +101,7 @@ test_that("BSTS burn helper preserves the cached fit and handles not-ready outpu
   fit <- .bstsBurnTestFit()
   cached <- list(bstsMainContainer = list(bstsModelResults = list(object = fit)))
   before <- serialize(cached, NULL)
-  options <- list(burninMethod = "manual", manualBurninAmount = 4)
+  options <- list(burninMethod = "manual", burninManualDraws = 4)
   expect_equal(helper(cached, options)$burn, 4)
   expect_identical(serialize(cached, NULL), before)
   expect_equal(helper(list(bstsMainContainer = list()), options)$burn, 0)
@@ -129,7 +129,7 @@ test_that("BSTS coefficient statistics and intervals use the same retained draws
   fill <- .bstsBurnTestFunction(".bstsFillCoefficientTable")
   for (burn in c(0, 4, 19)) {
     table <- .bstsBurnTestTable()
-    options <- list(burn = burn, posteriorSummaryCiLevel = 0.95, showCoefMeanInc = TRUE)
+    options <- list(burn = burn, posteriorSummaryCiLevel = 0.95, posteriorSummaryConditionalEstimates = TRUE)
     fill(fit, table, options, TRUE)
     expect_length(table$rows, ncol(fit$coefficients))
     for (row in table$rows) {
@@ -175,7 +175,7 @@ test_that("BSTS aggregated states keep every draw at zero burn-in", {
   fit <- .bstsBurnTestFit()
   for (burn in c(0, 4, 19)) {
     options <- list(burn = burn, time = seq_along(fit$original.series),
-      aggregatedStatesPlot = TRUE, aggregatedStatesPlotCiLevel = 0.95,
+      aggregatedStatesPlot = TRUE, aggregatedStateAndErrorPlotsCiLevel = 0.95,
       aggregatedStatesPlotObservationsShown = FALSE)
     plot <- .bstsBurnTestStatePlot(".bstsAggregatedStatePlot", fit, options)
     built <- ggplot2::ggplot_build(plot)
@@ -220,7 +220,7 @@ test_that("BSTS forecasts receive the resolved burn-in without refitting", {
 })
 
 test_that("BSTS burn options invalidate derived results, not model fitting", {
-  burnOptions <- c("burninMethod", "automaticBurninProportion", "manualBurninAmount")
+  burnOptions <- c("burninMethod", "burninAutomaticProportion", "burninManualDraws")
   for (name in c(".bstsStatePlotDependencies", ".bstsPredictionDependencies", ".bstsControlDependencies"))
     expect_true(all(burnOptions %in% .bstsBurnTestFunction(name)()))
   expect_false(any(burnOptions %in% .bstsBurnTestFunction(".bstsModelDependencies")()))

@@ -19,7 +19,7 @@ test_that("Model Summary table results match (AR - manual)", {
   options$dependent <- "contNormal"
   options$autoregressiveComponent <- TRUE
   options$localLevelComponent <- FALSE
-  options$samples <- 10
+  options$mcmcDraws <- 10
 
   set.seed(1)
   for (i in 1:6){
@@ -39,9 +39,9 @@ test_that("Model Summary table results match (AR - automatic)", {
   options$dependent <- "contNormal"
   options$autoregressiveComponent <- TRUE
   options$localLevelComponent <- FALSE
-  options$lagSelectionMethod <- "auto"
-  options$maxLags <- 4
-  options$samples <- 10
+  options$autoregressiveLagSelectionMethod <- "auto"
+  options$autoregressiveMaxLags <- 4
+  options$mcmcDraws <- 10
 
   set.seed(1)
   for (i in 1:6){
@@ -61,7 +61,7 @@ test_that("Model Summary table results match (local level)", {
   options <- jaspTools::analysisOptions("bayesianStateSpace")
   options$dependent <- "contNormal"
   options$localLevelComponent <- TRUE
-  options$samples <- 10
+  options$mcmcDraws <- 10
 
   set.seed(1)
   for (i in 1:6){
@@ -82,7 +82,7 @@ test_that("Model Summary table results match (local linear trend)", {
   options$dependent <- "contNormal"
   options$localLinearTrendComponent <- TRUE
   options$localLevelComponent <- FALSE
-  options$samples <- 10
+  options$mcmcDraws <- 10
 
   set.seed(1)
   for (i in 1:6){
@@ -101,7 +101,7 @@ test_that("Model Summary table results match (semi-local linear trend)", {
   options <- jaspTools::analysisOptions("bayesianStateSpace")
   options$dependent <- "contNormal"
   options$localLevelComponent <- TRUE
-  options$samples <- 10
+  options$mcmcDraws <- 10
 
   set.seed(1)
   for (i in 1:6){
@@ -128,7 +128,7 @@ test_that("Model Summary table results match (seasonal)", {
                                      normalPriorSd="",
                                      inverseGammaPriorSd=""
   ))
-  options$samples <- 10
+  options$mcmcDraws <- 10
 
   set.seed(1)
   for (i in 1:6){
@@ -148,7 +148,7 @@ options$covariates <- c("contcor1", "contcor2")
 options$time <- "dateYear"
 options$posteriorSummaryTable <- TRUE
 options$localLevelComponent <- TRUE
-options$samples <- 10
+options$mcmcDraws <- 10
 options$expectedPredictors <- 3
 options$modelTerms <- list(list(components = "contcor1", isNuisance = FALSE), list(
   components = "contcor2", isNuisance = FALSE))
@@ -193,7 +193,7 @@ options$fixedFactors <- c("facGender", "facExperim")
 options$time <- "dateYear"
 options$posteriorSummaryTable <- TRUE
 options$localLevelComponent <- TRUE
-options$samples <- 10
+options$mcmcDraws <- 10
 options$expectedPredictors <- 3
 options$modelTerms <- list(list(components = "facGender", isNuisance = FALSE), list(
   components = "facExperim", isNuisance = FALSE))
@@ -237,7 +237,7 @@ options$componentStatesPlot <- TRUE
 options$forecastErrorPlot<- TRUE
 options$residualPlot <- TRUE
 options$controlChartPlot <- TRUE
-options$probalisticControlPlot <- TRUE
+options$controlChartProbabilisticPlot <- TRUE
 for (i in 1:6){
   options$time <- dateTimeVarNames[i]
 
@@ -279,7 +279,7 @@ test_that("Prediction plot matches", {
   skip_on_os(c("mac","linux"))
   options <- jaspTools::analysisOptions("bayesianStateSpace")
   options$dependent <- "contNormal"
-  options$samples <- 10
+  options$mcmcDraws <- 10
   options$localLevelComponent <- TRUE
   options$time <- "dateYear"
   options$predictionHorizon <- 12
@@ -306,7 +306,7 @@ test_that("Prediction plot matches", {
     options$dependent <- "contNormal"
     options$autoregressiveComponent <- TRUE
     options$localLevelComponent <- FALSE
-    options$samples <- 10
+    options$mcmcDraws <- 10
 
     set.seed(1)
     for (i in 1:6){
@@ -326,9 +326,9 @@ test_that("Prediction plot matches", {
     options$dependent <- "contNormal"
     options$autoregressiveComponent <- TRUE
     options$localLevelComponent <- FALSE
-    options$lagSelectionMethod <- "auto"
-    options$maxLags <- 4
-    options$samples <- 10
+    options$autoregressiveLagSelectionMethod <- "auto"
+    options$autoregressiveMaxLags <- 4
+    options$mcmcDraws <- 10
 
     set.seed(1)
     for (i in 1:6){
@@ -348,7 +348,7 @@ test_that("Prediction plot matches", {
     options <- jaspTools::analysisOptions("bayesianStateSpace")
     options$dependent <- "contNormal"
     options$localLevelComponent <- TRUE
-    options$samples <- 10
+    options$mcmcDraws <- 10
 
     set.seed(1)
     for (i in 1:6){
@@ -369,7 +369,7 @@ test_that("Prediction plot matches", {
     options$dependent <- "contNormal"
     options$localLinearTrendComponent <- TRUE
     options$localLevelComponent <- FALSE
-    options$samples <- 10
+    options$mcmcDraws <- 10
 
     set.seed(1)
     for (i in 1:6){
@@ -388,7 +388,7 @@ test_that("Prediction plot matches", {
     options <- jaspTools::analysisOptions("bayesianStateSpace")
     options$dependent <- "contNormal"
     options$localLevelComponent <- TRUE
-    options$samples <- 10
+    options$mcmcDraws <- 10
 
     set.seed(1)
     for (i in 1:6){
@@ -415,7 +415,7 @@ test_that("Prediction plot matches", {
                                        normalPriorSd="",
                                        inverseGammaPriorSd=""
     ))
-    options$samples <- 10
+    options$mcmcDraws <- 10
 
     set.seed(1)
     for (i in 1:6){
@@ -435,7 +435,7 @@ test_that("Prediction plot matches", {
   options$time <- "dateYear"
   options$posteriorSummaryTable <- TRUE
   options$localLevelComponent <- TRUE
-  options$samples <- 10
+  options$mcmcDraws <- 10
   options$expectedPredictors <- 3
   options$modelTerms <- list(list(components = "contcor1", isNuisance = FALSE), list(
     components = "contcor2", isNuisance = FALSE))
@@ -480,7 +480,7 @@ test_that("Prediction plot matches", {
   options$time <- "dateYear"
   options$posteriorSummaryTable <- TRUE
   options$localLevelComponent <- TRUE
-  options$samples <- 10
+  options$mcmcDraws <- 10
   options$expectedPredictors <- 3
   options$modelTerms <- list(list(components = "facGender", isNuisance = FALSE), list(
     components = "facExperim", isNuisance = FALSE))
@@ -523,7 +523,7 @@ test_that("Prediction plot matches", {
   options$forecastErrorPlot<- TRUE
   options$residualPlot <- TRUE
   options$controlChartPlot <- TRUE
-  options$probalisticControlPlot <- TRUE
+  options$controlChartProbabilisticPlot <- TRUE
   # the 3rd value in dateTimeVarNames causes errors when unit test performed on Github (day)
   # possibly due to different region settings on operating systems, removed for now
   for (i in c(1:2,4:6)){
@@ -567,7 +567,7 @@ test_that("Prediction plot matches", {
     skip_on_os("windows")
     options <- jaspTools::analysisOptions("bayesianStateSpace")
     options$dependent <- "contNormal"
-    options$samples <- 10
+    options$mcmcDraws <- 10
     options$localLevelComponent <- TRUE
     options$time <- "dateYear"
     options$predictionHorizon <- 12

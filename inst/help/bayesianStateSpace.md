@@ -16,6 +16,9 @@ The Gaussian State Space Model decomposes the hidden state of a time series into
 - Dependent Variable: Response variable to be estimated (needed)
 - Covariates: Numerical predictor variables (optional)
 - Fixed Factors: Categorical predictor variables that will be recoded internally to dummy variables (optional)
+- Time: Optional variable that determines observation order for the analysis. Complete numeric values order observations from smallest to largest, regardless of gaps. Complete, unambiguous dates and times order observations chronologically. Use `YYYY-MM-DD` for dates or `YYYY-MM-DD HH:MM:SS` for dates with times; seconds can be omitted. Responses, covariates and fixed factors stay aligned, and the spreadsheet order is unchanged. Tied values retain spreadsheet row order. If any Time value is missing or cannot be interpreted, or dates are ambiguous, Time is ignored for the entire analysis and a warning is shown. Leave Time empty to use spreadsheet row order. Output notes explain date interpretation, sorting and repeated Time values when applicable.
+
+Successive observations are modeled as equally spaced steps; no rows are added for gaps in Time. Missing response values retain their steps in the fitted model. State estimates can therefore be available at steps without an observed response. These steps are not removed or replaced by observed values. Predictors must be complete.
 
 #### Output
 - Posterior summary of coefficients: Shows model-averaged coefficient estimates, using all retained MCMC draws, including zeros when a predictor was excluded.
@@ -66,11 +69,11 @@ The Gaussian State Space Model decomposes the hidden state of a time series into
 
 #### Prediction
 - This option plots the posterior predictive distribution sampled from the specified state space model. As of now only possible without predictor variables.
-  - Horizon: Determines the number of time points into the future that are predicted. Value needs to be larger than 0 to make predictions and show a plot.
+  - Horizon: Determines the number of observation steps predicted beyond the final step in analysis order, including any trailing missing responses. Value needs to be larger than 0 to make predictions and show a plot. The forecast plot uses observation-step numbers; it does not infer future dates or numeric Time values.
 
 #### Control chart
 - Show control chart: This option plots the aggregated state but adds a critical threshold that can be used as a control chart. The threshold is calculated by mean(state) +/- L*sigma
-  - Control period end: The end of the baseline period that is used to calculate the mean and sigma for the threshold
+  - Control period end: The number of initial observations in analysis order used as the baseline for calculating the mean and sigma of the threshold. For example, 20 uses the first 20 steps after ordering by usable Time, including steps with missing responses. This is a step count, not a Time value or date.
   - Sigma threshold: How many sigmas a value has to exeed our mean to be considered as a critical value
   - Show probalistic control plot: Instead of plotting whether the aggregated state and its credible interval exeed the threshold, this plot shows the probability that the state exceeds the threshold.
 
@@ -120,11 +123,11 @@ This optional table summarises each coefficient using only retained draws in whi
 If no retained draws include a predictor, its conditional mean, SD and interval are unavailable. With only one included draw, the mean is shown, but the SD and interval are unavailable. Conditional intervals describe coefficient uncertainty assuming inclusion; they do not measure evidence for including the predictor.
 
 #### State Plots:
-- Aggregated State: Time stamps are on the x-axis and the actual distribution of the estimated states on the y-axis. If the option `Actual observations` is selected, the real dependent variable values will be shown as points.
-- Component State plot: Plots the individual contribution of each state contribution to the overall state. Time stamps are on the x-axis and the distribution of each component on the y axis. Each component has a single column where the label on the right corresponds to the component name. The blue shaded area reflects the credible interval.
+- Aggregated State: The x-axis uses the interpreted Time values, or row positions if Time is empty or ignored. The y-axis shows the distribution of the estimated states. If the option `Actual observations` is selected, the observed dependent variable values will be shown as points; missing responses have no observation point.
+- Component State plot: Plots the individual contribution of each state component to the overall state. The x-axis uses the interpreted Time values, or row positions if Time is empty or ignored, and the y-axis shows the distribution of each component. Each component has a single column where the label on the right corresponds to the component name. The blue shaded area reflects the credible interval.
 
 #### Prediction Plot:
-- Time stamps are on the x-axis and the actual distribution of the estimated states on the y-axis. The line before the dashed line are the actual observations. The dashed line represents the end of the data set and the start of the prediction. The black line after the dashed line represents the mean of the predicted state and the blue shaded area the 95 percent credible interval.
+- Observation-step numbers are on the x-axis. The line before the dashed line shows the actual observations in analysis order. The dashed line represents the final step of the fitted series and the start of prediction, including any trailing missing responses. The black line after the dashed line represents the posterior predictive mean and the blue shaded area the 95 percent posterior predictive interval. Future dates or numeric Time values are not inferred.
 
 ### References
 - Scott, S. L. (2020). bsts: Bayesian Structural Time Series (0.9.5) [Computer software]. https://CRAN.R-project.org/package=bsts

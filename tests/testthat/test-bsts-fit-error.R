@@ -4,8 +4,8 @@ test_that("BSTS fitting errors gain context without changing successful fits", {
   options <- list(dependent = "response", covariates = character(), fixedFactors = character(),
                   autoregressiveComponent = FALSE, localLevelComponent = FALSE,
                   localLinearTrendComponent = FALSE, semiLocalLinearTrendComponent = FALSE,
-                  dynamicRegregressionComponent = FALSE, seasonalities = NULL,
-                  samples = 10, seed = 1, expectedPredictors = 1, timeout = 120)
+                  dynamicRegressionComponent = FALSE, seasonalities = NULL,
+                  mcmcDraws = 10, seed = 1, expectedPredictors = 1, mcmcTimeoutSeconds = 120)
 
   numericalErrorPrefix <- paste0(
     "Model estimation failed because of a numerical problem during sampling. ",

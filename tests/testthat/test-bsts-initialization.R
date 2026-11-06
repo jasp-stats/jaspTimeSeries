@@ -12,8 +12,8 @@
        autoregressiveComponent = FALSE, localLevelComponent = component == "localLevel",
        localLinearTrendComponent = component == "localLinearTrend",
        semiLocalLinearTrendComponent = component == "semilocalTrend",
-       dynamicRegregressionComponent = FALSE, seasonalities = NULL,
-       samples = 40L, seed = 123, expectedPredictors = 1, timeout = 120)
+       dynamicRegressionComponent = FALSE, seasonalities = NULL,
+       mcmcDraws = 40L, seed = 123, expectedPredictors = 1, mcmcTimeoutSeconds = 120)
 }
 
 test_that("BSTS fits level components without removing missing time steps", {
@@ -33,7 +33,7 @@ test_that("BSTS fits level components without removing missing time steps", {
         result <- fit(data, options)
 
         expect_s3_class(result, "bsts")
-        expect_equal(result$niter, options$samples)
+        expect_equal(result$niter, options$mcmcDraws)
         expect_identical(as.numeric(result$original.series), data$y)
         expect_equal(dim(result$state.contributions)[3L], nrow(data))
         priorName <- if (component == "localLevel") "initial.state.prior" else "initial.level.prior"
@@ -45,7 +45,7 @@ test_that("BSTS fits level components without removing missing time steps", {
         expect_equal(prior$sigma, stats::sd(data$y, na.rm = TRUE))
 
         residuals <- bsts::residuals.bsts(result, burn = 10L)
-        expect_equal(dim(residuals), c(options$samples - 10L, nrow(data)))
+        expect_equal(dim(residuals), c(options$mcmcDraws - 10L, nrow(data)))
         expect_identical(unname(which(colSums(!is.na(residuals)) == 0L)), missing)
         expect_true(all(is.finite(residuals[, -missing, drop = FALSE])))
         expect_true(all(is.finite(result$sigma.obs)))
@@ -75,9 +75,9 @@ test_that("BSTS complete-data level priors and posterior draws remain unchanged"
       formula <- if (regression) stats::reformulate(options$covariates, response = "y") else data$y
       expected <- bsts::bsts(
         formula = formula, data = data, state.specification = state,
-        niter = options$samples, ping = 0, timestamps = NULL, seed = options$seed,
+        niter = options$mcmcDraws, ping = 0, timestamps = NULL, seed = options$seed,
         expected.model.size = options$expectedPredictors,
-        model.options = bsts::BstsOptions(timeout.seconds = options$timeout))
+        model.options = bsts::BstsOptions(timeout.seconds = options$mcmcTimeoutSeconds))
 
       for (name in c("state.specification", "prior", "original.series", "sigma.obs",
                      "state.contributions", "one.step.prediction.errors",
@@ -104,7 +104,7 @@ test_that("BSTS residual plotting works after fitting a response with leading ga
   plots <- new.env(parent = emptyenv())
   time <- seq_len(nrow(data))
   builder(plots, fit, list(residualPlot = TRUE, burn = 10L, time = time,
-                          aggregatedStatesPlotCiLevel = .95), ready = TRUE)
+                          aggregatedStateAndErrorPlotsCiLevel = .95), ready = TRUE)
   built <- ggplot2::ggplot_build(plots$bstsResidualPlot$plotObject)
   ribbon <- built$data[[1L]]
   line <- built$data[[2L]]

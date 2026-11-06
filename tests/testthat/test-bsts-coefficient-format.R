@@ -1,6 +1,6 @@
 test_that("BSTS coefficient estimates use JASP's standard numeric formatting", {
   options <- list(modelTerms = list(list(components = "predictor")),
-                  posteriorSummaryTable = TRUE, showCoefMeanInc = TRUE,
+                  posteriorSummaryTable = TRUE, posteriorSummaryConditionalEstimates = TRUE,
                   posteriorSummaryCiLevel = 0.95)
   for (suffix in c("CoefficientTable", "ConditionalCoefficientTable")) {
     builder <- getFromNamespace(paste0(".bstsCreate", suffix), "jaspTimeSeries")
