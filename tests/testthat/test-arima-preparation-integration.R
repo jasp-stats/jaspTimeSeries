@@ -382,3 +382,46 @@ test_that("ARIMA residual policies are local and preserve model forecasts", {
     }
   }
 })
+
+test_that("ARIMA defaults omit missing residuals only for diagnostics and report the gaps", {
+  data <- arimaPreparationFixture()
+  data$y[c(1L, 2L, 25L, 48L)] <- NA_real_
+  permutation <- c(seq(2L, 48L, 2L), seq(1L, 47L, 2L))
+  input <- data[permutation, ]
+  before <- serialize(input, NULL)
+  reference <- arimaPreparationRun(data, time = FALSE)
+  actual <- arimaPreparationRun(input, residualAcf = TRUE, residualLjungBox = TRUE, residualMaxLag = 3L)
+  expect_identical(actual$options$residualAcfMissingValues, "omit")
+  expect_identical(actual$options$residualLjungBoxMissingValues, "omit")
+  expectArimaPreparedLike(actual, reference, data$y)
+  fit <- arimaPreparationFit(actual)
+  residuals <- getFromNamespace(".tsResiduals", "jaspTimeSeries")(fit)
+  retained <- residuals[!is.na(residuals)]
+  plots <- actual$result$results$residContainer$collection
+  acfOutput <- plots$residContainer_residualACFPlot
+  ljungOutput <- plots$residContainer_ljungPlot
+  expect_identical(acfOutput$status, "complete")
+  expect_identical(ljungOutput$status, "complete")
+  acf <- actual$result$state$figures[[acfOutput$data]]$obj
+  layer <- Filter(function(layer) inherits(layer$geom, "GeomLinerange"), acf$layers)[[1L]]
+  expect_equal(layer$data$acf,
+    as.numeric(stats::acf(retained, plot = FALSE, lag.max = 3L)$acf)[-1L], tolerance = 1e-10)
+  ljung <- actual$result$state$figures[[ljungOutput$data]]$obj
+  expected <- vapply(1:3, function(lag) stats::Box.test(retained, lag, type = "Ljung-Box")$p.value, numeric(1L))
+  expect_equal(ggplot2::ggplot_build(ljung)$data[[2L]]$y, expected, tolerance = 1e-10)
+  for (note in list(plots$residContainer_residualAcfMissingNote,
+                   plots$residContainer_residualLjungBoxMissingNote)) {
+    text <- paste(unlist(note), collapse = " ")
+    expect_match(text, "44 of 48", fixed = TRUE)
+    expect_match(text, "consecutive time steps", fixed = TRUE)
+    expect_match(text, "internal gaps are ignored", fixed = TRUE)
+  }
+  containerMeta <- Filter(function(item) identical(item$name, "residContainer"), actual$result$results$.meta)
+  expect_length(containerMeta, 1L)
+  order <- vapply(containerMeta[[1L]]$meta, `[[`, "", "name")
+  expect_true(all(c("residContainer_residualACFPlot", "residContainer_residualAcfMissingNote",
+                    "residContainer_ljungPlot", "residContainer_residualLjungBoxMissingNote") %in% order))
+  expect_equal(match("residContainer_residualAcfMissingNote", order), match("residContainer_residualACFPlot", order) + 1L)
+  expect_equal(match("residContainer_residualLjungBoxMissingNote", order), match("residContainer_ljungPlot", order) + 1L)
+  expect_identical(serialize(input, NULL), before)
+})

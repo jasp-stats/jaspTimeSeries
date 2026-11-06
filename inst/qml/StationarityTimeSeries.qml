@@ -58,12 +58,15 @@ Form
         RadioButtonGroup
         {
             name: "testMissingValues"
+            id: testMissingValuesChoice
             title: qsTr("Missing observations")
             enabled: adfTest.checked || ppRegression.checked || ppStudentized.checked || kpssLevel.checked || kpssTrend.checked
-            info: qsTr("Applies only to this calculation. Report an error stops this output if any observations are missing. Omit missing observations at the ends removes only leading and trailing missing values; internal missing values still cause an error. Use the longest complete segment selects the longest consecutive run without missing values, using the earliest run when tied. When observations are omitted, the retained range and observation count are reported. The original data are unchanged.")
-            RadioButton { value: "error"; label: qsTr("Report an error"); checked: true }
-            RadioButton { value: "trim"; label: qsTr("Omit missing observations at the ends") }
+            info: qsTr("Applies only to this calculation. Omit all missing observations removes missing values and treats the remaining observations as consecutive time steps, ignoring any internal gaps. Use the longest complete segment selects the longest consecutive run without missing values, using the earliest run when tied. When observations are omitted, a note reports the observations used and any effect on time spacing. The original data and saved values are unchanged.")
+            RadioButton { value: "omit"; label: qsTr("Omit all missing observations"); checked: true }
             RadioButton { value: "longest"; label: qsTr("Use the longest complete segment") }
+            // Retain an explicitly selected setting from older development files.
+            RadioButton { value: "trim"; label: qsTr("Omit missing observations at the ends"); visible: testMissingValuesChoice.value === "trim" }
+            RadioButton { value: "error"; label: qsTr("Report an error"); visible: testMissingValuesChoice.value === "error" }
         }
     }
     Group
@@ -313,11 +316,14 @@ Form
                 RadioButtonGroup
                 {
                     name: "acfMissingValues"
+                    id: acfMissingValuesChoice
                     title: qsTr("Missing observations")
-                    info: qsTr("Applies only to this calculation. Report an error stops this output if any observations are missing. Omit missing observations at the ends removes only leading and trailing missing values; internal missing values still cause an error. Use the longest complete segment selects the longest consecutive run without missing values, using the earliest run when tied. When observations are omitted, the retained range and observation count are reported. The original data are unchanged.")
-                    RadioButton { value: "error"; label: qsTr("Report an error"); checked: true }
-                    RadioButton { value: "trim"; label: qsTr("Omit missing observations at the ends") }
+                    info: qsTr("Applies only to this calculation. Omit all missing observations removes missing values and treats the remaining observations as consecutive time steps, ignoring any internal gaps. Use the longest complete segment selects the longest consecutive run without missing values, using the earliest run when tied. When observations are omitted, a note reports the observations used and any effect on time spacing. The original data and saved values are unchanged.")
+                    RadioButton { value: "omit"; label: qsTr("Omit all missing observations"); checked: true }
                     RadioButton { value: "longest"; label: qsTr("Use the longest complete segment") }
+                    // Retain an explicitly selected setting from older development files.
+                    RadioButton { value: "trim"; label: qsTr("Omit missing observations at the ends"); visible: acfMissingValuesChoice.value === "trim" }
+                    RadioButton { value: "error"; label: qsTr("Report an error"); visible: acfMissingValuesChoice.value === "error" }
                 }
                 IntegerField { name: "acfMaxLag"; label: qsTr("Maximum lag"); min: 1; defaultValue: 10 }
                 CheckBox { name: "acfZeroLag"; label: qsTr("Zero lag") }
@@ -348,11 +354,14 @@ Form
                 RadioButtonGroup
                 {
                     name: "pacfMissingValues"
+                    id: pacfMissingValuesChoice
                     title: qsTr("Missing observations")
-                    info: qsTr("Applies only to this calculation. Report an error stops this output if any observations are missing. Omit missing observations at the ends removes only leading and trailing missing values; internal missing values still cause an error. Use the longest complete segment selects the longest consecutive run without missing values, using the earliest run when tied. When observations are omitted, the retained range and observation count are reported. The original data are unchanged.")
-                    RadioButton { value: "error"; label: qsTr("Report an error"); checked: true }
-                    RadioButton { value: "trim"; label: qsTr("Omit missing observations at the ends") }
+                    info: qsTr("Applies only to this calculation. Omit all missing observations removes missing values and treats the remaining observations as consecutive time steps, ignoring any internal gaps. Use the longest complete segment selects the longest consecutive run without missing values, using the earliest run when tied. When observations are omitted, a note reports the observations used and any effect on time spacing. The original data and saved values are unchanged.")
+                    RadioButton { value: "omit"; label: qsTr("Omit all missing observations"); checked: true }
                     RadioButton { value: "longest"; label: qsTr("Use the longest complete segment") }
+                    // Retain an explicitly selected setting from older development files.
+                    RadioButton { value: "trim"; label: qsTr("Omit missing observations at the ends"); visible: pacfMissingValuesChoice.value === "trim" }
+                    RadioButton { value: "error"; label: qsTr("Report an error"); visible: pacfMissingValuesChoice.value === "error" }
                 }
                 IntegerField { name: "pacfMaxLag"; label: qsTr("Maximum lag"); min: 1; defaultValue: 10 }
                 CheckBox

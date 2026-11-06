@@ -336,3 +336,63 @@ test_that("Spectral policy selects a complete segment after ordering and filteri
   expect_match(paste(unlist(longest$results$spectralMissingNote), collapse = " "), "31 of 39", fixed = TRUE)
   expect_match(paste(unlist(longest$results$bandWidthTable$footnotes), collapse = " "), "steps 9 to 39", fixed = TRUE)
 })
+
+test_that("Stationarity defaults omit all missing observations with local explanatory notes", {
+  data <- ssPreparationFixture()
+  data$y[c(1L, 12L, 29L, 48L)] <- NA_real_
+  input <- data[c(25:48, 1:24), ]
+  before <- serialize(input, NULL)
+  options <- ssPreparationOptions("StationarityTimeSeries", pacf = TRUE, pacfMaxLag = 8L)
+  for (name in c("testMissingValues", "acfMissingValues", "pacfMissingValues"))
+    expect_identical(options[[name]], "omit")
+  actual <- ssPreparationRun("StationarityTimeSeries", input, options)
+  observed <- data[!is.na(data$y), ]
+  reference <- ssPreparationRun("StationarityTimeSeries", observed,
+    utils::modifyList(options, list(time = "")))
+  # The omission note shifts footnote identifiers, but no test results.
+  values <- function(rows) lapply(rows, function(row) row[names(row) != ".footnotes"])
+  expect_equal(values(ssPreparationTable(actual, "stationaryTable")),
+               values(ssPreparationTable(reference, "stationaryTable")), tolerance = 1e-10)
+  expect_equal(ssPreparationAcf(actual)$acf,
+    as.numeric(stats::acf(observed$y, plot = FALSE, lag.max = 8L)$acf)[-1L], tolerance = 1e-10)
+  pacf <- ssPreparationPlot(actual, "pacfPlot")
+  layer <- Filter(function(layer) inherits(layer$geom, "GeomLinerange"), pacf$layers)[[1L]]
+  expect_equal(layer$data$acf, as.numeric(stats::pacf(observed$y, plot = FALSE, lag.max = 8L)$acf), tolerance = 1e-10)
+  for (note in list(actual$results$stationaryTable$footnotes,
+                   actual$results$acfMissingNote, actual$results$pacfMissingNote)) {
+    text <- paste(unlist(note), collapse = " ")
+    expect_match(text, "44 of 48", fixed = TRUE)
+    expect_match(text, "consecutive time steps", fixed = TRUE)
+    expect_match(text, "internal gaps are ignored", fixed = TRUE)
+  }
+  order <- vapply(actual$results$.meta, `[[`, "", "name")
+  expect_true(all(c("acfPlot", "acfMissingNote", "pacfPlot", "pacfMissingNote") %in% order))
+  expect_equal(match("acfMissingNote", order), match("acfPlot", order) + 1L)
+  expect_equal(match("pacfMissingNote", order), match("pacfPlot", order) + 1L)
+  expect_null(reference$results$acfMissingNote)
+  expect_null(reference$results$pacfMissingNote)
+  expect_identical(serialize(input, NULL), before)
+})
+
+test_that("Spectral default omission compresses only the calculation and explains it", {
+  data <- ssPreparationFixture()
+  data$y[c(1L, 12L, 29L, 48L)] <- NA_real_
+  input <- data[c(25:48, 1:24), ]
+  before <- serialize(input, NULL)
+  options <- ssPreparationOptions("SpectralTimeSeries")
+  expect_identical(options$missingValues, "omit")
+  actual <- ssPreparationRun("SpectralTimeSeries", input, options)
+  ssPreparationSpectrum(actual, data$y[!is.na(data$y)], options)
+  for (note in list(actual$results$bandWidthTable$footnotes, actual$results$spectralMissingNote)) {
+    text <- paste(unlist(note), collapse = " ")
+    expect_match(text, "44 of 48", fixed = TRUE)
+    expect_match(text, "consecutive time steps", fixed = TRUE)
+    expect_match(text, "internal gaps are ignored", fixed = TRUE)
+  }
+  order <- vapply(actual$results$.meta, `[[`, "", "name")
+  expect_true(all(c("powerSpectralDensity", "spectralMissingNote") %in% order))
+  expect_equal(match("spectralMissingNote", order), match("powerSpectralDensity", order) + 1L)
+  complete <- ssPreparationRun("SpectralTimeSeries", ssPreparationFixture(), options)
+  expect_null(complete$results$spectralMissingNote)
+  expect_identical(serialize(input, NULL), before)
+})

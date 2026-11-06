@@ -50,6 +50,23 @@
     invokeRestart("muffleWarning")
 })
 
+test_that("new Time Series diagnostic and wrapper defaults omit missing observations", {
+  analyses <- list(
+    StationarityTimeSeries = c("testMissingValues", "acfMissingValues", "pacfMissingValues"),
+    SpectralTimeSeries = "missingValues",
+    ARIMATimeSeries = c("residualAcfMissingValues", "residualLjungBoxMissingValues")
+  )
+  for (analysis in names(analyses)) {
+    options <- jaspTools::analysisOptions(analysis)
+    for (name in analyses[[analysis]]) expect_identical(options[[name]], "omit")
+  }
+  for (package in c("jaspTimeSeries", "jaspDescriptives")) {
+    wrapper <- getExportedValue(package, "DescriptivesTimeSeries")
+    expect_identical(formals(wrapper)$acfMissingValues, "omit")
+    expect_identical(formals(wrapper)$pacfMissingValues, "omit")
+  }
+})
+
 test_that("Stationarity tests select complete inputs without changing the observation grid", {
   scope <- .tsPolicyScope()
   values <- 2 + sin(1:20) + (1:20) / 50

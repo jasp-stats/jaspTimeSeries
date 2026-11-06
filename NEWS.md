@@ -16,7 +16,7 @@
 # jaspTimeSeries (development version)
 
 ## Added
-* Added explicit missing-observation choices for autocorrelation plots, stationarity tests, spectral analysis, and ARIMA's Ljung-Box diagnostics: report an error (default), omit missing values only at the ends, or use the longest complete segment. Selected ranges are reported without changing model inputs or saved-row alignment.
+* Added missing-observation choices for autocorrelation plots, stationarity tests, spectral analysis, and ARIMA's Ljung-Box diagnostics: omit all missing observations (default) or use the longest complete segment. Omitting all missing observations adds an output note explaining that the remaining observations are treated as consecutive steps, ignoring internal gaps; model inputs and saved-row alignment are unchanged.
 * Integrated the Bayesian State Space Models analysis from the standalone `jaspBsts` module, originally developed by Fridtjof Petersen.
 
 ## Changed
