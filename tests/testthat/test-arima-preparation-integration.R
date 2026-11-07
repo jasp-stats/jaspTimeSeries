@@ -23,19 +23,15 @@ arimaPreparationRun <- function(input, time = TRUE, covariates = character(), ..
   options$forecastLength <- 3L
   options$forecastTable <- options$forecastTimeSeries <- options$forecastTimeSeriesObserved <- TRUE
   options <- utils::modifyList(options, list(...))
-  encoded <- jaspTools:::encodeOptionsAndDataset(jaspTools:::fixOptionsForVariableTypes(options), input)
-  # Model the native global-filter contract: supplied rows keep spreadsheet IDs.
-  rownames(encoded$dataset) <- rownames(input)
-  result <- jaspTools::runAnalysis("ARIMATimeSeries", dataset = encoded$dataset,
-                                  options = encoded$options, encodedDataset = TRUE, view = FALSE)
+  # The bridge imports a fresh spreadsheet: its rows are 1..n, regardless of R
+  # row names. Global-filter identities are checked separately with the real
+  # preparation and saving helpers below, not simulated through this import.
+  rownames(input) <- NULL
+  result <- jaspTools::runAnalysis("ARIMATimeSeries", dataset = input,
+                                  options = options, view = FALSE)
   expect_identical(result$status, "complete")
   expect_false(isTRUE(result$results$error))
-  # The runtime drops unassigned columns before encoding. Map selected names
-  # through their encoded options, not through positions in the input frame.
-  columnNames <- setNames(c("y", if (time) "Time", covariates),
-    c(encoded$options$dependent, if (time) encoded$options$time, encoded$options$covariates))
-  list(result = result, options = encoded$options, dataset = encoded$dataset,
-       columnNames = columnNames)
+  list(result = result, options = options, dataset = input)
 }
 
 arimaPreparationFit <- function(run) {
@@ -45,14 +41,8 @@ arimaPreparationFit <- function(run) {
 }
 
 arimaPreparationCoefficients <- function(run) {
-  rows <- run$result$results$coefTable$data
-  # runAnalysis retains encoded variable labels in raw results. Decode only
-  # those labels, without dropping row grouping or coefficient metadata.
-  lapply(rows, function(row) {
-    if (row$coefficients %in% names(run$columnNames))
-      row$coefficients <- unname(run$columnNames[row$coefficients])
-    row
-  })
+  # The public runner decodes result labels back to the supplied column names.
+  run$result$results$coefTable$data
 }
 
 arimaPreparationForecast <- function(run) {
@@ -172,7 +162,7 @@ test_that("one or two future regressors follow the final filtered row even acros
   rownames(input) <- as.character(seq(2, 96, 2))
   for (covariates in list("x1", c("x1", "x2"))) {
     actual <- arimaPreparationRun(input, covariates = covariates, filter = TRUE,
-                                  filterBy = "row", rowStart = 2L, rowEnd = 76L)
+                                  filterBy = "row", rowStart = 1L, rowEnd = 38L)
     reference <- arimaPreparationRun(data, time = FALSE, covariates = covariates,
                                      filter = TRUE, filterBy = "row", rowStart = 1L, rowEnd = 38L)
     expectArimaPreparedLike(actual, reference, data$y[1:38])
@@ -190,10 +180,13 @@ test_that("one or two future regressors follow the final filtered row even acros
     expect_match(paste(unlist(actual$result$results$timeTiesNote), collapse = " "),
                  "successive steps", fixed = TRUE)
 
-    # Real preparation and the real supported-runtime fit feed the unchanged
-    # saving helper. Only the column sink is collected; this is not a Desktop
-    # persistent-state or spreadsheet-write test.
-    prepared <- jaspDescriptives::.tsPrepareData(NULL, actual$dataset, actual$options, TRUE, covariates = TRUE)
+    # The same observations after a global filter have nonconsecutive original
+    # spreadsheet identities. The bridge's fresh-data import cannot represent
+    # that filter; check its preparation/writeback contract directly, using the
+    # genuine runtime fit and collecting only the native column sink.
+    options <- utils::modifyList(actual$options, list(rowStart = 2L, rowEnd = 76L))
+    prepared <- jaspDescriptives::.tsPrepareData(NULL, input, options, TRUE, covariates = TRUE)
+    expect_equal(prepared$data$y, as.numeric(fit$x), tolerance = 1e-12)
     expect_identical(rownames(prepared$data), rownames(input)[match(1:38, permutation)])
     expect_identical(rownames(prepared$raw), rownames(input)[match(1:48, permutation)])
     written <- NULL
@@ -207,7 +200,6 @@ test_that("one or two future regressors follow the final filtered row even acros
     }
     saveResiduals <- getFromNamespace(".tsSaveResiduals", "jaspTimeSeries")
     environment(saveResiduals) <- scope
-    options <- actual$options
     options$residualSavedToData <- TRUE
     options$residualColumn <- "savedResiduals"
     saveResiduals(prepared$data, prepared$raw, fit, options, new.env(parent = emptyenv()), TRUE, character())
@@ -329,7 +321,9 @@ test_that("automatic ARIMA aligns residual plots and saved rows after ordering a
   expect_match(paste(unlist(plots$residContainer_residualTimeSeriesMissingNote), collapse = " "),
                "Missing residuals appear as gaps", fixed = TRUE)
 
-  prepared <- jaspDescriptives::.tsPrepareData(NULL, actual$dataset, actual$options, TRUE, covariates = TRUE)
+  # Keep the separate global-filter writeback check: imported bridge data have
+  # consecutive row IDs, whereas this direct fixture retains skipped rows.
+  prepared <- jaspDescriptives::.tsPrepareData(NULL, input, actual$options, TRUE, covariates = TRUE)
   expectedRows <- 2L * match(selected, permutation)
   expect_identical(rownames(prepared$data), as.character(expectedRows))
   written <- NULL

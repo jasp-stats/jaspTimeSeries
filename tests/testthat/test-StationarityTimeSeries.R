@@ -1,7 +1,12 @@
 context("Stationarity Time Series")
 
+# An explicit CSV path preserves date labels; basename lookup uses fread(),
+# whose IDate column the current native bridge imports as integer day counts.
+webpageVisitsFile <- system.file("jaspData", "JASP Webpage Visits.csv",
+                                package = "jaspTools", mustWork = TRUE)
+
 options <- jaspTools::analysisOptions("StationarityTimeSeries")
-# Explicit native default: readQML can misparse the following Label as checked.
+# This plot fixture does not write transformed values back to the data.
 options$transformationSavedToData <- FALSE
 options$dependent <- "visits"
 options$time <- "date"
@@ -12,7 +17,7 @@ options$kpssLevel <- TRUE
 options$kpssTrend <- TRUE
 options$detrend <- TRUE
 set.seed(1)
-results <- jaspTools::runAnalysis("StationarityTimeSeries", "JASP Webpage Visits.csv", options)
+results <- jaspTools::runAnalysis("StationarityTimeSeries", webpageVisitsFile, options)
 
 
 test_that("Detrend using linear regression table results match", {

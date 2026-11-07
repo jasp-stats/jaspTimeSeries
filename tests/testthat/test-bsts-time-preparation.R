@@ -184,7 +184,7 @@ test_that("BSTS ordered and shuffled inputs yield the same seeded model with res
 })
 
 .bstsTimePreparationRun <- function(input, time = TRUE) {
-  options <- jaspTools:::readQML(system.file("qml", "bayesianStateSpace.qml", package = "jaspTimeSeries"))
+  options <- jaspTools::analysisOptions("bayesianStateSpace")
   options$dependent <- list(types = "scale", value = "y")
   options$time <- if (time)
     list(types = if (is.numeric(input$Time)) "scale" else "nominal", value = "Time")
@@ -197,11 +197,12 @@ test_that("BSTS ordered and shuffled inputs yield the same seeded model with res
   options$burninManualDraws <- 5L
   options$aggregatedStatesPlot <- options$residualPlot <- TRUE
   options$predictionHorizon <- 2L
-  encoded <- jaspTools:::encodeOptionsAndDataset(jaspTools:::fixOptionsForVariableTypes(options), input)
-  rownames(encoded$dataset) <- rownames(input)
+  # A fresh bridge dataset uses its current spreadsheet row order. The direct
+  # preparation tests above cover identities retained after global filtering.
+  rownames(input) <- NULL
   set.seed(123)
-  result <- jaspTools::runAnalysis("bayesianStateSpace", dataset = encoded$dataset,
-                                  options = encoded$options, encodedDataset = TRUE,
+  result <- jaspTools::runAnalysis("bayesianStateSpace", dataset = input,
+                                  options = options,
                                   view = FALSE, makeTests = FALSE)
   expect_identical(result$status, "complete")
   expect_false(isTRUE(result$results$error))

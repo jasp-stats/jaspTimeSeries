@@ -7,7 +7,7 @@
   text <- gsub("//[^\n]*", "", text)
   matches <- regmatches(text, gregexpr('\\bname\\s*:\\s*"[^"]+"', text, perl = TRUE))[[1L]]
   names <- unique(sub('.*"([^"]+)"$', "\\1", matches))
-  list(names = names, defaults = jaspTools:::readQML(path))
+  list(names = names, path = path, defaults = jaspTools::analysisOptions("bayesianStateSpace"))
 }
 
 .bstsContractWalk <- function(expression, inspect) {
@@ -81,17 +81,33 @@ test_that("BSTS option naming preserves every QML and wrapper default", {
   nested <- c("modelTerms", "seasonalities")
   active <- setdiff(qml$names, c("allVariablesList", "availableTerm", .bstsContractRowKeys))
   expect_setequal(names(defaults), setdiff(active, c(assignments, nested)))
-  expect_identical(qml$defaults[names(defaults)], defaults)
+  # Native QML parsing keeps IntegerField values as integers. Compare their
+  # values, independent of R storage type and analysisOptions' tracking metadata.
+  qmlDefaults <- setNames(lapply(names(defaults), function(name) qml$defaults[[name]]), names(defaults))
+  expect_equal(qmlDefaults, defaults)
   expect_identical(wrapper[names(defaults)], defaults)
 
   for (name in assignments) {
     value <- if (name %in% c("dependent", "time")) "" else list()
-    expect_identical(qml$defaults[[name]], value)
+    # analysisOptions deliberately omits empty list options; the real form
+    # recreates these when options are passed to runAnalysis.
+    if (is.list(value)) expect_null(qml$defaults[[name]])
+    else expect_identical(qml$defaults[[name]], value)
     expect_identical(wrapper[[name]], list(types = list(), value = value))
   }
-  for (name in nested) expect_identical(wrapper[[name]], list())
-  # readQML currently flattens row fields and omits their enclosing lists.
-  expect_identical(qml$defaults[.bstsContractRowKeys],
+  for (name in nested) {
+    expect_null(qml$defaults[[name]])
+    expect_identical(wrapper[[name]], list())
+  }
+  # Row controls are initialized only when a seasonal component exists.
+  # Let the real QML form populate an empty row rather than flattening its fields.
+  seasonal <- jaspSyntax::parseQmlOptions(
+    qml$path, options = '{"seasonalities":[{}]}',
+    moduleName = "jaspTimeSeries", analysisName = "bayesianStateSpace",
+    version = as.character(utils::packageVersion("jaspTimeSeries")), preloadData = FALSE,
+    includeMeta = FALSE, includeTypeOptions = FALSE, isolated = FALSE)$seasonalities
+  expect_length(seasonal, 1L)
+  expect_equal(seasonal[[1L]][.bstsContractRowKeys],
     list(name = "", number = 2, duration = 1, inverseGammaPriorSd = .01,
          inverseGammaPriorN = .01, normalPriorMean = 0, normalPriorSd = .01))
   expect_identical(wrapper[c("plotWidth", "plotHeight")], list(plotWidth = 480, plotHeight = 320))

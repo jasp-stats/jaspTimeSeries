@@ -1202,7 +1202,7 @@
       "RemoteHost": "api.github.com",
       "RemoteUsername": "jasp-stats",
       "RemoteRepo": "jaspDescriptives",
-      "RemoteSha": "0274f8bb225b3524fb15ba2409e0609fb8f278e1"
+      "RemoteSha": "16c7840449cc237604ff48eabfdb1b6cd746db1f"
     },
     "jaspGraphs": {
       "Package": "jaspGraphs",

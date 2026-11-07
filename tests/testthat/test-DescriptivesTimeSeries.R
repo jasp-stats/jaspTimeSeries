@@ -1,14 +1,16 @@
 context("Descriptives Time Series")
 
-# options <- jaspTools::analysisOptions("DescriptivesTimeSeries")
-options <- analysisOptionsFromJaspDescriptives("DescriptivesTimeSeries")
+options <- jaspTools::analysisOptions("DescriptivesTimeSeries")
 options$dependent <- "visits"
 options$time <- "date"
 options$lagPlot <- TRUE
 options$acf <- TRUE
 options$pacf <- TRUE
 set.seed(1)
-results <- jaspTools::runAnalysis("DescriptivesTimeSeries", "JASP Webpage Visits.csv", options)
+# An explicit CSV path preserves the date strings. The built-in-name loader
+# uses fread(), whose IDate column reaches the native bridge as numeric days.
+dataset <- system.file("jaspData", "JASP Webpage Visits.csv", package = "jaspTools", mustWork = TRUE)
+results <- jaspTools::runAnalysis("DescriptivesTimeSeries", dataset, options)
 
 
 test_that("Autocorrelation Function plot matches", {

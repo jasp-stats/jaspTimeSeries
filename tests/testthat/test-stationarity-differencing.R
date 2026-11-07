@@ -30,11 +30,11 @@ stationarityDifferenceTransform <- function(data, options) {
 
 stationarityDifferenceRun <- function(data, options) {
   options[["time.types"]] <- if (is.numeric(data$Time)) "scale" else "nominal"
-  encoded <- jaspTools:::encodeOptionsAndDataset(
-    jaspTools:::fixOptionsForVariableTypes(options), data)
-  rownames(encoded$dataset) <- rownames(data)
-  result <- jaspTools::runAnalysis("StationarityTimeSeries", dataset = encoded$dataset,
-    options = encoded$options, encodedDataset = TRUE, view = FALSE,
+  # Native import creates a fresh spreadsheet; direct tests below separately
+  # preserve and verify row identities from a global filter.
+  rownames(data) <- NULL
+  result <- jaspTools::runAnalysis("StationarityTimeSeries", dataset = data,
+    options = options, view = FALSE,
     quiet = TRUE, makeTests = FALSE)
   expect_identical(result$status, "complete")
   expect_identical(result$results$timeSeriesPlot$status, "complete")

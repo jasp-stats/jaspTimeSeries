@@ -6,11 +6,7 @@ ssPreparationOptions <- function(analysis, ...) {
   options[["dependent.types"]] <- "scale"
   options[["time"]] <- "Time"
   options[["filter"]] <- FALSE
-  options[["rowStart"]] <- options[["rowEnd"]] <- ""
-  options[["timeStart"]] <- options[["timeEnd"]] <- ""
-  options[["dateStart"]] <- options[["dateEnd"]] <- ""
   if (analysis == "StationarityTimeSeries") {
-    # Explicit native default: readQML can misread the subsequent Label.
     options[["transformationSavedToData"]] <- FALSE
     options[["timeSeriesPlot"]] <- FALSE
     options[["acf"]] <- TRUE
@@ -34,12 +30,11 @@ ssPreparationOptions <- function(analysis, ...) {
 ssPreparationRun <- function(analysis, data, options) {
   options[["time.types"]] <- if (options[["time"]] == "") character() else
     if (is.numeric(data[[options[["time"]]]])) "scale" else "nominal"
-  encoded <- jaspTools:::encodeOptionsAndDataset(
-    jaspTools:::fixOptionsForVariableTypes(options), data)
-  # Synthetic global-filter fixtures retain original spreadsheet identities.
-  rownames(encoded$dataset) <- rownames(data)
-  result <- jaspTools::runAnalysis(analysis, dataset = encoded$dataset,
-    options = encoded$options, encodedDataset = TRUE, view = FALSE,
+  # The bridge imports fresh rows 1..n. Global-filter row identities are tested
+  # directly with the preparation/transformation/saving helpers below.
+  rownames(data) <- NULL
+  result <- jaspTools::runAnalysis(analysis, dataset = data,
+    options = options, view = FALSE,
     quiet = TRUE, makeTests = FALSE)
   expect_identical(result$status, "complete")
   result
@@ -166,12 +161,11 @@ test_that("Stationarity log and root analyses retain gaps in plots and saved val
 
 test_that("Stationarity row filters preserve original identities before automatic detrending", {
   data <- ssPreparationFixture()[c(48:25, 1:24), , drop = FALSE]
-  # Nonconsecutive identities represent rows remaining after a global filter.
-  rownames(data) <- as.character(seq(2L, 96L, 2L))
-  selected <- which(as.numeric(rownames(data)) >= 14 & as.numeric(rownames(data)) <= 82)
+  rownames(data) <- NULL
+  selected <- 7:41
   selected <- selected[order(data$Time[selected], selected)]
   options <- ssPreparationOptions("StationarityTimeSeries", filter = TRUE,
-    filterBy = "row", rowStart = 14, rowEnd = 82, detrend = TRUE,
+    filterBy = "row", rowStart = 7, rowEnd = 41, detrend = TRUE,
     polynomialSpecification = "auto", polynomialSpecificationAutoMax = 3L,
     polynomialSpecificationAutoIc = "aic")
   actual <- ssPreparationRun("StationarityTimeSeries", data, options)
@@ -182,6 +176,17 @@ test_that("Stationarity row filters preserve original identities before automati
   expect_equal(ssPreparationTable(actual, "polyTable"),
                ssPreparationTable(reference, "polyTable"), tolerance = 1e-10)
   expect_equal(ssPreparationAcf(actual), ssPreparationAcf(reference), tolerance = 1e-10)
+
+  # The native bridge's dataframe import cannot represent a global row filter.
+  # Preserve that distinct contract check with the real shared preparation:
+  # these same observations now occupy every second original spreadsheet row.
+  filtered <- data
+  rownames(filtered) <- as.character(seq(2L, 96L, 2L))
+  filteredOptions <- utils::modifyList(options, list(rowStart = 14L, rowEnd = 82L))
+  prepared <- jaspDescriptives::.tsPrepareData(NULL, filtered, filteredOptions, TRUE)
+  expect_equal(prepared$data$y, data$y[selected])
+  expect_equal(prepared$data$t, data$Time[selected])
+  expect_identical(rownames(prepared$data), as.character(2L * selected))
 })
 
 test_that("Spectral numeric and date filters match explicit selection and spec.pgram", {
