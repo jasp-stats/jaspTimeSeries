@@ -163,10 +163,10 @@ test_that("BSTS component curves and bands exclude burn-in without losing time p
       expectedMean <- summarize(mean)
       expectedLower <- summarize(quantile, probs = 0.025)
       expectedUpper <- summarize(quantile, probs = 0.975)
-      expect_equal(built$data[[1]]$y, expectedMean)
-      expect_equal(built$data[[2]]$ymin, expectedLower)
-      expect_equal(built$data[[2]]$ymax, expectedUpper)
-      expect_length(built$data[[1]]$x, length(components) * length(fit$original.series))
+      expect_equal(built$data[[2]]$y, expectedMean)
+      expect_equal(built$data[[1]]$ymin, expectedLower)
+      expect_equal(built$data[[1]]$ymax, expectedUpper)
+      expect_length(built$data[[2]]$x, length(components) * length(fit$original.series))
     }
   }
 })

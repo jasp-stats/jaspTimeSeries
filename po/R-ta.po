@@ -287,13 +287,10 @@ msgstr "ஒருங்கிணைந்த நிலை"
 msgid "Time"
 msgstr "நேரம்"
 
-msgid "Distribution"
-msgstr "பரவல்"
-
 msgid "Component States"
 msgstr "கூறு நிலைகள்"
 
-msgid "Prediction plot"
+msgid "Prediction Plot"
 msgstr "கணிப்பு சூழ்ச்சி"
 
 msgid "Control Plots"
@@ -309,22 +306,6 @@ msgstr "வாசல் சூழ்ச்சி"
 
 msgid "Probability Plot"
 msgstr "நிகழ்தகவு சூழ்ச்சி"
-
-msgid ""
-"First date where %1$.3f*sigma is exceeded by %2$.1f%% state credible "
-"interval: %3$s"
-msgstr ""
-"முதல் தேதி %1$.3f*சிக்மா %2$.1f%% மாநில நம்பகமான இடைவெளி: %3$s ஐ மீறுகிறது"
-
-msgid ""
-"First time point where %1$.3f*sigma is exceeded by %2$.1f%% state credible "
-"interval: %3$s"
-msgstr ""
-"%1$.3f* சிக்மா %2$.1f%% மாநில நம்பகமான இடைவெளி: %3$s ஐ விட அதிகமாக இருக்கும்"
-" முதல் முறையாகும்"
-
-msgid "Threshold never reached"
-msgstr "வாசல் ஒருபோதும் எட்டவில்லை"
 
 msgid "Probability"
 msgstr "நிகழ்தகவு"
@@ -470,3 +451,49 @@ msgstr ""
 
 msgid "At least two observed values of the dependent variable are required to initialize a local level or semilocal trend component."
 msgstr ""
+
+msgid "Forecast error"
+msgstr ""
+
+msgid "Observed and predicted values"
+msgstr ""
+
+msgid "Residual"
+msgstr ""
+
+msgid "State contribution"
+msgstr ""
+
+#~ msgid "Distribution"
+#~ msgstr "பரவல்"
+
+msgid "<i>Note.</i> The lower bound of the %1$.0f%% state credible interval does not exceed the upper control limit (%2$g&sigma;) at any time point."
+msgstr ""
+
+msgid "<i>Note.</i> The lower bound of the %1$.0f%% state credible interval first exceeds the upper control limit (%2$g&sigma;) at Time = %3$s."
+msgstr ""
+
+msgid "Local level"
+msgstr ""
+
+msgid "Local linear trend"
+msgstr ""
+
+msgid "Semi-local linear trend"
+msgstr ""
+
+#~ msgid ""
+#~ "First date where %1$.3f*sigma is exceeded by %2$.1f%% state credible "
+#~ "interval: %3$s"
+#~ msgstr ""
+#~ "முதல் தேதி %1$.3f*சிக்மா %2$.1f%% மாநில நம்பகமான இடைவெளி: %3$s ஐ மீறுகிறது"
+
+#~ msgid ""
+#~ "First time point where %1$.3f*sigma is exceeded by %2$.1f%% state credible "
+#~ "interval: %3$s"
+#~ msgstr ""
+#~ "%1$.3f* சிக்மா %2$.1f%% மாநில நம்பகமான இடைவெளி: %3$s ஐ விட அதிகமாக இருக்கும்"
+#~ " முதல் முறையாகும்"
+
+#~ msgid "Threshold never reached"
+#~ msgstr "வாசல் ஒருபோதும் எட்டவில்லை"

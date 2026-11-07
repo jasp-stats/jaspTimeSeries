@@ -286,13 +286,10 @@ msgstr "Status Teragregasi"
 msgid "Time"
 msgstr "Waktu"
 
-msgid "Distribution"
-msgstr "Distribusi"
-
 msgid "Component States"
 msgstr "Status Komponen"
 
-msgid "Prediction plot"
+msgid "Prediction Plot"
 msgstr "Diagram prediksi"
 
 msgid "Control Plots"
@@ -308,23 +305,6 @@ msgstr "Diagram Ambang Batas"
 
 msgid "Probability Plot"
 msgstr "Diagram Probabilitas"
-
-msgid ""
-"First date where %1$.3f*sigma is exceeded by %2$.1f%% state credible "
-"interval: %3$s"
-msgstr ""
-"Tanggal awal di mana %1$.3f*sigma dilampaui oleh %2$.1f%% interval kredibel "
-"status: %3$s"
-
-msgid ""
-"First time point where %1$.3f*sigma is exceeded by %2$.1f%% state credible "
-"interval: %3$s"
-msgstr ""
-"Titik waktu awal di mana %1$.3f*sigma dilampaui oleh %2$.1f%% interval "
-"kredibel status: %3$s"
-
-msgid "Threshold never reached"
-msgstr "Ambang batas tidak pernah dicapai"
 
 msgid "Probability"
 msgstr "Probabilitas"
@@ -467,3 +447,50 @@ msgstr ""
 
 msgid "At least two observed values of the dependent variable are required to initialize a local level or semilocal trend component."
 msgstr ""
+
+msgid "Forecast error"
+msgstr ""
+
+msgid "Observed and predicted values"
+msgstr ""
+
+msgid "Residual"
+msgstr ""
+
+msgid "State contribution"
+msgstr ""
+
+#~ msgid "Distribution"
+#~ msgstr "Distribusi"
+
+msgid "<i>Note.</i> The lower bound of the %1$.0f%% state credible interval does not exceed the upper control limit (%2$g&sigma;) at any time point."
+msgstr ""
+
+msgid "<i>Note.</i> The lower bound of the %1$.0f%% state credible interval first exceeds the upper control limit (%2$g&sigma;) at Time = %3$s."
+msgstr ""
+
+msgid "Local level"
+msgstr ""
+
+msgid "Local linear trend"
+msgstr ""
+
+msgid "Semi-local linear trend"
+msgstr ""
+
+#~ msgid ""
+#~ "First date where %1$.3f*sigma is exceeded by %2$.1f%% state credible "
+#~ "interval: %3$s"
+#~ msgstr ""
+#~ "Tanggal awal di mana %1$.3f*sigma dilampaui oleh %2$.1f%% interval kredibel "
+#~ "status: %3$s"
+
+#~ msgid ""
+#~ "First time point where %1$.3f*sigma is exceeded by %2$.1f%% state credible "
+#~ "interval: %3$s"
+#~ msgstr ""
+#~ "Titik waktu awal di mana %1$.3f*sigma dilampaui oleh %2$.1f%% interval "
+#~ "kredibel status: %3$s"
+
+#~ msgid "Threshold never reached"
+#~ msgstr "Ambang batas tidak pernah dicapai"

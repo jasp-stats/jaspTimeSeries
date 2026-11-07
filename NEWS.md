@@ -20,6 +20,7 @@
 * Integrated the Bayesian State Space Models analysis from the standalone `jaspBsts` module, originally developed by Fridtjof Petersen.
 
 ## Changed
+* Standardized Bayesian state space plots with JASP styling, neutral credible-interval bands, clearer axis labels, and component panels that grow with the number of states.
 * Time series analyses, including Bayesian state space models, use Time to order whole observations, treating successive observations as equal steps without filling gaps. Unusable or ambiguous Time falls back to row order with a warning; ties retain spreadsheet order. Bayesian models retain missing-response steps and keep covariates and fixed factors aligned.
 * With Time supplied, ARIMA forecasts use steps ahead in tables and CSV exports, and observation steps in plots. With Time empty, plots, tables, and CSV exports use the same continuing row index. Stationarity detrending uses observation steps.
 * Bayesian state space forecast plots with Time supplied label their axis as observation steps; future dates or numeric Time values are not inferred.
@@ -27,6 +28,7 @@
 * Updated module metadata to use the project website and a consistent package title.
 
 ## Fixed
+* Keep Bayesian state space plot labels visible, use shortened axes for calendar Time, show each selected trend component separately, and place control-chart explanations below the plot as standard notes.
 * Respect the selected differencing order in Stationarity while retaining missing positions and the original spreadsheet alignment of saved transformations.
 * Initialize Bayesian local-level and semilocal-trend priors from the first observed response when the series starts with missing values, preserving every time step for estimation and residual plots.
 * Load the Bayesian state space summary methods with the module so restored models can regenerate their tables in a fresh R session.

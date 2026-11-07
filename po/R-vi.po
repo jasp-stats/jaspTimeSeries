@@ -282,13 +282,10 @@ msgstr "Trạng thái gộp"
 msgid "Time"
 msgstr "Thời gian"
 
-msgid "Distribution"
-msgstr "Phân phối"
-
 msgid "Component States"
 msgstr "Trạng thái thành phần"
 
-msgid "Prediction plot"
+msgid "Prediction Plot"
 msgstr "Biểu đồ dự báo"
 
 msgid "Control Plots"
@@ -304,23 +301,6 @@ msgstr "Biểu đồ ngưỡng"
 
 msgid "Probability Plot"
 msgstr "Biểu đồ xác suất"
-
-msgid ""
-"First date where %1$.3f*sigma is exceeded by %2$.1f%% state credible "
-"interval: %3$s"
-msgstr ""
-"Ngày đầu tiên mà %1$.3f*sigma bị vượt bởi khoảng tin cậy trạng thái "
-"%2$.1f%%: %3$s"
-
-msgid ""
-"First time point where %1$.3f*sigma is exceeded by %2$.1f%% state credible "
-"interval: %3$s"
-msgstr ""
-"Thời điểm đầu tiên mà %1$.3f*sigma bị vượt bởi khoảng tin cậy trạng thái "
-"%2$.1f%%: %3$s"
-
-msgid "Threshold never reached"
-msgstr "Không bao giờ đạt ngưỡng"
 
 msgid "Probability"
 msgstr "Xác suất"
@@ -458,3 +438,50 @@ msgstr ""
 
 msgid "At least two observed values of the dependent variable are required to initialize a local level or semilocal trend component."
 msgstr ""
+
+msgid "Forecast error"
+msgstr ""
+
+msgid "Observed and predicted values"
+msgstr ""
+
+msgid "Residual"
+msgstr ""
+
+msgid "State contribution"
+msgstr ""
+
+#~ msgid "Distribution"
+#~ msgstr "Phân phối"
+
+msgid "<i>Note.</i> The lower bound of the %1$.0f%% state credible interval does not exceed the upper control limit (%2$g&sigma;) at any time point."
+msgstr ""
+
+msgid "<i>Note.</i> The lower bound of the %1$.0f%% state credible interval first exceeds the upper control limit (%2$g&sigma;) at Time = %3$s."
+msgstr ""
+
+msgid "Local level"
+msgstr ""
+
+msgid "Local linear trend"
+msgstr ""
+
+msgid "Semi-local linear trend"
+msgstr ""
+
+#~ msgid ""
+#~ "First date where %1$.3f*sigma is exceeded by %2$.1f%% state credible "
+#~ "interval: %3$s"
+#~ msgstr ""
+#~ "Ngày đầu tiên mà %1$.3f*sigma bị vượt bởi khoảng tin cậy trạng thái "
+#~ "%2$.1f%%: %3$s"
+
+#~ msgid ""
+#~ "First time point where %1$.3f*sigma is exceeded by %2$.1f%% state credible "
+#~ "interval: %3$s"
+#~ msgstr ""
+#~ "Thời điểm đầu tiên mà %1$.3f*sigma bị vượt bởi khoảng tin cậy trạng thái "
+#~ "%2$.1f%%: %3$s"
+
+#~ msgid "Threshold never reached"
+#~ msgstr "Không bao giờ đạt ngưỡng"

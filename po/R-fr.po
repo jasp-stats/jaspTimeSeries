@@ -284,15 +284,8 @@ msgstr "État agrégé"
 msgid "Time"
 msgstr "Temps"
 
-msgid "Distribution"
-msgstr "Distribution"
-
 msgid "Component States"
 msgstr "États des composants"
-
-#, fuzzy
-msgid "Prediction plot"
-msgstr "Écart-Type de la Prédiction"
 
 msgid "Control Plots"
 msgstr "Graphiques de contrôle"
@@ -307,23 +300,6 @@ msgstr "Graphique de seuil"
 
 msgid "Probability Plot"
 msgstr "Graphique de probabilité"
-
-msgid ""
-"First date where %1$.3f*sigma is exceeded by %2$.1f%% state credible "
-"interval: %3$s"
-msgstr ""
-"Première date à laquelle l'intervalle de crédibilité de l'état de %2$.1f%% "
-"dépasse %1$.3f*sigma : %3$s"
-
-msgid ""
-"First time point where %1$.3f*sigma is exceeded by %2$.1f%% state credible "
-"interval: %3$s"
-msgstr ""
-"Premier point temporel à lequel l'intervalle de crédibilité de l'état de "
-"%2$.1f%% dépasse %1$.3f*sigma : %3$s"
-
-msgid "Threshold never reached"
-msgstr "Seuil jamais atteint"
 
 msgid "Probability"
 msgstr "Probabilité"
@@ -461,3 +437,57 @@ msgstr ""
 
 msgid "At least two observed values of the dependent variable are required to initialize a local level or semilocal trend component."
 msgstr ""
+
+msgid "Forecast error"
+msgstr ""
+
+msgid "Observed and predicted values"
+msgstr ""
+
+msgid "Prediction Plot"
+msgstr ""
+
+msgid "Residual"
+msgstr ""
+
+msgid "State contribution"
+msgstr ""
+
+#~ msgid "Distribution"
+#~ msgstr "Distribution"
+
+#, fuzzy
+#~ msgid "Prediction plot"
+#~ msgstr "Écart-Type de la Prédiction"
+
+msgid "<i>Note.</i> The lower bound of the %1$.0f%% state credible interval does not exceed the upper control limit (%2$g&sigma;) at any time point."
+msgstr ""
+
+msgid "<i>Note.</i> The lower bound of the %1$.0f%% state credible interval first exceeds the upper control limit (%2$g&sigma;) at Time = %3$s."
+msgstr ""
+
+msgid "Local level"
+msgstr ""
+
+msgid "Local linear trend"
+msgstr ""
+
+msgid "Semi-local linear trend"
+msgstr ""
+
+#~ msgid ""
+#~ "First date where %1$.3f*sigma is exceeded by %2$.1f%% state credible "
+#~ "interval: %3$s"
+#~ msgstr ""
+#~ "Première date à laquelle l'intervalle de crédibilité de l'état de %2$.1f%% "
+#~ "dépasse %1$.3f*sigma : %3$s"
+
+#~ msgid ""
+#~ "First time point where %1$.3f*sigma is exceeded by %2$.1f%% state credible "
+#~ "interval: %3$s"
+#~ msgstr ""
+#~ "Premier point temporel à lequel l'intervalle de crédibilité de l'état de "
+#~ "%2$.1f%% dépasse %1$.3f*sigma : %3$s"
+
+#~ msgid "Threshold never reached"
+#~ msgstr "Seuil jamais atteint"

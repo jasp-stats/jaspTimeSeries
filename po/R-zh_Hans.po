@@ -277,13 +277,10 @@ msgstr "聚合状态"
 msgid "Time"
 msgstr "时间"
 
-msgid "Distribution"
-msgstr "分布"
-
 msgid "Component States"
 msgstr "组件状态"
 
-msgid "Prediction plot"
+msgid "Prediction Plot"
 msgstr "预测图"
 
 msgid "Control Plots"
@@ -299,19 +296,6 @@ msgstr "阈值图"
 
 msgid "Probability Plot"
 msgstr "概率图"
-
-msgid ""
-"First date where %1$.3f*sigma is exceeded by %2$.1f%% state credible "
-"interval: %3$s"
-msgstr "状态可信区间 %2$.1f%% 首次超过 %1$.3f*sigma 的日期：%3$s"
-
-msgid ""
-"First time point where %1$.3f*sigma is exceeded by %2$.1f%% state credible "
-"interval: %3$s"
-msgstr "状态可信区间 %2$.1f%% 首次超过 %1$.3f*sigma 的时间点：%3$s"
-
-msgid "Threshold never reached"
-msgstr "从未达到阈值"
 
 msgid "Probability"
 msgstr "概率"
@@ -452,3 +436,46 @@ msgstr ""
 
 msgid "At least two observed values of the dependent variable are required to initialize a local level or semilocal trend component."
 msgstr ""
+
+msgid "Forecast error"
+msgstr ""
+
+msgid "Observed and predicted values"
+msgstr ""
+
+msgid "Residual"
+msgstr ""
+
+msgid "State contribution"
+msgstr ""
+
+#~ msgid "Distribution"
+#~ msgstr "分布"
+
+msgid "<i>Note.</i> The lower bound of the %1$.0f%% state credible interval does not exceed the upper control limit (%2$g&sigma;) at any time point."
+msgstr ""
+
+msgid "<i>Note.</i> The lower bound of the %1$.0f%% state credible interval first exceeds the upper control limit (%2$g&sigma;) at Time = %3$s."
+msgstr ""
+
+msgid "Local level"
+msgstr ""
+
+msgid "Local linear trend"
+msgstr ""
+
+msgid "Semi-local linear trend"
+msgstr ""
+
+#~ msgid ""
+#~ "First date where %1$.3f*sigma is exceeded by %2$.1f%% state credible "
+#~ "interval: %3$s"
+#~ msgstr "状态可信区间 %2$.1f%% 首次超过 %1$.3f*sigma 的日期：%3$s"
+
+#~ msgid ""
+#~ "First time point where %1$.3f*sigma is exceeded by %2$.1f%% state credible "
+#~ "interval: %3$s"
+#~ msgstr "状态可信区间 %2$.1f%% 首次超过 %1$.3f*sigma 的时间点：%3$s"
+
+#~ msgid "Threshold never reached"
+#~ msgstr "从未达到阈值"

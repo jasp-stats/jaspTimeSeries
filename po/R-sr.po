@@ -287,13 +287,10 @@ msgstr "Агрегатно стање"
 msgid "Time"
 msgstr "Време"
 
-msgid "Distribution"
-msgstr "Дистрибуција"
-
 msgid "Component States"
 msgstr "Компоненте државе"
 
-msgid "Prediction plot"
+msgid "Prediction Plot"
 msgstr "Графикон предвиђања"
 
 msgid "Control Plots"
@@ -309,23 +306,6 @@ msgstr "Графикон прага"
 
 msgid "Probability Plot"
 msgstr "Графикон вероватноће"
-
-msgid ""
-"First date where %1$.3f*sigma is exceeded by %2$.1f%% state credible "
-"interval: %3$s"
-msgstr ""
-"Први датум када је %1$.3f*sigma премашен у %2$.1f%% интервалу поверења за "
-"државу: %3$s"
-
-msgid ""
-"First time point where %1$.3f*sigma is exceeded by %2$.1f%% state credible "
-"interval: %3$s"
-msgstr ""
-"Прва временска тачка када је %1$.3f*sigma премашена у %2$.1f%% интервалу "
-"поверења за државу: %3$s"
-
-msgid "Threshold never reached"
-msgstr "Праг никада није достигнут"
 
 msgid "Probability"
 msgstr "Вероватноћа"
@@ -471,3 +451,50 @@ msgstr ""
 
 msgid "At least two observed values of the dependent variable are required to initialize a local level or semilocal trend component."
 msgstr ""
+
+msgid "Forecast error"
+msgstr ""
+
+msgid "Observed and predicted values"
+msgstr ""
+
+msgid "Residual"
+msgstr ""
+
+msgid "State contribution"
+msgstr ""
+
+#~ msgid "Distribution"
+#~ msgstr "Дистрибуција"
+
+msgid "<i>Note.</i> The lower bound of the %1$.0f%% state credible interval does not exceed the upper control limit (%2$g&sigma;) at any time point."
+msgstr ""
+
+msgid "<i>Note.</i> The lower bound of the %1$.0f%% state credible interval first exceeds the upper control limit (%2$g&sigma;) at Time = %3$s."
+msgstr ""
+
+msgid "Local level"
+msgstr ""
+
+msgid "Local linear trend"
+msgstr ""
+
+msgid "Semi-local linear trend"
+msgstr ""
+
+#~ msgid ""
+#~ "First date where %1$.3f*sigma is exceeded by %2$.1f%% state credible "
+#~ "interval: %3$s"
+#~ msgstr ""
+#~ "Први датум када је %1$.3f*sigma премашен у %2$.1f%% интервалу поверења за "
+#~ "државу: %3$s"
+
+#~ msgid ""
+#~ "First time point where %1$.3f*sigma is exceeded by %2$.1f%% state credible "
+#~ "interval: %3$s"
+#~ msgstr ""
+#~ "Прва временска тачка када је %1$.3f*sigma премашена у %2$.1f%% интервалу "
+#~ "поверења за државу: %3$s"
+
+#~ msgid "Threshold never reached"
+#~ msgstr "Праг никада није достигнут"

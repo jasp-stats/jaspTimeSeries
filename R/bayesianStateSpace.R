@@ -602,6 +602,22 @@ quantInv <- function(distr, value){
 }
 
 
+.bstsPlotStyle <- function(time) {
+  # Native capped guides retain JASP's separated axes on calendar scales,
+  # without the numeric editing metadata required by rangeframe conversion.
+  axes <- if (inherits(time, c("Date", "POSIXt"))) {
+    list(ggplot2::theme(axis.line = ggplot2::element_line(colour = "black",
+                         linewidth = jaspGraphs::getGraphOption("axisTickWidth"))),
+         ggplot2::guides(x = ggplot2::guide_axis(check.overlap = TRUE, cap = "both"),
+                         y = ggplot2::guide_axis(cap = "both")))
+  } else {
+    list(jaspGraphs::geom_rangeframe(),
+         ggplot2::guides(x = ggplot2::guide_axis(check.overlap = TRUE)))
+  }
+  list(jaspGraphs::themeJaspRaw(), axes,
+       ggplot2::theme(plot.margin = ggplot2::margin(5, 15, 5, 5)))
+}
+
 .bstsCreateStatePlots <- function(jaspResults,dataset,options,ready) {
 
 
@@ -652,15 +668,15 @@ quantInv <- function(distr, value){
 
   p <-  ggplot2::ggplot(NULL,ggplot2::aes(x=time,y=mean)) +
     ggplot2::geom_ribbon(mapping=ggplot2::aes(ymin=ymin,ymax =ymax),
-                         fill ="blue",alpha=0.5) + ggplot2::xlab(gettext("Time")) +
-    ggplot2::ylab(gettext("Distribution")) +
-    ggplot2::geom_line(size=0.7)
+                         fill ="grey70",alpha=0.5) + ggplot2::xlab(gettext("Time")) +
+    ggplot2::ylab(gettext("State contribution")) +
+    ggplot2::geom_line(linewidth=0.7)
 
 
   if(options$aggregatedStatesPlotObservationsShown)
-    p <- p + ggplot2::geom_point(ggplot2::aes(y=actualValues))
+    p <- p + jaspGraphs::geom_point(ggplot2::aes(y=actualValues))
 
-  p <- jaspGraphs::themeJasp(p)
+  p <- p + .bstsPlotStyle(time)
 
   bstsAggregatedStatePlot$plotObject <- p
 
@@ -672,9 +688,26 @@ quantInv <- function(distr, value){
 .bstsComponentStatePlot <- function(bstsStatePlots,bstsResults,options,ready){
   if (!ready) return()
 
-  bstsComponentStatePlot <- createJaspPlot(title= gettext("Component States"), height = 320, width = 480)
-
   state <- bstsResults$state.contributions[.bstsRetainedDraws(bstsResults, options$burn), , , drop = FALSE]
+  # bsts calls several distinct trend components "trend". Give them unique
+  # labels before melting, which otherwise silently retains only one column.
+  componentNames <- dimnames(state)[[2L]]
+  if (anyDuplicated(componentNames) || "time" %in% componentNames) {
+    duplicates <- duplicated(componentNames) | duplicated(componentNames, fromLast = TRUE)
+    specification <- bstsResults$state.specification
+    if (length(specification) == dim(state)[2L]) {
+      for (i in which(duplicates)) {
+        componentNames[i] <- switch(class(specification[[i]])[1L],
+          LocalLevel = gettext("Local level"),
+          LocalLinearTrend = gettext("Local linear trend"),
+          SemilocalLinearTrend = gettext("Semi-local linear trend"),
+          componentNames[i])
+      }
+    }
+    dimnames(state)[[2L]] <- make.unique(c("time", componentNames), sep = " ")[-1L]
+  }
+  bstsComponentStatePlot <- createJaspPlot(title = gettext("Component States"),
+                                        height = 320 + 180 * (dim(state)[2L] - 1L), width = 480)
   # Summarize iterations only, preserving time/component dimensions even when
   # a single draw remains.
   means <- as.data.frame(t(apply(state, c(2, 3), mean)))
@@ -691,13 +724,28 @@ quantInv <- function(distr, value){
   means2 <- reshape2::melt(means,id.vars='time',variable.name="component")
 
   p <-  ggplot2::ggplot(data=means2, ggplot2::aes(x=time, y=value)) +
-    ggplot2::geom_line() +
     ggplot2::geom_ribbon(ggplot2::aes(ymin=ymin$value,ymax=ymax$value),
-                         fill ="blue",alpha=0.5) +
-    ggplot2::theme_bw() + ggplot2::theme(legend.title = ggplot2::element_blank()) + ggplot2::ylab("") + ggplot2::xlab("")   +
-    ggplot2::facet_grid(component ~ ., scales="free") +
-    ggplot2::guides(colour=FALSE) +
-    ggplot2::theme(axis.text.x=ggplot2::element_text(angle = -90, hjust = 0))
+                         fill ="grey70",alpha=0.5) +
+    ggplot2::geom_line(linewidth = 0.7) +
+    ggplot2::labs(x = gettext("Time"), y = gettext("State contribution")) +
+    ggplot2::facet_wrap(~ component, ncol = 1, scales = "free_y") +
+    # Keep the complete interval within labelled endpoints. Explicit endpoints
+    # avoid a second pretty() call or scale expansion rounding away an end tick.
+    ggplot2::scale_y_continuous(
+      limits = function(limits) {
+        if (diff(limits) == 0) limits <- limits + c(-.5, .5)
+        range(pretty(limits, n = 5))
+      },
+      breaks = function(limits) {
+        ticks <- pretty(limits, n = 5)
+        tolerance <- diff(limits) * sqrt(.Machine$double.eps)
+        c(limits[1L], ticks[ticks > limits[1L] + tolerance &
+                             ticks < limits[2L] - tolerance], limits[2L])
+      },
+      expand = ggplot2::expansion(mult = 0)) +
+    .bstsPlotStyle(options$time) +
+    ggplot2::theme(strip.text = ggplot2::element_text(size = jaspGraphs::getGraphOption("fontsize"), hjust = 0),
+                   panel.spacing = ggplot2::unit(1, "lines"))
 
 
   bstsComponentStatePlot$plotObject <- p
@@ -711,7 +759,7 @@ quantInv <- function(distr, value){
   if(!ready | !options$predictionHorizon>0) return()
   if (!is.null(jaspResults[["bstsMainContainer"]][["bstsPredictionPlot"]])) return()
 
-  bstsPredictionPlot <- createJaspPlot(title=gettext("Prediction plot"), height = 320, width = 480)
+  bstsPredictionPlot <- createJaspPlot(title=gettext("Prediction Plot"), height = 320, width = 480)
   bstsPredictionPlot$dependOn(.bstsPredictionDependencies())
 
   bstsModelResults <- jaspResults[["bstsMainContainer"]][["bstsModelResults"]]$object
@@ -728,13 +776,13 @@ quantInv <- function(distr, value){
 
   p <- ggplot2::ggplot(data=predDF,ggplot2::aes(x=time,y=mean)) +
     ggplot2::geom_ribbon(mapping=ggplot2::aes(ymin=LL,ymax=UL),
-                         fill ="blue",alpha=0.5) +
+                         fill ="grey70",alpha=0.5) +
     ggplot2::xlab(if (options$time0 != "") gettext("Observation step") else gettext("Time")) +
-    ggplot2::geom_line(size=0.7) +
-    ggplot2::geom_vline(xintercept=length(bstsPredictionResults$original.series),linetype=2) +
-    ggplot2::theme_classic()
+    ggplot2::ylab(gettext("Observed and predicted values")) +
+    ggplot2::geom_line(linewidth=0.7) +
+    ggplot2::geom_vline(xintercept=length(bstsPredictionResults$original.series),linetype=2)
 
-  p <- jaspGraphs::themeJasp(p)
+  p <- p + .bstsPlotStyle(predDF$time)
 
   bstsPredictionPlot$plotObject <- p
   jaspResults[["bstsMainContainer"]][["bstsPredictionPlot"]] <- bstsPredictionPlot
@@ -787,7 +835,7 @@ quantInv <- function(distr, value){
   control = c(1:options[["controlChartPeriodEnd"]])
   L = options[["controlChartSigmaThreshold"]]
   CI=.95
-  bstsControlPlotThreshold <- createJaspPlot(title=gettext("Threshold Plot"), height = 320, width = 480)
+  bstsControlPlotThreshold <- createJaspPlot(title=gettext("Threshold Plot"), height = 320, width = 480, position = 1)
 
   # extract model components
   state <- bstsResults$state.contributions
@@ -818,44 +866,35 @@ quantInv <- function(distr, value){
 
   p <- ggplot2::ggplot(NULL,ggplot2::aes(x=time,y=mean))+
     ggplot2::geom_ribbon(mapping=ggplot2::aes(ymin=ymin,ymax =ymax ),
-                         alpha=0.5,fill ="blue") + ggplot2::xlab(gettext("Time")) +
-    ggplot2::ylab(gettext("Distribution")) +
-    ggplot2::geom_line(size=0.7) +
-    ggplot2::theme_classic() +
-    ggplot2::geom_hline(yintercept=ul_state, linetype="dashed", color = "red") +
-    ggplot2::geom_hline(yintercept=ll_state, linetype="dashed", color = "red")
+                         alpha=0.5,fill ="grey70") + ggplot2::xlab(gettext("Time")) +
+    ggplot2::ylab(gettext("State contribution")) +
+    ggplot2::geom_line(linewidth=0.7) +
+    ggplot2::geom_hline(yintercept=ul_state, linetype="dashed") +
+    ggplot2::geom_hline(yintercept=ll_state, linetype="dashed")
 
   first_threshold <- time[which(ymin > ul_state)[1]]
 
-    p <- jaspGraphs::themeJasp(p)
+  p <- p + .bstsPlotStyle(time)
 
   if (!is.na(first_threshold)) {
-    captionText <- if (inherits(time, c("POSIXt", "Date")))
-      gettextf("First date where %1$.3f*sigma is exceeded by %2$.1f%% state credible interval: %3$s", L, 100 * CI, first_threshold)
-    else
-      gettextf("First time point where %1$.3f*sigma is exceeded by %2$.1f%% state credible interval: %3$s", L, 100 * CI, first_threshold)
+    note <- gettextf("<i>Note.</i> The lower bound of the %1$.0f%% state credible interval first exceeds the upper control limit (%2$g&sigma;) at Time = %3$s.",
+                     100 * CI, L, as.character(first_threshold))
   } else {
-    captionText <- gettext("Threshold never reached")
+    note <- gettextf("<i>Note.</i> The lower bound of the %1$.0f%% state credible interval does not exceed the upper control limit (%2$g&sigma;) at any time point.",
+                     100 * CI, L)
   }
 
-  p <- p + ggplot2::labs(caption = captionText)
-
-
-
-  p <- p+ ggplot2::theme(plot.caption = ggplot2::element_text(face="italic",hjust = 0,size=12)) +
-    ggplot2::theme(plot.margin = ggplot2::margin(0, 15, 10, 15))
-
   bstsControlPlotThreshold$plotObject <- p
-
-
-
   bstsControlPlots[["bstsControlPlotThreshold"]] <- bstsControlPlotThreshold
+  # The parent container invalidates both outputs when Time, burn-in, the
+  # control period, sigma threshold or plot visibility changes.
+  bstsControlPlots[["bstsControlPlotThresholdNote"]] <- createJaspHtml(text = note, position = 1.1)
   return()
 }
 
 .bstsFillControlPlotProbability <- function(bstsControlPlots,bstsResults,options,ready){
 
-  bstsControlPlotProbability <- createJaspPlot(title=gettext("Probability Plot"), height = 320, width = 480)
+  bstsControlPlotProbability <- createJaspPlot(title=gettext("Probability Plot"), height = 320, width = 480, position = 2)
 
 
   control = c(1:options[["controlChartPeriodEnd"]])
@@ -897,10 +936,10 @@ quantInv <- function(distr, value){
 
 
   p <- ggplot2::ggplot(NULL,ggplot2::aes(time,threshold_prob)) + ggplot2::xlab(gettext("Time")) +
-    ggplot2::ylab(gettext("Probability")) + ggplot2::geom_line() + ggplot2::theme_classic() + ggplot2::ylim(0,1)
+    ggplot2::ylab(gettext("Probability")) + ggplot2::geom_line(linewidth = 0.7) + ggplot2::ylim(0,1)
 
 
-  p <- jaspGraphs::themeJasp(p) +
+  p <- p + .bstsPlotStyle(time) +
     ggplot2::theme(plot.margin = ggplot2::margin(0, 15, 10, 15))
 
   bstsControlPlotProbability$plotObject <- p
@@ -945,11 +984,11 @@ quantInv <- function(distr, value){
 
   p <-  ggplot2::ggplot(NULL,ggplot2::aes(x=time,y=mean)) +
     ggplot2::geom_ribbon(mapping=ggplot2::aes(ymin=ymin,ymax =ymax),
-                         fill ="blue",alpha=0.5) + ggplot2::xlab(gettext("Time")) +
-    ggplot2::ylab(gettext("Distribution")) +
-    ggplot2::geom_line(size=0.7)
+                         fill ="grey70",alpha=0.5) + ggplot2::xlab(gettext("Time")) +
+    ggplot2::ylab(gettext("Residual")) +
+    ggplot2::geom_line(linewidth=0.7)
 
-  p <- jaspGraphs::themeJasp(p)
+  p <- p + .bstsPlotStyle(time)
 
   bstsResidualPlot$plotObject <- p
 
@@ -974,11 +1013,11 @@ quantInv <- function(distr, value){
 
   p <-  ggplot2::ggplot(NULL,ggplot2::aes(x=time,y=mean)) +
     ggplot2::geom_ribbon(mapping=ggplot2::aes(ymin=ymin,ymax =ymax),
-                         fill ="blue",alpha=0.5) + ggplot2::xlab(gettext("Time")) +
-    ggplot2::ylab(gettext("Distribution")) +
-    ggplot2::geom_line(size=0.7)
+                         fill ="grey70",alpha=0.5) + ggplot2::xlab(gettext("Time")) +
+    ggplot2::ylab(gettext("Forecast error")) +
+    ggplot2::geom_line(linewidth=0.7)
 
-  p <- jaspGraphs::themeJasp(p)
+  p <- p + .bstsPlotStyle(time)
 
   bstsForecastErrorPlot$plotObject <- p
 

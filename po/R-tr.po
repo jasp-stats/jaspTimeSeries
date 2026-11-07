@@ -285,13 +285,10 @@ msgstr "Birleştirilmiş Durum"
 msgid "Time"
 msgstr "Zaman"
 
-msgid "Distribution"
-msgstr "Dağıtım"
-
 msgid "Component States"
 msgstr "Bileşen Durumları"
 
-msgid "Prediction plot"
+msgid "Prediction Plot"
 msgstr "Tahmini grafik"
 
 msgid "Control Plots"
@@ -307,23 +304,6 @@ msgstr "Eşik Grafiği"
 
 msgid "Probability Plot"
 msgstr "Olasılık Grafiği"
-
-msgid ""
-"First date where %1$.3f*sigma is exceeded by %2$.1f%% state credible "
-"interval: %3$s"
-msgstr ""
-"%1$.3f*sigma'nın %2$.1f%% tarafından aşıldığı ilk tarih, güvenilir aralık "
-"durumu: %3$s"
-
-msgid ""
-"First time point where %1$.3f*sigma is exceeded by %2$.1f%% state credible "
-"interval: %3$s"
-msgstr ""
-"%1$.3f*sigma'nın %2$.1f%% durum güvenilir aralığı tarafından aşıldığı ilk "
-"zaman noktası: %3$s"
-
-msgid "Threshold never reached"
-msgstr "Eşiğe asla ulaşılamadı"
 
 msgid "Probability"
 msgstr "Olasılık"
@@ -468,3 +448,50 @@ msgstr ""
 
 msgid "At least two observed values of the dependent variable are required to initialize a local level or semilocal trend component."
 msgstr ""
+
+msgid "Forecast error"
+msgstr ""
+
+msgid "Observed and predicted values"
+msgstr ""
+
+msgid "Residual"
+msgstr ""
+
+msgid "State contribution"
+msgstr ""
+
+#~ msgid "Distribution"
+#~ msgstr "Dağıtım"
+
+msgid "<i>Note.</i> The lower bound of the %1$.0f%% state credible interval does not exceed the upper control limit (%2$g&sigma;) at any time point."
+msgstr ""
+
+msgid "<i>Note.</i> The lower bound of the %1$.0f%% state credible interval first exceeds the upper control limit (%2$g&sigma;) at Time = %3$s."
+msgstr ""
+
+msgid "Local level"
+msgstr ""
+
+msgid "Local linear trend"
+msgstr ""
+
+msgid "Semi-local linear trend"
+msgstr ""
+
+#~ msgid ""
+#~ "First date where %1$.3f*sigma is exceeded by %2$.1f%% state credible "
+#~ "interval: %3$s"
+#~ msgstr ""
+#~ "%1$.3f*sigma'nın %2$.1f%% tarafından aşıldığı ilk tarih, güvenilir aralık "
+#~ "durumu: %3$s"
+
+#~ msgid ""
+#~ "First time point where %1$.3f*sigma is exceeded by %2$.1f%% state credible "
+#~ "interval: %3$s"
+#~ msgstr ""
+#~ "%1$.3f*sigma'nın %2$.1f%% durum güvenilir aralığı tarafından aşıldığı ilk "
+#~ "zaman noktası: %3$s"
+
+#~ msgid "Threshold never reached"
+#~ msgstr "Eşiğe asla ulaşılamadı"

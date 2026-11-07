@@ -275,13 +275,10 @@ msgstr ""
 msgid "Time"
 msgstr ""
 
-msgid "Distribution"
-msgstr ""
-
 msgid "Component States"
 msgstr ""
 
-msgid "Prediction plot"
+msgid "Prediction Plot"
 msgstr ""
 
 msgid "Control Plots"
@@ -296,19 +293,6 @@ msgid "Threshold Plot"
 msgstr ""
 
 msgid "Probability Plot"
-msgstr ""
-
-msgid ""
-"First date where %1$.3f*sigma is exceeded by %2$.1f%% state credible "
-"interval: %3$s"
-msgstr ""
-
-msgid ""
-"First time point where %1$.3f*sigma is exceeded by %2$.1f%% state credible "
-"interval: %3$s"
-msgstr ""
-
-msgid "Threshold never reached"
 msgstr ""
 
 msgid "Probability"
@@ -436,4 +420,31 @@ msgid "Desired MCMC draws must be a positive whole number."
 msgstr ""
 
 msgid "At least two observed values of the dependent variable are required to initialize a local level or semilocal trend component."
+msgstr ""
+
+msgid "Forecast error"
+msgstr ""
+
+msgid "Observed and predicted values"
+msgstr ""
+
+msgid "Residual"
+msgstr ""
+
+msgid "State contribution"
+msgstr ""
+
+msgid "<i>Note.</i> The lower bound of the %1$.0f%% state credible interval does not exceed the upper control limit (%2$g&sigma;) at any time point."
+msgstr ""
+
+msgid "<i>Note.</i> The lower bound of the %1$.0f%% state credible interval first exceeds the upper control limit (%2$g&sigma;) at Time = %3$s."
+msgstr ""
+
+msgid "Local level"
+msgstr ""
+
+msgid "Local linear trend"
+msgstr ""
+
+msgid "Semi-local linear trend"
 msgstr ""
