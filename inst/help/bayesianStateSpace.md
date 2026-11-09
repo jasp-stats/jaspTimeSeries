@@ -124,10 +124,10 @@ If no retained draws include a predictor, its conditional mean, SD and interval 
 
 #### State Plots:
 - Aggregated State: The x-axis uses the interpreted Time values, or row positions if Time is empty or ignored. The y-axis shows the distribution of the estimated states. If the option `Actual observations` is selected, the observed dependent variable values will be shown as points; missing responses have no observation point.
-- Component State plot: Plots the individual contribution of each state component to the overall state. The x-axis uses the interpreted Time values, or row positions if Time is empty or ignored, and the y-axis shows the distribution of each component. Each component has a single column where the label on the right corresponds to the component name. The blue shaded area reflects the credible interval.
+- Component State plot: Plots the individual contribution of each state component to the overall state. The x-axis uses the interpreted Time values, or row positions if Time is empty or ignored, and the y-axis shows the distribution of each component. Each component has a single column where the label on the right corresponds to the component name. The shaded area reflects the credible interval.
 
 #### Prediction Plot:
-- Observation-step numbers are on the x-axis. The line before the dashed line shows the actual observations in analysis order. The dashed line represents the final step of the fitted series and the start of prediction, including any trailing missing responses. The black line after the dashed line represents the posterior predictive mean and the blue shaded area the 95 percent posterior predictive interval. Future dates or numeric Time values are not inferred.
+- Observation-step numbers are on the x-axis. The line before the dashed line shows the actual observations in analysis order. The dashed line represents the final step of the fitted series and the start of prediction, including any trailing missing responses. The black line after the dashed line represents the posterior predictive mean and the shaded area the 95 percent posterior predictive interval. Future dates or numeric Time values are not inferred.
 
 ### References
 - Scott, S. L. (2020). bsts: Bayesian Structural Time Series (0.9.5) [Computer software]. https://CRAN.R-project.org/package=bsts
