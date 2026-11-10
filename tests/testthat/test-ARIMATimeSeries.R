@@ -1,5 +1,10 @@
 context("ARIMA Time Series")
 
+# An explicit CSV path preserves date labels; basename lookup uses fread(),
+# whose IDate column the current native bridge imports as integer day counts.
+webpageVisitsFile <- system.file("jaspData", "JASP Webpage Visits.csv",
+                                package = "jaspTools", mustWork = TRUE)
+
 # test with covariate
 options <- jaspTools::analysisOptions("ARIMATimeSeries")
 options$dependent <- "visits"
@@ -12,7 +17,7 @@ options$residualLjungBox <- TRUE
 options$periodSpecification <- "dominant"
 options$forecastSave <- ""
 set.seed(1)
-results <- jaspTools::runAnalysis("ARIMATimeSeries", "JASP Webpage Visits.csv", options)
+results <- jaspTools::runAnalysis("ARIMATimeSeries", webpageVisitsFile, options)
 
 
 test_that("Coefficients table results match", {
@@ -75,7 +80,7 @@ options$forecastTable <- TRUE
 options$modelSpecification <- "custom"
 options$forecastSave <- ""
 set.seed(1)
-results <- jaspTools::runAnalysis("ARIMATimeSeries", "JASP Webpage Visits.csv", options)
+results <- jaspTools::runAnalysis("ARIMATimeSeries", webpageVisitsFile, options)
 
 
 test_that("Coefficients table results match", {

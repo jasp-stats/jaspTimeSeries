@@ -10,10 +10,9 @@ test_that("StationarityTimeSeries results match", {
   opts <- jaspTools::analysisOptions(jaspFile)
   dataset <- jaspTools::extractDatasetFromJASPFile(jaspFile)
 
-  # Encode and run analysis
-  encoded <- jaspTools:::encodeOptionsAndDataset(opts, dataset)
+  # The public runner validates and encodes plain options and data through QML.
   set.seed(1)
-  results <- jaspTools::runAnalysis("StationarityTimeSeries", encoded$dataset, encoded$options, encodedDataset = TRUE)
+  results <- jaspTools::runAnalysis("StationarityTimeSeries", dataset, opts)
 
   plotName <- results[["results"]][["acfPlot"]][["data"]]
   testPlot <- results[["state"]][["figures"]][[plotName]][["obj"]]
