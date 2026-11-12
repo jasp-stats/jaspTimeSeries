@@ -55,3 +55,12 @@ Rproj.user
 /.Rprofile
 /renv
 _processedLockFile.lock
+
+# Compiled R package build artifacts
+/src/*.o
+/src/*.so
+/src/*.dll
+/src/*.dylib
+
+# Local agent experiments and validation artifacts
+/tempAI/

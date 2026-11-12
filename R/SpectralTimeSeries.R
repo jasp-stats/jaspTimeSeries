@@ -19,13 +19,8 @@
 SpectralTimeSeries <- function(jaspResults, dataset, options) {
   ready <- options[["dependent"]] != ""
 
-  datasetRaw <- .tsReadData(jaspResults, dataset, options, ready)
-
-  datasetFiltered <- .tsDataFilterHandler(datasetRaw, options, ready)
-
-  dataset <- .tsDataWithMissingRowsHandler(datasetFiltered, options, ready)
-
-  .tsErrorHandler(dataset, ready)
+  dataset <- .tsPrepareData(jaspResults, dataset, options, ready)$data
+  ready <- ready && nrow(dataset) > 0L
 
   .tsPowerSpectralDensity(jaspResults, dataset, options, ready, position = 2, dependencies = .tsSpectralDependencies())
   .tsCreateTableBandWith(jaspResults, dataset, options, ready, position = 1, dependencies = .tsSpectralDependencies())
@@ -33,7 +28,7 @@ SpectralTimeSeries <- function(jaspResults, dataset, options) {
 
 .tsSpectralDependencies <- function() {
   return(c(
-    "dependent", "time",
+    "dependent", "time", "naAction",
     "kernel", "kernelMethod", "kernelTerm", "kernelDimension",
     "taper", "log", "detrend", "demean",
     "filter", "filterBy", "rowStart", "rowEnd", "timeStart", "timeEnd", "dateStart", "dateEnd"
@@ -41,35 +36,28 @@ SpectralTimeSeries <- function(jaspResults, dataset, options) {
 }
 
 .tsComputeSpectralResults <- function(dataset, options, jaspResults, ready) {
-  if (!is.null(jaspResults[["spectralResult"]])) {
+  if (!is.null(jaspResults[["spectralResultWithMissingValues"]])) {
     return()
   }
 
   if (ready) {
-    y <- ts(dataset$y)
-
-    k <- NULL
-
-    dims <- .tsGetKernellDimensions(options)
-
-    if (options[["kernel"]]) {
-      k <- stats::kernel(options[["kernelMethod"]], dims)
+    prepared <- .tsCompleteSeries(dataset$y, options[["naAction"]])
+    result <- list(spectrum = NULL, error = prepared$error, note = prepared$note)
+    if (is.null(result$error)) {
+      res <- try({
+        k <- if (options[["kernel"]]) stats::kernel(options[["kernelMethod"]], .tsGetKernellDimensions(options)) else NULL
+        stats::spec.pgram(ts(prepared$y), kernel = k, taper = options[["taper"]],
+          demean = options[["demean"]], detrend = options[["detrend"]],
+          plot = FALSE, na.action = na.fail)
+      }, silent = TRUE)
+      if (inherits(res, "try-error") || any(!is.finite(c(res$freq, res$spec, res$bandwidth))))
+        result$error <- gettext("The spectral analysis failed.")
+      else
+        result$spectrum <- res
     }
 
-    res <- try(stats::spec.pgram(
-      y,
-      kernel    = k,
-      taper     = options[["taper"]],
-      demean    = options[["demean"]],
-      detrend   = options[["detrend"]],
-      plot      = FALSE,
-      na.action = na.exclude # should probably add other options at some point
-    ))
-
-    if (jaspBase::isTryError(res)) .quitAnalysis(gettext("The spectral analysis failed."))
-
-    jaspResults[["spectralResult"]] <- createJaspState(res)
-    jaspResults[["spectralResult"]]$dependOn(.tsSpectralDependencies())
+    jaspResults[["spectralResultWithMissingValues"]] <- createJaspState(result)
+    jaspResults[["spectralResultWithMissingValues"]]$dependOn(.tsSpectralDependencies())
   }
 }
 
@@ -85,7 +73,10 @@ SpectralTimeSeries <- function(jaspResults, dataset, options) {
       return()
     }
 
-    .tsFillPowerSpectralDensity(plot, jaspResults, dataset, options, ready)
+    note <- .tsFillPowerSpectralDensity(plot, jaspResults, dataset, options, ready)
+    if (!is.null(note))
+      jaspResults[["spectralMissingNote"]] <- createJaspHtml(text = note,
+        dependencies = c(dependencies, "whiteNoise", "pinkNoise", "brownNoise"), position = position + 0.1)
   }
 }
 
@@ -99,7 +90,16 @@ SpectralTimeSeries <- function(jaspResults, dataset, options) {
 
 .tsFillPowerSpectralDensity <- function(powerSpectralDensity, jaspResults, dataset, options, ready) {
   .tsComputeSpectralResults(dataset, options, jaspResults, ready)
-  res <- jaspResults[["spectralResult"]]$object
+  cached <- jaspResults[["spectralResultWithMissingValues"]]$object
+  if (!is.null(cached$error)) {
+    powerSpectralDensity$setError(cached$error)
+    return(invisible(NULL))
+  }
+  res <- cached$spectrum
+  if (any(res$freq <= 0) || any(res$spec <= 0)) {
+    powerSpectralDensity$setError(gettext("The selected spectrum contains zero or invalid values and cannot be plotted on a logarithmic scale."))
+    return(invisible(NULL))
+  }
 
   x <- res$freq
   y <- res$spec
@@ -143,7 +143,7 @@ SpectralTimeSeries <- function(jaspResults, dataset, options) {
 
   powerSpectralDensity$plotObject <- p
 
-  return()
+  invisible(cached$note)
 }
 
 .tsCreateTableBandWith <- function(jaspResults, dataset, options, ready, position, dependencies) {
@@ -162,7 +162,13 @@ SpectralTimeSeries <- function(jaspResults, dataset, options) {
   # Check if ready
   if (ready) {
     .tsComputeSpectralResults(dataset, options, jaspResults, ready)
-    res <- jaspResults[["spectralResult"]]$object
+    cached <- jaspResults[["spectralResultWithMissingValues"]]$object
+    if (!is.null(cached$error)) {
+      table$setError(cached$error)
+      return()
+    }
+    res <- cached$spectrum
+    if (!is.null(cached$note)) table$addFootnote(cached$note)
 
     rows <- data.frame(bandwidth = res$bandwidth)
     row.names(rows) <- paste0("row", 1)

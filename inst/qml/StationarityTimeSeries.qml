@@ -21,10 +21,10 @@ Form
         {
             name: "time"
             label: qsTr("Time")
-            allowedColumns: ["ordinal", "nominal"]
+            allowedColumns: ["scale", "ordinal", "nominal"]
             singleVariable: true
             allowAnalysisOwnComputedColumns: false
-            info: qsTr("Optional. Can either be an ordinal variable indicating the order of the observations, or a text variable indicating the date/time stamp of the observations. Combined date and time values should be in the standard format 'YYYY-MM-DD HH:MM:SS', where seconds (':SS') can also be omitted. Date-only values should be in the format 'YYYY-MM-DD'. If a time variable is not supplied, the row order of the data is used.")
+            info: qsTr("Optional. Complete numeric values order observations from smallest to largest, regardless of gaps. Complete, unambiguous dates and times order observations chronologically. Use 'YYYY-MM-DD' for dates or 'YYYY-MM-DD HH:MM:SS' for dates with times; seconds can be omitted. All variables stay aligned, and spreadsheet row order is unchanged. Tied values retain spreadsheet row order. If any value is missing or cannot be interpreted, or dates are ambiguous, Time is ignored for the entire analysis and a warning is shown. Leave Time empty to use spreadsheet row order. Successive observations are modeled as equally spaced steps; no rows are added for gaps in Time.")
         }
     }
 
@@ -55,6 +55,15 @@ Form
             CheckBox { name: "kpssLevel"; id: kpssLevel;	label: qsTr("Level stationary") }
             CheckBox { name: "kpssTrend"; id: kpssTrend;	label: qsTr("Trend stationary") }
         }
+        RadioButtonGroup
+        {
+            name: "testNaAction"
+            title: qsTr("Missing values")
+            enabled: adfTest.checked || ppRegression.checked || ppStudentized.checked || kpssLevel.checked || kpssTrend.checked
+            info: qsTr("Applies only to this calculation. Listwise exclusion removes missing observations and treats the remaining observations as consecutive time steps, ignoring any internal gaps. Use the longest complete segment selects the longest consecutive run without missing values, using the earliest run when tied. When observations are omitted, a note reports the observations used and any effect on time spacing. The original data and saved values are unchanged.")
+            RadioButton { value: "listwise"; label: qsTr("Exclude cases listwise"); checked: true }
+            RadioButton { value: "longest"; label: qsTr("Use the longest complete segment") }
+        }
     }
     Group
     {
@@ -63,7 +72,7 @@ Form
             name: "filter"
             id: filter
             label: qsTr("Filter by")
-            info: qsTr("Filters the time series so only a specific range will be used for further analyses. Row number refers to the row number in the spreadsheet. If a 'Time' variable is supplied it is also possible to filter by time index or date, depending on the format of the 'Time' variable.")
+            info: qsTr("Selects an inclusive range of observations for analysis. Row number refers to original spreadsheet rows, even when Time changes the analysis order. Time index filters numeric Time values, including negative values and decimals. Date filters interpreted dates and times. Date filters use UTC. A date-only End includes the entire day; an End with a time uses that exact cutoff. Time or date filtering requires a usable Time variable; otherwise, select Row number or disable filtering.")
             RadioButtonGroup
             {
                 name: "filterBy"
@@ -89,8 +98,8 @@ Form
                     Group
                     {
                         columns: 2
-                        IntegerField { name: "timeStart"; label: qsTr("Start"); defaultValue: 1 }
-                        IntegerField { name: "timeEnd"; label: qsTr("End"); defaultValue: 100 }
+                        DoubleField { name: "timeStart"; label: qsTr("Start"); defaultValue: 1; negativeValues: true; decimals: 10 }
+                        DoubleField { name: "timeEnd"; label: qsTr("End"); defaultValue: 100; negativeValues: true; decimals: 10 }
                     }
                 }
                 RadioButton
@@ -190,7 +199,7 @@ Form
                 name: "detrend"
                 id: detrend
                 label: qsTr("Detrend using linear regression")
-                info: qsTr("Fits a polynomial regression to the dependent variable with time as predictor, and keeps only the residuals. If best fitting is selected, the polynomial regression is chosen based on the information criterion.")
+                info: qsTr("Fits a polynomial regression to the dependent variable using observation step as predictor, and keeps only the residuals. Differences between Time values do not affect detrending; rows with missing dependent values retain their step positions. If best fitting is selected, the polynomial regression is chosen based on the information criterion.")
                 RadioButtonGroup
                 {
                     name: "polynomialSpecification"
@@ -232,7 +241,7 @@ Form
                 id: difference
                 label: qsTr("Difference")
                 childrenOnSameRow: true
-                info: qsTr("Differences the dependent variable. Note that differencing leads to a shorter time-series (n - lag) as a lag is used.")
+                info: qsTr("Differences the dependent variable at the selected lag, repeated according to Order. The first Lag × Order positions are retained as missing values (up to the series length). Existing missing values also propagate into differences that use them. Time series plots and saved transformations retain these positions; stationarity tests and autocorrelation plots handle them according to their own Missing values setting.")
                 IntegerField { name: "differenceLag"; label: qsTr("Lag"); defaultValue: 1; min: 1; }
                 IntegerField { name: "differenceOrder"; label: qsTr("Order"); defaultValue: 1; min: 1; }
             }
@@ -260,6 +269,13 @@ Form
     Section
     {
         title: qsTr("Plots")
+        Label
+        {
+            text: qsTr("Plots reflect the transformations selected above.")
+            wrapMode: Text.WordWrap
+            Layout.columnSpan: 2
+            Layout.fillWidth: true
+        }
         Group
         {
             CheckBox
@@ -293,6 +309,14 @@ Form
                 id: acf
                 label: qsTr("Autocorrelation function")
                 info: qsTr("Plots the autocorrelation for a specified number of lags. The confidence interval may be given assuming either a white noise process, or assuming for a lag q a moving average process of order q - 1")
+                RadioButtonGroup
+                {
+                    name: "acfNaAction"
+                    title: qsTr("Missing values")
+                    info: qsTr("Applies only to this calculation. Listwise exclusion removes missing observations and treats the remaining observations as consecutive time steps, ignoring any internal gaps. Use the longest complete segment selects the longest consecutive run without missing values, using the earliest run when tied. When observations are omitted, a note reports the observations used and any effect on time spacing. The original data and saved values are unchanged.")
+                    RadioButton { value: "listwise"; label: qsTr("Exclude cases listwise"); checked: true }
+                    RadioButton { value: "longest"; label: qsTr("Use the longest complete segment") }
+                }
                 IntegerField { name: "acfMaxLag"; label: qsTr("Maximum lag"); min: 1; defaultValue: 10 }
                 CheckBox { name: "acfZeroLag"; label: qsTr("Zero lag") }
                 CheckBox
@@ -319,6 +343,14 @@ Form
                 id: pacf
                 label: qsTr("Partial autocorrelation function")
                 info: qsTr("Plots the partial autocorrelation for a specified number of lags.")
+                RadioButtonGroup
+                {
+                    name: "pacfNaAction"
+                    title: qsTr("Missing values")
+                    info: qsTr("Applies only to this calculation. Listwise exclusion removes missing observations and treats the remaining observations as consecutive time steps, ignoring any internal gaps. Use the longest complete segment selects the longest consecutive run without missing values, using the earliest run when tied. When observations are omitted, a note reports the observations used and any effect on time spacing. The original data and saved values are unchanged.")
+                    RadioButton { value: "listwise"; label: qsTr("Exclude cases listwise"); checked: true }
+                    RadioButton { value: "longest"; label: qsTr("Use the longest complete segment") }
+                }
                 IntegerField { name: "pacfMaxLag"; label: qsTr("Maximum lag"); min: 1; defaultValue: 10 }
                 CheckBox
                 {

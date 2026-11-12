@@ -19,15 +19,12 @@
 StationarityTimeSeries <- function(jaspResults, dataset, options) {
   ready <- options[["dependent"]] != ""
 
-  datasetRaw <- .tsReadData(jaspResults, dataset, options, ready)
-
-  datasetFiltered <- .tsDataFilterHandler(datasetRaw, options, ready)
-
-  dataset <- .tsDataWithMissingRowsHandler(datasetFiltered, options, ready)
+  prepared <- .tsPrepareData(jaspResults, dataset, options, ready)
+  datasetRaw <- prepared$raw
+  dataset <- prepared$data
+  ready <- ready && nrow(dataset) > 0L
 
   transformedDataset <- .tsTransformData(jaspResults, dataset, options, ready)
-
-  .tsErrorHandler(dataset, ready)
 
   .tsCreateTableStationarityTests(jaspResults, transformedDataset, options, ready, position = 2, dependencies = c(.tsTransformationDependencies(), "adfTest", "ppTestRegressionCoefficient", "ppTestStudentized", "kpssLevel", "kpssTrend"))
 
@@ -61,7 +58,7 @@ StationarityTimeSeries <- function(jaspResults, dataset, options) {
 
   # apply log
   if (options[["log"]]) {
-    if (any(transformedDataset$y <= 0)) {
+    if (any(transformedDataset$y <= 0, na.rm = TRUE)) {
       .quitAnalysis(gettext("Data cannot be zero or negative for log transformation."))
     }
 
@@ -71,7 +68,9 @@ StationarityTimeSeries <- function(jaspResults, dataset, options) {
 
   # apply root
   if (options[["root"]]) {
-    if (any(transformedDataset$y < 0)) {
+    if (any(transformedDataset$y < 0, na.rm = TRUE)) {
+      if (options[["log"]])
+        .quitAnalysis(gettext("The log transformation produced negative values, so the root transformation cannot be applied. Values between 0 and 1 have negative logarithms. Disable either Log or Root."))
       .quitAnalysis(gettext("Data cannot be negative for root transformation."))
     }
 
@@ -91,7 +90,8 @@ StationarityTimeSeries <- function(jaspResults, dataset, options) {
   if (options[["detrend"]]) {
     if (options[["polynomialSpecification"]] == "custom") {
       completeRows <- complete.cases(transformedDataset[, c("y", "t")])
-      fit <- lm(y ~ poly(as.integer(t), options[["detrendPoly"]]), data = transformedDataset[completeRows, ])
+      detrendData <- data.frame(y = transformedDataset$y, step = seq_len(nrow(transformedDataset)))
+      fit <- lm(y ~ poly(step, options[["detrendPoly"]]), data = detrendData[completeRows, ])
       residualsVec <- residuals(fit)
       transformedDataset$y[completeRows] <- residualsVec
     }
@@ -112,11 +112,10 @@ StationarityTimeSeries <- function(jaspResults, dataset, options) {
     differencedY <- diff(
       transformedDataset$y,
       lag = options[["differenceLag"]],
-      order = options[["differenceOrder"]]
+      differences = options[["differenceOrder"]]
     )
 
-    # add NA's to start of the transformed dependent variable
-    # because differencing makes the variable shorter (n - lag)
+    # Retain the original row positions, including the initial lag * order gaps.
     transformedDataset$y <- c(
       rep(NA, nrow(transformedDataset) - length(differencedY)),
       differencedY
@@ -173,7 +172,7 @@ StationarityTimeSeries <- function(jaspResults, dataset, options) {
   }
 
   if (ready) {
-    res <- sapply(0:(options[["polynomialSpecificationAutoMax"]]), .tsFitPoly, x = dataset$y, t = as.integer(dataset$t))
+    res <- sapply(0:(options[["polynomialSpecificationAutoMax"]]), .tsFitPoly, x = dataset$y, t = seq_len(nrow(dataset)))
 
     jaspResults[["polyResult"]] <- createJaspState(res)
     jaspResults[["polyResult"]]$dependOn(.tsTransformationDependencies())
@@ -184,8 +183,8 @@ StationarityTimeSeries <- function(jaspResults, dataset, options) {
   # append transformed variable to spreadsheet
   if (options[["transformationSavedToData"]] && is.null(jaspResults[["transformationColumn"]]) && options[["transformationColumn"]] != "" && ready) {
     transformationColumn <- rep(NA, max(as.numeric(rownames(datasetRaw))))
-    matchT <- match(as.POSIXct(datasetRaw$t, tz = "UTC"), dataset$t)
-    transformationColumn[as.numeric(rownames(datasetRaw))] <- dataset$y[matchT]
+    matchRows <- match(rownames(datasetRaw), rownames(dataset))
+    transformationColumn[as.numeric(rownames(datasetRaw))] <- dataset$y[matchRows]
     jaspResults[["transformationColumn"]] <- createJaspColumn(columnName = options[["transformationColumn"]])
     jaspResults[["transformationColumn"]]$dependOn(dependencies)
     jaspResults[["transformationColumn"]]$setScale(transformationColumn)
@@ -198,7 +197,7 @@ StationarityTimeSeries <- function(jaspResults, dataset, options) {
   }
 
   stationaryTable <- createJaspTable(gettext("Stationarity Tests"))
-  stationaryTable$dependOn(dependencies)
+  stationaryTable$dependOn(c(dependencies, "testNaAction"))
   stationaryTable$position <- position
   stationaryTable$showSpecifiedColumnsOnly <- TRUE
 
@@ -246,14 +245,20 @@ StationarityTimeSeries <- function(jaspResults, dataset, options) {
     return()
   }
 
-  dataset <- dataset[complete.cases(dataset), ]
+  prepared <- .tsCompleteSeries(dataset$y, options[["testNaAction"]])
+  if (!is.null(prepared$error)) {
+    stationaryTable$setError(prepared$error)
+    return()
+  }
+  y <- prepared$y
+  if (!is.null(prepared$note)) stationaryTable$addFootnote(prepared$note)
 
   df <- data.frame(test, statistic = numeric(5), lag = numeric(5), p = numeric(5), null)
 
   smallerA <- smallerPr <- smallerPs <- smallerKl <- smallerKt <- greaterA <- greaterPr <- greaterPs <- greaterKl <- greaterKt <- FALSE
   if (options[["adfTest"]]) {
-    fit <- try(tseries::adf.test(dataset$y))
-    if (jaspBase::isTryError(fit)) .quitAnalysis(gettext("The ADF test failed."))
+    fit <- try(tseries::adf.test(y), silent = TRUE)
+    if (.tsStationarityTestFailed(fit, stationaryTable, gettext("The ADF test failed."))) return()
     df[1, c("statistic", "lag", "p")] <- c(fit$statistic, fit$parameter, fit$p.value)
     stationaryTable$addRows(df[1, ])
     stationaryTable$setRowName(rowIndex = 1, newName = "adf")
@@ -263,8 +268,8 @@ StationarityTimeSeries <- function(jaspResults, dataset, options) {
   if (options[["ppTestRegressionCoefficient"]]) {
     # type = c("Z(alpha)", "Z(t_alpha)")
     # rho normalized bias test (regression coefficient) vs. tau studentized test
-    fit <- try(tseries::pp.test(dataset$y, type = "Z(alpha)"))
-    if (jaspBase::isTryError(fit)) .quitAnalysis(gettext("The PP regression coefficient test failed."))
+    fit <- try(tseries::pp.test(y, type = "Z(alpha)"), silent = TRUE)
+    if (.tsStationarityTestFailed(fit, stationaryTable, gettext("The PP regression coefficient test failed."))) return()
     df[2, c("statistic", "lag", "p")] <- c(fit$statistic, fit$parameter, fit$p.value)
     stationaryTable$addRows(df[2, ])
     stationaryTable$setRowName(rowIndex = which(rowsIdx == 2), newName = "ppRegression")
@@ -272,8 +277,8 @@ StationarityTimeSeries <- function(jaspResults, dataset, options) {
     greaterPr <- fit$p.value == 0.99 # p value 0.01 - 0.99
   }
   if (options[["ppTestStudentized"]]) {
-    fit <- try(tseries::pp.test(dataset$y, type = "Z(t_alpha)"))
-    if (jaspBase::isTryError(fit)) .quitAnalysis(gettext("The PP studentized test failed."))
+    fit <- try(tseries::pp.test(y, type = "Z(t_alpha)"), silent = TRUE)
+    if (.tsStationarityTestFailed(fit, stationaryTable, gettext("The PP studentized test failed."))) return()
     df[3, c("statistic", "lag", "p")] <- c(fit$statistic, fit$parameter, fit$p.value)
     stationaryTable$addRows(df[3, ])
     stationaryTable$setRowName(rowIndex = which(rowsIdx == 3), newName = "ppStudentized")
@@ -281,8 +286,8 @@ StationarityTimeSeries <- function(jaspResults, dataset, options) {
     greaterPs <- fit$p.value == 0.99 # p value 0.01 - 0.99
   }
   if (options[["kpssLevel"]]) {
-    fit <- try(tseries::kpss.test(dataset$y, null = "Level"))
-    if (jaspBase::isTryError(fit)) .quitAnalysis(gettext("The KPSS test for level stationarity failed."))
+    fit <- try(tseries::kpss.test(y, null = "Level"), silent = TRUE)
+    if (.tsStationarityTestFailed(fit, stationaryTable, gettext("The KPSS test for level stationarity failed."))) return()
     df[4, c("statistic", "lag", "p")] <- c(fit$statistic, fit$parameter, fit$p.value)
     stationaryTable$addRows(df[4, ])
     stationaryTable$setRowName(rowIndex = which(rowsIdx == 4), newName = "kpssLevel")
@@ -290,8 +295,8 @@ StationarityTimeSeries <- function(jaspResults, dataset, options) {
     greaterKl <- fit$p.value == 0.1 # p value 0.1 - 0.01
   }
   if (options[["kpssTrend"]]) {
-    fit <- try(tseries::kpss.test(dataset$y, null = "Trend"))
-    if (jaspBase::isTryError(fit)) .quitAnalysis(gettext("The KPSS test for trend stationarity failed."))
+    fit <- try(tseries::kpss.test(y, null = "Trend"), silent = TRUE)
+    if (.tsStationarityTestFailed(fit, stationaryTable, gettext("The KPSS test for trend stationarity failed."))) return()
     df[5, c("statistic", "lag", "p")] <- c(fit$statistic, fit$parameter, fit$p.value)
     stationaryTable$addRows(df[5, ])
     stationaryTable$setRowName(rowIndex = which(rowsIdx == 5), newName = "kpssTrend")
@@ -313,6 +318,15 @@ StationarityTimeSeries <- function(jaspResults, dataset, options) {
       colNames = "p", rowNames = .stationaryFootnoteRows(greaterA, greaterPr, greaterPs, greaterKl, greaterKt, options)
     )
   }
+}
+
+.tsStationarityTestFailed <- function(fit, table, message) {
+  if (inherits(fit, "try-error") || length(fit$statistic) != 1L || length(fit$p.value) != 1L ||
+      any(!is.finite(c(fit$statistic, fit$p.value, fit$parameter)))) {
+    table$setError(message)
+    return(TRUE)
+  }
+  FALSE
 }
 
 .stationaryFootnoteRows <- function(A, Pr, Ps, Kl, Kt, options) {
@@ -347,6 +361,7 @@ StationarityTimeSeries <- function(jaspResults, dataset, options) {
 }
 
 .tsACFTransformation <- function(jaspResults, dataset, options, ready, position, dependencies) {
+  dependencies <- c(dependencies, "acfNaAction")
   if (!options[["acf"]]) {
     return()
   }
@@ -362,18 +377,21 @@ StationarityTimeSeries <- function(jaspResults, dataset, options) {
       return()
     }
 
-    .tsFillACF(plot,
+    note <- .tsFillACF(plot,
       type = "ACF", dataset, options,
       zeroLag = options[["acfZeroLag"]],
       maxLag = options[["acfMaxLag"]],
       ci = options[["acfCi"]],
       ciValue = options[["acfCiLevel"]],
-      ciType = options[["acfCiType"]]
+      ciType = options[["acfCiType"]], missingValues = options[["acfNaAction"]]
     )
+    if (!is.null(note))
+      jaspResults[["acfMissingNote"]] <- createJaspHtml(text = note, dependencies = dependencies, position = position + 0.1)
   }
 }
 
 .tsPACFTransformation <- function(jaspResults, dataset, options, ready, position, dependencies) {
+  dependencies <- c(dependencies, "pacfNaAction")
   if (!options[["pacf"]]) {
     return()
   }
@@ -389,12 +407,14 @@ StationarityTimeSeries <- function(jaspResults, dataset, options) {
       return()
     }
 
-    .tsFillACF(plot,
+    note <- .tsFillACF(plot,
       type = "PACF", dataset, options,
       maxLag = options[["pacfMaxLag"]],
       ci = options[["pacfCi"]],
       ciValue = options[["pacfCiLevel"]],
-      ciType = options[["pacfCiType"]]
+      ciType = options[["pacfCiType"]], missingValues = options[["pacfNaAction"]]
     )
+    if (!is.null(note))
+      jaspResults[["pacfMissingNote"]] <- createJaspHtml(text = note, dependencies = dependencies, position = position + 0.1)
   }
 }
