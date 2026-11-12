@@ -136,10 +136,10 @@ test_that("BSTS dependency declarations use current option names", {
                "localLevelSigmaGuess", "localLevelSigmaWeight", "lltLevelPrior", "lltLevelSigmaGuess",
                "lltLevelSigmaWeight", "lltSlopePrior", "lltSlopeSigmaGuess", "lltSlopeSigmaWeight")
   expect_setequal(setdiff(unique(dependencies), active), dormant)
-  # Time now changes model order. The separate fixed-factor and timeout
-  # dependency omissions remain outside the Time-preparation integration.
+  # Every option consumed by the fit refits the model, including fixed factors
+  # and the MCMC timeout.
   expect_setequal(helpers$.bstsModelDependencies(), c(
-    "dependent", "time", "covariates", "expectedPredictors", "mcmcDraws", "seed", "modelTerms",
+    "dependent", "time", "covariates", "fixedFactors", "mcmcTimeoutSeconds", "expectedPredictors", "mcmcDraws", "seed", "modelTerms",
     "seasonalities", "autoregressiveComponent", "autoregressiveLagSelectionMethod",
     "autoregressiveLags", "autoregressiveMaxLags", "localLevelComponent", "localLinearTrendComponent",
     "semiLocalLinearTrendComponent", "dynamicRegressionComponent", dormant))

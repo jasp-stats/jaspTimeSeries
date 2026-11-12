@@ -119,7 +119,7 @@ Form
                 name:   "seasonal"
                 id:     seasonal
                 label:  qsTr("Seasonal components")
-                info:   qsTr("Fit a seasonal ARIMA model. If the frequency is not known, a dominant frequency may be determined from a spectral analysis.")
+                info:   qsTr("Fit a seasonal ARIMA model. The period is the number of observations per seasonal cycle (e.g., 12 for monthly data with a yearly cycle) and must be at least 2. If the period is not known, a dominant period may be determined from a spectral analysis; if none is found, a nonseasonal model is fitted.")
                 RadioButtonGroup
                 {
                     name: "periodSpecification"
@@ -131,7 +131,7 @@ Form
                         label: qsTr("Custom")
                         checked: true
                         childrenOnSameRow: true
-                        IntegerField { name: "m";   id: m; defaultValue: 1; min: 1 }
+                        IntegerField { name: "m";   id: m; defaultValue: 12; min: 1 }
                     }
                     RadioButton { value: "dominant";  label: qsTr("Dominant") }
                 }
@@ -317,7 +317,7 @@ Form
                     name:   "residualLjungBox"
                     id:     residualLjungBox
                     label:  qsTr("Ljung-Box p-values")
-                    info:   qsTr("Plots the p-values of the Ljung-Box test for a number of lags of which the null hypothesis assumes that the data independently distributed and therefore have no autocorrelation.")
+                    info:   qsTr("Plots the p-values of the Ljung-Box test on the residuals for each lag up to the maximum lag. The null hypothesis is that the residuals have no autocorrelation up to that lag. The degrees of freedom are reduced by the number of estimated nonseasonal AR and MA coefficients (p + q), so lags up to p + q have no test and are not shown. Seasonal AR and MA coefficients and regression coefficients are not subtracted, following the usual convention.")
                     RadioButtonGroup
                     {
                         name: "residualLjungBoxNaAction"
@@ -407,7 +407,7 @@ Form
             name:   "forecastTable"
             id:     forecastTable
             label:  qsTr("Forecasts table")
-            info:   qsTr("Reports forecast means and intervals. With Time assigned, Steps ahead counts from 1 after the final modeled row. With Time empty, t continues the row index.")
+            info:   qsTr("Reports forecast means with 80% and 95% prediction intervals, the ranges expected to contain future observations; they treat the estimated model coefficients as known. With Time assigned, Steps ahead counts from 1 after the final modeled row. With Time empty, t continues the row index.")
         }
     }
 }

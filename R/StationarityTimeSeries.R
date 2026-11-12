@@ -318,6 +318,24 @@ StationarityTimeSeries <- function(jaspResults, dataset, options) {
       colNames = "p", rowNames = .stationaryFootnoteRows(greaterA, greaterPr, greaterPs, greaterKl, greaterKt, options)
     )
   }
+
+  # The tests' reference distributions allow at most a constant and a linear
+  # trend. Removing a higher-degree polynomial fitted to the same data makes
+  # unit-root tests reject too often and KPSS too rarely.
+  degree <- .tsDetrendDegree(jaspResults, options)
+  if (!is.null(degree) && degree >= 2)
+    stationaryTable$addFootnote(gettextf("These p-values assume at most a linear trend. After removing a polynomial trend of degree %i they are not valid.", as.integer(degree)),
+      colNames = "p")
+}
+
+# Degree of the polynomial removed by detrending: the custom degree, or the
+# degree selected by the information criterion. NULL without detrending.
+.tsDetrendDegree <- function(jaspResults, options) {
+  if (!options[["detrend"]]) return(NULL)
+  if (options[["polynomialSpecification"]] == "custom") return(options[["detrendPoly"]])
+  lmFit <- jaspResults[["polyResult"]]$object
+  if (is.null(lmFit)) return(NULL)
+  unlist(lmFit["degree", which.min(unlist(lmFit[options[["polynomialSpecificationAutoIc"]], ]))])
 }
 
 .tsStationarityTestFailed <- function(fit, table, message) {

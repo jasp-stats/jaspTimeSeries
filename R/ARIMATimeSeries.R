@@ -86,14 +86,14 @@ ARIMATimeSeries <- function(jaspResults, dataset, options) {
   }
 
   if (ready) {
-    if (options[["seasonal"]]) {
+    period <- .tsArimaSeasonalPeriod(dataset$y, options)
+    seasonal <- period$seasonal
+    m <- period$m
+    if (seasonal) {
       P <- options[["P"]]
       D <- options[["D"]]
       Q <- options[["Q"]]
-      if (options[["periodSpecification"]] == "custom") m <- options[["m"]]
-      if (options[["periodSpecification"]] == "dominant") m <- forecast::findfrequency(dataset$y)
     } else {
-      m <- 1
       P <- D <- Q <- 0
     }
     y <- ts(dataset$y, frequency = m)
@@ -122,15 +122,37 @@ ARIMATimeSeries <- function(jaspResults, dataset, options) {
         allowmean = options[["intercept"]],
         ic = options[["modelSpecificationAutoIc"]],
         xreg = xreg,
-        seasonal = options[["seasonal"]]
+        seasonal = seasonal
       ))
     }
 
     if (jaspBase::isTryError(fit)) .quitAnalysis(gettext("The ARIMA model could not be fit."))
 
+    attr(fit, "tsSeasonalNote") <- period$note
     jaspResults[["arimaResult"]] <- createJaspState(fit)
     jaspResults[["arimaResult"]]$dependOn(dependencies)
   }
+}
+
+# A seasonal period of 1 makes every seasonal lag equal the nonseasonal lag, so
+# seasonal and nonseasonal terms are not identified. Require a period of at
+# least 2; when no dominant period is found, fit the nonseasonal model instead.
+.tsArimaSeasonalPeriod <- function(y, options) {
+  if (!options[["seasonal"]])
+    return(list(seasonal = FALSE, m = 1, note = NULL))
+
+  if (options[["periodSpecification"]] == "dominant") {
+    m <- forecast::findfrequency(y)
+    if (m < 2)
+      return(list(seasonal = FALSE, m = 1,
+                  note = gettext("No dominant seasonal period was found in the data, so a nonseasonal model was fitted.")))
+    return(list(seasonal = TRUE, m = m, note = gettextf("Seasonal period: %i (dominant period).", as.integer(m))))
+  }
+
+  m <- options[["m"]]
+  if (m < 2)
+    .quitAnalysis(gettext("The seasonal period must be at least 2. With a period of 1, the seasonal terms repeat the nonseasonal lag-1 terms and cannot be estimated separately. Set the period to the number of observations per cycle (e.g., 12 for monthly data with a yearly cycle), or disable seasonal components."))
+  list(seasonal = TRUE, m = m, note = NULL)
 }
 
 .tsCreateTableModel <- function(jaspResults, fit, dataset, options, ready, position, dependencies) {
@@ -162,6 +184,10 @@ ARIMATimeSeries <- function(jaspResults, dataset, options) {
     )
     row.names(rows) <- paste0("row", 1)
     table$addRows(rows)
+
+    seasonalNote <- attr(fit, "tsSeasonalNote")
+    if (!is.null(seasonalNote))
+      table$addFootnote(seasonalNote)
   }
 }
 
@@ -334,7 +360,7 @@ ARIMATimeSeries <- function(jaspResults, dataset, options) {
       return()
     }
 
-    .tsFillTimeSeriesPlot(residualTimeSeriesPlot, dataset, options, type = options[["residualTimeSeriesType"]], distribution = options[["residualTimeSeriesDistribution"]], yName = "Standardized Residuals")
+    .tsFillTimeSeriesPlot(residualTimeSeriesPlot, dataset, options, type = options[["residualTimeSeriesType"]], distribution = options[["residualTimeSeriesDistribution"]], yName = gettext("Residuals"))
 
     if (anyNA(dataset$y) && options[["residualTimeSeriesDistribution"]] %in% c("density", "histogram")) {
       residContainer[["residualTimeSeriesMissingNote"]] <- createJaspHtml(
@@ -388,7 +414,12 @@ ARIMATimeSeries <- function(jaspResults, dataset, options) {
       return()
     }
 
-    note <- .tsFillLjungBoxPlot(ljungPlot, dataset, options)
+    # Residuals of a fitted ARMA(p, q) lose p + q degrees of freedom (Box.test's
+    # documented fitdf convention). Seasonal ARMA and regression coefficients are
+    # not subtracted. arimaorder() reports the fitted model's orders by name, so
+    # automatic selection uses the orders that were actually chosen.
+    fittedOrder <- forecast::arimaorder(fit)
+    note <- .tsFillLjungBoxPlot(ljungPlot, dataset, options, fitdf = sum(fittedOrder[c("p", "q")]))
     if (!is.null(note))
       residContainer[["residualLjungBoxMissingNote"]] <- createJaspHtml(text = note, dependencies = ljungDependencies, position = 3.1)
   }
@@ -406,7 +437,7 @@ ARIMATimeSeries <- function(jaspResults, dataset, options) {
   }
 }
 
-.tsFillLjungBoxPlot <- function(ljungPlot, dataset, options) {
+.tsFillLjungBoxPlot <- function(ljungPlot, dataset, options, fitdf = 0L) {
   prepared <- .tsCompleteSeries(dataset$y, options[["residualLjungBoxNaAction"]])
   if (!is.null(prepared$error)) {
     ljungPlot$setError(prepared$error)
@@ -417,14 +448,29 @@ ARIMATimeSeries <- function(jaspResults, dataset, options) {
     ljungPlot$setError(gettextf("The maximum lag must be positive and smaller than the number of selected observations (%s).", length(prepared$y)))
     return(invisible(NULL))
   }
+  # With fitdf estimated coefficients, the test at lag h has h - fitdf degrees of
+  # freedom, so it exists only for lags above fitdf.
+  if (maxLag <= fitdf) {
+    ljungPlot$setError(gettextf("The Ljung-Box test needs a maximum lag larger than the number of estimated AR and MA coefficients (%1$i).", as.integer(fitdf)))
+    return(invisible(NULL))
+  }
   nLags <- seq_len(maxLag)
-  pValues <- try(vapply(nLags, function(i) stats::Box.test(prepared$y, i, type = "Ljung-Box")$p.value, numeric(1L)), silent = TRUE)
+  testedLags <- nLags[nLags > fitdf]
+  pValues <- try(vapply(testedLags, function(i) stats::Box.test(prepared$y, i, type = "Ljung-Box", fitdf = fitdf)$p.value, numeric(1L)), silent = TRUE)
   if (inherits(pValues, "try-error") || any(!is.finite(pValues))) {
     ljungPlot$setError(gettext("The Ljung-Box test failed for the selected observations."))
     return(invisible(NULL))
   }
 
-  df <- data.frame(x = nLags, y = pValues)
+  if (fitdf > 0) {
+    fitdfNote <- sprintf(ngettext(fitdf,
+      "The p-values account for the %1$i estimated AR or MA coefficient (degrees of freedom: lag minus %1$i), so lag %1$i has no test and is not shown.",
+      "The p-values account for the %1$i estimated AR and MA coefficients (degrees of freedom: lag minus %1$i), so lags up to %1$i have no test and are not shown."),
+      as.integer(fitdf))
+    prepared$note <- paste(c(prepared$note, fitdfNote), collapse = " ")
+  }
+
+  df <- data.frame(x = testedLags, y = pValues)
 
   yBreaks <- jaspGraphs::getPrettyAxisBreaks(c(0, 1))
   xBreaks <- jaspGraphs::getPrettyAxisBreaks(nLags)
@@ -595,10 +641,10 @@ ARIMATimeSeries <- function(jaspResults, dataset, options) {
   timeTitle <- if (options[["time"]] == "") "t" else gettext("Steps ahead")
   table$addColumnInfo(name = "t", title = timeTitle, type = "string")
   table$addColumnInfo(name = "y", title = yName, type = "number")
-  overtitle80 <- gettextf("%s%% CI", 100 * .80)
+  overtitle80 <- gettextf("%s%% Prediction Interval", 100 * .80)
   table$addColumnInfo(name = "lower80", title = gettext("Lower"), type = "number", overtitle = overtitle80)
   table$addColumnInfo(name = "upper80", title = gettext("Upper"), type = "number", overtitle = overtitle80)
-  overtitle95 <- gettextf("%s%% CI", 100 * .95)
+  overtitle95 <- gettextf("%s%% Prediction Interval", 100 * .95)
   table$addColumnInfo(name = "lower95", title = gettext("Lower"), type = "number", overtitle = overtitle95)
   table$addColumnInfo(name = "upper95", title = gettext("Upper"), type = "number", overtitle = overtitle95)
 
