@@ -16,7 +16,7 @@
 #
 
 #' @export
-ARIMATimeSeries <- function(jaspResults, dataset, options) {
+ARIMATimeSeriesInternal <- function(jaspResults, dataset, options) {
   ready <- options[["dependent"]] != ""
 
   prepared <- .tsPrepareData(jaspResults, dataset, options, ready, covariates = TRUE)

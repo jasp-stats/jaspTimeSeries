@@ -242,7 +242,7 @@ test_that("saved Stationarity transformations retain original row identity after
   # production entrypoint and lm/diff computations are genuine. This checks the
   # column payload, not native Desktop spreadsheet writeback.
   scope <- new.env(parent = asNamespace("jaspTimeSeries"))
-  for (name in c("StationarityTimeSeries", ".tsTransformData", ".tsSaveTransformation")) {
+  for (name in c("StationarityTimeSeriesInternal", ".tsTransformData", ".tsSaveTransformation")) {
     fun <- getFromNamespace(name, "jaspTimeSeries")
     environment(fun) <- scope
     scope[[name]] <- fun
@@ -293,7 +293,7 @@ test_that("saved Stationarity transformations retain original row identity after
     expected[as.numeric(rownames(input))[selected]] <- transformed
     result <- new.env(parent = emptyenv())
     writes <- list()
-    expect_no_error(scope$StationarityTimeSeries(result, input, options))
+    expect_no_error(scope$StationarityTimeSeriesInternal(result, input, options))
     expect_equal(writes$preparedTransformation, expected, tolerance = 1e-10)
     expect_true(!is.null(result$timeTiesNote))
     expect_identical(which(!is.na(writes$preparedTransformation)), which(!is.na(expected)))
