@@ -268,3 +268,121 @@ test_that("BSTS coefficient output dependencies refresh summaries without refitt
     }
   }
 })
+
+test_that("BSTS inclusion Bayes factor divides posterior by prior inclusion odds", {
+  bf <- .bstsCoefficientTestFunction(".bstsInclusionBayesFactor")
+  expect_equal(bf(0.25, 0.5), 3)
+  expect_equal(bf(0.5, 0.8), 4)
+  expect_equal(bf(0.75, 0.5), 1 / 3)
+  expect_equal(bf(c(0.2, 0.6), c(0.2, 0.6)), c(1, 1))
+  # Undefined when the prior fixes inclusion or the draws never vary.
+  expect_true(all(is.na(bf(c(0, 1, 1, 0.5, 0.5, NA), c(0.5, 0.5, 1, 0, 1, 0.5)))))
+})
+
+test_that("BSTS model-averaged table reports inclusion Bayes factors with explained gaps", {
+  fit <- .bstsCoefficientTestFit()
+  table <- .bstsCoefficientTestTable()
+  .bstsCoefficientTestFunction(".bstsFillCoefficientTable")(fit, table, .bstsCoefficientTestOptions(), TRUE)
+  rows <- .bstsCoefficientTestRows(table)
+  expect_identical(table$rowNames, names(rows))
+  # After burn = 2: posterior inclusion 1, 1, 1/2, 1/3, 1/3, 1/6, 0.
+  expected <- c(always = NA, negative = NA, mixed = 1 / (0.7 / 0.3), twice = 0.5 / (0.3 / 0.7),
+                tied = 0.5 / (0.8 / 0.2), once = 0.2 / (0.2 / 0.8), never = NA)
+  expect_equal(vapply(rows, function(row) row$BFinc, numeric(1)), expected)
+  notes <- setNames(table$footnotes, vapply(table$footnotes, function(note) note$rowNames, character(1)))
+  expect_setequal(names(notes), c("always", "negative", "never"))
+  for (note in notes) expect_identical(note$colNames, "BFinc")
+  expect_match(notes$always$message, "All 6 retained draws", fixed = TRUE)
+  expect_match(notes$never$message, "None of the 6 retained draws", fixed = TRUE)
+  # Neutral wording: the draws alone do not say whether the Bayes factor is large or small.
+  expect_match(notes$always$message, "estimated as 1 and the inclusion Bayes factor cannot be estimated", fixed = TRUE)
+  expect_match(notes$never$message, "estimated as 0 and the inclusion Bayes factor cannot be estimated", fixed = TRUE)
+  expect_false(any(grepl("is large|is small", c(notes$always$message, notes$never$message))))
+
+  fit$prior$prior.inclusion.probabilities[] <- 1
+  table <- .bstsCoefficientTestTable()
+  .bstsCoefficientTestFunction(".bstsFillCoefficientTable")(fit, table, .bstsCoefficientTestOptions(), TRUE)
+  expect_true(all(vapply(table$rows, function(row) is.na(row$BFinc), logical(1))))
+  expect_length(table$footnotes, ncol(fit$coefficients))
+  expect_true(all(vapply(table$footnotes, function(note) grepl("prior inclusion probability is 1", note$message, fixed = TRUE), logical(1))))
+})
+
+test_that("BSTS inclusion summaries are withheld only for an intercept bsts absorbs into the trend", {
+  fit <- .bstsCoefficientTestFit()
+  fit$coefficients <- cbind("(Intercept)" = 0, fit$coefficients[, c("twice", "never")])
+  fit$prior$prior.inclusion.probabilities <- c(0.4, 0.3, 0.1)
+  fit$predictors <- cbind("(Intercept)" = 1, twice = 1:8, never = c(1, 1, 1, 1, 1, 1, 1, 2))
+  absorbedColumn <- .bstsCoefficientTestFunction(".bstsAbsorbedInterceptColumn")
+  for (states in list(c("trend", "seasonal.4.1"), "seasonal.4.1")) {
+    fit$state.specification <- lapply(states, function(name) list(name = name))
+    hasTrend <- "trend" %in% states
+    expect_identical(absorbedColumn(fit), c(hasTrend, FALSE, FALSE))
+    marginal <- .bstsCoefficientTestTable()
+    conditional <- .bstsCoefficientTestTable()
+    .bstsCoefficientTestFunction(".bstsFillCoefficientTable")(fit, marginal, .bstsCoefficientTestOptions(), TRUE)
+    .bstsCoefficientTestFunction(".bstsFillConditionalCoefficientTable")(fit, conditional, .bstsCoefficientTestOptions(), TRUE)
+    intercept <- .bstsCoefficientTestRows(marginal)[["(Intercept)"]]
+    expect_identical(is.na(c(intercept$priorIncP, intercept$postIncP)), c(hasTrend, hasTrend))
+    expect_true(is.na(intercept$BFinc)) # absorbed, or never included
+    # Absorbed: the zeroed placeholder draws are not shown as estimates.
+    estimates <- unlist(intercept[c("mean", "sd", "lowerCri", "upperCri")])
+    expect_identical(unname(is.na(estimates)), rep(hasTrend, 4L))
+    if (hasTrend) {
+      marginalNote <- Filter(function(note) identical(note$rowNames, "(Intercept)"), marginal$footnotes)[[1L]]
+      expect_setequal(marginalNote$colNames, c("priorIncP", "postIncP", "BFinc", "mean", "sd", "lowerCri", "upperCri"))
+    }
+    expect_identical(unname(is.na(.bstsCoefficientTestRows(conditional)[["(Intercept)"]]$postIncP)), hasTrend)
+    expect_equal(.bstsCoefficientTestRows(marginal)$twice$BFinc, 0.5 / (0.3 / 0.7))
+    for (table in list(marginal, conditional)) {
+      interceptNotes <- Filter(function(note) identical(note$rowNames, "(Intercept)"), table$footnotes)
+      expect_length(interceptNotes, 1L)
+      expect_identical(grepl("absorbed into the level component", interceptNotes[[1L]]$message, fixed = TRUE), hasTrend)
+    }
+  }
+})
+
+test_that("BSTS inclusion Bayes factors match bsts fits with and without a trend", {
+  skip_if_not_installed("bsts")
+  set.seed(20261111)
+  n <- 80
+  data <- data.frame(x1 = rnorm(n), x2 = rnorm(n))
+  data$y <- cumsum(rnorm(n, 0, 0.3)) + 0.8 * data$x1 + rnorm(n)
+  options <- .bstsCoefficientTestOptions()
+  options$burn <- 100
+  for (trend in c(TRUE, FALSE)) {
+    states <- if (trend) bsts::AddLocalLevel(list(), data$y) else bsts::AddSeasonal(list(), data$y, nseasons = 4)
+    fit <- bsts::bsts(y ~ x1 + x2, data = data, state.specification = states, niter = 600,
+                      ping = 0, seed = 1, expected.model.size = 1)
+    absorbed <- .bstsCoefficientTestFunction(".bstsAbsorbedInterceptColumn")(fit)
+    expect_identical(absorbed, c(trend, FALSE, FALSE))
+    # bsts zeroes every saved intercept draw exactly when it absorbs the intercept.
+    if (trend) expect_true(all(fit$coefficients[, "(Intercept)"] == 0))
+    table <- .bstsCoefficientTestTable()
+    .bstsCoefficientTestFunction(".bstsFillCoefficientTable")(fit, table, options, TRUE)
+    rows <- .bstsCoefficientTestRows(table)
+    retained <- fit$coefficients[-seq_len(options$burn), , drop = FALSE]
+    for (name in colnames(retained)) {
+      prior <- fit$prior$prior.inclusion.probabilities[match(name, colnames(retained))]
+      post <- mean(retained[, name] != 0)
+      expected <- if (name == "(Intercept)" && trend || post %in% c(0, 1)) NA_real_ else
+        (post / (1 - post)) / (prior / (1 - prior))
+      expect_equal(rows[[name]]$BFinc, expected)
+    }
+  }
+})
+
+test_that("BSTS coefficient tables say that inclusion concerns the static coefficient under dynamic regression", {
+  for (dynamic in c(FALSE, TRUE)) {
+    options <- .bstsCoefficientTestOptions()
+    options$dynamicRegressionComponent <- dynamic
+    result <- .bstsCoefficientTestResult(.bstsCoefficientTestFit())
+    .bstsCoefficientTestBuilder(".bstsCreateCoefficientTable")(result, options, TRUE)
+    .bstsCoefficientTestBuilder(".bstsCreateConditionalCoefficientTable")(result, options, TRUE)
+    for (table in list(result$bstsMainContainer$bstsCoefficientSummaryTable,
+                       result$bstsMainContainer$bstsConditionalCoefficientSummaryTable)) {
+      general <- vapply(Filter(function(note) is.null(note$rowNames), table$footnotes),
+                        function(note) note$message, character(1L))
+      expect_identical(any(grepl("concern only the constant (static) coefficient", general, fixed = TRUE)), dynamic)
+    }
+  }
+})

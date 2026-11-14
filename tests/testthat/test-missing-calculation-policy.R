@@ -237,7 +237,7 @@ test_that("ARIMA residual policies affect diagnostic copies without changing the
     layer <- Filter(function(layer) inherits(layer$geom, "GeomLinerange"), plots$residualACFPlot$plotObject$layers)[[1L]]
     expect_equal(layer$data$acf,
       as.numeric(stats::acf(selected[[acfPolicy]], plot = FALSE, lag.max = 3L)$acf)[-1L], tolerance = 1e-10)
-    expected <- vapply(1:3, function(lag) stats::Box.test(selected[[ljungPolicy]], lag, type = "Ljung-Box")$p.value, numeric(1L))
+    expected <- vapply(2:3, function(lag) stats::Box.test(selected[[ljungPolicy]], lag, type = "Ljung-Box", fitdf = 1L)$p.value, numeric(1L))
     expect_equal(ggplot2::ggplot_build(plots$ljungPlot$plotObject)$data[[2L]]$y, expected, tolerance = 1e-10)
     expect_match(plots$residualAcfMissingNote$text,
       if (acfPolicy == "listwise") "44 of 48" else "steps 3 to 24", fixed = TRUE)

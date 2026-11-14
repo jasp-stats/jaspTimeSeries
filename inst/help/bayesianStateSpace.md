@@ -24,13 +24,13 @@ Successive observations are modeled as equally spaced steps; no rows are added f
 - Posterior summary of coefficients: Shows model-averaged coefficient estimates, using all retained MCMC draws, including zeros when a predictor was excluded.
   - Show estimates conditional on inclusion: Adds a separate table of coefficient estimates using only retained draws in which the predictor was included. This table includes conditional means, standard deviations and credible intervals, together with posterior inclusion probabilities and the number of included draws.
   - Credible Interval: Sets the credible interval level for both coefficient tables. The model-averaged intervals include zero-valued excluded draws; the conditional intervals use only included draws.
-- Expected predictors: Number of predictors that are expected, affects prior inclusion probability
+- Expected predictors: Number of predictors that are expected, affects prior inclusion probability. It is divided over all design columns, including the intercept, each factor dummy and the columns of null-model terms; the prior inclusion probability actually used is shown in the P(incl) column.
 
 ### Model Components
 ---
 #### Components and model terms
   - Components: All the independent variables that can be included in the model.
-  - Model terms: The independent variables in the model. By default, all the main effects of the specified independent variables are included in the model. To include interactions, click multiple variables (e.g., by holding the ctrl/cmd button on your keyboard while clicking) and drag those into the `Model Terms` box. Ticking the boxes on the right-hand side allows model terms to always be included (Inclusion probability = 1).
+  - Model terms: The independent variables in the model. By default, all the main effects of the specified independent variables are included in the model. To include interactions, click multiple variables (e.g., by holding the ctrl/cmd button on your keyboard while clicking) and drag those into the `Model Terms` box. Ticking "Add to null model" includes a term in every model (prior inclusion probability 1), as in Bayesian linear regression. The null model then consists of the state components and these terms. Without a level component (local level, local linear trend or semi-local linear trend), the intercept is not part of the null model; it is selected like the other predictors. The inclusion Bayes factors of the other predictors compare models with and without them, all including the null-model terms; null-model terms themselves have no inclusion Bayes factor. With a dynamic regression component, every predictor also has a time-varying effect, and inclusion probabilities and Bayes factors concern only the constant (static) coefficient: whether a predictor has a constant effect in addition to its time-varying effect. For a factor or interaction, all of its columns are included, except columns that are zero in every observation (e.g., an empty combination of factor levels), which bsts excludes.
 
 - Add autoregressive component: Adds an autoregressive component to the model where the current state is predicted from it's previous state via an autoregressive coefficient(e.g. alpha[t] = phi*alpha[t-1] + error for an AR(1) process)
   - Manually: The number in `No. of lags` determines the number of lags/coefficients added
@@ -104,7 +104,8 @@ This table summarises the prior and posterior information of the predictor varia
 - Coefficients: Names of the predictor variables
 - P(incl): The prior probability that a predictor is included in the model.
 - P(incl|data): The posterior probability that a predictor is included in the model, meaning its coefficient is nonzero, regardless of sign.
-- BF_inclusion: Quantifies how strongly our beliefs about the inclusion probability of each predictor changes.
+- BF_inclusion: Inclusion Bayes factor, the change from prior to posterior inclusion odds: (P(incl|data) / (1 - P(incl|data))) / (P(incl) / (1 - P(incl))). Values above 1 favour including the predictor, values below 1 favour excluding it. It is not shown in two situations: when the prior inclusion probability is 0 or 1, the Bayes factor is undefined; when all or none of the retained draws included the predictor, the posterior inclusion probability is estimated as 1 or 0 and the Bayes factor cannot be estimated (more MCMC draws may help).
+- When the model has a level component (local level, local linear trend or semi-local linear trend), bsts absorbs the intercept into the level and sets its regression coefficient to zero in every draw. Inclusion probabilities, the Bayes factor and coefficient estimates are therefore not shown for the intercept; its contribution is part of the level.
 - Mean: Mean of each coefficient across all retained MCMC draws.
 - SD: Standard deviation of each coefficient across all retained MCMC draws.
 - Credible Interval: Posterior credible interval for each coefficient across all retained MCMC draws, including zeros when the predictor was excluded.

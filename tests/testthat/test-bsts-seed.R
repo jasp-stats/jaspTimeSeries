@@ -14,3 +14,10 @@ test_that("BSTS seed changes invalidate the model container and its cached fit",
   expect_identical(results$bstsMainContainer$dependencies, dependencies)
   expect_true("seed" %in% results$bstsMainContainer$dependencies)
 })
+
+test_that("BSTS fixed-factor and timeout changes invalidate the cached fit", {
+  dependencies <- getFromNamespace(".bstsModelDependencies", "jaspTimeSeries")()
+  # Both are consumed by .bstsResultsHelper: fixed factors enter the formula and
+  # the timeout bounds sampling, so changing either must refit.
+  expect_true(all(c("fixedFactors", "mcmcTimeoutSeconds") %in% dependencies))
+})

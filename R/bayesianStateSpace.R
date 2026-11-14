@@ -137,6 +137,8 @@ bayesianStateSpaceInternal <- function(jaspResults, dataset, options) {
   return(c("dependent",
            "time",
            "covariates",
+           "fixedFactors",
+           "mcmcTimeoutSeconds",
            "expectedPredictors",
            "distFam",
            "mcmcDraws",
@@ -274,6 +276,10 @@ bayesianStateSpaceInternal <- function(jaspResults, dataset, options) {
   }
 
 
+  # NULL unless a predictor is added to the null model; bsts then applies its
+  # default inclusion probabilities from expected.model.size itself.
+  inclusion <- .bstsPriorInclusionProbabilities(formula, dataset, options)
+
   model <- tryCatch(bsts::bsts(formula = formula,
                       data=dataset,
                       state.specification = ss,
@@ -282,6 +288,7 @@ bayesianStateSpaceInternal <- function(jaspResults, dataset, options) {
                       timestamps=NULL,
                       seed = options$seed,
                       expected.model.size = options$expectedPredictors,
+                      prior.inclusion.probabilities = inclusion$probabilities,
                       model.options = bsts::BstsOptions(timeout.seconds = options[["mcmcTimeoutSeconds"]] )
   ), error = function(e) {
     detail <- conditionMessage(e)
@@ -293,7 +300,49 @@ bayesianStateSpaceInternal <- function(jaspResults, dataset, options) {
   }
   )
 
+  attr(model, "bstsNullModelColumns") <- inclusion$nullModelColumns
   return(model)
+}
+
+# Predictors added to the null model are in every model: all of their design
+# columns (factor dummies, interaction columns) get prior inclusion probability
+# 1. The inclusion Bayes factors of the other predictors then compare models
+# with and without them, all containing the null-model predictors. Every other
+# column keeps BoomSpikeSlab's default: expected size divided by the number of
+# design columns (intercept included), or 1 when the size reaches that number.
+# The design matrix is built exactly as bsts builds it.
+.bstsPriorInclusionProbabilities <- function(formula, dataset, options) {
+  if (!inherits(formula, "formula")) return(NULL)
+  size <- options[["expectedPredictors"]]
+  if (length(size) != 1L || !is.finite(size) || size <= 0)
+    .quitAnalysis(gettext("The expected number of predictors must be larger than 0."))
+
+  nullTerms <- Filter(function(term) isTRUE(term$isNuisance), options[["modelTerms"]])
+  if (!length(nullTerms)) return(NULL)
+
+  frame <- stats::model.frame(formula, data = dataset, na.action = stats::na.pass, drop.unused.levels = TRUE)
+  formulaTerms <- attr(frame, "terms")
+  design <- stats::model.matrix(formulaTerms, frame)
+
+  # Match ticked terms to the formula's terms by their set of variables, not by
+  # label: R orders the variables of an interaction itself, so a term stored
+  # as "z:x" can appear in the formula as "x:z".
+  termVariables <- attr(formulaTerms, "factors")
+  formulaTermSets <- lapply(colnames(termVariables), function(label)
+    sort(rownames(termVariables)[termVariables[, label] > 0]))
+  nullTermSets <- lapply(nullTerms, function(term) sort(unlist(term$components)))
+  matched <- match(nullTermSets, formulaTermSets)
+  if (anyNA(matched)) {
+    missingTerms <- vapply(nullTerms[is.na(matched)], function(term) paste(unlist(term$components), collapse = ":"), character(1))
+    .quitAnalysis(gettextf("The following terms added to the null model are not part of the model: %s.", paste(missingTerms, collapse = ", ")))
+  }
+  nullLabels <- colnames(termVariables)[matched]
+
+  nColumns <- ncol(design)
+  probabilities <- rep(if (size < nColumns) size / nColumns else 1, nColumns)
+  nullModelColumns <- attr(design, "assign") %in% match(nullLabels, attr(formulaTerms, "term.labels"))
+  probabilities[nullModelColumns] <- 1
+  list(probabilities = probabilities, nullModelColumns = nullModelColumns)
 }
 
 
@@ -371,8 +420,8 @@ bayesianStateSpaceInternal <- function(jaspResults, dataset, options) {
     if (modelType == "alternative") {
       predictors <- c(predictors, predictor)
     } else if (modelType == "null") {
-      isNuisance <- modelTerms[[i]]$isNuisance
-      if (isNuisance)
+      # "Add to null model"; missing in older saved analyses means not added.
+      if (isTRUE(modelTerms[[i]]$isNuisance))
         predictors <- c(predictors, predictor)
     }
   }
@@ -504,6 +553,7 @@ quantInv <- function(distr, value){
   bstsCoefficientTable$addColumnInfo(name = "lowerCri",   title = gettext("Lower"),         type = "number", overtitle = overtitle)
   bstsCoefficientTable$addColumnInfo(name = "upperCri",   title = gettext("Upper"),         type = "number", overtitle = overtitle)
   bstsCoefficientTable$addFootnote(gettext("Estimates include all retained draws, including zeros when a predictor was excluded."))
+  .bstsDynamicRegressionFootnote(bstsCoefficientTable, options)
 
   .bstsFillCoefficientTable(bstsResults,bstsCoefficientTable,options,ready)
 
@@ -515,34 +565,103 @@ quantInv <- function(distr, value){
   if (!ready) return()
   res <- as.data.frame(summary(bstsResults, burn = options$burn, order = FALSE)$coefficients)
   res$priorInc <- bstsResults$prior$prior.inclusion.probabilities
-  res$BFinc <- res$inc.prob/(1-res$inc.prob)
-
-
+  res$BFinc <- .bstsInclusionBayesFactor(res$priorInc, res$inc.prob)
+  res$absorbed <- .bstsAbsorbedInterceptColumn(bstsResults)
+  nullModel <- attr(bstsResults, "bstsNullModelColumns")
+  res$inNullModel <- if (length(nullModel) == nrow(res)) nullModel else FALSE
 
   ci <- options$posteriorSummaryCiLevel
   coefficients <- bstsResults$coefficients[.bstsRetainedDraws(bstsResults, options$burn), , drop = FALSE]
+  nRetained <- nrow(coefficients)
   res$lo_ci <- apply(coefficients, 2, stats::quantile, (1 - ci) / 2)
   res$hi_ci <- apply(coefficients, 2, stats::quantile, 1 - (1 - ci) / 2)
   res <- res[order(res$inc.prob,decreasing = TRUE),]
 
-
   for (i in 1:nrow(res)) {
+    coefficient <- rownames(res)[i]
+    absorbed <- res$absorbed[i]
     row <- list(
-      coef = rownames(res[i,]),
-      priorIncP = res$priorInc[i],
-      postIncP = res$inc.prob[i],
-      BFinc = res$BFinc[i],
-      mean = res$mean[i],
-      sd = res$sd[i],
-      lowerCri = res$lo_ci[i],
-      upperCri = res$hi_ci[i]
+      coef = coefficient,
+      priorIncP = if (absorbed) NA_real_ else res$priorInc[i],
+      postIncP = if (absorbed) NA_real_ else res$inc.prob[i],
+      BFinc = if (absorbed) NA_real_ else res$BFinc[i],
+      # The absorbed intercept's draws are placeholders set to zero by bsts,
+      # not an estimate; blank them so they cannot be read as "intercept = 0".
+      mean = if (absorbed) NA_real_ else res$mean[i],
+      sd = if (absorbed) NA_real_ else res$sd[i],
+      lowerCri = if (absorbed) NA_real_ else res$lo_ci[i],
+      upperCri = if (absorbed) NA_real_ else res$hi_ci[i]
     )
 
-    bstsCoefficientTable$addRows(row)
+    bstsCoefficientTable$addRows(row, rowNames = coefficient)
 
+    note <- .bstsInclusionBayesFactorNote(absorbed, res$priorInc[i], res$inc.prob[i], nRetained, res$inNullModel[i])
+    if (!is.null(note))
+      bstsCoefficientTable$addFootnote(note$message, rowNames = coefficient, colNames = note$colNames)
   }
 
+}
 
+# With dynamic regression, every predictor in the formula also has a
+# time-varying coefficient in the state. Spike-and-slab selection, and thus the
+# inclusion summaries in these tables, concern only the static coefficient.
+.bstsDynamicRegressionFootnote <- function(table, options) {
+  if (isTRUE(options[["dynamicRegressionComponent"]]))
+    table$addFootnote(gettext("With dynamic regression, every predictor also has a time-varying effect. Inclusion probabilities and Bayes factors concern only the constant (static) coefficient: whether a predictor has a constant effect in addition to its time-varying effect."))
+}
+
+# Inclusion Bayes factor for one design column: posterior inclusion odds divided
+# by prior inclusion odds. bsts places independent Bernoulli inclusion priors on
+# the columns, so this ratio is the marginal Bayes factor for a nonzero
+# coefficient. It is undefined when the prior fixes inclusion (probability 0 or
+# 1). Posterior draw frequencies of 0 or 1 would give 0/Inf, which finite draws
+# cannot establish, so those are NA too; the table footnotes explain each case.
+.bstsInclusionBayesFactor <- function(priorInclusion, posteriorInclusion) {
+  bf <- (posteriorInclusion / (1 - posteriorInclusion)) / (priorInclusion / (1 - priorInclusion))
+  bf[is.na(priorInclusion) | priorInclusion <= 0 | priorInclusion >= 1] <- NA_real_
+  bf[!is.na(bf) & (posteriorInclusion <= 0 | posteriorInclusion >= 1)] <- NA_real_
+  bf
+}
+
+# Mirrors bsts:::.RemoveInterceptAmbiguity: with a "trend" state component, bsts
+# moves the first all-ones predictor column into the trend and sets its saved
+# coefficient draws to zero. bsts names the local level, local linear trend and
+# semi-local linear trend all "trend"; user-facing text calls this the level
+# component. Inclusion summaries do not apply to that column.
+.bstsAbsorbedInterceptColumn <- function(bstsResults) {
+  predictors <- bstsResults$predictors
+  nColumns <- ncol(bstsResults$coefficients)
+  absorbed <- rep(FALSE, nColumns)
+  if (is.null(predictors) || ncol(predictors) != nColumns) return(absorbed)
+  stateNames <- vapply(bstsResults$state.specification, function(state) as.character(state$name)[1L], character(1))
+  if (!"trend" %in% stateNames) return(absorbed)
+  allOnes <- apply(predictors, 2, function(column) all(column == 1))
+  if (any(allOnes)) absorbed[match(TRUE, allOnes)] <- TRUE
+  absorbed
+}
+
+.bstsInclusionBayesFactorNote <- function(absorbed, priorInclusion, posteriorInclusion, nRetained, inNullModel = FALSE) {
+  if (absorbed)
+    return(list(colNames = c("priorIncP", "postIncP", "BFinc", "mean", "sd", "lowerCri", "upperCri"),
+                message = gettext("The intercept is absorbed into the level component (local level, local linear trend or semi-local linear trend), so its regression coefficient is zero in every draw. Inclusion probabilities, the inclusion Bayes factor and coefficient estimates do not apply; the intercept's contribution is part of the level.")))
+  # bsts sets the prior to 0 for a column that is zero in every observation,
+  # also when that column belongs to a term added to the null model.
+  if (isTRUE(priorInclusion <= 0))
+    return(list(colNames = "BFinc",
+                message = gettext("The prior inclusion probability is 0 because this column is zero in every observation (e.g., an empty combination of factor levels), so the predictor is excluded from every model and no inclusion Bayes factor is defined.")))
+  if (isTRUE(inNullModel))
+    return(list(colNames = "BFinc",
+                message = gettext("This predictor is added to the null model, so it is included in every model (prior inclusion probability 1) and has no inclusion Bayes factor. The inclusion Bayes factors of the other predictors compare models with and without them, all including this predictor.")))
+  if (isTRUE(priorInclusion >= 1))
+    return(list(colNames = "BFinc",
+                message = gettext("The prior inclusion probability is 1, so the predictor is included in every model and no inclusion Bayes factor is defined. Lower the expected number of predictors to obtain one.")))
+  if (isTRUE(posteriorInclusion >= 1))
+    return(list(colNames = "BFinc",
+                message = gettextf("All %1$i retained draws included this predictor, so its posterior inclusion probability is estimated as 1 and the inclusion Bayes factor cannot be estimated. More MCMC draws may help.", nRetained)))
+  if (isTRUE(posteriorInclusion <= 0))
+    return(list(colNames = "BFinc",
+                message = gettextf("None of the %1$i retained draws included this predictor, so its posterior inclusion probability is estimated as 0 and the inclusion Bayes factor cannot be estimated. More MCMC draws may help.", nRetained)))
+  NULL
 }
 
 
@@ -565,6 +684,7 @@ quantInv <- function(distr, value){
   table$addColumnInfo(name = "upperCri",      title = gettext("Upper"), type = "number", overtitle = overtitle)
   table$addFootnote(gettext("Estimates use only retained draws in which the predictor was included (its coefficient was nonzero). These intervals describe coefficient uncertainty conditional on inclusion; they do not measure evidence for inclusion."))
   table$addFootnote(gettext("Conditional estimates may be unreliable when based on few included draws. Included draws are MCMC draws, not independent observations."))
+  .bstsDynamicRegressionFootnote(table, options)
 
   .bstsFillConditionalCoefficientTable(bstsResults, table, options, ready)
   jaspResults[["bstsMainContainer"]][["bstsConditionalCoefficientSummaryTable"]] <- table
@@ -574,6 +694,7 @@ quantInv <- function(distr, value){
   if (!ready) return()
   coefficients <- bstsResults$coefficients[.bstsRetainedDraws(bstsResults, options$burn), , drop = FALSE]
   inclusionProbability <- colMeans(coefficients != 0)
+  absorbed <- .bstsAbsorbedInterceptColumn(bstsResults)
   probabilities <- c((1 - options$posteriorSummaryCiLevel) / 2,
                      1 - (1 - options$posteriorSummaryCiLevel) / 2)
 
@@ -585,14 +706,17 @@ quantInv <- function(distr, value){
     interval <- if (nIncluded > 1L) stats::quantile(included, probabilities, names = FALSE) else c(NA_real_, NA_real_)
     coefficient <- colnames(coefficients)[j]
     table$addRows(list(coef = coefficient,
-                       postIncP = inclusionProbability[j],
+                       postIncP = if (absorbed[j]) NA_real_ else inclusionProbability[j],
                        includedDraws = nIncluded,
                        mean = if (nIncluded > 0L) mean(included) else NA_real_,
                        sd = if (nIncluded > 1L) stats::sd(included) else NA_real_,
                        lowerCri = interval[1L],
                        upperCri = interval[2L]), rowNames = coefficient)
 
-    if (nIncluded == 0L)
+    if (absorbed[j])
+      table$addFootnote(gettext("The intercept is absorbed into the level component (local level, local linear trend or semi-local linear trend), so its regression coefficient is zero in every draw. Inclusion probabilities and conditional estimates do not apply; the intercept's contribution is part of the level."),
+                        rowNames = coefficient, colNames = c("postIncP", "mean", "sd", "lowerCri", "upperCri"))
+    else if (nIncluded == 0L)
       table$addFootnote(gettext("No retained draws included this predictor; conditional estimates are unavailable."),
                         rowNames = coefficient, colNames = c("mean", "sd", "lowerCri", "upperCri"))
     else if (nIncluded == 1L)

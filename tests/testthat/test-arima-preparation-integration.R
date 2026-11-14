@@ -375,7 +375,7 @@ test_that("ARIMA residual policies are independent and preserve model forecasts"
     expect_equal(layer$data$acf,
       as.numeric(stats::acf(selected[[acfPolicy]], plot = FALSE, lag.max = 3L)$acf)[-1L], tolerance = 1e-10)
     ljung <- actual$result$state$figures[[plots$residContainer_ljungPlot$data]]$obj
-    expected <- vapply(1:3, function(lag) stats::Box.test(selected[[ljungPolicy]], lag, type = "Ljung-Box")$p.value, numeric(1L))
+    expected <- vapply(2:3, function(lag) stats::Box.test(selected[[ljungPolicy]], lag, type = "Ljung-Box", fitdf = 1L)$p.value, numeric(1L))
     expect_equal(ggplot2::ggplot_build(ljung)$data[[2L]]$y, expected, tolerance = 1e-10)
     expect_match(paste(unlist(plots$residContainer_residualAcfMissingNote), collapse = " "),
       if (acfPolicy == "listwise") "44 of 48" else "steps 3 to 24", fixed = TRUE)
@@ -423,7 +423,7 @@ test_that("ARIMA defaults omit missing residuals only for diagnostics and report
   expect_equal(layer$data$acf,
     as.numeric(stats::acf(retained, plot = FALSE, lag.max = 3L)$acf)[-1L], tolerance = 1e-10)
   ljung <- actual$result$state$figures[[ljungOutput$data]]$obj
-  expected <- vapply(1:3, function(lag) stats::Box.test(retained, lag, type = "Ljung-Box")$p.value, numeric(1L))
+  expected <- vapply(2:3, function(lag) stats::Box.test(retained, lag, type = "Ljung-Box", fitdf = 1L)$p.value, numeric(1L))
   expect_equal(ggplot2::ggplot_build(ljung)$data[[2L]]$y, expected, tolerance = 1e-10)
   for (note in list(plots$residContainer_residualAcfMissingNote,
                    plots$residContainer_residualLjungBoxMissingNote)) {

@@ -33,7 +33,8 @@
 .bstsBurnTestTable <- function() {
   table <- new.env(parent = emptyenv())
   table$rows <- list()
-  table$addRows <- function(row) table$rows[[length(table$rows) + 1L]] <- row
+  table$addRows <- function(row, ...) table$rows[[length(table$rows) + 1L]] <- row
+  table$addFootnote <- function(...) invisible(NULL)
   table
 }
 
