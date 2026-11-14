@@ -13,6 +13,7 @@ Description
 	license		: "GPL (>= 2)"
 	icon		: "analysis-time-series.svg"
 	preloadData: true
+	hasWrappers: true
 
 	GroupTitle
 	{
@@ -24,7 +25,6 @@ Description
 	{
 		title:		qsTr("Time Series Descriptives")
 		func:		"DescriptivesTimeSeries"
-		hasWrapper:	true
 	}
 
 	GroupTitle
@@ -63,7 +63,6 @@ Description
 		title:		qsTr("Bayesian Gaussian State Space Models")
 		func:		"bayesianStateSpace"
 		qml:		"bayesianStateSpace.qml"
-		hasWrapper:	true
 		preloadData:	false
 	}
 

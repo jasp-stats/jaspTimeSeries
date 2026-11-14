@@ -16,7 +16,7 @@
 #
 
 #' @export
-SpectralTimeSeries <- function(jaspResults, dataset, options) {
+SpectralTimeSeriesInternal <- function(jaspResults, dataset, options) {
   ready <- options[["dependent"]] != ""
 
   dataset <- .tsPrepareData(jaspResults, dataset, options, ready)$data

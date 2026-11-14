@@ -16,7 +16,7 @@
 #
 
 #' @export
-StationarityTimeSeries <- function(jaspResults, dataset, options) {
+StationarityTimeSeriesInternal <- function(jaspResults, dataset, options) {
   ready <- options[["dependent"]] != ""
 
   prepared <- .tsPrepareData(jaspResults, dataset, options, ready)
