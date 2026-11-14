@@ -2,10 +2,11 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: jaspTimeSeries 0.96.3\n"
-"POT-Creation-Date: 2026-11-05 04:36\n"
+"POT-Creation-Date: 2026-11-14 03:22\n"
 "PO-Revision-Date: 2024-05-19 20:45+0000\n"
 "Last-Translator: robachowyk <kaya.robach@gmail.com>\n"
-"Language-Team: French <https://hosted.weblate.org/projects/jasp/jasptimeseries-r/fr/>\n"
+"Language-Team: French <https://hosted.weblate.org/projects/jasp/"
+"jasptimeseries-r/fr/>\n"
 "Language: fr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -104,6 +105,14 @@ msgstr ""
 msgid "Ljung-Box Plot"
 msgstr ""
 
+msgid ""
+"The maximum lag must be positive and smaller than the number of selected "
+"observations (%s)."
+msgstr ""
+
+msgid "The Ljung-Box test failed for the selected observations."
+msgstr ""
+
 msgid "Lag"
 msgstr ""
 
@@ -126,197 +135,24 @@ msgstr ""
 msgid "Forecast Time Series Plot"
 msgstr ""
 
+msgid "Observation step"
+msgstr ""
+
 msgid "Forecasts"
 msgstr ""
 
-msgid ""
-"The following covariates contain missing values: %1$s. Resolve the missing "
-"values before fitting the model."
+msgid "Steps ahead"
 msgstr ""
-
-msgid ""
-"The following covariates contain values that cannot be interpreted as "
-"numbers: %1$s. Covariates must be numeric. For categorical predictors, use "
-"Fixed Factors."
-msgstr ""
-
-msgid ""
-"Model estimation failed because of a numerical problem during sampling. "
-"Check the dependent variable for extreme values and consider rescaling it to "
-"more moderate units. If the autoregressive component is enabled, temporarily "
-"disabling it can help identify the source of the problem.\n"
-"\n"
-"Technical details:\n"
-"%1$s"
-msgstr ""
-
-msgid ""
-"Model estimation failed.\n"
-"\n"
-"%1$s"
-msgstr ""
-
-msgid "No completed MCMC draws are available for burn-in selection."
-msgstr ""
-
-msgid ""
-"The automatic burn-in proportion must be greater than 0 and at most 1. To "
-"discard no draws, select manual burn-in and enter 0."
-msgstr ""
-
-msgid ""
-"Automatic burn-in needs a larger tail proportion or more completed MCMC "
-"draws. Alternatively, select manual burn-in."
-msgstr ""
-
-msgid "Select automatic or manual burn-in."
-msgstr ""
-
-msgid ""
-"Burn-in must be a whole number between 0 and %1$d, leaving at least one of "
-"the %2$d completed MCMC draws."
-msgstr ""
-
-msgid ""
-"Unknown value provided for modelType, possible values: `alternative`, `null`"
-msgstr ""
-"Valeur inconnue fournie pour modelType, valeurs possibles: "
-"`alternative`,`null`"
-
-msgid "Residual SD"
-msgstr "Écart-Type Résiduel"
-
-msgid "Prediction SD"
-msgstr "Écart-Type de la Prédiction"
-
-msgid "R%s"
-msgstr "R%s"
-
-msgid "Harvey's goodness of fit"
-msgstr "Qualité d'ajustement d'Harvey"
-
-msgid ""
-"Only %1$s draws were sampled out of the desired %2$s. Additionally, %3$s "
-"MCMC draws out of %1$s are discarded as burn in."
-msgstr ""
-"Seuls %1$s tirages ont été échantillonnés sur les %2$s souhaités. De plus, "
-"%3$s tirages MCMC sur %1$s sont éliminés comme période de chauffe."
-
-#, fuzzy
-msgid "%1$d MCMC draws out of %2$d are discarded as burn in."
-msgstr "sont supprimés dans la période de chauffe."
-
-msgid ""
-"The local level component has been selected (by default). If you wish to "
-"adjust the model, you can do so under 'Model Components'."
-msgstr ""
-"La composante de niveau local a été sélectionnée (par défaut). Si vous "
-"souhaitez ajuster le modèle, vous pouvez le faire sous « Composants du "
-"modèle »."
-
-msgid ""
-"Harvey's goodness of fit is unavailable when the dependent variable "
-"contains missing observations."
-msgstr ""
-
-msgid "Harvey's goodness of fit could not be computed."
-msgstr ""
-
-msgid "Model-Averaged Coefficient Estimates"
-msgstr ""
-
-msgid "%s%% Credible Interval"
-msgstr "Intervalle de crédibilité à %s%%"
-
-msgid "P(incl)"
-msgstr "P(incl)"
-
-msgid "P(incl|data)"
-msgstr "P(incl|donnée)"
-
-msgid "BF<sub>inclusion</sub>"
-msgstr "FB<sub>inclusion</sub>"
-
-msgid "Mean"
-msgstr "Moyenne"
-
-msgid "SD"
-msgstr "Écart-type"
-
-msgid ""
-"Estimates include all retained draws, including zeros when a predictor was "
-"excluded."
-msgstr ""
-
-msgid "Coefficient Estimates Conditional on Inclusion"
-msgstr ""
-
-msgid "Included draws"
-msgstr ""
-
-msgid ""
-"Estimates use only retained draws in which the predictor was included (its "
-"coefficient was nonzero). These intervals describe coefficient uncertainty "
-"conditional on inclusion; they do not measure evidence for inclusion."
-msgstr ""
-
-msgid ""
-"Conditional estimates may be unreliable when based on few included draws. "
-"Included draws are MCMC draws, not independent observations."
-msgstr ""
-
-msgid ""
-"No retained draws included this predictor; conditional estimates are "
-"unavailable."
-msgstr ""
-
-msgid ""
-"Only one retained draw included this predictor; its conditional SD and "
-"credible interval are unavailable."
-msgstr ""
-
-msgid "State Plots"
-msgstr "Tracé d'Etats"
-
-msgid "Aggregated State"
-msgstr "État agrégé"
-
-msgid "Time"
-msgstr "Temps"
-
-msgid "Component States"
-msgstr "États des composants"
-
-msgid "Control Plots"
-msgstr "Graphiques de contrôle"
-
-msgid ""
-"Control period end must be a whole number of at least 2 and cannot exceed "
-"the number of time points (%1$d)."
-msgstr ""
-
-msgid "Threshold Plot"
-msgstr "Graphique de seuil"
-
-msgid "Probability Plot"
-msgstr "Graphique de probabilité"
-
-msgid "Probability"
-msgstr "Probabilité"
-
-msgid "Error Plots"
-msgstr "Graphiques d'Erreur"
-
-msgid "Residual Plot"
-msgstr "Graphique des Résidus"
-
-msgid "Forecast Error Plot"
-msgstr "Tracé de la prédiction d'erreur"
 
 msgid "The spectral analysis failed."
 msgstr ""
 
 msgid "Power Spectral Density Plot"
+msgstr ""
+
+msgid ""
+"The selected spectrum contains zero or invalid values and cannot be plotted "
+"on a logarithmic scale."
 msgstr ""
 
 msgid "Spectral Density"
@@ -403,67 +239,170 @@ msgstr ""
 msgid "Partial Autocorrelation Function"
 msgstr ""
 
-msgid "Observation step"
-msgstr ""
-
-msgid "Steps ahead"
-msgstr ""
-
-
-#~ msgid "Mean<sub>inclusion</sub>"
-#~ msgstr "Moyenne<sub>inclusion</sub>"
-
-#~ msgid "Posterior Summary of Coefficients"
-#~ msgstr "Résumé a posteriori des coefficients"
-
-#~ msgid "SD<sub>inclusion</sub>"
-#~ msgstr "ET<sub>inclusion</sub>"
-
 msgid ""
-"The maximum lag must be positive and smaller than the number of selected "
-"observations (%s)."
-msgstr ""
-
-msgid "The Ljung-Box test failed for the selected observations."
+"The following covariates contain missing values: %1$s. Resolve the missing "
+"values before fitting the model."
 msgstr ""
 
 msgid ""
-"The selected spectrum contains zero or invalid values and cannot be plotted "
-"on a logarithmic scale."
+"The following covariates contain values that cannot be interpreted as "
+"numbers: %1$s. Covariates must be numeric. For categorical predictors, use "
+"Fixed Factors."
 msgstr ""
 
 msgid "Desired MCMC draws must be a positive whole number."
 msgstr ""
 
-msgid "At least two observed values of the dependent variable are required to initialize a local level or semilocal trend component."
+msgid ""
+"At least two observed values of the dependent variable are required to "
+"initialize a local level or semilocal trend component."
 msgstr ""
 
-msgid "Forecast error"
+msgid ""
+"Model estimation failed because of a numerical problem during sampling. "
+"Check the dependent variable for extreme values and consider rescaling it to "
+"more moderate units. If the autoregressive component is enabled, temporarily "
+"disabling it can help identify the source of the problem.\n"
+"\n"
+"Technical details:\n"
+"%1$s"
 msgstr ""
 
-msgid "Observed and predicted values"
+msgid ""
+"Model estimation failed.\n"
+"\n"
+"%1$s"
 msgstr ""
 
-msgid "Prediction Plot"
+msgid "No completed MCMC draws are available for burn-in selection."
 msgstr ""
 
-msgid "Residual"
+msgid ""
+"The automatic burn-in proportion must be greater than 0 and at most 1. To "
+"discard no draws, select manual burn-in and enter 0."
 msgstr ""
 
-msgid "State contribution"
+msgid ""
+"Automatic burn-in needs a larger tail proportion or more completed MCMC "
+"draws. Alternatively, select manual burn-in."
 msgstr ""
 
-#~ msgid "Distribution"
-#~ msgstr "Distribution"
+msgid "Select automatic or manual burn-in."
+msgstr ""
+
+msgid ""
+"Burn-in must be a whole number between 0 and %1$d, leaving at least one of "
+"the %2$d completed MCMC draws."
+msgstr ""
+
+msgid ""
+"Unknown value provided for modelType, possible values: `alternative`, `null`"
+msgstr ""
+"Valeur inconnue fournie pour modelType, valeurs possibles: "
+"`alternative`,`null`"
+
+msgid "Residual SD"
+msgstr "Écart-Type Résiduel"
+
+msgid "Prediction SD"
+msgstr "Écart-Type de la Prédiction"
+
+msgid "R%s"
+msgstr "R%s"
+
+msgid "Harvey's goodness of fit"
+msgstr "Qualité d'ajustement d'Harvey"
+
+msgid ""
+"Only %1$s draws were sampled out of the desired %2$s. Additionally, %3$s "
+"MCMC draws out of %1$s are discarded as burn in."
+msgstr ""
+"Seuls %1$s tirages ont été échantillonnés sur les %2$s souhaités. De plus, "
+"%3$s tirages MCMC sur %1$s sont éliminés comme période de chauffe."
 
 #, fuzzy
-#~ msgid "Prediction plot"
-#~ msgstr "Écart-Type de la Prédiction"
+msgid "%1$d MCMC draws out of %2$d are discarded as burn in."
+msgstr "sont supprimés dans la période de chauffe."
 
-msgid "<i>Note.</i> The lower bound of the %1$.0f%% state credible interval does not exceed the upper control limit (%2$g&sigma;) at any time point."
+msgid ""
+"The local level component has been selected (by default). If you wish to "
+"adjust the model, you can do so under 'Model Components'."
+msgstr ""
+"La composante de niveau local a été sélectionnée (par défaut). Si vous "
+"souhaitez ajuster le modèle, vous pouvez le faire sous « Composants du "
+"modèle »."
+
+msgid ""
+"Harvey's goodness of fit is unavailable when the dependent variable contains "
+"missing observations."
 msgstr ""
 
-msgid "<i>Note.</i> The lower bound of the %1$.0f%% state credible interval first exceeds the upper control limit (%2$g&sigma;) at Time = %3$s."
+msgid "Harvey's goodness of fit could not be computed."
+msgstr ""
+
+msgid "Model-Averaged Coefficient Estimates"
+msgstr ""
+
+msgid "%s%% Credible Interval"
+msgstr "Intervalle de crédibilité à %s%%"
+
+msgid "P(incl)"
+msgstr "P(incl)"
+
+msgid "P(incl|data)"
+msgstr "P(incl|donnée)"
+
+msgid "BF<sub>inclusion</sub>"
+msgstr "FB<sub>inclusion</sub>"
+
+msgid "Mean"
+msgstr "Moyenne"
+
+msgid "SD"
+msgstr "Écart-type"
+
+msgid ""
+"Estimates include all retained draws, including zeros when a predictor was "
+"excluded."
+msgstr ""
+
+msgid "Coefficient Estimates Conditional on Inclusion"
+msgstr ""
+
+msgid "Included draws"
+msgstr ""
+
+msgid ""
+"Estimates use only retained draws in which the predictor was included (its "
+"coefficient was nonzero). These intervals describe coefficient uncertainty "
+"conditional on inclusion; they do not measure evidence for inclusion."
+msgstr ""
+
+msgid ""
+"Conditional estimates may be unreliable when based on few included draws. "
+"Included draws are MCMC draws, not independent observations."
+msgstr ""
+
+msgid ""
+"No retained draws included this predictor; conditional estimates are "
+"unavailable."
+msgstr ""
+
+msgid ""
+"Only one retained draw included this predictor; its conditional SD and "
+"credible interval are unavailable."
+msgstr ""
+
+msgid "State Plots"
+msgstr "Tracé d'Etats"
+
+msgid "Aggregated State"
+msgstr "État agrégé"
+
+msgid "Time"
+msgstr "Temps"
+
+msgid "State contribution"
 msgstr ""
 
 msgid "Local level"
@@ -475,16 +414,83 @@ msgstr ""
 msgid "Semi-local linear trend"
 msgstr ""
 
+msgid "Component States"
+msgstr "États des composants"
+
+msgid "Prediction Plot"
+msgstr ""
+
+msgid "Observed and predicted values"
+msgstr ""
+
+msgid "Control Plots"
+msgstr "Graphiques de contrôle"
+
+msgid ""
+"Control period end must be a whole number of at least 2 and cannot exceed "
+"the number of time points (%1$d)."
+msgstr ""
+
+msgid "Threshold Plot"
+msgstr "Graphique de seuil"
+
+msgid "Probability Plot"
+msgstr "Graphique de probabilité"
+
+msgid ""
+"<i>Note.</i> The lower bound of the %1$.0f%% state credible interval first "
+"exceeds the upper control limit (%2$g&sigma;) at Time = %3$s."
+msgstr ""
+
+msgid ""
+"<i>Note.</i> The lower bound of the %1$.0f%% state credible interval does "
+"not exceed the upper control limit (%2$g&sigma;) at any time point."
+msgstr ""
+
+msgid "Probability"
+msgstr "Probabilité"
+
+msgid "Error Plots"
+msgstr "Graphiques d'Erreur"
+
+msgid "Residual Plot"
+msgstr "Graphique des Résidus"
+
+msgid "Residual"
+msgstr ""
+
+msgid "Forecast Error Plot"
+msgstr "Tracé de la prédiction d'erreur"
+
+msgid "Forecast error"
+msgstr ""
+
+#~ msgid "Mean<sub>inclusion</sub>"
+#~ msgstr "Moyenne<sub>inclusion</sub>"
+
+#~ msgid "Posterior Summary of Coefficients"
+#~ msgstr "Résumé a posteriori des coefficients"
+
+#~ msgid "SD<sub>inclusion</sub>"
+#~ msgstr "ET<sub>inclusion</sub>"
+
+#~ msgid "Distribution"
+#~ msgstr "Distribution"
+
+#, fuzzy
+#~ msgid "Prediction plot"
+#~ msgstr "Écart-Type de la Prédiction"
+
 #~ msgid ""
 #~ "First date where %1$.3f*sigma is exceeded by %2$.1f%% state credible "
 #~ "interval: %3$s"
 #~ msgstr ""
-#~ "Première date à laquelle l'intervalle de crédibilité de l'état de %2$.1f%% "
-#~ "dépasse %1$.3f*sigma : %3$s"
+#~ "Première date à laquelle l'intervalle de crédibilité de l'état de %2$.1f%"
+#~ "% dépasse %1$.3f*sigma : %3$s"
 
 #~ msgid ""
-#~ "First time point where %1$.3f*sigma is exceeded by %2$.1f%% state credible "
-#~ "interval: %3$s"
+#~ "First time point where %1$.3f*sigma is exceeded by %2$.1f%% state "
+#~ "credible interval: %3$s"
 #~ msgstr ""
 #~ "Premier point temporel à lequel l'intervalle de crédibilité de l'état de "
 #~ "%2$.1f%% dépasse %1$.3f*sigma : %3$s"

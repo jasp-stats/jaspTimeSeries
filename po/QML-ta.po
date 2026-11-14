@@ -1167,7 +1167,6 @@ msgid ""
 "is empty, the first column, t, continues the row index."
 msgstr ""
 
-#: /private/tmp/jasp-time-controls-step4-20261009-f33g81ee/jaspTimeSeries/inst/qml/ARIMATimeSeries.qml:372
 msgctxt "ARIMATimeSeries|"
 msgid ""
 "Plots forecasts and optionally observed values. With Time assigned, the x-"
@@ -1355,7 +1354,3 @@ msgstr ""
 msgctxt "StationarityTimeSeries|"
 msgid "Missing values"
 msgstr ""
-
-#~ msgctxt "bayesianStateSpace|"
-#~ msgid "Show means across draws included"
-#~ msgstr "டிராக்கள் முழுவதும் சேர்க்கப்பட்டுள்ளன"

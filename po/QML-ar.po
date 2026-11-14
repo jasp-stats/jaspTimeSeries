@@ -1091,7 +1091,6 @@ msgid ""
 "is empty, the first column, t, continues the row index."
 msgstr ""
 
-#: /private/tmp/jasp-time-controls-step4-20261009-f33g81ee/jaspTimeSeries/inst/qml/ARIMATimeSeries.qml:372
 msgctxt "ARIMATimeSeries|"
 msgid ""
 "Plots forecasts and optionally observed values. With Time assigned, the x-"

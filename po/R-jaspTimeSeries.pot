@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: jaspTimeSeries 0.96.3\n"
-"POT-Creation-Date: 2026-11-05 04:36\n"
+"POT-Creation-Date: 2026-11-14 03:22\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -85,9 +85,7 @@ msgstr ""
 msgid "Time Series Plot"
 msgstr ""
 
-msgid ""
-"Missing residuals appear as gaps in the time-series plot and are excluded "
-"from the distribution."
+msgid "Missing residuals appear as gaps in the time-series plot and are excluded from the distribution."
 msgstr ""
 
 msgid "Autocorrelation Function Plot"
@@ -97,6 +95,12 @@ msgid "Q-Q Plot"
 msgstr ""
 
 msgid "Ljung-Box Plot"
+msgstr ""
+
+msgid "The maximum lag must be positive and smaller than the number of selected observations (%s)."
+msgstr ""
+
+msgid "The Ljung-Box test failed for the selected observations."
 msgstr ""
 
 msgid "Lag"
@@ -117,13 +121,115 @@ msgstr ""
 msgid "Forecast Time Series Plot"
 msgstr ""
 
+msgid "Observation step"
+msgstr ""
+
 msgid "Forecasts"
+msgstr ""
+
+msgid "Steps ahead"
+msgstr ""
+
+msgid "The spectral analysis failed."
+msgstr ""
+
+msgid "Power Spectral Density Plot"
+msgstr ""
+
+msgid "The selected spectrum contains zero or invalid values and cannot be plotted on a logarithmic scale."
+msgstr ""
+
+msgid "Spectral Density"
+msgstr ""
+
+msgid "Bandwidth"
+msgstr ""
+
+msgid "Data cannot be zero or negative for log transformation."
+msgstr ""
+
+msgid "The log transformation produced negative values, so the root transformation cannot be applied. Values between 0 and 1 have negative logarithms. Disable either Log or Root."
+msgstr ""
+
+msgid "Data cannot be negative for root transformation."
+msgstr ""
+
+msgid "Detrend using linear regression"
+msgstr ""
+
+msgid "Degree"
+msgstr ""
+
+msgid "A polynomial regression with a degree of %s was fitted."
+msgstr ""
+
+msgid "Stationarity Tests"
+msgstr ""
+
+msgid "Test"
+msgstr ""
+
+msgid "Statistic"
+msgstr ""
+
+msgid "Truncation lag parameter"
+msgstr ""
+
+msgid "H₀"
+msgstr ""
+
+msgid "Level"
+msgstr ""
+
+msgid "Trend"
+msgstr ""
+
+msgid "Non-stationary"
+msgstr ""
+
+msgid "Level stationary"
+msgstr ""
+
+msgid "Trend stationary"
+msgstr ""
+
+msgid "The ADF test failed."
+msgstr ""
+
+msgid "The PP regression coefficient test failed."
+msgstr ""
+
+msgid "The PP studentized test failed."
+msgstr ""
+
+msgid "The KPSS test for level stationarity failed."
+msgstr ""
+
+msgid "The KPSS test for trend stationarity failed."
+msgstr ""
+
+msgid "The p-value is actually less than p-value shown (see Help file)."
+msgstr ""
+
+msgid "The p-value is actually greater than p-value shown (see Help file)."
+msgstr ""
+
+msgid "Autocorrelation Function"
+msgstr ""
+
+msgid "Partial Autocorrelation Function"
 msgstr ""
 
 msgid "The following covariates contain missing values: %1$s. Resolve the missing values before fitting the model."
 msgstr ""
 
 msgid "The following covariates contain values that cannot be interpreted as numbers: %1$s. Covariates must be numeric. For categorical predictors, use Fixed Factors."
+msgstr ""
+
+msgid "Desired MCMC draws must be a positive whole number."
+msgstr ""
+
+msgid "At least two observed values of the dependent variable are required to initialize a local level or semilocal trend component."
 msgstr ""
 
 msgid "Model estimation failed because of a numerical problem during sampling. Check the dependent variable for extreme values and consider rescaling it to more moderate units. If the autoregressive component is enabled, temporarily disabling it can help identify the source of the problem.\n\nTechnical details:\n%1$s"
@@ -228,10 +334,25 @@ msgstr ""
 msgid "Time"
 msgstr ""
 
+msgid "State contribution"
+msgstr ""
+
+msgid "Local level"
+msgstr ""
+
+msgid "Local linear trend"
+msgstr ""
+
+msgid "Semi-local linear trend"
+msgstr ""
+
 msgid "Component States"
 msgstr ""
 
 msgid "Prediction Plot"
+msgstr ""
+
+msgid "Observed and predicted values"
 msgstr ""
 
 msgid "Control Plots"
@@ -246,6 +367,12 @@ msgstr ""
 msgid "Probability Plot"
 msgstr ""
 
+msgid "<i>Note.</i> The lower bound of the %1$.0f%% state credible interval first exceeds the upper control limit (%2$g&sigma;) at Time = %3$s."
+msgstr ""
+
+msgid "<i>Note.</i> The lower bound of the %1$.0f%% state credible interval does not exceed the upper control limit (%2$g&sigma;) at any time point."
+msgstr ""
+
 msgid "Probability"
 msgstr ""
 
@@ -255,140 +382,11 @@ msgstr ""
 msgid "Residual Plot"
 msgstr ""
 
-msgid "Forecast Error Plot"
-msgstr ""
-
-msgid "The spectral analysis failed."
-msgstr ""
-
-msgid "Power Spectral Density Plot"
-msgstr ""
-
-msgid "Spectral Density"
-msgstr ""
-
-msgid "Bandwidth"
-msgstr ""
-
-msgid "Data cannot be zero or negative for log transformation."
-msgstr ""
-
-msgid "The log transformation produced negative values, so the root transformation cannot be applied. Values between 0 and 1 have negative logarithms. Disable either Log or Root."
-msgstr ""
-
-msgid "Data cannot be negative for root transformation."
-msgstr ""
-
-msgid "Detrend using linear regression"
-msgstr ""
-
-msgid "Degree"
-msgstr ""
-
-msgid "A polynomial regression with a degree of %s was fitted."
-msgstr ""
-
-msgid "Stationarity Tests"
-msgstr ""
-
-msgid "Test"
-msgstr ""
-
-msgid "Statistic"
-msgstr ""
-
-msgid "Truncation lag parameter"
-msgstr ""
-
-msgid "H₀"
-msgstr ""
-
-msgid "Level"
-msgstr ""
-
-msgid "Trend"
-msgstr ""
-
-msgid "Non-stationary"
-msgstr ""
-
-msgid "Level stationary"
-msgstr ""
-
-msgid "Trend stationary"
-msgstr ""
-
-msgid "The ADF test failed."
-msgstr ""
-
-msgid "The PP regression coefficient test failed."
-msgstr ""
-
-msgid "The PP studentized test failed."
-msgstr ""
-
-msgid "The KPSS test for level stationarity failed."
-msgstr ""
-
-msgid "The KPSS test for trend stationarity failed."
-msgstr ""
-
-msgid "The p-value is actually less than p-value shown (see Help file)."
-msgstr ""
-
-msgid "The p-value is actually greater than p-value shown (see Help file)."
-msgstr ""
-
-msgid "Autocorrelation Function"
-msgstr ""
-
-msgid "Partial Autocorrelation Function"
-msgstr ""
-
-msgid "Observation step"
-msgstr ""
-
-msgid "Steps ahead"
-msgstr ""
-
-msgid "The maximum lag must be positive and smaller than the number of selected observations (%s)."
-msgstr ""
-
-msgid "The Ljung-Box test failed for the selected observations."
-msgstr ""
-
-msgid "The selected spectrum contains zero or invalid values and cannot be plotted on a logarithmic scale."
-msgstr ""
-
-msgid "Desired MCMC draws must be a positive whole number."
-msgstr ""
-
-msgid "At least two observed values of the dependent variable are required to initialize a local level or semilocal trend component."
-msgstr ""
-
-msgid "Forecast error"
-msgstr ""
-
-msgid "Observed and predicted values"
-msgstr ""
-
 msgid "Residual"
 msgstr ""
 
-msgid "State contribution"
+msgid "Forecast Error Plot"
 msgstr ""
 
-msgid "<i>Note.</i> The lower bound of the %1$.0f%% state credible interval does not exceed the upper control limit (%2$g&sigma;) at any time point."
-msgstr ""
-
-msgid "<i>Note.</i> The lower bound of the %1$.0f%% state credible interval first exceeds the upper control limit (%2$g&sigma;) at Time = %3$s."
-msgstr ""
-
-msgid "Local level"
-msgstr ""
-
-msgid "Local linear trend"
-msgstr ""
-
-msgid "Semi-local linear trend"
+msgid "Forecast error"
 msgstr ""

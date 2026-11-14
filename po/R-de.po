@@ -2,10 +2,10 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: jaspTimeSeries 0.17.3\n"
-"POT-Creation-Date: 2026-11-05 04:36\n"
+"POT-Creation-Date: 2026-11-14 03:22\n"
 "PO-Revision-Date: 2026-10-14 19:51+0000\n"
-"Last-Translator: Johannes Keyser <jokeyser@users.noreply.hosted.weblate.org>"
-"\n"
+"Last-Translator: Johannes Keyser "
+"<jokeyser@users.noreply.hosted.weblate.org>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/jasp/"
 "jasptimeseries-r/de/>\n"
 "Language: de\n"
@@ -107,6 +107,14 @@ msgstr "Q-Q-Diagramm"
 msgid "Ljung-Box Plot"
 msgstr "Ljung-Box-Diagramm"
 
+msgid ""
+"The maximum lag must be positive and smaller than the number of selected "
+"observations (%s)."
+msgstr ""
+
+msgid "The Ljung-Box test failed for the selected observations."
+msgstr ""
+
 msgid "Lag"
 msgstr "Verzögerung"
 
@@ -134,198 +142,25 @@ msgstr "Prognose fehlgeschlagen."
 msgid "Forecast Time Series Plot"
 msgstr "Prognose-Zeitreihen-Diagramm"
 
+msgid "Observation step"
+msgstr ""
+
 msgid "Forecasts"
 msgstr "Prognosen"
 
-msgid ""
-"The following covariates contain missing values: %1$s. Resolve the missing "
-"values before fitting the model."
+msgid "Steps ahead"
 msgstr ""
-
-msgid ""
-"The following covariates contain values that cannot be interpreted as "
-"numbers: %1$s. Covariates must be numeric. For categorical predictors, use "
-"Fixed Factors."
-msgstr ""
-
-msgid ""
-"Model estimation failed because of a numerical problem during sampling. "
-"Check the dependent variable for extreme values and consider rescaling it to "
-"more moderate units. If the autoregressive component is enabled, temporarily "
-"disabling it can help identify the source of the problem.\n"
-"\n"
-"Technical details:\n"
-"%1$s"
-msgstr ""
-
-msgid ""
-"Model estimation failed.\n"
-"\n"
-"%1$s"
-msgstr ""
-
-msgid "No completed MCMC draws are available for burn-in selection."
-msgstr ""
-
-msgid ""
-"The automatic burn-in proportion must be greater than 0 and at most 1. To "
-"discard no draws, select manual burn-in and enter 0."
-msgstr ""
-
-msgid ""
-"Automatic burn-in needs a larger tail proportion or more completed MCMC "
-"draws. Alternatively, select manual burn-in."
-msgstr ""
-
-msgid "Select automatic or manual burn-in."
-msgstr ""
-
-msgid ""
-"Burn-in must be a whole number between 0 and %1$d, leaving at least one of "
-"the %2$d completed MCMC draws."
-msgstr ""
-
-msgid ""
-"Unknown value provided for modelType, possible values: `alternative`, `null`"
-msgstr ""
-"Unbekannter Wert für modelType gegeben, mögliche Werte: `alternative`, `null`"
-
-msgid "Residual SD"
-msgstr "Residuelle SD"
-
-msgid "Prediction SD"
-msgstr "Vorhersage SD"
-
-msgid "R%s"
-msgstr "R%s"
-
-msgid "Harvey's goodness of fit"
-msgstr "Harveys Anpassungsgüte"
-
-msgid ""
-"Only %1$s draws were sampled out of the desired %2$s. Additionally, %3$s "
-"MCMC draws out of %1$s are discarded as burn in."
-msgstr ""
-"Von den gewünschten %2$s Stichproben wurden nur %1$s gezogen. Zusätzlich "
-"werden %3$s der %1$s MCMC-Stichproben als Aufwärmphase verworfen."
-
-msgid "%1$d MCMC draws out of %2$d are discarded as burn in."
-msgstr "%1$d von %2$d MCMC-Ziehungen werden als Aufwärmphase verworfen."
-
-msgid ""
-"The local level component has been selected (by default). If you wish to "
-"adjust the model, you can do so under 'Model Components'."
-msgstr ""
-"Die Komponente lokale Ebene wurde ausgewählt (standardmäßig). Wenn Sie das "
-"Modell anpassen möchten, können Sie dies unter 'Modellkomponenten' tun."
-
-msgid ""
-"Harvey's goodness of fit is unavailable when the dependent variable "
-"contains missing observations."
-msgstr ""
-
-msgid "Harvey's goodness of fit could not be computed."
-msgstr ""
-
-msgid "Model-Averaged Coefficient Estimates"
-msgstr ""
-
-msgid "%s%% Credible Interval"
-msgstr "%s%% Glaubwürdigkeitsintervall"
-
-msgid "P(incl)"
-msgstr "P(inkl)"
-
-msgid "P(incl|data)"
-msgstr "P(inkl|Daten)"
-
-msgid "BF<sub>inclusion</sub>"
-msgstr "BF<sub>Inklusion</sub>"
-
-msgid "Mean"
-msgstr "Mittelwert"
-
-msgid "SD"
-msgstr "SD"
-
-msgid ""
-"Estimates include all retained draws, including zeros when a predictor was "
-"excluded."
-msgstr ""
-
-msgid "Coefficient Estimates Conditional on Inclusion"
-msgstr ""
-
-msgid "Included draws"
-msgstr ""
-
-msgid ""
-"Estimates use only retained draws in which the predictor was included (its "
-"coefficient was nonzero). These intervals describe coefficient uncertainty "
-"conditional on inclusion; they do not measure evidence for inclusion."
-msgstr ""
-
-msgid ""
-"Conditional estimates may be unreliable when based on few included draws. "
-"Included draws are MCMC draws, not independent observations."
-msgstr ""
-
-msgid ""
-"No retained draws included this predictor; conditional estimates are "
-"unavailable."
-msgstr ""
-
-msgid ""
-"Only one retained draw included this predictor; its conditional SD and "
-"credible interval are unavailable."
-msgstr ""
-
-msgid "State Plots"
-msgstr "Zustandsdiagramme"
-
-msgid "Aggregated State"
-msgstr "Aggregierter Zustand"
-
-msgid "Time"
-msgstr "Zeit"
-
-msgid "Component States"
-msgstr "Komponenten-Zustände"
-
-msgid "Prediction Plot"
-msgstr "Vorhersage-Diagramm"
-
-msgid "Control Plots"
-msgstr "Kontrolldiagramme"
-
-msgid ""
-"Control period end must be a whole number of at least 2 and cannot exceed "
-"the number of time points (%1$d)."
-msgstr ""
-
-msgid "Threshold Plot"
-msgstr "Schwellwert-Diagramm"
-
-msgid "Probability Plot"
-msgstr "Wahrscheinlichkeitsdiagramm"
-
-msgid "Probability"
-msgstr "Wahrscheinlichkeit"
-
-msgid "Error Plots"
-msgstr "Fehlerdiagramme"
-
-msgid "Residual Plot"
-msgstr "Residuendiagramm"
-
-msgid "Forecast Error Plot"
-msgstr "Prognosefehlerdiagramm"
 
 msgid "The spectral analysis failed."
 msgstr "Die Spektralanalyse ist fehlgeschlagen."
 
 msgid "Power Spectral Density Plot"
 msgstr "Diagramm Spektrale Leistungsdichte"
+
+msgid ""
+"The selected spectrum contains zero or invalid values and cannot be plotted "
+"on a logarithmic scale."
+msgstr ""
 
 msgid "Spectral Density"
 msgstr "Spektrale Leistungsdichte"
@@ -415,6 +250,229 @@ msgstr "Autokorrelationsfunktion"
 msgid "Partial Autocorrelation Function"
 msgstr "Partielle Autokorrelationsfunktion"
 
+msgid ""
+"The following covariates contain missing values: %1$s. Resolve the missing "
+"values before fitting the model."
+msgstr ""
+
+msgid ""
+"The following covariates contain values that cannot be interpreted as "
+"numbers: %1$s. Covariates must be numeric. For categorical predictors, use "
+"Fixed Factors."
+msgstr ""
+
+msgid "Desired MCMC draws must be a positive whole number."
+msgstr ""
+
+msgid ""
+"At least two observed values of the dependent variable are required to "
+"initialize a local level or semilocal trend component."
+msgstr ""
+
+msgid ""
+"Model estimation failed because of a numerical problem during sampling. "
+"Check the dependent variable for extreme values and consider rescaling it to "
+"more moderate units. If the autoregressive component is enabled, temporarily "
+"disabling it can help identify the source of the problem.\n"
+"\n"
+"Technical details:\n"
+"%1$s"
+msgstr ""
+
+msgid ""
+"Model estimation failed.\n"
+"\n"
+"%1$s"
+msgstr ""
+
+msgid "No completed MCMC draws are available for burn-in selection."
+msgstr ""
+
+msgid ""
+"The automatic burn-in proportion must be greater than 0 and at most 1. To "
+"discard no draws, select manual burn-in and enter 0."
+msgstr ""
+
+msgid ""
+"Automatic burn-in needs a larger tail proportion or more completed MCMC "
+"draws. Alternatively, select manual burn-in."
+msgstr ""
+
+msgid "Select automatic or manual burn-in."
+msgstr ""
+
+msgid ""
+"Burn-in must be a whole number between 0 and %1$d, leaving at least one of "
+"the %2$d completed MCMC draws."
+msgstr ""
+
+msgid ""
+"Unknown value provided for modelType, possible values: `alternative`, `null`"
+msgstr ""
+"Unbekannter Wert für modelType gegeben, mögliche Werte: `alternative`, `null`"
+
+msgid "Residual SD"
+msgstr "Residuelle SD"
+
+msgid "Prediction SD"
+msgstr "Vorhersage SD"
+
+msgid "R%s"
+msgstr "R%s"
+
+msgid "Harvey's goodness of fit"
+msgstr "Harveys Anpassungsgüte"
+
+msgid ""
+"Only %1$s draws were sampled out of the desired %2$s. Additionally, %3$s "
+"MCMC draws out of %1$s are discarded as burn in."
+msgstr ""
+"Von den gewünschten %2$s Stichproben wurden nur %1$s gezogen. Zusätzlich "
+"werden %3$s der %1$s MCMC-Stichproben als Aufwärmphase verworfen."
+
+msgid "%1$d MCMC draws out of %2$d are discarded as burn in."
+msgstr "%1$d von %2$d MCMC-Ziehungen werden als Aufwärmphase verworfen."
+
+msgid ""
+"The local level component has been selected (by default). If you wish to "
+"adjust the model, you can do so under 'Model Components'."
+msgstr ""
+"Die Komponente lokale Ebene wurde ausgewählt (standardmäßig). Wenn Sie das "
+"Modell anpassen möchten, können Sie dies unter 'Modellkomponenten' tun."
+
+msgid ""
+"Harvey's goodness of fit is unavailable when the dependent variable contains "
+"missing observations."
+msgstr ""
+
+msgid "Harvey's goodness of fit could not be computed."
+msgstr ""
+
+msgid "Model-Averaged Coefficient Estimates"
+msgstr ""
+
+msgid "%s%% Credible Interval"
+msgstr "%s%% Glaubwürdigkeitsintervall"
+
+msgid "P(incl)"
+msgstr "P(inkl)"
+
+msgid "P(incl|data)"
+msgstr "P(inkl|Daten)"
+
+msgid "BF<sub>inclusion</sub>"
+msgstr "BF<sub>Inklusion</sub>"
+
+msgid "Mean"
+msgstr "Mittelwert"
+
+msgid "SD"
+msgstr "SD"
+
+msgid ""
+"Estimates include all retained draws, including zeros when a predictor was "
+"excluded."
+msgstr ""
+
+msgid "Coefficient Estimates Conditional on Inclusion"
+msgstr ""
+
+msgid "Included draws"
+msgstr ""
+
+msgid ""
+"Estimates use only retained draws in which the predictor was included (its "
+"coefficient was nonzero). These intervals describe coefficient uncertainty "
+"conditional on inclusion; they do not measure evidence for inclusion."
+msgstr ""
+
+msgid ""
+"Conditional estimates may be unreliable when based on few included draws. "
+"Included draws are MCMC draws, not independent observations."
+msgstr ""
+
+msgid ""
+"No retained draws included this predictor; conditional estimates are "
+"unavailable."
+msgstr ""
+
+msgid ""
+"Only one retained draw included this predictor; its conditional SD and "
+"credible interval are unavailable."
+msgstr ""
+
+msgid "State Plots"
+msgstr "Zustandsdiagramme"
+
+msgid "Aggregated State"
+msgstr "Aggregierter Zustand"
+
+msgid "Time"
+msgstr "Zeit"
+
+msgid "State contribution"
+msgstr ""
+
+msgid "Local level"
+msgstr ""
+
+msgid "Local linear trend"
+msgstr ""
+
+msgid "Semi-local linear trend"
+msgstr ""
+
+msgid "Component States"
+msgstr "Komponenten-Zustände"
+
+msgid "Prediction Plot"
+msgstr "Vorhersage-Diagramm"
+
+msgid "Observed and predicted values"
+msgstr ""
+
+msgid "Control Plots"
+msgstr "Kontrolldiagramme"
+
+msgid ""
+"Control period end must be a whole number of at least 2 and cannot exceed "
+"the number of time points (%1$d)."
+msgstr ""
+
+msgid "Threshold Plot"
+msgstr "Schwellwert-Diagramm"
+
+msgid "Probability Plot"
+msgstr "Wahrscheinlichkeitsdiagramm"
+
+msgid ""
+"<i>Note.</i> The lower bound of the %1$.0f%% state credible interval first "
+"exceeds the upper control limit (%2$g&sigma;) at Time = %3$s."
+msgstr ""
+
+msgid ""
+"<i>Note.</i> The lower bound of the %1$.0f%% state credible interval does "
+"not exceed the upper control limit (%2$g&sigma;) at any time point."
+msgstr ""
+
+msgid "Probability"
+msgstr "Wahrscheinlichkeit"
+
+msgid "Error Plots"
+msgstr "Fehlerdiagramme"
+
+msgid "Residual Plot"
+msgstr "Residuendiagramm"
+
+msgid "Residual"
+msgstr ""
+
+msgid "Forecast Error Plot"
+msgstr "Prognosefehlerdiagramm"
+
+msgid "Forecast error"
+msgstr ""
+
 #~ msgid "Lag Plot"
 #~ msgstr "Verzögerungsdiagramm"
 
@@ -481,23 +539,18 @@ msgstr "Partielle Autokorrelationsfunktion"
 
 #~ msgid "'End' must be in a date-like format (e.g., yyyy-mm-dd hh:mm:ss)."
 #~ msgstr ""
-#~ "'Ende' muss in einem datumsähnlichen Format angegeben werden (z. B. jjjj-mm-"
-#~ "tt hh:mm:ss)."
+#~ "'Ende' muss in einem datumsähnlichen Format angegeben werden (z. B. jjjj-"
+#~ "mm-tt hh:mm:ss)."
 
 #~ msgid ""
-#~ "The 'End' value of the filter should be larger/later than the 'Start' value."
+#~ "The 'End' value of the filter should be larger/later than the 'Start' "
+#~ "value."
 #~ msgstr ""
-#~ "Der 'Ende'-Wert des Filters sollte größer/später sein als der 'Start'-Wert."
+#~ "Der 'Ende'-Wert des Filters sollte größer/später sein als der 'Start'-"
+#~ "Wert."
 
 #~ msgid "No parameters are estimated."
 #~ msgstr "Es werden keine Parameter geschätzt."
-
-msgid "Observation step"
-msgstr ""
-
-msgid "Steps ahead"
-msgstr ""
-
 
 #~ msgid "Mean<sub>inclusion</sub>"
 #~ msgstr "Mittelwert<sub>Inklusion</sub>"
@@ -508,54 +561,8 @@ msgstr ""
 #~ msgid "SD<sub>inclusion</sub>"
 #~ msgstr "SD<sub>Inklusion</sub>"
 
-msgid ""
-"The maximum lag must be positive and smaller than the number of selected "
-"observations (%s)."
-msgstr ""
-
-msgid "The Ljung-Box test failed for the selected observations."
-msgstr ""
-
-msgid ""
-"The selected spectrum contains zero or invalid values and cannot be plotted "
-"on a logarithmic scale."
-msgstr ""
-
-msgid "Desired MCMC draws must be a positive whole number."
-msgstr ""
-
-msgid "At least two observed values of the dependent variable are required to initialize a local level or semilocal trend component."
-msgstr ""
-
-msgid "Forecast error"
-msgstr ""
-
-msgid "Observed and predicted values"
-msgstr ""
-
-msgid "Residual"
-msgstr ""
-
-msgid "State contribution"
-msgstr ""
-
 #~ msgid "Distribution"
 #~ msgstr "Verteilung"
-
-msgid "<i>Note.</i> The lower bound of the %1$.0f%% state credible interval does not exceed the upper control limit (%2$g&sigma;) at any time point."
-msgstr ""
-
-msgid "<i>Note.</i> The lower bound of the %1$.0f%% state credible interval first exceeds the upper control limit (%2$g&sigma;) at Time = %3$s."
-msgstr ""
-
-msgid "Local level"
-msgstr ""
-
-msgid "Local linear trend"
-msgstr ""
-
-msgid "Semi-local linear trend"
-msgstr ""
 
 #~ msgid ""
 #~ "First date where %1$.3f*sigma is exceeded by %2$.1f%% state credible "
@@ -565,8 +572,8 @@ msgstr ""
 #~ "Glaubwürdigkeitsintervall überschritten wird: %3$s"
 
 #~ msgid ""
-#~ "First time point where %1$.3f*sigma is exceeded by %2$.1f%% state credible "
-#~ "interval: %3$s"
+#~ "First time point where %1$.3f*sigma is exceeded by %2$.1f%% state "
+#~ "credible interval: %3$s"
 #~ msgstr ""
 #~ "Erster Zeitpunkt, wann %1$.3f*Sigma vom %2$.1f%% Zustands-"
 #~ "Glaubwürdigkeitsintervall überschritten wird: %3$s"
