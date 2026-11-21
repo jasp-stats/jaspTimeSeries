@@ -1,4 +1,3 @@
-#
 msgid ""
 msgstr ""
 "MIME-Version: 1.0\n"
@@ -173,9 +172,10 @@ msgctxt "ARIMATimeSeries|"
 msgid "BIC"
 msgstr ""
 
+#, fuzzy
 msgctxt "ARIMATimeSeries|"
 msgid "Manual"
-msgstr ""
+msgstr "Manuel"
 
 msgctxt "ARIMATimeSeries|"
 msgid "Nonseasonal"
@@ -213,9 +213,10 @@ msgctxt "ARIMATimeSeries|"
 msgid "Residual Diagnostics"
 msgstr ""
 
+#, fuzzy
 msgctxt "ARIMATimeSeries|"
 msgid "Plots"
-msgstr ""
+msgstr "Grafikler"
 
 msgctxt "ARIMATimeSeries|"
 msgid "Observed time series"
@@ -644,9 +645,10 @@ msgctxt "StationarityTimeSeries|"
 msgid "e.g., transformed"
 msgstr ""
 
+#, fuzzy
 msgctxt "StationarityTimeSeries|"
 msgid "Plots"
-msgstr ""
+msgstr "Grafikler"
 
 msgctxt "StationarityTimeSeries|"
 msgid "Plots reflect the transformations selected above."
